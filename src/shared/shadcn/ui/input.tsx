@@ -3,11 +3,11 @@ import { cva, VariantProps } from "class-variance-authority"
 import { cn } from "@/shared/shadcn/lib/utils"
 
 const inputVariants = cva(
-  "block w-full rounded-md border border-input text-foreground transition focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 disabled:cursor-not-allowed",
+  "block w-full rounded-md text-black transition outline-none focus-visible:border-primary disabled:opacity-50 disabled:cursor-not-allowed",
   {
     variants: {
       variant: {
-        default: "border-1 border-gray text-gray",
+        default: "border border-gray placeholder-gray",
         error: "border-destructive focus-visible:ring-destructive",
         underline: "border-0 border-b rounded-none",
       },
