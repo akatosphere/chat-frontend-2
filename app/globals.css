@@ -46,6 +46,7 @@
   --muted: #E4E4E4;
   --muted-foreground: #00000033;
   --gray: #747474;
+  --red: red;
 
   --radius-md: 8px;
   --radius-sm: 4px;
@@ -115,6 +116,7 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-gray: var(--gray);
+  --color-red: var(--red); 
 
   --radius-md: var(--radius-md);
   --radius-main: var(--radius-sm);
@@ -201,13 +203,4 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
 }

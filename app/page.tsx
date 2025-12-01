@@ -17,7 +17,7 @@ export default function Home() {
         Нажимая на «Зарегистрироваться», вы соглашаетесь 
         с <Button variant='text' size='inline' className="subtext-tight">Пользовательским соглашением</Button>.
         </p>
-        <FormInput id="1" placeholder="+7 900 000 00 00" label="Введите номер телефона"/>
+        <FormInput id="1" placeholder="+7 900 000 00 00" label="Введите номер телефона" error=""/>
       </main>
     </div>
   );
