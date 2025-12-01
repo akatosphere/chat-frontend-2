@@ -7,7 +7,7 @@ interface Props {
   label: string;
   placeholder: string;
   value: string;
-  error: string | undefined
+  error?: string | undefined
 }
 
 export const FormInput = forwardRef<HTMLInputElement, Props> (
