@@ -6,6 +6,7 @@ interface Props {
   id: string;
   label: string;
   placeholder: string;
+  value: string;
   error: string | undefined
 }
 
@@ -15,6 +16,7 @@ export const FormInput = forwardRef<HTMLInputElement, Props> (
       id,
       label,
       placeholder,
+      value,
       error
     },
     ref
@@ -22,7 +24,7 @@ export const FormInput = forwardRef<HTMLInputElement, Props> (
     return (
       <div className="flex flex-col gap-[4px]">
         <Label variant={error ? "error" : "default"} htmlFor={id}>{error || label}</Label>
-        <Input id={id} placeholder={placeholder} variant={error ? "error" : "default"}/>
+        <Input id={id} placeholder={placeholder} variant={error ? "error" : "default"} value={value}/>
       </div>
     )
   }

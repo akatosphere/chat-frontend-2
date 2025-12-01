@@ -1,4 +1,4 @@
-import { FormInput } from "@/shared/formInput/ui/formInput";
+import { FormInput } from "@/shared/form/ui/formInput";
 import { Button } from "@/shared/shadcn/ui/button";
 import Image from "next/image";
 
@@ -17,7 +17,9 @@ export default function Home() {
         Нажимая на «Зарегистрироваться», вы соглашаетесь 
         с <Button variant='text' size='inline' className="subtext-tight">Пользовательским соглашением</Button>.
         </p>
-        <FormInput id="1" placeholder="+7 900 000 00 00" label="Введите номер телефона" error=""/>
+        <form>
+          <FormInput id="1" label="Введите имя" placeholder="Имя" value="11" error=""/>
+        </form>
       </main>
     </div>
   );
