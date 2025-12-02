@@ -2,10 +2,10 @@
 import React from "react";
 import { Tooltip } from "@/shared/ui/tooltip";
 import { cn } from "@/shared/shadcn/lib/utils";
-import { VerificationCodeInput } from "@/features/code-verification/ui/verification-code-input";
-import { ResendSection } from "@/features/code-verification/ui/verification-code-resend";
-import { useVerification } from "@/features/code-verification/lib/use-verification";
-import { useVerificationUI } from "@/features/code-verification/lib/use-verification-ui";
+import { VerificationCodeInput } from "./verification-code-input";
+import { useVerificationUI } from "../lib/use-verification-ui";
+import { useVerification } from "../lib/use-verification";
+import { VerificationCodeResend } from "./verification-code-resend";
 
 export const CodeVerification: React.FC<{ className?: string }> = ({
   className,
@@ -44,7 +44,7 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
         className="mb-3 lg:mb-4"
       />
 
-      <ResendSection
+      <VerificationCodeResend
         onResend={onResend}
         resendTimer={resendTimer}
         isResendAvailable={isResendAvailable}

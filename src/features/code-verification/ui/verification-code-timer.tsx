@@ -1,4 +1,3 @@
-// components/verification/TimerDisplay.tsx
 "use client";
 import React from "react";
 import { formatTime } from "@/shared/lib/format-time";

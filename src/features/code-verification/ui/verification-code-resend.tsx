@@ -1,4 +1,3 @@
-// components/verification/ResendSection.tsx
 "use client";
 import { Button } from "@/shared/shadcn/ui/button";
 import { VerificationCodeInputTimer } from "@/features/code-verification/ui/verification-code-timer";
@@ -9,7 +8,7 @@ interface Props {
   onResend: () => void;
 }
 
-export const ResendSection = ({
+export const VerificationCodeResend = ({
   isResendAvailable,
   resendTimer,
   onResend,

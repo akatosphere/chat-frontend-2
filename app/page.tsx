@@ -1,6 +1,5 @@
+import { CodeVerification } from "@/features/code-verification";
 import { Button } from "@/shared/shadcn/ui/button";
-import { Tooltip } from "@/shared/ui/tooltip";
-import { CodeVerification } from "@/widgets/code-verification/code-verification";
 
 export default function Home() {
   return (
