@@ -1,55 +1,121 @@
 "use client";
 
-import { FormInput } from "@/shared/form/ui/formInput";
-import { Button } from "@/shared/shadcn/ui/button";
 import { useEffect, useState } from "react";
-import { userSchema } from "../model/validation";
-
-type user = {
-    firstName: string, 
-    nickName: string
-};
+import { Button } from "@/shared/shadcn/ui/button";
+import { FormInput } from "@/shared/form/ui/formInput";
+import { firstNameSchema, nickNameSchema } from "../model/validation";
 
 export default function UserForm() {
-    const [user, setUser] = useState<user>({firstName: "", nickName: ""})
+    // Разделённые состояния для инпутов
+    const [firstName, setFirstName] = useState("");
+    const [firstNameError, setFirstNameError] = useState("");
+
+    const [nickName, setNickName] = useState("");
+    const [nickNameError, setNickNameError] = useState("");
+
     const [isValid, setIsValid] = useState(false);
 
-    useEffect(() => {
-        const saved = localStorage.getItem("userForm");
-        if (saved) {
-            try {
-                const parsed = JSON.parse(saved);
-                setUser(parsed as user);
-            } catch {
-                // если localStorage сломан — игнорируем
-            }
+    // Загрузка из localStorage при монтировании
+useEffect(() => {
+    const saved = localStorage.getItem("userForm");
+    if (saved) {
+        try {
+            const parsed = JSON.parse(saved);
+            const fName = parsed.firstName || "";
+            const nName = parsed.nickName || "";
+
+            setFirstName(fName);
+            setNickName(nName);
+
+            // Валидируем сразу после загрузки
+            const fError = validateFirstName(fName);
+            const nError = validateNickName(nName);
+            setFirstNameError(fError);
+            setNickNameError(nError);
+
+            setIsValid(!fError && !nError);
+
+        } catch {
+            // игнорируем ошибки парсинга
         }
-    }, []);
+    }
+}, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, value } = e.target;
-
-        const updated = { ...user, [id]: value };
-        setUser(updated);
-
-        const result = userSchema.safeParse(updated);
-        setIsValid(result.success);
+    // Функции валидации конкретного поля
+    const validateFirstName = (value: string) => {
+        if (!value) return "Заполните поле";
+        const result = firstNameSchema.safeParse(value);
+        return result.success ? "" : result.error.issues[0].message;
     };
 
+    const validateNickName = (value: string) => {
+        if (!value) return "Заполните поле";
+        const result = nickNameSchema.safeParse(value);
+        return result.success ? "" : result.error.issues[0].message;
+    };
 
+    // Обработчики изменения инпутов
+    const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        setFirstName(val);
+        const err = validateFirstName(val);
+        setFirstNameError(err);
+
+        localStorage.setItem("userForm", JSON.stringify({ firstName: val, nickName }));
+
+        setIsValid(!err && !nickNameError);
+    };
+
+    const handleNickNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        setNickName(val);
+        const err = validateNickName(val);
+        setNickNameError(err);
+
+        localStorage.setItem("userForm", JSON.stringify({ firstName, nickName: val }));
+
+        setIsValid(!err && !firstNameError);
+    };
+
+    // Сабмит формы
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!isValid) return;
+
+        console.log("Форма отправлена:", { firstName, nickName });
+        // Очистка формы
+        setFirstName("");
+        setFirstNameError("");
+        setNickName("");
+        setNickNameError("");
+        setIsValid(false);
+        localStorage.removeItem("userForm");
+    };
 
     return (
-        <form className="flex flex-col gap-2">
-            <FormInput id="firstName" value={user.firstName} onChange={handleChange} label="Введите имя" /> 
-            <FormInput id="nickName" value={user.nickName} onChange={handleChange} label="Придумайте никнейм" />
+        <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+            <FormInput
+                id="firstName"
+                value={firstName}
+                onChange={handleFirstNameChange}
+                label="Введите имя"
+                error={firstNameError}
+            />
+            <FormInput
+                id="nickName"
+                value={nickName}
+                onChange={handleNickNameChange}
+                label="Придумайте никнейм"
+                error={nickNameError}
+            />
             <Button
-            variant="default"
-            size="lg"
-            type="submit"
-            disabled={!isValid}
+                variant="default"
+                size="lg"
+                type="submit"
+                disabled={!isValid}
             >
-            Далее
+                Далее
             </Button>
         </form>
-    )
+    );
 }
