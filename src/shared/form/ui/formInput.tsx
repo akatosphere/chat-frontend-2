@@ -4,8 +4,8 @@ import { forwardRef } from "react";
 
 interface Props {
   id: string;
-  label: string;
-  placeholder: string;
+  label?: string;
+  placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;

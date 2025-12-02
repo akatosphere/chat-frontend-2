@@ -24,7 +24,7 @@ export default function PhoneInput({
       format="+7 ### ### ## ##"
       value={value}
       error={error}
-      placeholder="+7 999 999 99 99"
+      placeholder="+7 900 000 00 00"
       onValueChange={(v) => onChange(v.formattedValue)}
       onBlur={onBlur}
       onFocus={onFocus}
