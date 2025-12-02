@@ -8,7 +8,9 @@ interface Props {
   placeholder: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: string
+  error?: string;
+  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const FormInput = forwardRef<HTMLInputElement, Props> (
@@ -19,7 +21,9 @@ export const FormInput = forwardRef<HTMLInputElement, Props> (
       placeholder,
       value,
       onChange,
-      error
+      error,
+      onBlur,
+      onFocus
     },
     ref
   ) => {
@@ -33,6 +37,8 @@ export const FormInput = forwardRef<HTMLInputElement, Props> (
           variant={error ? "error" : "default"} 
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
+          onFocus={onFocus}
         />
       </div>
     )
