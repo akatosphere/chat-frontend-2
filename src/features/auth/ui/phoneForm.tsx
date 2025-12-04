@@ -1,13 +1,19 @@
 "use client";
 
+import { cn } from '@/shared/shadcn/lib/utils';
 import { useState } from "react";
 import { Button } from "@/shared/shadcn/ui/button";
 import { usePhoneStore } from "../model/store";
-import PhoneInput from "./phoneInput";
+import { PhoneInput } from "./phoneInput";
 import { phoneSchema } from "../model/validation";
 
+type PhoneFormProps = {
+  className?: string,
+};
 
-export default function PhoneForm() {
+export const PhoneForm : React.FC<PhoneFormProps> = ({
+  className,
+}) => {
     const setPhone = usePhoneStore((state) => state.setPhone);
 
     const [localPhone, setLocalPhone] = useState("");
@@ -36,10 +42,10 @@ export default function PhoneForm() {
         if (!isValid) return;
         setPhone(localPhone);
         setLocalPhone("");
-    };
-
-    return (
-        <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+    };    
+  return (
+    <div className={cn("", className)}>
+        <form className={cn("flex flex-col gap-2", className)} onSubmit={handleSubmit}>
             <PhoneInput
                 value={localPhone}
                 onChange={handleChange}
@@ -55,6 +61,7 @@ export default function PhoneForm() {
             >
                 Далее
             </Button>
-        </form>
-    );
-} 
+        </form>    
+    </div>
+  );
+};

@@ -1,8 +1,8 @@
 "use client"
 
 import { usePhoneStore } from "@/features/auth/model/store";
-import PhoneForm from "@/features/auth/ui/phoneForm";
-import UsernameForm from "@/features/auth/ui/userForm";
+import { PhoneForm } from "@/features/auth/ui/phoneForm";
+import { UserForm } from "@/features/auth/ui/userForm";
 import Image from "next/image";
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
           <h2>Сохранённый телефон:</h2>
           <p>{phone || "Телефон ещё не введён"}</p>
         </div>
-        <UsernameForm/>
+        <UserForm/>
       </main>
     </div>
   );

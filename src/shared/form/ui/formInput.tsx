@@ -1,8 +1,10 @@
+import { cn } from '@/shared/shadcn/lib/utils';
 import { Input } from "@/shared/shadcn/ui/input";
 import { Label } from "@/shared/shadcn/ui/label";
 import { forwardRef } from "react";
 
-interface Props {
+type FormInputProps = {
+  className?: string,
   id: string;
   label?: string;
   placeholder?: string;
@@ -13,9 +15,10 @@ interface Props {
   onFocus?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const FormInput = forwardRef<HTMLInputElement, Props> (
+export const FormInput = forwardRef<HTMLInputElement, FormInputProps> (
   (
     {
+      className,
       id,
       label,
       placeholder,
@@ -28,7 +31,7 @@ export const FormInput = forwardRef<HTMLInputElement, Props> (
     ref
   ) => {
     return (
-      <div className="flex flex-col gap-[4px]">
+      <div className={cn("flex flex-col gap-[4px]", className)}>
         <Label variant={error ? "error" : "default"} htmlFor={id}>{error || label}</Label>
         <Input 
           id={id} 
