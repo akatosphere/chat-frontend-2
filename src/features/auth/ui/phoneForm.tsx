@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/shared/shadcn/ui/button";
 import { usePhoneStore } from "../model/store";
 import PhoneInput from "./phoneInput";
@@ -14,14 +14,8 @@ export default function PhoneForm() {
     const [error, setError] = useState("");
     const [isValid, setIsValid] = useState(false);
 
-    useEffect(() => {
-        const saved = localStorage.getItem("phone");
-        if (saved) setLocalPhone(saved);
-    }, []);
-
     const handleChange = (value: string) => {
         setLocalPhone(value);
-        localStorage.setItem("phone", value);
         const result = phoneSchema.safeParse(value);
         setIsValid(result.success);
     };

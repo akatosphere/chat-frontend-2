@@ -21,11 +21,13 @@ const userSchema = z.object({
 
 const firstNameSchema = z
     .string()
+    .min(1, "Заполните поле")
     .min(2, "Не менее 2 символов")
     .regex(/^[A-Za-zА-Яа-яЁё\s-]+$/, "Только буквы, пробел или тире");
 
 const nickNameSchema = z
     .string()
+    .min(1, "Заполните поле")
     .min(5, "Не менее 5 символов")
     .regex(/^[A-Za-z0-9_-]+$/, "Латиница, цифры, тире или подчёркивание");
 

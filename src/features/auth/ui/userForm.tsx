@@ -15,41 +15,13 @@ export default function UserForm() {
 
     const [isValid, setIsValid] = useState(false);
 
-    // Загрузка из localStorage при монтировании
-useEffect(() => {
-    const saved = localStorage.getItem("userForm");
-    if (saved) {
-        try {
-            const parsed = JSON.parse(saved);
-            const fName = parsed.firstName || "";
-            const nName = parsed.nickName || "";
-
-            setFirstName(fName);
-            setNickName(nName);
-
-            // Валидируем сразу после загрузки
-            const fError = validateFirstName(fName);
-            const nError = validateNickName(nName);
-            setFirstNameError(fError);
-            setNickNameError(nError);
-
-            setIsValid(!fError && !nError);
-
-        } catch {
-            // игнорируем ошибки парсинга
-        }
-    }
-}, []);
-
     // Функции валидации конкретного поля
     const validateFirstName = (value: string) => {
-        if (!value) return "Заполните поле";
         const result = firstNameSchema.safeParse(value);
         return result.success ? "" : result.error.issues[0].message;
     };
 
     const validateNickName = (value: string) => {
-        if (!value) return "Заполните поле";
         const result = nickNameSchema.safeParse(value);
         return result.success ? "" : result.error.issues[0].message;
     };
@@ -60,9 +32,6 @@ useEffect(() => {
         setFirstName(val);
         const err = validateFirstName(val);
         setFirstNameError(err);
-
-        localStorage.setItem("userForm", JSON.stringify({ firstName: val, nickName }));
-
         setIsValid(!err && !nickNameError);
     };
 
@@ -72,24 +41,19 @@ useEffect(() => {
         const err = validateNickName(val);
         setNickNameError(err);
 
-        localStorage.setItem("userForm", JSON.stringify({ firstName, nickName: val }));
-
         setIsValid(!err && !firstNameError);
     };
 
-    // Сабмит формы
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!isValid) return;
 
         console.log("Форма отправлена:", { firstName, nickName });
-        // Очистка формы
         setFirstName("");
         setFirstNameError("");
         setNickName("");
         setNickNameError("");
         setIsValid(false);
-        localStorage.removeItem("userForm");
     };
 
     return (
