@@ -16,18 +16,17 @@ const backgroundVariants = cva(
   }
 )
 
-interface BackgroundProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof backgroundVariants> {}
+type BackgroundProps = React.HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof backgroundVariants>
 
-export function Background({ variant, className, children, ...props }: BackgroundProps) {
+export const Background = ({ variant, className, children, ...props }: BackgroundProps) => {
   return (
     <div className={cn(backgroundVariants({ variant }), className)} {...props}>
       
       {/* Desktop фон фото */}
       <div className="hidden md:block absolute inset-0 z-0">
         <Image 
-          src="/backgroundDesktop.png"
+          src="/bgStartPageDef.png"
           alt="desktop background"
           fill
           style={{ objectFit: "cover" }}

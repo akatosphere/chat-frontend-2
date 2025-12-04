@@ -2,7 +2,7 @@ import * as React from "react"
 import { cn } from "@/shared/shadcn/lib/utils"
 import { cva, type VariantProps } from "class-variance-authority"
 
-const widgetVariants = cva(
+const backgroundCardLayoutVariants = cva(
   "rounded-2xl overflow-hidden p-6 flex flex-col items-center border-2 border-white md:border-none",
   {
     variants: {
@@ -21,39 +21,34 @@ const widgetVariants = cva(
   }
 )
 
-export interface WidgetProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof widgetVariants> {
-  header?: React.ReactNode
-  body?: React.ReactNode
-  button?: React.ReactNode
-}
+type BackgroundCardLayoutProps = React.HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof backgroundCardLayoutVariants> & {
+    children: React.ReactNode
+  }
 
-export function Widget({
-  header,
-  body,
-  button,
+export const BackgroundCardLayout = ({
+  children,
   variant,
   size,
-  className,
   ...props
-}: WidgetProps) {
+}: BackgroundCardLayoutProps) => {
   return (
-    <div className={cn(widgetVariants({ variant, size }), className)} {...props}>
-      
+    <div className={cn(backgroundCardLayoutVariants({ variant, size }), 'relative')} {...props}>
+
+    {
+      children ? (
+        <div className="relative z-10 w-full h-full flex flex-col text-red-500">
+          {children}
+        </div>
+      ) : (
+        <div className="flex justify-center items-center z-10 text-red-500">Контента нет</div>
+      )
+    }
+
       {/* Белые размытые пятна */}
       <div className="absolute z-0 w-48 h-48 top-[50%] left-[60%] rounded-full bg-white/70 blur-[50px] " />
       <div className="absolute z-0 w-48 h-48 top-[70%] left-0 rounded-full bg-white/70 blur-[50px]" />
       <div className="absolute z-0 w-48 h-48 top-[-10%] left-0 rounded-full bg-white/70 blur-[50px]" />
-
-      {/* Контен виджета */}
-      {header && <div className="z-10 mt-4">{header}</div>}
-      {body && <div className="z-10 mt-6 w-full text-center">{body}</div>}
-      {button && (
-        <div className="z-10 mt-6 md:mt-auto md:mb-20 flex justify-center">
-          {button}
-        </div>
-      )}
     </div>
   )
 }
