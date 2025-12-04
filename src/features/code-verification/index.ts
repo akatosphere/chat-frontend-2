@@ -1,2 +1,2 @@
-export { CodeVerification } from "./ui/code-verification";
-export { useVerification } from "./lib/use-verification";
+export { CodeVerification } from "./ui/codeVerification";
+export { useVerification } from "./lib/useVerification";

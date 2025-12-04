@@ -1,9 +1,9 @@
 "use client";
 
 import { cn } from "@/shared/shadcn/lib/utils";
-import { VerificationCodeInputCell } from "./verification-code-input-cell";
-import { VerificationCodeInputError } from "./verification-code-input-error";
-import { useVerificationCodeInputController } from "../lib/use-verification-code-input-cotroller";
+import { VerificationCodeInputCell } from "./verificationCodeInputCell";
+import { VerificationCodeInputError } from "./verificationCodeInputError";
+import { useVerificationCodeInputController } from "../lib/useVerificationCodeInputCotroller";
 import { useEffect } from "react";
 
 interface Props {

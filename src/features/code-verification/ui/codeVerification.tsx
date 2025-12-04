@@ -2,10 +2,10 @@
 import React from "react";
 import { Tooltip } from "@/shared/ui/tooltip";
 import { cn } from "@/shared/shadcn/lib/utils";
-import { VerificationCodeInput } from "./verification-code-input";
-import { useVerificationUI } from "../lib/use-verification-ui";
-import { useVerification } from "../lib/use-verification";
-import { VerificationCodeResend } from "./verification-code-resend";
+import { VerificationCodeInput } from "./verificationCodeInput";
+import { useVerificationUI } from "../lib/useVerificationUI";
+import { useVerification } from "../lib/useVerification";
+import { VerificationCodeResend } from "./verificationCodeResend";
 
 export const CodeVerification: React.FC<{ className?: string }> = ({
   className,

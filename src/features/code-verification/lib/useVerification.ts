@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useVerificationStore } from "../model/user-verification-store";
+import { useVerificationStore } from "../model/userVerificationStore";
 
 interface useVerificationOptions {
   initialAttemptsLeft?: number;
