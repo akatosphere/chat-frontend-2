@@ -1,7 +1,4 @@
 import { Button } from "@/shared/shadcn/ui/button";
-import { Popa } from "@/shared/shadcn/ui/popa";
-import { Textok } from "@/shared/shadcn/ui/textokik";
-import Image from "next/image";
 import { Support } from "../features/auth/support/ui/support";
 
 export default function Home() {
