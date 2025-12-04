@@ -1,5 +1,3 @@
-// src/features/support/api/send-message.ts
-
 import api from "@/shared/api/inceptors";
 
 export interface SendSupportMessageData {
