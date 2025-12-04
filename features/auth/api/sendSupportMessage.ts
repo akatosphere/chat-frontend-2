@@ -1,4 +1,4 @@
-import api from "@/shared/api/inceptors";
+import api from "@/shared/api/api-client";
 
 export interface SendSupportMessageData {
   email: string;

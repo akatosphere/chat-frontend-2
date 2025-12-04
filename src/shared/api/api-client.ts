@@ -56,10 +56,10 @@ const processQueue = (error: unknown | null, token: string | null = null) => {
 const handleLogout = () => {
   if (typeof window === "undefined") {
     // SSR
-    redirect("/login");
+    redirect("/auth");
   } else {
     // CSR
-    window.location.href = "/login";
+    window.location.href = "/auth";
   }
 };
 

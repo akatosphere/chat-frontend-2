@@ -1,5 +1,5 @@
 import { Button } from "@/shared/shadcn/ui/button";
-import { Support } from "../features/auth/support/ui/support";
+import { Support } from "../features/auth/ui/support";
 
 export default function Home() {
   return (
