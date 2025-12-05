@@ -1,10 +1,6 @@
 import { AxiosError } from "axios";
 import { MessageError, ValidationError } from "./types";
 
-export type Result<T = void> =
-  | { success: true; data: T }
-  | { success: false; error: string };
-
 export const errorHandler = (error: unknown): string => {
   if (!(error instanceof AxiosError)) {
     return "Неизвестная ошибка";
