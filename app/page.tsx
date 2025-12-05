@@ -1,5 +1,6 @@
 import { Button } from "@/shared/shadcn/ui/button";
 import { Support } from "../features/auth/ui/support";
+import { TestLogin } from "../features/auth/ui/testLogin";
 
 export default function Home() {
   return (
@@ -34,6 +35,7 @@ export default function Home() {
           .
         </p>
         <Support />
+        <TestLogin />
       </main>
     </div>
   );

@@ -34,6 +34,7 @@ export async function loginByCodeAction(data: LoginByCodeInput) {
 
     if (!res.ok) {
       const error = await res.json();
+      console.error(error);
       return {
         success: false,
         error: error.detail || "Неверный код",
