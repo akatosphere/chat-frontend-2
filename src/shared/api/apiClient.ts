@@ -105,7 +105,7 @@ api.interceptors.response.use(
         // разблокируем всех, кто ждал
         processQueue(null, newAccessToken);
 
-        // Подставляем токен в текущий запрос
+        // подставляем токен в текущий запрос
         config.headers = config.headers || {};
         config.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
