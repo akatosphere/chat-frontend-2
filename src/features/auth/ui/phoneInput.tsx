@@ -9,6 +9,7 @@ type PhoneInputProps = {
   error?: string,
   onBlur?: React.FocusEventHandler<HTMLInputElement>,
   onFocus?: React.FocusEventHandler<HTMLInputElement>,
+  disabled?: boolean,
 }
 
 export const PhoneInput : React.FC<PhoneInputProps> = ({
@@ -17,7 +18,8 @@ export const PhoneInput : React.FC<PhoneInputProps> = ({
   error,
   onBlur,
   onFocus,
-  onChange
+  onChange,
+  disabled
 }) => {
   return (
     <div className={cn("", className)}>
@@ -33,6 +35,7 @@ export const PhoneInput : React.FC<PhoneInputProps> = ({
         onValueChange={(v) => onChange(v.formattedValue)}
         onBlur={onBlur}
         onFocus={onFocus}
+        disabled={disabled}
       />      
     </div>
 

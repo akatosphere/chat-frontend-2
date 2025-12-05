@@ -5,14 +5,15 @@ import { forwardRef } from "react";
 
 type FormInputProps = {
   className?: string,
-  id: string;
-  label?: string;
-  placeholder?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: string;
-  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onFocus?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  id: string,
+  label?: string,
+  placeholder?: string,
+  value?: string,
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  error?: string,
+  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  onFocus?: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  disabled?: boolean,
 }
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps> (
@@ -26,7 +27,8 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps> (
       onChange,
       error,
       onBlur,
-      onFocus
+      onFocus,
+      disabled
     },
     ref
   ) => {
@@ -42,6 +44,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps> (
           onChange={onChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          disabled={disabled}
         />
       </div>
     )

@@ -32,8 +32,9 @@ export interface InputProps
     VariantProps<typeof inputVariants> {}
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, inputSize, ...props }, ref) => (
+  ({ className, variant, inputSize, disabled, ...props }, ref) => (
     <input
+      disabled={disabled}
       ref={ref}
       className={cn(inputVariants({ variant, inputSize }), className)}
       {...props}
