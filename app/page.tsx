@@ -3,7 +3,7 @@
 import { usePhoneStore } from "@/features/auth/model/store";
 import { PhoneForm } from "@/features/auth/ui/phoneForm";
 import { UserForm } from "@/features/auth/ui/userForm";
-import Image from "next/image";
+import { FormTextarea } from "@/shared/form/ui/formTextarea";
 
 export default function Home() {
   const phone = usePhoneStore((state) => state.phone);
@@ -16,6 +16,10 @@ export default function Home() {
           <p>{phone || "Телефон ещё не введён"}</p>
         </div>
         <UserForm/>
+        <FormTextarea
+          id="1"
+          label="Опишите проблему"
+        />
       </main>
     </div>
   );
