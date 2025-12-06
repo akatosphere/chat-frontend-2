@@ -51,8 +51,9 @@ export async function loginByCodeAction(data: LoginByCodeInput) {
     }
 
     const cookieStore = await cookies();
-
-    cookieStore.set("refresh_token", refresh, {
+    cookieStore.set({
+      name: "refresh_token",
+      value: refresh,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",

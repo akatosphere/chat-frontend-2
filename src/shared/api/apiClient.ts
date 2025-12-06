@@ -1,127 +1,91 @@
 import axios, {
   AxiosError,
   AxiosInstance,
-  AxiosResponse,
-  AxiosRequestConfig,
+  InternalAxiosRequestConfig,
+  AxiosHeaders,
 } from "axios";
-import { redirect } from "next/navigation";
 
-interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
+interface CustomConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
-}
-
-interface PendingRequest {
-  resolve: (response: AxiosResponse) => void;
-  reject: (error: unknown) => void;
 }
 
 export const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true, // HttpOnly cookie летит автоматически
   timeout: 15_000,
 });
 
-const refreshClient: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true,
-  timeout: 10_000,
-});
-
-// флаг для блокировки повторных запросов и очередь отложенных запросов
 let isRefreshing = false;
-let failedQueue: PendingRequest[] = [];
+let failedQueue: Array<{
+  resolve: (token: string) => void;
+  reject: (error: Error) => void;
+}> = [];
 
-// обработка очереди
-const processQueue = (error: unknown | null, token: string | null = null) => {
+const processQueue = (error: Error | null, token: string | null = null) => {
   failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else if (token) {
-      // подставляем новый токен и возвращаем готовый ответ
-      const fakeResponse = {
-        data: null,
-        status: 200,
-        statusText: "Refreshed",
-        headers: {},
-        config: {} as AxiosRequestConfig,
-      } as AxiosResponse;
-
-      prom.resolve(fakeResponse);
-    }
+    if (error) prom.reject(error);
+    else if (token) prom.resolve(token);
   });
-
   failedQueue = [];
 };
 
-const handleLogout = () => {
-  if (typeof window === "undefined") {
-    // SSR
-    redirect("/auth");
-  } else {
-    // CSR
-    window.location.href = "/auth";
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("access_token");
+  if (token) {
+    config.headers ??= new AxiosHeaders();
+    config.headers.set("Authorization", `Bearer ${token}`);
   }
-};
+  return config;
+});
 
 api.interceptors.response.use(
   (response) => response,
-
   async (error: AxiosError) => {
-    const config = error.config as AxiosRequestConfigWithRetry;
+    const config = error.config as CustomConfig;
 
-    // 401 + не повторяли, запускаем refresh
-    if (error.response?.status === 401 && !config._retry) {
-      config._retry = true;
-
-      // уже идёт рефреш, становимся в очередь
-      if (isRefreshing) {
-        return new Promise<AxiosResponse>((resolve, reject) => {
-          failedQueue.push({
-            resolve: (response) => {
-              // токен уже обновлён, просто повторяем запрос
-              resolve(api(config));
-            },
-            reject,
-          });
-        });
-      }
-
-      isRefreshing = true;
-
-      try {
-        //  используем refreshClient БЕЗ интерсепторов
-        const { data } = await refreshClient.post<{ access: string }>(
-          "/api/v1/auth/login/refresh/token/",
-          {} // refresh берётся из HttpOnly cookie
-        );
-
-        const newAccessToken = data.access;
-
-        // обновляем глобальный заголовок для всех будущих запросов
-        api.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${newAccessToken}`;
-
-        // разблокируем всех, кто ждал
-        processQueue(null, newAccessToken);
-
-        // подставляем токен в текущий запрос
-        config.headers = config.headers || {};
-        config.headers["Authorization"] = `Bearer ${newAccessToken}`;
-
-        // повторяем оригинальный запрос
-        return api(config);
-      } catch (refreshError) {
-        processQueue(refreshError);
-        handleLogout();
-        return Promise.reject(refreshError);
-      } finally {
-        isRefreshing = false;
-      }
+    if (!config || error.response?.status !== 401 || config._retry) {
+      return Promise.reject(error);
     }
 
-    // все остальные ошибки просто пробрасываем
-    return Promise.reject(error);
+    config._retry = true;
+
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        failedQueue.push({ resolve, reject });
+      })
+        .then((token) => {
+          config.headers?.set("Authorization", `Bearer ${token}`);
+          return api(config);
+        })
+        .catch((err) => Promise.reject(err));
+    }
+
+    isRefreshing = true;
+
+    try {
+      const res = await fetch("/api/refresh-token", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Refresh failed");
+
+      const data = await res.json();
+      const newAccess = data.access;
+
+      localStorage.setItem("access_token", newAccess);
+      api.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
+      processQueue(null, newAccess);
+
+      config.headers?.set("Authorization", `Bearer ${newAccess}`);
+      return api(config);
+    } catch (err) {
+      processQueue(err as Error, null);
+      localStorage.removeItem("access_token");
+      window.location.href = "/auth";
+      return Promise.reject(err);
+    } finally {
+      isRefreshing = false;
+      failedQueue = [];
+    }
   }
 );
 
