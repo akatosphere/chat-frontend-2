@@ -6,6 +6,7 @@ import { Button } from "@/shared/shadcn/ui/button";
 import { FormInput } from "@/shared/form/ui/formInput";
 import { UserFormData, userFormSchema } from "../model/validation";
 import { useForm } from 'react-hook-form';
+import { useUserFormStore } from '../model/store';
 
 
 type UserFormProps = {
@@ -28,13 +29,15 @@ export const UserForm : React.FC<UserFormProps> = ({
         reValidateMode: "onChange",
         defaultValues: {
             firstName: "",
-            nickName: "",
+            nickname: "",
         },
     });
 
+    const setUser = useUserFormStore((state) => state.setUser);
     const onSubmit = (data: UserFormData) => {
-        console.log("Форма отправлена:", data);
+        setUser(data)
         reset();
+        
     }
 
     watch();
@@ -49,10 +52,10 @@ export const UserForm : React.FC<UserFormProps> = ({
                 {...register("firstName")}
             />
             <FormInput
-                id="nickName"
+                id="nickname"
                 label="Придумайте никнейм"
-                error={errors.nickName?.message}
-                {...register("nickName")}
+                error={errors.nickname?.message}
+                {...register("nickname")}
             />
             <Button
                 variant="default"
