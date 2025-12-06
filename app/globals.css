@@ -45,6 +45,10 @@
   --primary-dark: #615aa3;
   --muted: #e4e4e4;
   --muted-foreground: #00000033;
+  --caption: #ffffff;
+  --error: #ff0000;
+  --text: #1c1c1e;
+  --text-gray: #747474;
 
   --radius-md: 8px;
   --radius-sm: 4px;
@@ -115,6 +119,10 @@
   --color-primary-dark: var(--primary-dark);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-caption: var(--caption);
+  --color-error: var(--error);
+  --color-text: var(--text);
+  --color-text-gray: var(--text-gray);
 
   --radius-md: var(--radius-md);
   --radius-main: var(--radius-sm);
