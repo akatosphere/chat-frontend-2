@@ -52,6 +52,8 @@
 
   --radius-md: 8px;
   --radius-sm: 4px;
+
+  --safe-h: 100svh;
 }
 
 @utility headline {
@@ -215,5 +217,22 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+.fullscreen {
+  height: var(--safe-h);
+  width: 100%;
+}
+
+/* только для мобилки */
+.bg-gradient-mobile {
+  background: linear-gradient(145.07deg, #e2eafe 18.45%, #dcf0ee 81.96%);
+}
+
+/* для desktop можно переопределить через media query, если нужен !important */
+@media (min-width: 768px) {
+  .bg-gradient-mobile {
+    background: white;
   }
 }
