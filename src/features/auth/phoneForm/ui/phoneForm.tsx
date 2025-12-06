@@ -1,12 +1,14 @@
 "use client";
 
 import { cn } from "@/shared/shadcn/lib/utils";
-import { useState } from "react";
 import { Button } from "@/shared/shadcn/ui/button";
 import { PhoneInput } from "../../ui/phoneInput";
 import { usePhoneStore } from "../model/store";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { phoneSchema, PhoneData } from "../model/schema";
 import { sendCode } from "../api/sendCode";
-import { phoneSchema } from "../model/schema";
+import { useState } from "react";
 
 type PhoneFormProps = {
   className?: string;
@@ -15,65 +17,63 @@ type PhoneFormProps = {
 export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
   const setPhone = usePhoneStore((state) => state.setPhone);
 
-  const [localPhone, setLocalPhone] = useState("");
-  const [error, setError] = useState("");
-  const [isValid, setIsValid] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
-  const handleChange = (value: string) => {
-    setLocalPhone(value);
-    const result = phoneSchema.safeParse(value);
-    setIsValid(result.success);
-  };
+  const {
+    handleSubmit,
+    control,
+    formState: { errors, isValid, isSubmitting, touchedFields },
+  } = useForm<PhoneData>({
+    resolver: zodResolver(phoneSchema),
+    mode: "onChange",
+    defaultValues: { phone: "" },
+  });
 
-  const handleFocus = () => {
-    setError("");
-  };
+  const showError =
+    !isFocused && touchedFields.phone ? errors.phone?.message : "";
 
-  const handleBlur = () => {
-    const result = phoneSchema.safeParse(localPhone);
-    if (!result.success && localPhone) {
-      setError(result.error.issues[0].message);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!isValid) return;
-    setIsLoading(true);
+  const onSubmit = async (data: PhoneData) => {
     const result = await sendCode({
-      phone_number: localPhone.replaceAll(" ", ""),
+      phone_number: data.phone.replaceAll(" ", ""),
       code_length: 5,
     });
+
     if (result.success) {
-      setPhone(localPhone);
-      console.log("Ответ от сервера:", result.data);
+      setPhone(data.phone);
     } else {
-      setError(result.error);
+      alert(result.error);
     }
-    setLocalPhone("");
-    setIsLoading(false);
   };
 
   return (
     <form
       className={cn("flex flex-col gap-2", className)}
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
-      <PhoneInput
-        id="phone"
-        value={localPhone}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        error={error}
-        disabled={isLoading}
+      <Controller
+        name="phone"
+        control={control}
+        render={({ field }) => (
+          <PhoneInput
+            id="phone"
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={(e) => {
+              setIsFocused(false);
+              field.onBlur();
+            }}
+            onFocus={() => setIsFocused(true)}
+            error={showError}
+            disabled={isSubmitting}
+          />
+        )}
       />
+
       <Button
         variant="default"
         size="lg"
         type="submit"
-        disabled={!isValid || isLoading}
+        disabled={!isValid || isSubmitting}
       >
         Далее
       </Button>

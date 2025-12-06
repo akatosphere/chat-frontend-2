@@ -37,7 +37,6 @@ export const UserForm : React.FC<UserFormProps> = ({
     const onSubmit = (data: UserFormData) => {
         setUser(data)
         reset();
-        
     }
 
     watch();
