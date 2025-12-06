@@ -42,28 +42,42 @@ export const UserForm : React.FC<UserFormProps> = ({
     watch();
 
   return (
-    <div className={cn("", className)}>
-        <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
-            <FormInput
-                id="firstName"
-                label="Введите имя"
-                error={errors.firstName?.message}
-                {...register("firstName")}
-            />
-            <FormInput
-                id="nickname"
-                label="Придумайте никнейм"
-                error={errors.nickname?.message}
-                {...register("nickname")}
-            />
-            <Button
-                variant="default"
-                size="lg"
-                type="submit"
-                disabled={!isValid}
-            >
-                Далее
-            </Button>
+    <div className={cn("h-100", className)}>
+        <form className="flex flex-col h-full place-content-between" onSubmit={handleSubmit(onSubmit)}>
+            <div className='flex flex-col gap-2'>
+                <FormInput
+                    id="firstName"
+                    label="Введите имя"
+                    error={errors.firstName?.message}
+                    {...register("firstName")}
+                />
+                <FormInput
+                    id="nickname"
+                    label="Придумайте никнейм"
+                    error={errors.nickname?.message}
+                    {...register("nickname")}
+                />
+            </div>
+            <div className='flex flex-col gap-4'>
+                <p className='caption font-medium text-gray'>
+                    Нажимая на «Зарегистрироваться», вы соглашаетесь 
+                    c <Button 
+                        type="button"
+                        variant='text' 
+                        size='inline' 
+                        className="caption"
+                        onClick={() => window.open("https://achat.ktsf.ru/agreement", "_blank")}
+                        >Пользовательским соглашением</Button>.
+                </p>
+                <Button
+                    variant="default"
+                    size="lg"
+                    type="submit"
+                    disabled={!isValid}
+                >
+                    Далее
+                </Button>
+            </div>
         </form>
     </div>
   );

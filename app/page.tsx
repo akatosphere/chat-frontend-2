@@ -12,8 +12,8 @@ export default function Home() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans text-black dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center gap-4 py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <PhoneForm />
-        <div>
+        <UserForm />
+        {/* <div>
           <h2>Сохранённый телефон:</h2>
           <p>{phone || "Телефон ещё не введён"}</p>
         </div>
@@ -23,7 +23,7 @@ export default function Home() {
           <h2>Пользователь:</h2>
           <p>{user.firstName || "Имя пользователя еще не введено"}</p>
           <p>{user.nickname || "Никнейм пользователя еще не введен"}</p>
-        </div>
+        </div> */}
       </main>
     </div>
   );
