@@ -1,86 +1,84 @@
 "use client";
 
-import { cn } from "@/shared/shadcn/lib/utils";
-import { useState } from "react";
+import { cn } from '@/shared/shadcn/lib/utils';
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/shared/shadcn/ui/button";
 import { FormInput } from "@/shared/form/ui/formInput";
-import { firstNameSchema, nickNameSchema } from "../model/validation";
+import { UserFormData, userFormSchema } from "../model/validation";
+import { useForm } from 'react-hook-form';
+import { useUserFormStore } from '../model/store';
+
 
 type UserFormProps = {
   className?: string;
 };
 
-export const UserForm: React.FC<UserFormProps> = ({ className }) => {
-  const [firstName, setFirstName] = useState("");
-  const [firstNameError, setFirstNameError] = useState("");
+export const UserForm : React.FC<UserFormProps> = ({
+  className,
+}) => {
 
-  const [nickName, setNickName] = useState("");
-  const [nickNameError, setNickNameError] = useState("");
+    const {
+        register,
+        handleSubmit,
+        formState: {errors, isValid},
+        reset,
+        watch
+    } = useForm<UserFormData>({
+        resolver: zodResolver(userFormSchema),
+        mode: "onChange",
+        reValidateMode: "onChange",
+        defaultValues: {
+            firstName: "",
+            nickname: "",
+        },
+    });
 
-  const [isValid, setIsValid] = useState(false);
+    const setUser = useUserFormStore((state) => state.setUser);
+    const onSubmit = (data: UserFormData) => {
+        setUser(data)
+        reset();
+    }
 
-  // Функции валидации конкретного поля
-  const validateFirstName = (value: string) => {
-    const result = firstNameSchema.safeParse(value);
-    return result.success ? "" : result.error.issues[0].message;
-  };
+    watch();
 
-  const validateNickName = (value: string) => {
-    const result = nickNameSchema.safeParse(value);
-    return result.success ? "" : result.error.issues[0].message;
-  };
-
-  // Обработчики изменения инпутов
-  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setFirstName(val);
-    const err = validateFirstName(val);
-    setFirstNameError(err);
-    setIsValid(!err && !nickNameError);
-  };
-
-  const handleNickNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setNickName(val);
-    const err = validateNickName(val);
-    setNickNameError(err);
-
-    setIsValid(!err && !firstNameError);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!isValid) return;
-
-    console.log("Форма отправлена:", { firstName, nickName });
-    setFirstName("");
-    setFirstNameError("");
-    setNickName("");
-    setNickNameError("");
-    setIsValid(false);
-  };
   return (
-    <form
-      className={cn("flex flex-col gap-4", className)}
-      onSubmit={handleSubmit}
-    >
-      <FormInput
-        id="firstName"
-        value={firstName}
-        onChange={handleFirstNameChange}
-        label="Введите имя"
-        error={firstNameError}
-      />
-      <FormInput
-        id="nickName"
-        value={nickName}
-        onChange={handleNickNameChange}
-        label="Придумайте никнейм"
-        error={nickNameError}
-      />
-      <Button variant="default" size="lg" type="submit" disabled={!isValid}>
-        Далее
-      </Button>
-    </form>
+    <div className={cn("h-100", className)}>
+        <form className="flex flex-col h-full place-content-between" onSubmit={handleSubmit(onSubmit)}>
+            <div className='flex flex-col gap-2'>
+                <FormInput
+                    id="firstName"
+                    label="Введите имя"
+                    error={errors.firstName?.message}
+                    {...register("firstName")}
+                />
+                <FormInput
+                    id="nickname"
+                    label="Придумайте никнейм"
+                    error={errors.nickname?.message}
+                    {...register("nickname")}
+                />
+            </div>
+            <div className='flex flex-col gap-4'>
+                <p className='caption font-medium text-gray'>
+                    Нажимая на «Зарегистрироваться», вы соглашаетесь 
+                    c <Button 
+                        type="button"
+                        variant='text' 
+                        size='inline' 
+                        className="caption"
+                        onClick={() => window.open("https://achat.ktsf.ru/agreement", "_blank")}
+                        >Пользовательским соглашением</Button>.
+                </p>
+                <Button
+                    variant="default"
+                    size="lg"
+                    type="submit"
+                    disabled={!isValid}
+                >
+                    Далее
+                </Button>
+            </div>
+        </form>
+    </div>
   );
 };

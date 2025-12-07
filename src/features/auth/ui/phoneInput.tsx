@@ -4,7 +4,7 @@ import { PatternFormat } from "react-number-format";
 
 type PhoneInputProps = {
   className?: string;
-  value: string;
+  value: string | undefined;
   id: string;
   onChange: (value: string) => void;
   error?: string;
