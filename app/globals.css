@@ -40,10 +40,10 @@
   --text-caption-tight: 12px;
   --leading-caption-tight: 100%;
 
-  --primary: #7769E1;
-  --primary-light: #CEC8FF;
-  --primary-dark: #615AA3;
-  --muted: #E4E4E4;
+  --primary: #7769e1;
+  --primary-light: #cec8ff;
+  --primary-dark: #615aa3;
+  --muted: #e4e4e4;
   --muted-foreground: #00000033;
 
   --radius-md: 8px;
@@ -219,7 +219,7 @@ body {
 
 /* только для мобилки */
 .bg-gradient-mobile {
-  background: linear-gradient(145.07deg, #E2EAFE 18.45%, #DCF0EE 81.96%);
+  background: linear-gradient(145.07deg, #e2eafe 18.45%, #dcf0ee 81.96%);
 }
 
 /* для desktop можно переопределить через media query, если нужен !important */
@@ -228,4 +228,3 @@ body {
     background: white;
   }
 }
-
