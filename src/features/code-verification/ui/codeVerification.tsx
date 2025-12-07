@@ -27,7 +27,7 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
   return (
     <div className={cn("flex flex-col items-center justify-center", className)}>
       <div className="flex mb-4 gap-2 items-center">
-        <h3 className="font-bold text text-text">Введите код</h3>
+        <h3 className="font-medium text text-text">Введите код</h3>
         <Tooltip>
           <p>Код должен содержать только цифры.</p>
           <p>Не более 10 запросов кода в час. При превышении — блокировка.</p>

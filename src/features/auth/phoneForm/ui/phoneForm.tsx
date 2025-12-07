@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { phoneSchema, PhoneData } from "../model/schema";
 import { sendCode } from "../api/sendCode";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type PhoneFormProps = {
   className?: string;
@@ -18,7 +19,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
   const setPhone = usePhoneStore((state) => state.setPhone);
 
   const [isFocused, setIsFocused] = useState(false);
-
+  const router = useRouter();
   const {
     handleSubmit,
     control,
@@ -40,6 +41,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
 
     if (result.success) {
       setPhone(data.phone);
+      router.push("/code");
     } else {
       alert(result.error);
     }

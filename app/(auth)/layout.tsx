@@ -12,7 +12,7 @@ export default function AuthLayout({
         <Link href="/start">Стартовая</Link>
         <Link href="/phone">Телефон</Link>
         <Link href="/code">Код</Link>
-        <Link href="/info">Фамилия/имя</Link>
+        <Link href="/user">Фамилия/имя</Link>
         <Link href="/support">Поддержка</Link>
       </div>
       {children}
