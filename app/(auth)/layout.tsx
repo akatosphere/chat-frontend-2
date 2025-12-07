@@ -1,3 +1,4 @@
+import { Background } from "@/shared/background/ui/Background";
 import Link from "next/link";
 
 export default function AuthLayout({
@@ -6,8 +7,8 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[url(/bgStartPageDef.png)] bg-cover bg-center min-h-screen min-w-screen">
-      <div className="flex gap-2">
+    <Background>
+      <div className="flex gap-2 absolute top-4 left-4">
         <Link href="/start">Стартовая</Link>
         <Link href="/phone">Поддержка</Link>
         <Link href="/code">Код</Link>
@@ -15,6 +16,6 @@ export default function AuthLayout({
         <Link href="/support">Поддержка</Link>
       </div>
       {children}
-    </div>
+    </Background>
   );
 }

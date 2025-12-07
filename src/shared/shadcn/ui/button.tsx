@@ -9,15 +9,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 
+        default:
           "bg-primary text-white desktop:hover:bg-primary-light desktop:hover:text-primary active:bg-primary-light active:text-primary",
         outline:
           "border border-primary border-[2px] text-primary desktop:hover:border-accent desktop:hover:text-primary-dark active:border-accent active:text-primary-dark disabled:border-muted dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-        text: "p-0 bg-transparent text-primary desktop:hover:text-primary-light active:text-primary-light"
+        text: "p-0 bg-transparent text-primary desktop:hover:text-primary-light active:text-primary-light",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        lg: "w-[329px] desktop:w-[360] h-[56px] text-tight font-medium rounded-md px-[150px] py-[26px] has-[>svg]:px-4",
+        lg: "w-[329px] desktop:w-[360px] h-[56px] text-tight font-medium rounded-md px-[150px] py-[26px] has-[>svg]:px-4",
         md: "w-[297px] h-[56px] text-tight font-medium rounded-md px-[150px] py-[26px]",
         sm: "w-[140.5px] desktop:w-[89px] h-[44px] desktop:h-[32] subtext-tight desktop:text-tight font-normal rounded-md desktop:rounded-sm gap-[4px] px-[28px] desktop:px-[16px] py-[10px] desktop:p-[6px] desktop:border-none has-[>svg]:px-2.5",
         inline: "h-auto p-0 leading-none",
@@ -31,27 +31,27 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-)
+);
 
 function Button({
- className,
- variant,
- size,
- asChild = false,
- ...props
+  className,
+  variant,
+  size,
+  asChild = false,
+  ...props
 }: React.ComponentProps<"button"> &
- VariantProps<typeof buttonVariants> & {
-  asChild?: boolean;
- }) {
- const Comp = asChild ? Slot : "button";
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  }) {
+  const Comp = asChild ? Slot : "button";
 
- return (
-  <Comp
-   data-slot="button"
-   className={cn(buttonVariants({ variant, size, className }))}
-   {...props}
-  />
- );
+  return (
+    <Comp
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  );
 }
 
 export { Button, buttonVariants };
