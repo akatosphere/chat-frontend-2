@@ -19,7 +19,7 @@ export const VerificationCodeResend = ({
     <Button
       variant="text"
       size="md"
-      className="pt-0 pb-0 lg:pt-4 lg:pb-4"
+      className="pt-0 pb-0 lg:pt-4 lg:pb-4 text-gray"
       onClick={onResend}
     >
       Отправить новый код

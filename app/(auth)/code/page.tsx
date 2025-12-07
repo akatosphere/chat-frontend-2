@@ -13,11 +13,11 @@ export default function Page() {
       <h3 className="font-semibold subheadline mb-5 desktop:mb-6 text-center">
         Подтвердите вход
       </h3>
-      <p className="text-text text text-center">
+      <p className="text-black text text-center">
         Код подтверждения отправлен
         <br /> на следующий номер:
       </p>
-      <span className="text-text text font-medium text-center mt-2">
+      <span className="text-black text font-medium text-center mt-2">
         {phone}
       </span>
       <CodeVerification className="mt-7 desktop:mt-6" />

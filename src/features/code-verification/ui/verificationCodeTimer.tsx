@@ -15,7 +15,7 @@ export const VerificationCodeInputTimer: React.FC<TimerDisplayProps> = ({
   return (
     <span
       className={cn(
-        "text text-text-gray font-semibold lg:pt-3 lg:pb-3 w-full block text-center",
+        "text text-gray font-semibold lg:pt-3 lg:pb-3 w-full block text-center",
         className
       )}
     >

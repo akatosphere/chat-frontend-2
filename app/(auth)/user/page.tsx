@@ -5,18 +5,22 @@ import { Logo } from "@/shared/ui/logo";
 
 export default function Page() {
   return (
-    <BackgroundCardLayout variant="form">
-      <Logo size="sm" withTitle={true} className="mb-8" />
+    <BackgroundCardLayout variant="form" className="pt-6">
+      <div className="flex items-center justify-between desktop:hidden mb-5 desktop:mb-0">
+        <BackButton href="/phone" />
+        <Logo size="sm" />
+      </div>
+      <Logo size="sm" withTitle className="mb-8 hidden desktop:flex" />
       <h3 className="font-semibold subheadline mb-5 desktop:mb-6 text-center">
         Личная информация
       </h3>
-      <span className="text-text text text-center mb-5 desktop:mb-6">
+      <span className="text-black text text-center mb-5 desktop:mb-6">
         Пожалуйста, заполните данные
       </span>
       <UserForm />
       <BackButton
         href="/code"
-        className="absolute top-0 desktop:left-0 left-4"
+        className="absolute top-0 desktop:left-0 left-4 hidden desktop:block"
       />
     </BackgroundCardLayout>
   );
