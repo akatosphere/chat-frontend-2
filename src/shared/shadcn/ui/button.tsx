@@ -17,9 +17,9 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        lg: "w-[329px] desktop:w-[360] h-[56px] text-tight font-medium rounded-md px-[150px] py-[26px] has-[>svg]:px-4",
-        md: "w-[297px] h-[56px] text-tight font-medium rounded-md px-[150px] py-[26px]",
-        sm: "w-[140.5px] desktop:w-[89px] h-[44px] desktop:h-[32] subtext-tight desktop:text-tight font-normal rounded-md desktop:rounded-sm gap-[4px] px-[28px] desktop:px-[16px] py-[10px] desktop:p-[6px] desktop:border-none has-[>svg]:px-2.5",
+        lg: "h-[56px] text-tight font-medium rounded-md px-[150px] py-[26px] has-[>svg]:px-4",
+        md: "h-[56px] text-tight font-medium rounded-md px-[150px] py-[26px]",
+        sm: "h-[44px] desktop:h-[32] subtext-tight desktop:text-tight font-normal rounded-md desktop:rounded-sm gap-[4px] px-[28px] desktop:px-[16px] py-[10px] desktop:p-[6px] desktop:border-none has-[>svg]:px-2.5",
         inline: "h-auto p-0 leading-none",
         icon: "size-9",
         "icon-sm": "size-8",
