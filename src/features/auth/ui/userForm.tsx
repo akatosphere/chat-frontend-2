@@ -7,6 +7,7 @@ import { FormInput } from "@/shared/form/ui/formInput";
 import { UserFormData, userFormSchema } from "../model/validation";
 import { useForm } from 'react-hook-form';
 import { useUserFormStore } from '../model/store';
+import Link from 'next/link';
 
 
 type UserFormProps = {
@@ -60,14 +61,18 @@ export const UserForm : React.FC<UserFormProps> = ({
             </div>
             <div className='flex flex-col gap-4'>
                 <p className='caption font-medium text-gray'>
-                    Нажимая на «Зарегистрироваться», вы соглашаетесь 
-                    c <Button 
+                    Нажимая на «Зарегистрироваться», вы соглашаетесь c{" "} 
+                    <Button 
                         type="button"
                         variant='text' 
                         size='inline' 
                         className="caption"
-                        onClick={() => window.open("https://achat.ktsf.ru/agreement", "_blank")}
-                        >Пользовательским соглашением</Button>.
+                        asChild
+                    >
+                        <Link href="https://achat.ktsf.ru/agreement" target='_blank'>
+                            Пользовательским соглашением
+                        </Link> 
+                    </Button>.
                 </p>
                 <Button
                     variant="default"
