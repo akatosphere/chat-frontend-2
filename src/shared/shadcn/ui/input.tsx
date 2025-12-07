@@ -1,45 +1,35 @@
-import * as React from "react"
-import { cva, VariantProps } from "class-variance-authority"
-import { cn } from "@/shared/shadcn/lib/utils"
+import * as React from 'react'
+import { cva, VariantProps } from 'class-variance-authority'
+import { cn } from '@/shared/shadcn/lib/utils'
 
 const inputVariants = cva(
-  "block w-full rounded-md text-black transition outline-none focus-visible:border-primary disabled:opacity-50 disabled:cursor-not-allowed",
+  'block w-full rounded-md text-black bg-white transition outline-none focus-visible:border-primary disabled:opacity-50 disabled:cursor-not-allowed',
   {
     variants: {
       variant: {
-        default: "border border-gray placeholder-gray",
-        error: "border-2 border-red focus-visible:border-red placeholder-gray",
-        underline: "border-0 border-b rounded-none",
+        default: 'border border-gray placeholder-gray',
+        error: 'border-2 border-error focus-visible:border-error placeholder-gray',
+        underline: 'border-0 border-b rounded-none',
       },
       inputSize: {
-        md: "h-[56px] text font-medium rounded-md py-[16px] pr-[10px] pl-[20px]",
+        md: 'h-[56px] text font-medium rounded-md py-[16px] pr-[10px] pl-[20px]',
       },
     },
     defaultVariants: {
-      variant: "default",
-      inputSize: "md",
+      variant: 'default',
+      inputSize: 'md',
     },
-  }
+  },
 )
 
-type HTMLInputProps = Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  "size"
->
+type HTMLInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>
 
-export interface InputProps
-  extends HTMLInputProps,
-    VariantProps<typeof inputVariants> {}
+export interface InputProps extends HTMLInputProps, VariantProps<typeof inputVariants> {}
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, variant, inputSize, disabled, ...props }, ref) => (
-    <input
-      disabled={disabled}
-      ref={ref}
-      className={cn(inputVariants({ variant, inputSize }), className)}
-      {...props}
-    />
-  )
+    <input disabled={disabled} ref={ref} className={cn(inputVariants({ variant, inputSize }), className)} {...props} />
+  ),
 )
 
-Input.displayName = "Input"
+Input.displayName = 'Input'
