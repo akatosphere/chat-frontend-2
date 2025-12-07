@@ -48,7 +48,7 @@
   --caption: #ffffff;
   --error: #ff0000;
   --text: #1c1c1e;
-  --text-gray: #747474;
+  --gray: #747474;
 
   --radius-md: 8px;
   --radius-sm: 4px;
@@ -122,7 +122,7 @@
   --color-caption: var(--caption);
   --color-error: var(--error);
   --color-text: var(--text);
-  --color-text-gray: var(--text-gray);
+  --color-gray: var(--gray);
 
   --radius-md: var(--radius-md);
   --radius-main: var(--radius-sm);
