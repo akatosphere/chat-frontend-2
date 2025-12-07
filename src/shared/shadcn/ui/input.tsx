@@ -12,7 +12,7 @@ const inputVariants = cva(
         underline: "border-0 border-b rounded-none",
       },
       inputSize: {
-        md: "w-[329px] desktop:w-[360] h-[56px] text font-medium rounded-md py-[16px] pr-[10px] pl-[20px]",
+        md: "h-[56px] text font-medium rounded-md py-[16px] pr-[10px] pl-[20px]",
       },
     },
     defaultVariants: {
