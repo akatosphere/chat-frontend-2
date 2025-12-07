@@ -12,7 +12,7 @@ const TextareaVariants = cva(
         underline: "border-0 border-b rounded-none",
       },
       textareaSize: {
-        md: "w-[329px] desktop:w-[360] h-[280px] desktop:h-[219] text font-medium rounded-md py-[16px] pr-[10px] pl-[20px]",
+        md: "h-[280px] desktop:h-[219] text font-medium rounded-md py-[16px] pr-[10px] pl-[20px]",
       },
     },
     defaultVariants: {

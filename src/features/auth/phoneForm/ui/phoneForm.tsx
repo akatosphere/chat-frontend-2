@@ -47,7 +47,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
 
   return (
     <form
-      className={cn("flex flex-col gap-4", className)}
+      className={cn("flex flex-col gap-4 h-full", className)}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Controller
@@ -74,6 +74,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
         size="lg"
         type="submit"
         disabled={!isValid || isSubmitting}
+        className="desktop:mt-auto"
       >
         Далее
       </Button>

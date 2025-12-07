@@ -28,6 +28,7 @@ export const Logo: React.FC<Props> = ({
   href = "/",
   withTitle = false,
 }) => {
+  console.log(withTitle);
   return (
     <div className={cn("inline-flex flex-col items-center", className)}>
       <Link

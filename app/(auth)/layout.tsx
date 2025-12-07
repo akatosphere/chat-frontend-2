@@ -8,9 +8,9 @@ export default function AuthLayout({
 }) {
   return (
     <Background>
-      <div className="flex gap-2 absolute top-4 left-4">
+      <div className="gap-2 absolute top-4 left-4 hidden md:flex">
         <Link href="/start">Стартовая</Link>
-        <Link href="/phone">Поддержка</Link>
+        <Link href="/phone">Телефон</Link>
         <Link href="/code">Код</Link>
         <Link href="/info">Фамилия/имя</Link>
         <Link href="/support">Поддержка</Link>
