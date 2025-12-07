@@ -46,22 +46,22 @@ export const ModalDialog : React.FC<ModalDialogProps> = ({
         Открыть модалку
         </AlertDialogTrigger>
         <AlertDialogContent className={cn(modalDialogVariants({ variant, size, className }))}>
-        <AlertDialogHeader className='text-black'>
-            <AlertDialogTitle>
+        <AlertDialogHeader>
+            <AlertDialogTitle className='text-tight text-black font-medium'>
             +7 999 999 99 99
             </AlertDialogTitle>
         </AlertDialogHeader>
-        <AlertDialogDescription className='text-gray'>
+        <AlertDialogDescription className='text-gray subtext-tight font-normal'>
             Номер телефона указан верно?
         </AlertDialogDescription>
         <AlertDialogFooter className='flex-row'>
             <AlertDialogCancel asChild>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className='flex flex-1'>
                 Изменить
             </Button>
             </AlertDialogCancel>
             <AlertDialogAction asChild>
-            <Button variant="default" size="sm">
+            <Button variant="default" size="sm" className='flex flex-1'>
                 Верно
             </Button>
             </AlertDialogAction>
