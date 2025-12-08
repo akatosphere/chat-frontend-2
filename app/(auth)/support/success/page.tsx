@@ -1,7 +1,5 @@
-import { SupportForm } from "@/features/auth/supportForm/ui/supportForm";
 import { BackgroundCardLayout } from "@/shared/layouts/card/backgroundCardLayout";
 import { Button } from "@/shared/shadcn/ui/button";
-import { BackAuthHeader } from "@/shared/ui/backAuthHeader";
 import { BackButton } from "@/shared/ui/backButton";
 import { Logo } from "@/shared/ui/logo";
 import Image from "next/image";
