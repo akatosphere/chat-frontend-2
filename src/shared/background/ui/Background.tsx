@@ -30,7 +30,7 @@ export const Background = ({
       {/* Desktop фон фото */}
       <div className="hidden desktop:block absolute inset-0 z-0">
         <Image
-          src="/bgStartPageDef.png"
+          src="/auth/bgStartPageDef.png"
           alt="desktop background"
           fill
           style={{ objectFit: "cover" }}

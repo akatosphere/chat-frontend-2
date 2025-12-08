@@ -1,15 +1,13 @@
 import { UserForm } from "@/features/auth/ui/userForm";
 import { BackgroundCardLayout } from "@/shared/layouts/card/backgroundCardLayout";
+import { BackAuthHeader } from "@/shared/ui/backAuthHeader";
 import { BackButton } from "@/shared/ui/backButton";
 import { Logo } from "@/shared/ui/logo";
 
 export default function Page() {
   return (
     <BackgroundCardLayout variant="form" className="pt-6">
-      <div className="flex items-center justify-between desktop:hidden mb-5 desktop:mb-0">
-        <BackButton href="/phone" />
-        <Logo size="sm" />
-      </div>
+      <BackAuthHeader backHref="/code" className="mb-5" />
       <Logo size="sm" withTitle className="mb-8 hidden desktop:flex" />
       <h3 className="font-semibold subheadline mb-5 desktop:mb-6 text-center">
         Личная информация
