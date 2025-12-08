@@ -1,6 +1,6 @@
 "use client";
 import { usePhoneStore } from "@/features/auth/phoneForm/model/store";
-import { CodeVerification } from "@/features/code-verification";
+import { CodeVerification } from "@/features/auth/codeVerification";
 import { BackgroundCardLayout } from "@/shared/layouts/card/backgroundCardLayout";
 import { BackButton } from "@/shared/ui/backButton";
 import { Logo } from "@/shared/ui/logo";

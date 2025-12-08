@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/shared/shadcn/ui/button";
-import { VerificationCodeInputTimer } from "@/features/code-verification/ui/verificationCodeTimer";
+import { VerificationCodeInputTimer } from "@/features/auth/codeVerification/ui/verificationCodeTimer";
 
 interface Props {
   isResendAvailable: boolean;
