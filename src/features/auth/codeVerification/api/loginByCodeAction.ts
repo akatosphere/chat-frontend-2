@@ -8,16 +8,12 @@ const LoginByCodeSchema = z.object({
   code: z.string().length(5, "Код должен быть из 5 цифр"),
 });
 
-type LoginByCodeInput = z.infer<typeof LoginByCodeSchema>;
-
-export async function loginByCodeAction(data: LoginByCodeInput) {
+export async function loginByCodeAction(
+  data: z.infer<typeof LoginByCodeSchema>
+) {
   const validated = LoginByCodeSchema.safeParse(data);
-
   if (!validated.success) {
-    return {
-      success: false,
-      error: "Неверный код. Повторите попытку",
-    };
+    return { success: false, error: "Неверный код. Повторите попытку" };
   }
 
   const { phone_number, code } = validated.data;
@@ -34,21 +30,10 @@ export async function loginByCodeAction(data: LoginByCodeInput) {
 
     if (!res.ok) {
       const error = await res.json();
-      console.error(error);
-      return {
-        success: false,
-        error: error.detail || "Неверный код",
-      };
+      return { success: false, error: error.detail || "Неверный код" };
     }
 
     const { access, refresh } = await res.json();
-
-    if (!access || !refresh) {
-      return {
-        success: false,
-        error: "Неверный код",
-      };
-    }
 
     const cookieStore = await cookies();
     cookieStore.set({
@@ -61,14 +46,8 @@ export async function loginByCodeAction(data: LoginByCodeInput) {
       maxAge: 60 * 60 * 24 * 30,
     });
 
-    return {
-      success: true,
-      access_token: access,
-    };
+    return { success: true, access_token: access };
   } catch (err) {
-    return {
-      success: false,
-      error: "Сервер недоступен. Попробуйте позже",
-    };
+    return { success: false, error: "Сервер недоступен. Попробуйте позже" };
   }
 }
