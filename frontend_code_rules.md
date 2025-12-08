@@ -30,6 +30,7 @@
 - переносы,
 - форматирование объектов и функций,
 - сортировку классов Tailwind (через плагин).
+- ссылка на документацию сортировки классов Tailwind: https://tailwindcss.com/blog/automatic-class-sorting-with-prettier
 
 ## Husky + lint-staged
 

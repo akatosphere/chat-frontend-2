@@ -1,6 +1,7 @@
 const config = {
   // Подключает плагин для сортировки классов TailwindCSS
   plugins: ["prettier-plugin-tailwindcss"],
+  tailwindFunctions: ["cva", "clsx", "cn"],
   // Всегда ставить точку с запятой в конце строки
   semi: true,
   // Использовать двойные кавычки вместо одинарных

@@ -51,7 +51,7 @@ export default defineConfig([
       indent: ["error", 2],
 
       // console.log → warning
-        "no-console": ["warn", { allow: ["warn", "error"] }],
+      "no-console": ["warn", { allow: ["warn", "error"] }],
 
       // Ошибка на неиспользуемые переменные
       "@typescript-eslint/no-unused-vars": [
@@ -63,7 +63,7 @@ export default defineConfig([
       ],
 
       // нейминг
-            "@typescript-eslint/naming-convention": [
+      "@typescript-eslint/naming-convention": [
         "error",
 
         // 1. Типы, интерфейсы — PascalCase
@@ -119,75 +119,7 @@ export default defineConfig([
             match: true,
           },
         },
-      ]
-
-
-      // "@typescript-eslint/naming-convention": [
-      //   "error",
-
-      //   // -----------------------------
-      //   // 1. Типы, интерфейсы, enum — PascalCase
-      //   // -----------------------------
-      //   {
-      //     selector: "typeLike",
-      //     format: ["PascalCase"],
-      //   },
-
-      //   // -----------------------------
-      //   // 2. Переменные, функции, утилиты — camelCase
-      //   // включая:
-      //   // - cn
-      //   // - buttonVariants
-      //   // - formSchema
-      //   // - useSomething
-      //   // - anythingElse
-      //   // -----------------------------
-      //   {
-      //     selector: "variableLike",
-      //     format: ["camelCase"],
-      //     leadingUnderscore: "allow",
-      //     trailingUnderscore: "allow",
-      //   },
-
-      //   // -----------------------------
-      //   // 3. Константы верхнего уровня — UPPER_CASE (по желанию)
-      //   // -----------------------------
-      //   {
-      //     selector: "variable",
-      //     modifiers: ["const"],
-      //     format: ["camelCase", "UPPER_CASE"],
-      //   },
-
-      //   // -----------------------------
-      //   // 4. Настоящие React компоненты
-      //   // Здесь мы ловим ИМЕННО jsx-функции
-      //   // -----------------------------
-      //   {
-      //     selector: "function",
-      //     modifiers: ["exported"],
-      //     format: ["PascalCase"],
-      //     // Чтобы cva() или schema() не считались компонентами
-      //     filter: {
-      //       regex: "^[A-Z]", // применяется только к функциям, которые уже начинаются с большой
-      //       match: true,
-      //     },
-      //   },
-
-      //   // -----------------------------
-      //   // 5. React-компоненты в виде:
-      //   // export const Button = () => ...
-      //   // -----------------------------
-      //   {
-      //     selector: "variable",
-      //     modifiers: ["exported", "const"],
-      //     types: ["function"],
-      //     format: ["PascalCase"],
-      //     filter: {
-      //       regex: "^[A-Z]", // только если сам переменной дали имя с заглавной
-      //       match: true,
-      //     },
-      //   },
-      // ]
+      ],
     },
   },
 ]);

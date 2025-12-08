@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 const backgroundCardLayoutVariants = cva(
-  "rounded-2xl overflow-hidden p-6 flex flex-col items-center border-2 border-white md:border-none",
+  "flex flex-col items-center overflow-hidden rounded-2xl border-2 border-white p-6 md:border-none",
   {
     variants: {
       variant: {
@@ -13,7 +13,7 @@ const backgroundCardLayoutVariants = cva(
         form: "bg-white md:bg-[#E9E7FE] md:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)]",
       },
       size: {
-        default: "max-w-lg w-full h-[95%] m-3",
+        default: "m-3 h-[95%] w-full max-w-lg",
       },
     },
     defaultVariants: {

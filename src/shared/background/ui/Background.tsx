@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { cn } from "@/shared/shadcn/lib/utils";
 
-const backgroundVariants = cva("w-full h-[100svh] flex justify-center items-center relative", {
+const backgroundVariants = cva("relative flex h-[100svh] w-full items-center justify-center", {
   variants: {
     variant: {
       default: "bg-gradient-mobile md:bg-white",
