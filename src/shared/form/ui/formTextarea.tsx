@@ -33,7 +33,7 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps> (
     ref
   ) => {
     return (
-      <div className={cn("flex flex-col gap-[4px]", className)}>
+      <div className={cn("flex flex-col gap-1", className)}>
         <Label variant={error ? "error" : "default"} htmlFor={id}>{error || label}</Label>
         <Textarea 
           id={id} 
