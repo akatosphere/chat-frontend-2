@@ -17,7 +17,6 @@ export const useVerificationUI = ({
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // async, когда добавим api. добавить обработку ошибок.
   const handleComplete = async (code: string) => {
     setLoading(true);
     const res = await onComplete(code);

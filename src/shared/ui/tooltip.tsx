@@ -23,6 +23,7 @@ export const Tooltip: React.FC<Props> = ({ className, children }) => {
     >
       <Button
         variant="text"
+        size="icon-xs"
         onClick={handleToggle}
         aria-label="Показать подсказку"
       >

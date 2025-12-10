@@ -20,6 +20,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
   const setPhone = usePhoneStore((state) => state.setPhone);
 
   const [isFocused, setIsFocused] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const {
     handleSubmit,
@@ -35,6 +36,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
     !isFocused && touchedFields.phone ? errors.phone?.message : "";
 
   const onSubmit = async (data: PhoneData) => {
+    setIsLoading(true);
     const result = await sendCode({
       phone_number: data.phone.replaceAll(" ", ""),
       code_length: 5,
@@ -47,6 +49,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
     } else {
       alert(result.error);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -68,7 +71,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
             }}
             onFocus={() => setIsFocused(true)}
             error={showError}
-            disabled={isSubmitting}
+            disabled={isSubmitting || isLoading}
           />
         )}
       />
@@ -77,7 +80,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
         variant="default"
         size="lg"
         type="submit"
-        disabled={!isValid || isSubmitting}
+        disabled={!isValid || isSubmitting || isLoading}
         className="desktop:mt-auto"
       >
         Далее
