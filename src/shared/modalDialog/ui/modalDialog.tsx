@@ -19,7 +19,7 @@ const modalDialogVariants = cva(
         default: "text-center desktop:text-start"
       },
       size: {
-        md: "desktop:w-[400px]"
+        md: "desktop:w-[400px] desktop:gap-2"
       }
     },
     defaultVariants: {
@@ -51,17 +51,17 @@ export const ModalDialog : React.FC<ModalDialogProps> = ({
             +7 999 999 99 99
             </AlertDialogTitle>
         </AlertDialogHeader>
-        <AlertDialogDescription className='text-gray subtext-tight font-normal'>
+        <AlertDialogDescription className='text-gray subtext-tight font-normal desktop:mb-4'>
             Номер телефона указан верно?
         </AlertDialogDescription>
-        <AlertDialogFooter className='flex-row'>
+        <AlertDialogFooter className='flex-row gap-6 desktop:gap-2 justify-end'>
             <AlertDialogCancel asChild>
-            <Button variant="outline" size="sm" className='flex flex-1'>
+            <Button variant="outline" size="sm" className='flex flex-1 desktop:flex-0'>
                 Изменить
             </Button>
             </AlertDialogCancel>
             <AlertDialogAction asChild>
-            <Button variant="default" size="sm" className='flex flex-1'>
+            <Button variant="default" size="sm" className='flex flex-1 desktop:flex-0'>
                 Верно
             </Button>
             </AlertDialogAction>
