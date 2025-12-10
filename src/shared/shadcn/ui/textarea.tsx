@@ -3,7 +3,7 @@ import { cva, VariantProps } from 'class-variance-authority'
 import { cn } from '@/shared/shadcn/lib/utils'
 
 const TextareaVariants = cva(
-  'resize-none block w-full rounded-md text-black transition outline-none focus-visible:border-primary disabled:opacity-50 disabled:cursor-not-allowed',
+  'resize-none block bg-white w-full rounded-md text-black transition outline-none focus-visible:border-primary disabled:opacity-50 disabled:cursor-not-allowed',
   {
     variants: {
       variant: {

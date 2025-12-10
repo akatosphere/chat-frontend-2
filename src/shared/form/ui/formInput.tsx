@@ -27,7 +27,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         ref
     ) => {
         return (
-            <div className={cn("flex flex-col gap-[4px]", className)}>
+            <div className={cn("flex flex-col gap-1", className)}>
                 <Label
                     variant={error ? "error" : "default"}
                     htmlFor={id}
