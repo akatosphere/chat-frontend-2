@@ -17,7 +17,7 @@ export default function Page() {
         size={"lg"}
         asChild
       >
-        <Link href="/phone">Начать</Link>
+        <Link href="/auth/phone">Начать</Link>
       </Button>
     </BackgroundCardLayout>
   );

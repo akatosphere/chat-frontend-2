@@ -6,18 +6,21 @@ import { VerificationCodeInput } from "./verificationCodeInput";
 import { useVerificationUI } from "../lib/useVerificationUI";
 import { useVerification } from "../lib/useVerification";
 import { VerificationCodeResend } from "./verificationCodeResend";
+import { usePhoneStore } from "../../phoneForm/model/store";
 
 export const CodeVerification: React.FC<{ className?: string }> = ({
   className,
 }) => {
+  const { phone } = usePhoneStore();
+
   const {
     attemptsLeft,
     isBanned,
+    resendTimer,
+    isResendAvailable,
     onComplete,
     onResend,
-    isResendAvailable,
-    resendTimer,
-  } = useVerification({});
+  } = useVerification({ phone_number: phone.replaceAll(" ", "") });
 
   const { error, loading, handleComplete, setError } = useVerificationUI({
     onComplete,
@@ -41,7 +44,7 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
         error={error || (isBanned && "Слишком много неверных попыток.") || ""}
         loading={loading}
         onErrorReset={() => setError("")}
-        className="mb-3 lg:mb-4"
+        className="mb-6 lg:mb-4"
       />
 
       <VerificationCodeResend

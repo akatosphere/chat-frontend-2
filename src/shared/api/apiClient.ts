@@ -1,9 +1,11 @@
+// lib/api.ts или src/lib/api.ts
 import axios, {
   AxiosError,
   AxiosInstance,
   InternalAxiosRequestConfig,
   AxiosHeaders,
 } from "axios";
+import { useAuthStore } from "./store";
 
 interface CustomConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
@@ -28,15 +30,19 @@ const processQueue = (error: Error | null, token: string | null = null) => {
   failedQueue = [];
 };
 
+// Request Interceptor — берём токен ТОЛЬКО из Zustand
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
+  const token = useAuthStore.getState().accessToken;
+
   if (token) {
     config.headers ??= new AxiosHeaders();
     config.headers.set("Authorization", `Bearer ${token}`);
   }
+
   return config;
 });
 
+// Response Interceptor — рефреш + очередь + обновление Zustand
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -48,6 +54,7 @@ api.interceptors.response.use(
 
     config._retry = true;
 
+    // Если уже идёт рефреш — ждём в очереди
     if (isRefreshing) {
       return new Promise((resolve, reject) => {
         failedQueue.push({ resolve, reject });
@@ -62,25 +69,38 @@ api.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      const res = await fetch("/api/refresh-token", {
+      const res = await fetch("http://localhost:3000/api/refresh-token", {
         method: "POST",
-        credentials: "include",
+        credentials: "include", // важно для httpOnly куки
       });
-      if (!res.ok) throw new Error("Refresh failed");
+
+      if (!res.ok) {
+        throw new Error("Refresh failed");
+      }
 
       const data = await res.json();
-      const newAccess = data.access;
+      const newAccessToken = data.access;
 
-      localStorage.setItem("access_token", newAccess);
-      api.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
-      processQueue(null, newAccess);
+      if (!newAccessToken) {
+        throw new Error("No access token in refresh response");
+      }
 
-      config.headers?.set("Authorization", `Bearer ${newAccess}`);
+      // КЛЮЧЕВОЙ МОМЕНТ: обновляем токен ТОЛЬКО через Zustand!
+      useAuthStore.getState()._updateToken(newAccessToken);
+
+      // Обновляем дефолтные заголовки (на всякий случай)
+      api.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+
+      // Разрешаем все запросы в очереди
+      processQueue(null, newAccessToken);
+
+      // Повторяем исходный запрос с новым токеном
+      config.headers?.set("Authorization", `Bearer ${newAccessToken}`);
       return api(config);
     } catch (err) {
+      // Полный логаут при любой ошибке рефреша
+      useAuthStore.getState().logout();
       processQueue(err as Error, null);
-      localStorage.removeItem("access_token");
-      window.location.href = "/auth";
       return Promise.reject(err);
     } finally {
       isRefreshing = false;

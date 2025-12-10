@@ -32,6 +32,7 @@ export const Background = ({
         <Image
           src="/auth/bgStartPageDef.png"
           alt="desktop background"
+          priority
           fill
           style={{ objectFit: "cover" }}
         />

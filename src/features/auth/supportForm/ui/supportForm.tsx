@@ -37,7 +37,7 @@ export const SupportForm: React.FC<SupportFormProps> = ({ className }) => {
     if (!isValid) return;
     const result = await sendSupport(data);
     if (result.success) {
-      router.push("/support/success");
+      router.push("/auth/support/success");
     } else {
       alert(result.error);
     }

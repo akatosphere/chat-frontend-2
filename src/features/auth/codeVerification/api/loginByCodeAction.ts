@@ -34,7 +34,6 @@ export async function loginByCodeAction(
     }
 
     const { access, refresh } = await res.json();
-
     const cookieStore = await cookies();
     cookieStore.set({
       name: "refresh_token",

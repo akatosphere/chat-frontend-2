@@ -16,8 +16,10 @@ export default function Page() {
         className="mx-auto object-contain mb-5 desktop:hidden desktop:mb-0"
       />
       <div className="flex flex-col text-center mb-8">
-        <span className="subheadline font-medium mb-4">Поздравляем!</span>
-        <span className="text">Регистрация прошла успешно</span>
+        <span className="subheadline font-medium mb-4 text-black">
+          Поздравляем!
+        </span>
+        <span className="text text-black">Регистрация прошла успешно</span>
       </div>
       <Button
         className="max-w-[329px] desktop:max-w-full w-full mx-auto desktop:mt-auto"
@@ -25,7 +27,7 @@ export default function Page() {
         size={"lg"}
         asChild
       >
-        <Link href="/">Далее</Link>
+        <Link href="/chat">Далее</Link>
       </Button>
     </BackgroundCardLayout>
   );

@@ -1,19 +1,27 @@
-"use client";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface VerificationState {
   attemptsLeft: number;
   banLevel: number;
-  resendTimer: number;
-  isBanned: boolean;
-  isResendAvailable: boolean;
+  lastResendAt: number | null;
+  banUntil: number;
 
-  setAttemptsLeft: (val: number | ((prev: number) => number)) => void;
-  setBanLevel: (val: number | ((prev: number) => number)) => void;
-  setResendTimer: (val: number | ((prev: number) => number)) => void;
-  setIsBanned: (val: boolean) => void;
-  setIsResendAvailable: (val: boolean) => void;
+  resendTimer: number;
+  isResendAvailable: boolean;
+  isBanned: boolean;
+
+  hasHydrated: boolean;
+  setHasHydrated: (v: boolean) => void;
+
+  setAttemptsLeft: (fn: (prev: number) => number) => void;
+  setBanLevel: (level: number) => void;
+  setLastResendAt: (time: number) => void;
+  setBanUntil: (time: number) => void;
+  setResendTimer: (value: number) => void;
+  setIsResendAvailable: (value: boolean) => void;
+  setIsBanned: (value: boolean) => void;
+  resetVerification: () => void;
 }
 
 export const useVerificationStore = create<VerificationState>()(
@@ -21,28 +29,47 @@ export const useVerificationStore = create<VerificationState>()(
     (set) => ({
       attemptsLeft: 5,
       banLevel: 0,
-      resendTimer: 120,
-      isBanned: false,
-      isResendAvailable: false,
+      lastResendAt: null,
+      banUntil: 0,
 
-      setAttemptsLeft: (val) =>
-        set((state) => ({
-          attemptsLeft:
-            typeof val === "function" ? val(state.attemptsLeft) : val,
-        })),
-      setBanLevel: (val) =>
-        set((state) => ({
-          banLevel: typeof val === "function" ? val(state.banLevel) : val,
-        })),
-      setResendTimer: (val) =>
-        set((state) => {
-          const newVal =
-            typeof val === "function" ? val(state.resendTimer) : val;
-          return { resendTimer: newVal, isResendAvailable: newVal <= 0 };
+      resendTimer: 0,
+      isResendAvailable: true,
+      isBanned: false,
+
+      hasHydrated: false,
+      setHasHydrated: (v) => set({ hasHydrated: v }),
+
+      setAttemptsLeft: (fn) =>
+        set((state) => ({ attemptsLeft: fn(state.attemptsLeft) })),
+      setBanLevel: (level) => set({ banLevel: level }),
+      setLastResendAt: (time) => set({ lastResendAt: time }),
+      setBanUntil: (time) => set({ banUntil: time }),
+      setResendTimer: (value) => set({ resendTimer: value }),
+      setIsResendAvailable: (value) => set({ isResendAvailable: value }),
+      setIsBanned: (value) => set({ isBanned: value }),
+
+      resetVerification: () =>
+        set({
+          attemptsLeft: 5,
+          banLevel: 0,
+          lastResendAt: null,
+          banUntil: 0,
+          resendTimer: 0,
+          isResendAvailable: true,
+          isBanned: false,
         }),
-      setIsBanned: (val) => set({ isBanned: val }),
-      setIsResendAvailable: (val) => set({ isResendAvailable: val }),
     }),
-    { name: "auth-storage" }
+    {
+      name: "verification-storage",
+      partialize: (state) => ({
+        attemptsLeft: state.attemptsLeft,
+        banLevel: state.banLevel,
+        lastResendAt: state.lastResendAt,
+        banUntil: state.banUntil,
+      }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
+    }
   )
 );

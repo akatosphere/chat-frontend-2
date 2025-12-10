@@ -8,7 +8,7 @@ export async function POST() {
   const refreshToken = cookieStore.get("refresh_token")?.value;
 
   if (!refreshToken) {
-    return NextResponse.json({ error: "No refresh token" }, { status: 401 });
+    return NextResponse.json({ error: "Нет refresh токена" }, { status: 401 });
   }
 
   try {
@@ -25,7 +25,7 @@ export async function POST() {
 
     if (!res.ok) {
       return NextResponse.json(
-        { error: data.detail || "Refresh failed" },
+        { error: data.detail || "Ошибка обновления refresh токена" },
         { status: 401 }
       );
     }
@@ -44,6 +44,6 @@ export async function POST() {
 
     return NextResponse.json({ access: data.access });
   } catch (err) {
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json({ error: "Серверная ошибка" }, { status: 500 });
   }
 }

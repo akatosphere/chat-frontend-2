@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { pluralize } from "@/shared/lib/pluralize";
+import { useRouter } from "next/navigation";
+
+type onCompleteResult = { success: boolean };
 
 interface UseVerificationUIOptions {
-  onComplete: (code: string) => { success: boolean };
+  onComplete: (code: string) => Promise<onCompleteResult>;
   attemptsLeft: number;
 }
 
@@ -12,12 +15,13 @@ export const useVerificationUI = ({
 }: UseVerificationUIOptions) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   // async, когда добавим api. добавить обработку ошибок.
-  const handleComplete = (code: string) => {
+  const handleComplete = async (code: string) => {
     setLoading(true);
-    const res = onComplete(code);
-    if (!res.success && attemptsLeft > 1)
+    const res = await onComplete(code);
+    if (!res?.success && attemptsLeft > 1)
       setError(
         `Код введен неверно. Осталось ${attemptsLeft - 1} ${pluralize(
           attemptsLeft - 1,
@@ -26,9 +30,9 @@ export const useVerificationUI = ({
           "попыток"
         )}.`
       );
-    else {
+    else if (res.success) {
       setError("");
-      // логика при успехе(редирект)
+      router.push("/auth/user");
     }
     setLoading(false);
     return res;

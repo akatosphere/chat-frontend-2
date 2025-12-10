@@ -48,7 +48,7 @@ export const Logo: React.FC<Props> = ({
       {withTitle && (
         <h3
           className={cn(
-            "font-bold text-text text-center leading-tight",
+            "font-bold text-center leading-tight text-black",
             logoVariants.title_sizes[size]
           )}
         >
