@@ -25,6 +25,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
   const {
     handleSubmit,
     control,
+    getValues,
     formState: { errors, isValid, isSubmitting, touchedFields },
   } = useForm<PhoneData>({
     resolver: zodResolver(phoneSchema),
@@ -51,6 +52,14 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
     }
     setIsLoading(false);
   };
+
+  const openModalHandler = () => {
+    const phone = getValues("phone");
+    if (!isValid) return;
+
+    setPendingPhone(phone);
+    setOpenModal(true); 
+  }
 
   return (
     <form
@@ -79,12 +88,22 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
       <Button
         variant="default"
         size="lg"
-        type="submit"
+        type="button"
         disabled={!isValid || isSubmitting || isLoading}
         className="desktop:mt-auto"
+        onClick={openModalHandler}
       >
         Далее
       </Button>
+      <ModalDialog
+        title={pendingPhone} 
+        description="Номер телефона указан верно?"
+        cancelBtnText="Изменить"
+        actionBtnText="Верно"
+        open={openModal}
+        onOpenChange={setOpenModal}
+        onConfirm={() => handleSubmit(onSubmit)()}
+      />
     </form>
   );
 };
