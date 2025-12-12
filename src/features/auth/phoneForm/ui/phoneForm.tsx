@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { savePhoneToCookie } from "../lib/savePhoneToCookie";
 import { PhoneInput } from "./phoneInput";
+import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 
 type PhoneFormProps = {
   className?: string;
@@ -21,6 +22,8 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [pendingPhone, setPendingPhone] = useState('')
+  const [openModal, setOpenModal] = useState(false)
   const router = useRouter();
   const {
     handleSubmit,
