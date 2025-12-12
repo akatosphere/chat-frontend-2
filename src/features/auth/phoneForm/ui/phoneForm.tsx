@@ -10,6 +10,7 @@ import { phoneSchema, PhoneData } from "../model/schema";
 import { sendCode } from "../api/sendCode";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 
 type PhoneFormProps = {
   className?: string;
@@ -19,10 +20,14 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
   const setPhone = usePhoneStore((state) => state.setPhone);
 
   const [isFocused, setIsFocused] = useState(false);
+  const [pendingPhone, setPendingPhone] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+
   const router = useRouter();
   const {
     handleSubmit,
     control,
+    getValues,
     formState: { errors, isValid, isSubmitting, touchedFields },
   } = useForm<PhoneData>({
     resolver: zodResolver(phoneSchema),
@@ -46,6 +51,14 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
       alert(result.error);
     }
   };
+
+  const openModalHandler = () => {
+    const phone = getValues("phone");
+    if (!isValid) return;
+
+    setPendingPhone(phone);
+    setOpenModal(true); 
+  }
 
   return (
     <form
@@ -74,12 +87,22 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
       <Button
         variant="default"
         size="lg"
-        type="submit"
+        type="button"
         disabled={!isValid || isSubmitting}
         className="desktop:mt-auto"
+        onClick={openModalHandler}
       >
         Далее
       </Button>
+      <ModalDialog 
+        title={pendingPhone} 
+        description="Номер телефона указан верно?"
+        cancelBtnText="Изменить"
+        actionBtnText="Верно"
+        open={openModal}
+        onOpenChange={setOpenModal}
+        onConfirm={() => handleSubmit(onSubmit)()}
+      />
     </form>
   );
 };
