@@ -11,7 +11,7 @@ export default function Home() {
   const phone = usePhoneStore((state) => state.phone);
   const user = useUserFormStore((store) => store.user);
   return (
-    <div className="">
+    <div>
       {<NavBar/>}
     </div>
   );
