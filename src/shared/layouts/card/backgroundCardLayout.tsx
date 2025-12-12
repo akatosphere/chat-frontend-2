@@ -53,7 +53,6 @@ export const BackgroundCardLayout = ({
         </div>
       )}
 
-      {/* Белые размытые пятна */}
       <div className="absolute z-0 w-48 h-48 top-[50%] left-[60%] rounded-full bg-white/70 blur-[50px] " />
       <div className="absolute z-0 w-48 h-48 top-[70%] left-0 rounded-full bg-white/70 blur-[50px]" />
       <div className="absolute z-0 w-48 h-48 top-[-10%] left-0 rounded-full bg-white/70 blur-[50px]" />

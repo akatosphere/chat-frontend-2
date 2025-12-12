@@ -70,7 +70,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
               field.onBlur();
             }}
             onFocus={() => setIsFocused(true)}
-            error={showError}
+            error={field.value && showError}
             disabled={isSubmitting || isLoading}
           />
         )}
