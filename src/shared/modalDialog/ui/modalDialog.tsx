@@ -46,7 +46,7 @@ export const ModalDialog : React.FC<ModalDialogProps> = ({
         Открыть модалку
         </AlertDialogTrigger>
         <AlertDialogContent className={cn(modalDialogVariants({ variant, size, className }))}>
-        <AlertDialogHeader>
+        <AlertDialogHeader className='mt-2 desktop:mt-0'>
             <AlertDialogTitle className='text-tight text-black font-medium'>
             +7 999 999 99 99
             </AlertDialogTitle>
