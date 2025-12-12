@@ -94,7 +94,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
       >
         Далее
       </Button>
-      <ModalDialog 
+      <ModalDialog
         title={pendingPhone} 
         description="Номер телефона указан верно?"
         cancelBtnText="Изменить"
