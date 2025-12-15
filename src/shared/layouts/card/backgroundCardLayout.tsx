@@ -3,24 +3,25 @@ import { cn } from "@/shared/shadcn/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const backgroundCardLayoutVariants = cva(
-  "rounded-lg rounded-md overflow-hidden p-4 pt-11 desktop:p-16 desktop:pt-18 desktop:pb-20 flex flex-col items-center border-2 border-white desktop:border-none",
+  'rounded-lg rounded-md overflow-hidden p-4 pt-11 desktop:p-16 desktop:pt-18 desktop:pb-20 flex flex-col items-center border-2 border-white desktop:border-none',
   {
     variants: {
       variant: {
         start:
-          "bg-[#E9E7FE] desktop:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)]",
-        form: "bg-white desktop:bg-[#E9E7FE] desktop:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)]",
+          'bg-[#E9E7FE] desktop:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)]',
+        form: 'bg-white desktop:bg-[#E9E7FE] desktop:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)]',
+        blur: 'bg-white desktop:bg-[#E9E7FE] desktop:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)]',
       },
       size: {
-        default: "max-w-lg w-full h-[95%] max-h-[760px] m-3",
+        default: 'max-w-lg w-full h-[95%] max-h-[760px] m-3',
       },
     },
     defaultVariants: {
-      variant: "start",
-      size: "default",
+      variant: 'start',
+      size: 'default',
     },
-  }
-);
+  },
+)
 
 type BackgroundCardLayoutProps = React.HTMLAttributes<HTMLDivElement> &
   VariantProps<typeof backgroundCardLayoutVariants> & {
