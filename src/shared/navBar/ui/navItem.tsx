@@ -1,20 +1,26 @@
-// src/shared/navBar/utils/navItem.tsx
 import Link from "next/link";
 import { ComponentType, SVGProps } from "react";
 
 interface NavItemProps {
-  label: string;  
+  label: string;
   href?: string;
   onClick?: () => void;
   iconDesktop: ComponentType<SVGProps<SVGSVGElement>>;
   iconMobile: ComponentType<SVGProps<SVGSVGElement>>;
-  variant: string;
+  isMobile: boolean;
   isActive?: boolean;
 }
 
-export const NavItem = ({ label, href, onClick, iconDesktop, iconMobile, variant, isActive }: NavItemProps) => {
-  const Icon = variant === "desktop" ? iconDesktop : iconMobile;
-  const isMobile = variant === "mobile";
+export const NavItem = ({
+  label,
+  href,
+  onClick,
+  iconDesktop,
+  iconMobile,
+  isMobile,
+  isActive,
+}: NavItemProps) => {
+  const Icon = isMobile ? iconMobile : iconDesktop;
   const colorClass = isActive ? "text-primary" : "text-gray";
   const bgClass = isActive && !isMobile ? "bg-gray-button-nav border border-gray-tone-nav rounded-md" : "";
   const wrapperClass = "cursor-pointer";
@@ -26,13 +32,18 @@ export const NavItem = ({ label, href, onClick, iconDesktop, iconMobile, variant
     </div>
   );
 
-return href ? (
-  <Link className={wrapperClass} href={href} onClick={onClick}>
-    {content}
-  </Link>
-) : (
-  <button className={wrapperClass} onClick={onClick}>
-    {content}
-  </button>
-);
+  if (href) {
+    return (
+      <Link href={href} className={wrapperClass} onClick={onClick}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button onClick={onClick} className={wrapperClass}>
+      {content}
+    </button>
+  );
 };
+

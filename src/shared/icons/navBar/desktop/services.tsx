@@ -2,8 +2,8 @@ export const ServicesDesktop = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path 
-        fill-rule="evenodd" 
-        clip-rule="evenodd" 
+        fillRule="evenodd" 
+        clipRule="evenodd" 
         d="M1.8193 28.1999C1.31993 27.4897 
           1.19753 26.5809 1.49122 25.7639L9.16015 
           4.43058C9.5407 3.37196 10.5447 2.66602 
