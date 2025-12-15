@@ -17,15 +17,16 @@ export default function Home() {
   return (
     <BackgroundPagelayout backgrountCardLayout={"form"}>
       {/* тестовая кнопка для тостера */}
-      <button className="bg-fuchsia-300 p-2 mr-10 ml-10 text-black font-bold rounded-[8px]" onClick={() => setShowToast(true)}>Показать тостер</button>
+      <button className="bg-fuchsia-300 p-2 mr-10 ml-10 text-black font-bold rounded-md" onClick={() => setShowToast(true)}>Показать тостер</button>
       {showToast && (<Toast
-      icon={{
-        mobile: "/toast/checkCircleMob.png",
-        desktop: "/toast/checkCircleDesk.png",
-      }}
-        duration={3000}
-        onClose={() => setShowToast(false)}
-      />)}
+        icon={{
+          mobile: "/toast/checkCircleMob.png",
+          desktop: "/toast/checkCircleDesk.png",
+        }}
+          duration={3000}
+          onClose={() => setShowToast(false)}
+        />)}
+
     </BackgroundPagelayout>
   );
 }

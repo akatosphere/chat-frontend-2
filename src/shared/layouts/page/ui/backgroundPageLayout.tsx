@@ -7,11 +7,12 @@ type BackgroundPagelayoutProps = {
 }
   
 export const BackgroundPagelayout = ( { children, backgrountCardLayout = "start" }: BackgroundPagelayoutProps ) => {
+
   return (
     <Background variant="default">
       <BackgroundCardLayout
         variant={backgrountCardLayout}
-      >
+      > 
         { children }
       </BackgroundCardLayout>
     </Background>
