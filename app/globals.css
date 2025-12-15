@@ -116,6 +116,7 @@
 
 @theme inline {
   --breakpoint-desktop: 1023px;
+  --breakpoint-card-not-compressed: 536px;
 
   --color-primary: var(--primary);
   --color-primary-light: var(--primary-light);

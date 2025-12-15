@@ -13,8 +13,6 @@ import { savePhoneToCookie } from '../lib/savePhoneToCookie'
 import { PhoneInput } from './phoneInput'
 import { ModalDialog } from '@/shared/modalDialog/ui/modalDialog'
 import {
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
@@ -102,7 +100,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
         onClick={openModalHandler}>
         Далее
       </Button>
-      <ModalDialog open={openModal} onOpenChange={setOpenModal}>
+      <ModalDialog open={openModal} onOpenChange={setOpenModal} overlay='card'>
         <AlertDialogHeader className="mt-2 desktop:mt-0">
           <AlertDialogTitle className="text-tight text-black font-medium">{pendingPhone}</AlertDialogTitle>
         </AlertDialogHeader>

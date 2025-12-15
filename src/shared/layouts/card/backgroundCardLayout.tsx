@@ -10,7 +10,6 @@ const backgroundCardLayoutVariants = cva(
         start:
           'bg-[#E9E7FE] desktop:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)]',
         form: 'bg-white desktop:bg-[#E9E7FE] desktop:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)]',
-        blur: 'bg-white desktop:bg-[#E9E7FE] desktop:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)]',
       },
       size: {
         default: 'max-w-lg w-full h-[95%] max-h-[760px] m-3',
@@ -57,6 +56,7 @@ export const BackgroundCardLayout = ({
       <div className="absolute z-0 w-48 h-48 top-[50%] left-[60%] rounded-full bg-white/70 blur-[50px] " />
       <div className="absolute z-0 w-48 h-48 top-[70%] left-0 rounded-full bg-white/70 blur-[50px]" />
       <div className="absolute z-0 w-48 h-48 top-[-10%] left-0 rounded-full bg-white/70 blur-[50px]" />
+
     </div>
   );
 };
