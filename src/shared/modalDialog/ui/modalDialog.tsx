@@ -6,6 +6,7 @@ const modalDialogVariants = cva('bg-white rounded-lg desktop:rounded-md', {
   variants: {
     variant: {
       default: 'flex flex-col text-center desktop:text-start',
+      vertical: 'text-center'
     },
     size: {
       md: 'desktop:w-[400px]',

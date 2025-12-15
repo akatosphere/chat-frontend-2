@@ -49,7 +49,7 @@ export const VerificationCodeResend = ({ className, isResendAvailable, resendTim
             <Button variant="default" size="md" className="flex flex-1" asChild>
               <Link href="/auth/support">Обратиться в поддержку</Link>
             </Button>
-            <Button variant="outline" size="md" className="flex flex-1">
+            <Button variant="outline" size="md" className="flex flex-1" onClick={() => setOpenModal(false)}>
               Закрыть
             </Button>
           </AlertDialogFooter>
