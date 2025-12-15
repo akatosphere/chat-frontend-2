@@ -257,8 +257,3 @@ body {
   border-right: 1px solid transparent;
   background-clip: content-box;
 }
-
-.list-scrollbar::-webkit-scrollbar {
-  padding-right: 2px;
-  margin-right: 2px;
-}
