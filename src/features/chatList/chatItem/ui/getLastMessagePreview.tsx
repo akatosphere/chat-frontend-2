@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { PhotoIcon } from "./photoIcon";
 import { VideoIcon } from "./videoIcon";
+import { pluralize } from "@/shared/lib/pluralize";
 
 const IMAGE_TYPES = ["jpg", "jpeg", "png", "webp"];
 const GIF_TYPES = ["gif"];
@@ -57,8 +58,7 @@ export const getLastMessagePreview = ({
       return {
         icons: [],
         text:
-          content ||
-          `${count} ${declension(count, ["файл", "файла", "файлов"])}`,
+          content || `${count} ${pluralize(count, "файл", "файла", "файлов")}`,
       };
     }
 
@@ -69,7 +69,7 @@ export const getLastMessagePreview = ({
     return {
       icons,
       text:
-        content || `${count} ${declension(count, ["файл", "файла", "файлов"])}`,
+        content || `${count} ${pluralize(count, "файл", "файла", "файлов")}`,
     };
   }
 
@@ -81,14 +81,4 @@ export const getLastMessagePreview = ({
   }
 
   return { icons, text: content || `${count} медиа` };
-};
-
-const declension = (
-  number: number,
-  words: [string, string, string]
-): string => {
-  const cases = [2, 0, 1, 1, 1, 2];
-  const index =
-    number % 100 > 4 && number % 100 < 20 ? 2 : cases[Math.min(number % 10, 5)];
-  return `${number} ${words[index]}`;
 };
