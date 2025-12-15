@@ -48,6 +48,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
 
   const onSubmit = async (data: PhoneData) => {
     setIsLoading(true)
+    setOpenModal(false)
     const result = await sendCode({
       phone_number: data.phone.replaceAll(' ', ''),
       code_length: 5,
@@ -109,20 +110,20 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
           Номер телефона указан верно?
         </AlertDialogDescription>
         <AlertDialogFooter className="flex-row gap-6 desktop:gap-2 justify-end">
-          <AlertDialogCancel asChild>
-            <Button variant="outline" size="sm" className="flex flex-1 desktop:flex-0">
-              Изменить
-            </Button>
-          </AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button
-              variant="default"
-              size="sm"
-              className="flex flex-1 desktop:flex-0"
-              onClick={() => handleSubmit(onSubmit)()}>
-              Верно
-            </Button>
-          </AlertDialogAction>
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex flex-1 desktop:flex-0"
+            onClick={() => setOpenModal(false)}>
+            Изменить
+          </Button>
+          <Button
+            variant="default"
+            size="sm"
+            className="flex flex-1 desktop:flex-0"
+            onClick={() => handleSubmit(onSubmit)()}>
+            Верно
+          </Button>
         </AlertDialogFooter>
       </ModalDialog>
     </form>

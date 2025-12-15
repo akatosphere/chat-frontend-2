@@ -1,9 +1,6 @@
 import { cn } from '@/shared/shadcn/lib/utils'
 import { cva, type VariantProps } from 'class-variance-authority'
-import {
-  AlertDialog,
-  AlertDialogContent,
-} from '@/shared/shadcn/ui/alert-dialog'
+import { AlertDialog, AlertDialogContent } from '@/shared/shadcn/ui/alert-dialog'
 
 const modalDialogVariants = cva('bg-white rounded-lg desktop:rounded-md', {
   variants: {
@@ -27,14 +24,7 @@ type ModalDialogProps = React.ComponentPropsWithoutRef<'div'> &
     onOpenChange: (value: boolean) => void
   }
 
-export const ModalDialog: React.FC<ModalDialogProps> = ({
-  className,
-  variant,
-  size,
-  open,
-  onOpenChange,
-  children
-}) => {
+export const ModalDialog: React.FC<ModalDialogProps> = ({ className, variant, size, open, onOpenChange, children }) => {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className={cn(modalDialogVariants({ variant, size, className }))}>
