@@ -37,7 +37,7 @@ export const VerificationCodeResend = ({ className, isResendAvailable, resendTim
         onClick={() => setOpenModal(true)}>
         Не приходит код?
       </Button>
-      <ModalDialog open={openModal} onOpenChange={setOpenModal} className="gap-5 py-8">
+      <ModalDialog overlay="card" open={openModal} onOpenChange={setOpenModal} className="gap-5 py-8">
         <div>
           <AlertDialogHeader className="mt-2 desktop:mt-0">
             <AlertDialogTitle className=" text-center title text-black font-medium">Код не пришел?</AlertDialogTitle>

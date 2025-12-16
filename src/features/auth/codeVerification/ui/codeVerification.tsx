@@ -61,7 +61,7 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
 
       <VerificationCodeResend onResend={onResend} resendTimer={resendTimer} isResendAvailable={isResendAvailable} />
 
-      <ModalDialog variant='vertical' open={openModal} onOpenChange={setOpenModal} className="gap-5 py-8">
+      <ModalDialog overlay="card" variant='vertical' open={openModal} onOpenChange={setOpenModal} className="gap-5 py-8">
         <div>
           <AlertDialogHeader>
             <AlertDialogTitle className="title text-black font-medium">Лимит исчерпан</AlertDialogTitle>
