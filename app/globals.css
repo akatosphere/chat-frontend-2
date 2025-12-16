@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 :root {
   /* Headline */
@@ -41,13 +41,14 @@
   --primary: #7769e1;
   --primary-light: #cec8ff;
   --primary-dark: #615aa3;
+  --primary-gray: #efeef7;
   --muted: #e4e4e4;
   --muted-foreground: #00000033;
   --caption: #ffffff;
   --error: #ff0000;
   --black: #1c1c1e;
   --gray: #747474;
-  --light-gray: #C5C5C5;
+  --light-gray: #c5c5c5;
 
   --radius-lg: 12px;
   --radius-md: 8px;
@@ -119,6 +120,7 @@
   --color-primary: var(--primary);
   --color-primary-light: var(--primary-light);
   --color-primary-dark: var(--primary-dark);
+  --color-primary-gray: var(--primary-gray);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-caption: var(--caption);
@@ -210,4 +212,3 @@ body {
   border-right: 1px solid transparent;
   background-clip: content-box;
 }
-
