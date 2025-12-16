@@ -142,13 +142,21 @@ export const useVerification = ({
   const onResend = async () => {
     if (!isResendAvailable) return;
 
-    resetVerification();
+    // resetVerification();
     // setLastResendAt(Date.now());
     // setResendTimer(resendBlockTime);
     // setIsResendAvailable(false);
     // setIsCodeExpired(false);
+    const result = await sendCode({
+      phone_number: phone_number.replaceAll(" ", ""),
+      code_length: 5,
+    });
 
-    await sendCode({ phone_number, code_length: 5 });
+    if (result.success) {
+      resetVerification();
+    } else {
+      alert(result.error);
+    }
   };
 
   return {
