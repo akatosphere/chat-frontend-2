@@ -12,6 +12,7 @@ interface Props {
   attemptsLeft: number;
   error: string;
   loading: boolean;
+  isCodeExpired: boolean;
   isBanned: boolean;
   onComplete: (code: string) => void;
   onErrorReset?: () => void;
@@ -23,6 +24,7 @@ export const VerificationCodeInput: React.FC<Props> = ({
   attemptsLeft,
   error,
   loading,
+  isCodeExpired,
   isBanned,
   onComplete,
   onErrorReset,
@@ -54,16 +56,22 @@ export const VerificationCodeInput: React.FC<Props> = ({
   }, [error, isBanned, length]);
 
   const wasBannedRef = useRef(isBanned);
+  const wasExpiredRef = useRef(isCodeExpired);
 
   useEffect(() => {
-    if (wasBannedRef.current && !isBanned) {
+    console.log(isCodeExpired);
+    if (
+      (wasBannedRef.current && !isBanned) ||
+      (!wasExpiredRef.current && isCodeExpired)
+    ) {
       setValues(Array.from({ length }, () => ""));
       onErrorReset?.();
       focus(0);
     }
 
     wasBannedRef.current = isBanned;
-  }, [isBanned, length]);
+    wasExpiredRef.current = isCodeExpired;
+  }, [isBanned, isCodeExpired, length]);
 
   return (
     <div>

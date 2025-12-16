@@ -57,6 +57,7 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
         attemptsLeft={attemptsLeft}
         onComplete={handleComplete}
         isBanned={isBanned}
+        isCodeExpired={isCodeExpired}
         error={
           (isCodeExpired && "Запросите код повторно.") ||
           (attemptsLeft >= 1 && error) ||
