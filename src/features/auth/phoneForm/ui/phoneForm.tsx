@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { savePhoneToCookie } from "../lib/savePhoneToCookie";
 import { PhoneInput } from "./phoneInput";
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
+import { useVerificationStore } from "../../codeVerification/model/userVerificationStore";
 
 type PhoneFormProps = {
   className?: string;
@@ -22,8 +23,8 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [pendingPhone, setPendingPhone] = useState('')
-  const [openModal, setOpenModal] = useState(false)
+  const [pendingPhone, setPendingPhone] = useState("");
+  const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
   const {
     handleSubmit,
@@ -35,6 +36,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
     mode: "onChange",
     defaultValues: { phone: "" },
   });
+  const { resetVerification } = useVerificationStore();
 
   const showError =
     !isFocused && touchedFields.phone ? errors.phone?.message : "";
@@ -48,6 +50,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
 
     if (result.success) {
       setPhone(data.phone);
+      resetVerification();
       await savePhoneToCookie(data.phone);
       router.push("/auth/code");
     } else {
@@ -61,8 +64,8 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
     if (!isValid) return;
 
     setPendingPhone(phone);
-    setOpenModal(true); 
-  }
+    setOpenModal(true);
+  };
 
   return (
     <form
@@ -99,7 +102,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
         Далее
       </Button>
       <ModalDialog
-        title={pendingPhone} 
+        title={pendingPhone}
         description="Номер телефона указан верно?"
         cancelBtnText="Изменить"
         actionBtnText="Верно"

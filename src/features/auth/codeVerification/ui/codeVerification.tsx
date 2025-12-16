@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Tooltip } from "@/shared/ui/tooltip";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { VerificationCodeInput } from "./verificationCodeInput";
@@ -18,6 +18,7 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
     isBanned,
     resendTimer,
     isResendAvailable,
+    isCodeExpired,
     onComplete,
     onResend,
   } = useVerification({ phone_number: phone.replaceAll(" ", "") });
@@ -26,6 +27,20 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
     onComplete,
     attemptsLeft,
   });
+
+  const openExpiredModal = () => {
+    alert("Код истёк(");
+  };
+
+  const hasOpenedModal = useRef(false);
+
+  useEffect(() => {
+    if (!isCodeExpired) return;
+    if (hasOpenedModal.current) return;
+
+    openExpiredModal();
+    hasOpenedModal.current = true;
+  }, [isCodeExpired]);
 
   return (
     <div className={cn("flex flex-col items-center justify-center", className)}>
@@ -41,7 +56,13 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
         length={5}
         attemptsLeft={attemptsLeft}
         onComplete={handleComplete}
-        error={error || (isBanned && "Слишком много неверных попыток.") || ""}
+        isBanned={isBanned}
+        error={
+          (isCodeExpired && "Запросите код повторно.") ||
+          (attemptsLeft >= 1 && error) ||
+          (isBanned && "Слишком много неверных попыток.") ||
+          ""
+        }
         loading={loading}
         onErrorReset={() => setError("")}
         className="mb-6 lg:mb-4"
