@@ -1,30 +1,17 @@
 import { cn } from '@/shared/shadcn/lib/utils'
 import { InputGroupTextarea } from '@/shared/shadcn/ui/input-group'
-import { useLayoutEffect, useRef } from 'react'
+import { resize } from '../lib/resizeTextareaHandler'
 
 type MessageFormProps = { className?: string }
 
 export const MessageForm: React.FC<MessageFormProps> = ({ className }) => {
-  const ref = useRef<HTMLTextAreaElement | null>(null)
-
-  const resize = () => {
-    const el = ref.current
-    if (!el) return
-
-    el.style.height = 'auto'
-    el.style.height = `${el.scrollHeight}px`
-  }
-
-  useLayoutEffect(() => {
-    resize()
-  }, [])
 
   return (
     <form className={cn('py-3 flex', className)}>
       <div className="flex-1" />
 
       <InputGroupTextarea
-        ref={ref}
+        onInput={resize}
         rows={1}
         placeholder="Сообщение"
         className="
@@ -45,3 +32,4 @@ export const MessageForm: React.FC<MessageFormProps> = ({ className }) => {
     </form>
   )
 }
+
