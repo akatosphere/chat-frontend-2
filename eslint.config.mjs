@@ -122,4 +122,21 @@ export default defineConfig([
       ],
     },
   },
+  
+  // Server Actions — разрешаем function
+  {
+    files: ["**/*actions.ts", "**/actions/**/*.ts", "**/actions/**/*.tsx"],
+    rules: {
+      "func-style": "off",
+      //стрелки запрещаем
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "ArrowFunctionExpression",
+          message:
+            "Server Actions must be declared with `export function`, arrow functions are not allowed",
+        },
+      ],
+    },
+  },
 ]);
