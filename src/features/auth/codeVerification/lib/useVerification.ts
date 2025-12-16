@@ -20,7 +20,7 @@ interface UseVerificationOptions {
 const DEFAULTS = {
   initialAttemptsLeft: 5,
   resendBlockTime: 120,
-  banTime: { firstBan: 6, repeatBan: 12 },
+  banTime: { firstBan: 600, repeatBan: 3599 },
 } as const;
 
 export const useVerification = ({
