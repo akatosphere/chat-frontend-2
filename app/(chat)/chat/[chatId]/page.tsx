@@ -8,13 +8,13 @@ interface ChatPageProps {
 export default async function ChatPage({ params }: ChatPageProps) {
   const { chatId } = await params
 
-  // Заглушка проверки
   if (!chatId) {
     notFound()
   }
 
   return (
-    <div className="flex flex-col h-svh">
+    <div className="flex flex-col min-h-svh">
+      <main className="flex-1 overflow-y-auto">{/* messages */}</main>
 
       <ChatFooter />
     </div>

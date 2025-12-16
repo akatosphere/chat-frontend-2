@@ -55,6 +55,7 @@
   --radius-lg: 16px;
 
   --safe-h: 100svh;
+  --keyboard-offset: 0px;
 }
 
 @utility headline {
