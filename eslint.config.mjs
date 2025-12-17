@@ -125,7 +125,8 @@ export default defineConfig([
   
   // Server Actions — разрешаем function
   {
-    files: ["**/*actions.ts", "**/actions/**/*.ts", "**/actions/**/*.tsx"],
+    files: ["**/*actions.ts", "**/actions/**/*.ts", "**/actions/**/*.tsx","src/shared/shadcn/**/*.ts",
+    "src/shared/shadcn/**/*.tsx"],
     rules: {
       "func-style": "off",
       //стрелки запрещаем
