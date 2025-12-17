@@ -52,3 +52,5 @@ export interface ChatListResponse {
   previous: string | null;
   results: ChatItemData[];
 }
+
+export type MessageStatus = "sent" | "delivered" | "pending";
