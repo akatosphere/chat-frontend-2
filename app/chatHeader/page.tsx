@@ -1,5 +1,4 @@
-import ChatHeaderClient from "@/shared/headerActiveChat/ui/chatHeaderClient";
-
+import ChatHeaderClient from "@/widgets/activeChatHeader/ui/chatHeaderClient";
 
 export default function Page() {
   return (

@@ -1,16 +1,16 @@
 "use client"
 
-import { HeaderActiveChat } from "./headerActiveChat"
+import { ChatHeader } from "./chatHeader"
 
 
 export default function ChatHeaderClient() {
   const handleCallClick = () => {
     //заглушка
-    console.info("Функция [Вызова] еще не реализована.")
+    console.info("Функция еще не реализована.")
   }
 
   return (
-    <HeaderActiveChat
+    <ChatHeader
       name="Ксения Ярыгина"
       status={"online"}
       photo="/icons/test.jpg"
