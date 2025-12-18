@@ -6,13 +6,14 @@ import { SITE_TITLE } from "../lib/constants/siteInfo";
 
 interface Props {
   className?: string;
-  size?: "sm" | "lg";
+  size?: "sm" | "lg" | "xs";
   href?: string;
   withTitle?: boolean;
 }
 
 const logoVariants = {
   logo_sizes: {
+    xs: "w-[49px] h-[44px]",
     sm: "w-[58px] h-[53px] lg:w-[78px] lg:h-[70px]",
     lg: "w-[211px] h-[183px] lg:w-[179px] lg:h-[161px]",
   },
