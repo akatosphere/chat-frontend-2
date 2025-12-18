@@ -39,7 +39,7 @@ export const Background = ({
       </div>
 
       {/* Передний план */}
-      <div className="relative z-10 w-full fullscreen flex justify-center items-center">
+      <div className="fullscreen relative z-10 flex w-full items-center justify-center">
         {children}
       </div>
     </div>
