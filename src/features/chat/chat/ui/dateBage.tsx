@@ -1,15 +1,19 @@
 import { cn } from "@/shared/shadcn/lib/utils";
 
 type DateBadgeProps = {
+  className?: string;
   label: string;
 };
 
-export const DateBadge: React.FC<DateBadgeProps> = ({ label }) => {
+export const DateBadge: React.FC<DateBadgeProps> = ({ label, className }) => {
   return (
-    <div className="my-6 flex justify-center">
-      <span className="bg-tone-gray/70 px-4 py-1.5 rounded-full text-xs font-medium text-gray">
-        {label}
-      </span>
+    <div
+      className={cn(
+        "flex justify-center px-2 py-0.5 bg-[#615AA399] text-white caption font-medium rounded-md w-fit self-center",
+        className
+      )}
+    >
+      <span>{label}</span>
     </div>
   );
 };

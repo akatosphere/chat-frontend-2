@@ -1,71 +1,163 @@
-import { ApiMessage } from "../model/types";
+export const mockMessagesPage = {
+  count: 12,
+  next: "http://api.example.org/messages/?page=2",
+  previous: null,
+  results: [
+    {
+      id: 1,
+      uid: "msg-1",
+      from_user: {
+        uid: "user-1",
+        username: "bigboss",
+        nickname: "Big Boss",
+        first_name: "Ivan",
+        last_name: "Petrov",
+        patronymic: "",
+        avatar_url: "/avatars/user-1.jpg",
+        avatar_webp_url: "/avatars/user-1.webp",
+      },
+      to_user: {
+        uid: "user-2",
+        username: "alex",
+        nickname: "Alex",
+        first_name: "Alexey",
+        last_name: "Smirnov",
+        patronymic: "",
+        avatar_url: "/avatars/user-2.jpg",
+        avatar_webp_url: "/avatars/user-2.webp",
+      },
+      content: "Привет! Ты видел последний апдейт?",
+      replied_messages: [],
+      forwarded_messages: [],
+      files_list: [],
+      new: false,
+      created_at: 1703875200, // 30 декабря 2023 10:00
+      updated_at: 1703875200,
+      chat_id: 100,
+      chat_key: "chat-100",
+      chat_type: "private",
+      message_rtc: null,
+    },
 
-const CURRENT_USER_UID = "user-me";
-const OTHER_USER_UID = "user-other";
+    {
+      id: 2,
+      uid: "msg-2",
+      from_user: {
+        uid: "user-2",
+        username: "alex",
+        nickname: "Alex",
+        first_name: "Alexey",
+        last_name: "Smirnov",
+        patronymic: "",
+        avatar_url: "/avatars/user-2.jpg",
+        avatar_webp_url: "/avatars/user-2.webp",
+      },
+      to_user: {
+        uid: "user-1",
+        username: "bigboss",
+        nickname: "Big Boss",
+        first_name: "Ivan",
+        last_name: "Petrov",
+        patronymic: "",
+        avatar_url: "/avatars/user-1.jpg",
+        avatar_webp_url: "/avatars/user-1.webp",
+      },
+      content: "Да, выглядит круто 👌",
+      replied_messages: [],
+      forwarded_messages: [],
+      files_list: [],
+      new: false,
+      created_at: 1703875500, // +5 минут
+      updated_at: 1703875500,
+      chat_id: 100,
+      chat_key: "chat-100",
+      chat_type: "private",
+      message_rtc: null,
+    },
 
-export type MockScenario = "all-read" | "has-unread";
-
-export const generateMockMessages = (
-  scenario: MockScenario = "all-read"
-): ApiMessage[] => {
-  const now = Date.now();
-  const messages: ApiMessage[] = [];
-  let id = 1;
-
-  const add = (
-    content: string,
-    isMine: boolean,
-    minutesAgo: number,
-    files = 0,
-    isRead = true
-  ) => {
-    const created_at = now - minutesAgo * 60 * 1000;
-    messages.push({
-      id: id++,
-      content,
-      created_at,
-      from_user: { uid: isMine ? CURRENT_USER_UID : OTHER_USER_UID },
-      files_list: Array.from({ length: files }, (_, i) => ({
-        id: i,
-        file_url: "",
-        file_type: "image",
-      })),
-      // new: true — доставлено (не прочитано), false — прочитано, undefined — отправлено мной
-      new: isRead ? false : true,
-    });
-  };
-
-  // Старые прочитанные сообщения (ниже всех)
-  for (let i = 100; i >= 30; i--) {
-    const minutesAgo = i * 15 + Math.random() * 60;
-    const isMine = Math.random() > 0.5;
-    add(
-      ["Старое сообщение", "Ок", "Понял", "😂", "Спасибо", "Давай"][
-        Math.floor(Math.random() * 6)
+    {
+      id: 3,
+      uid: "msg-3",
+      from_user: {
+        uid: "user-1",
+        username: "bigboss",
+        nickname: "Big Boss",
+        first_name: "Ivan",
+        last_name: "Petrov",
+        patronymic: "",
+        avatar_url: "/avatars/user-1.jpg",
+        avatar_webp_url: "/avatars/user-1.webp",
+      },
+      to_user: {
+        uid: "user-2",
+        username: "alex",
+        nickname: "Alex",
+        first_name: "Alexey",
+        last_name: "Smirnov",
+        patronymic: "",
+        avatar_url: "/avatars/user-2.jpg",
+        avatar_webp_url: "/avatars/user-2.webp",
+      },
+      content: "Скидываю скрин",
+      replied_messages: [],
+      forwarded_messages: [],
+      files_list: [
+        {
+          id: 10,
+          uid: "file-10",
+          file: "screenshot.png",
+          file_url: "/files/screenshot.png",
+          file_webp: "screenshot.webp",
+          file_webp_url: "/files/screenshot.webp",
+          file_type: "image",
+          new: false,
+          created_at: 1703875600,
+          updated_at: 1703875600,
+        },
       ],
-      isMine,
-      minutesAgo
-    );
-  }
+      new: false,
+      created_at: 1703875600,
+      updated_at: 1703875600,
+      chat_id: 100,
+      chat_key: "chat-100",
+      chat_type: "private",
+      message_rtc: null,
+    },
 
-  if (scenario === "has-unread") {
-    // 30 непрочитанных сообщений от собеседника
-    for (let i = 29; i >= 0; i--) {
-      add(
-        `Непрочитанное сообщение #${30 - i}`,
-        false,
-        i * 2 + 5,
-        Math.random() > 0.7 ? 1 : 0,
-        false
-      );
-    }
-  } else {
-    // Просто прочитанные
-    for (let i = 20; i >= 0; i--) {
-      const isMine = Math.random() > 0.4;
-      add(`Сообщение #${21 - i}`, isMine, i * 3, Math.random() > 0.8 ? 1 : 0);
-    }
-  }
-
-  return messages.sort((a, b) => a.created_at - b.created_at); // от старых к новым
+    {
+      id: 4,
+      uid: "msg-4",
+      from_user: {
+        uid: "user-2",
+        username: "alex",
+        nickname: "Alex",
+        first_name: "Alexey",
+        last_name: "Smirnov",
+        patronymic: "",
+        avatar_url: "/avatars/user-2.jpg",
+        avatar_webp_url: "/avatars/user-2.webp",
+      },
+      to_user: {
+        uid: "user-1",
+        username: "bigboss",
+        nickname: "Big Boss",
+        first_name: "Ivan",
+        last_name: "Petrov",
+        patronymic: "",
+        avatar_url: "/avatars/user-1.jpg",
+        avatar_webp_url: "/avatars/user-1.webp",
+      },
+      content: "Вот это сообщение было раньше",
+      replied_messages: [],
+      forwarded_messages: [],
+      files_list: [],
+      new: true,
+      created_at: 1703788800, // 29 декабря 2023
+      updated_at: 1703788800,
+      chat_id: 100,
+      chat_key: "chat-100",
+      chat_type: "private",
+      message_rtc: null,
+    },
+  ],
 };

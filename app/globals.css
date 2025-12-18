@@ -52,6 +52,9 @@
   --light-gray: #c5c5c5;
   --light-green: #d8f5f0;
   --tone-gray: #eeeeee;
+  --light-tone-gray: #f5f6f880;
+  --teal: #d8f5f0;
+  --accent: #d6d2f6;
 
   --radius-lg: 12px;
   --radius-md: 8px;
@@ -131,6 +134,8 @@
   --color-light-gray: var(--light-gray);
   --color-light-green: var(--light-green);
   --color-tone-gray: var(--tone-gray);
+  --color-light-tone-gray: var(--light-tone-gray);
+  --color-teal: var(--teal);
 
   --radius-lg: var(--radius-lg);
   --radius-md: var(--radius-md);
