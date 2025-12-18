@@ -77,7 +77,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
             id="phone"
             value={field.value}
             onChange={field.onChange}
-            onBlur={(e) => {
+            onBlur={() => {
               setIsFocused(false);
               field.onBlur();
             }}

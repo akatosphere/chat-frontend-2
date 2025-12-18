@@ -252,3 +252,16 @@ body {
   background-clip: content-box;
 }
 
+/* класс для цвета */
+.primary {
+  --color-primary: var(--primary);
+}
+
+.gray {
+  --color-gray: var(--gray);
+}
+
+.light-gray {
+  --color-muted: var(--muted);
+}
+
