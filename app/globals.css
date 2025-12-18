@@ -45,9 +45,16 @@
   --primary-dark: #615aa3;
   --muted: #e4e4e4;
   --muted-foreground: #00000033;
+  --caption: #ffffff;
+  --error: #ff0000;
+  --black: #1c1c1e;
+  --gray: #747474;
+  --light-gray: #C5C5C5;
 
+  --radius-lg: 12px;
   --radius-md: 8px;
   --radius-sm: 4px;
+  --radius-lg: 16px;
 
   --safe-h: 100svh;
 }
@@ -115,14 +122,20 @@
   --color-primary-dark: var(--primary-dark);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-caption: var(--caption);
+  --color-error: var(--error);
+  --color-black: var(--black);
+  --color-gray: var(--gray);
+  --color-light-gray: var(--light-gray);
 
+  --radius-lg: var(--radius-lg);
   --radius-md: var(--radius-md);
   --radius-main: var(--radius-sm);
+  --radius-lg: var(--radius-lg);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-roboto);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -152,7 +165,6 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
@@ -165,8 +177,8 @@
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--black);
+  font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
 }
 
 .dark {
@@ -223,8 +235,20 @@ body {
 }
 
 /* для desktop можно переопределить через media query, если нужен !important */
-@media (min-width: 768px) {
+@media (min-width: 1023px) {
   .bg-gradient-mobile {
     background: white;
   }
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--light-gray);
+  border-radius: 4px;
+  border-right: 1px solid transparent;
+  background-clip: content-box;
+}
+
