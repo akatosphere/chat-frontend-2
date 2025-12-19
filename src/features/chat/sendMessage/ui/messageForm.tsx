@@ -1,6 +1,7 @@
 import { cn } from '@/shared/shadcn/lib/utils'
-import { InputGroup, InputGroupAddon, InputGroupText, InputGroupTextarea } from '@/shared/shadcn/ui/input-group'
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupTextarea } from '@/shared/shadcn/ui/input-group'
 import { resize } from '../lib/resizeTextareaHandler'
+import EmojiBtn from '@icons/emojiBtn.svg';
 
 type MessageFormProps = { className?: string }
 
@@ -26,7 +27,9 @@ export const MessageForm: React.FC<MessageFormProps> = ({ className }) => {
         >
         </InputGroupTextarea>
           <InputGroupAddon align="inline-end">
-            <InputGroupText>:)</InputGroupText>
+            <InputGroupButton>
+              <EmojiBtn/>
+            </InputGroupButton>
           </InputGroupAddon>
       </InputGroup>
 
