@@ -16,7 +16,7 @@ export const ChatFooter: React.FC<ChatFooterProps> = ({ className }) => {
     <footer
       style={{ paddingBottom: 'var(--keyboard-offset)' }}
       className={cn('shrink-0 w-full bg-primary-gray/90', className)}>
-        <MessageForm/>
+        <MessageForm onSubmitMessage={(m) => {console.log("сообщение: ", m)}}/>
     </footer>
   )
 }
