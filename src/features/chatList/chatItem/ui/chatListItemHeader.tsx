@@ -3,17 +3,20 @@ import { ChatItemData } from "../model/types";
 import { StatusIcon } from "./statusIcon";
 import { formatLastSeen } from "../lib/formatLastSeen";
 import Mute from "@icons/chat/mute.svg";
+import { getChatDisplayName } from "../lib/getUserDisplayName";
 
-type HeaderProps = {
+type ChatListItemHeaderProps = {
   chat: ChatItemData;
   isActive?: boolean;
 };
 
-export const Header = ({ chat, isActive }: HeaderProps) => {
+export const ChatListItemHeader = ({
+  chat,
+  isActive,
+}: ChatListItemHeaderProps) => {
   const user = chat.chat;
   const lastMsg = chat.last_message;
-  const displayName =
-    chat.name || `${user.first_name} ${user.last_name}`.trim() || user.username;
+  const displayName = getChatDisplayName(chat);
   const time = lastMsg ? formatLastSeen(lastMsg.created_at) : "";
 
   return (
@@ -30,7 +33,7 @@ export const Header = ({ chat, isActive }: HeaderProps) => {
         {!chat.notifications && (
           <Mute
             className={cn(
-              "desktop:w-3.5 w-[11px] desktop:h-3.5 h-[11px] text-gray shrink-0 transform-colors duration-200",
+              "desktop:w-3.5 w-[11px] desktop:h-3.5 h-[11px] text-gray shrink-0 transition-colors duration-200",
               isActive && "text-white"
             )}
           />
@@ -41,13 +44,13 @@ export const Header = ({ chat, isActive }: HeaderProps) => {
           <StatusIcon
             isMessageNew={lastMsg?.new}
             fromUser={lastMsg?.from_user}
-            isActive={isActive || false}
+            isActive={Boolean(isActive)}
             userId={user.uid}
           />
         )}
         <span
           className={cn(
-            "desktop:minitext caption text-gray leading-none transform-colors duration-200",
+            "desktop:minitext caption text-gray leading-none transition-colors duration-200",
             isActive && "text-white"
           )}
         >

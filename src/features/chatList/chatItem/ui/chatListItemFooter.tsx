@@ -3,19 +3,19 @@ import { MessagePreview } from "./messagePreview";
 import Pin from "@icons/chat/pin.svg";
 import { cn } from "@/shared/shadcn/lib/utils";
 
-type FooterProps = {
+type ChatListItemFooterProps = {
   isActive?: boolean;
   totalUnread: number;
   isFavorite: boolean;
   lastMsg: ChatItemData["last_message"];
 };
 
-export const Footer = ({
+export const ChatListItemFooter = ({
   isFavorite,
   lastMsg,
   isActive,
   totalUnread,
-}: FooterProps) => {
+}: ChatListItemFooterProps) => {
   return (
     <div className="flex items-stretch justify-between gap-3 mt-1 h-full">
       <MessagePreview lastMsg={lastMsg} isActive={isActive} />

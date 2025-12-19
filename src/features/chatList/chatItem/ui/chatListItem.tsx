@@ -1,13 +1,13 @@
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ChatItemData } from "../model/types";
 import { Avatar } from "./avatar";
-import { Header } from "./header";
-import { Footer } from "./footer";
+import { ChatListItemHeader } from "./chatListItemHeader";
+import { ChatListItemFooter } from "./chatListItemFooter";
 
 type ChatListItemProps = {
   chat: ChatItemData;
   isActive?: boolean;
-  onClick: (id: number) => void;
+  onClick: () => void;
 };
 
 export const ChatListItem = ({
@@ -27,12 +27,15 @@ export const ChatListItem = ({
           chat.is_favorite && "bg-white",
           isActive && "bg-primary-accent hover:bg-primary-accent"
         )}
-        onClick={() => onClick(chat.id)}
+        onClick={onClick}
       >
-        <Avatar isOnline={user.is_online} avatarUrl={user.avatar_url || ""} />
+        <Avatar
+          isOnline={user.is_online}
+          avatarUrl={user.avatar_webp_url || user.avatar_url || ""}
+        />
         <div className="flex-1 min-w-0 flex flex-col justify-between relative after:content-[''] after:absolute after:left-0 after:right-0 after:h-px after:bg-gray after:opacity-15 after:top-[calc(100%+10px)]">
-          <Header chat={chat} isActive={isActive} />
-          <Footer
+          <ChatListItemHeader chat={chat} isActive={isActive} />
+          <ChatListItemFooter
             isFavorite={chat.is_favorite}
             lastMsg={chat.last_message}
             isActive={isActive}

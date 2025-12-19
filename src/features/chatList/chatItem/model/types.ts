@@ -54,3 +54,20 @@ export interface ChatListResponse {
 }
 
 export type MessageStatus = "sent" | "delivered" | "pending";
+
+export type FilesSummary = {
+  types: string[];
+  count: number;
+};
+
+export type PreviewIconType = "photo" | "video" | "file";
+
+export type LastMessagePreview = {
+  icons: PreviewIconType[];
+  text: string;
+};
+
+export type GetLastMessagePreviewParams = {
+  content?: string;
+  files?: FilesSummary | null;
+};

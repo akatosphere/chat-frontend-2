@@ -14,7 +14,7 @@ export const mockChats: ChatListResponse = {
         first_name: "Влад",
         last_name: "",
         avatar: null,
-        avatar_url: null,
+        avatar_url: "./auth/success.svg",
         avatar_webp: null,
         avatar_webp_url: null,
         is_blocked: false,
