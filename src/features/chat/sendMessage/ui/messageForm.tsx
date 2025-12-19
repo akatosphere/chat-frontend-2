@@ -63,7 +63,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           "
         />
 
-        <InputGroupAddon align="inline-end">
+        <InputGroupAddon align="inline-end" className='mb-2'>
           <InputGroupButton onClick={onEmojiBtnClick} type="button">
             <EmojiBtn />
           </InputGroupButton>
