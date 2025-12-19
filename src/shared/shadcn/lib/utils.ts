@@ -21,6 +21,6 @@ const customTwMerge = extendTailwindMerge({
   },
 });
 
-export const cn = (...inputs: ClassValue[]) => {
+export function cn(...inputs: ClassValue[]) {
   return customTwMerge(clsx(inputs));
-};
+}

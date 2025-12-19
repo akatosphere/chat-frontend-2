@@ -16,6 +16,6 @@ export const usePhoneStore = create<PhoneState>()(
     }),
     {
       name: "auth-phone-storage",
-    }
-  )
+    },
+  ),
 );
