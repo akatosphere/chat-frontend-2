@@ -22,7 +22,7 @@ export const Tooltip: React.FC<Props> = ({ className, children }) => {
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      <Button variant="text" size="icon-xs" onClick={handleToggle} aria-label="Показать подсказку">
+      <Button variant="text" size="icon-sm" onClick={handleToggle} aria-label="Показать подсказку">
         <Image
           src="/icons/info.svg"
           alt="Информация"
