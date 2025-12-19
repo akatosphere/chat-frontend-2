@@ -8,9 +8,7 @@ const LoginByCodeSchema = z.object({
   code: z.string().length(5, "Код должен быть из 5 цифр"),
 });
 
-export async function loginByCodeAction(
-  data: z.infer<typeof LoginByCodeSchema>
-) {
+export async function loginByCodeAction(data: z.infer<typeof LoginByCodeSchema>) {
   const validated = LoginByCodeSchema.safeParse(data);
   if (!validated.success) {
     return { success: false, error: "Неверный код. Повторите попытку" };
@@ -25,7 +23,7 @@ export async function loginByCodeAction(
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone_number, code }),
-      }
+      },
     );
 
     if (!res.ok) {
@@ -46,7 +44,7 @@ export async function loginByCodeAction(
     });
 
     return { success: true, access_token: access };
-  } catch (err) {
+  } catch {
     return { success: false, error: "Сервер недоступен. Попробуйте позже" };
   }
 }

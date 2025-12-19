@@ -21,6 +21,10 @@ export default defineConfig([
 
   {
     files: ["**/*.ts", "**/*.tsx"],
+    extends: [
+      // "plugin:@typescript-eslint/recommended",
+      // "plugin:prettier/recommended"
+    ],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -48,7 +52,7 @@ export default defineConfig([
       "func-style": ["error", "expression"],
 
       // 2 пробела
-      indent: ["error", 2],
+      indent: ["error", 2, { SwitchCase: 1 }],
 
       // console.log → warning
       "no-console": ["warn", { allow: ["warn", "error"] }],
@@ -119,14 +123,40 @@ export default defineConfig([
             match: true,
           },
         },
+
+        // 6. Исключения для Zod схем (*Schema)
+        {
+          selector: "variable",
+          format: ["camelCase", "UPPER_CASE", "PascalCase"],
+          filter: {
+            regex: ".*Schema$",
+            match: true,
+          },
+        },
+
+        // 7. Разрешить snake_case только для данных API
+        {
+          selector: "variable",
+          format: null, // не проверять формат
+          filter: {
+            regex: "^[_a-z]+$",
+            match: true,
+          },
+        },
       ],
     },
   },
-  
+
   // Server Actions — разрешаем function
   {
-    files: ["**/*actions.ts", "**/actions/**/*.ts", "**/actions/**/*.tsx","src/shared/shadcn/**/*.ts",
-    "src/shared/shadcn/**/*.tsx"],
+    files: [
+      "middleware.ts",
+      "**/*actions.ts",
+      "**/actions/**/*.ts",
+      "**/actions/**/*.tsx",
+      "src/shared/shadcn/**/*.ts",
+      "src/shared/shadcn/**/*.tsx",
+    ],
     rules: {
       "func-style": "off",
       //стрелки запрещаем
@@ -138,6 +168,13 @@ export default defineConfig([
             "Server Actions must be declared with `export function`, arrow functions are not allowed",
         },
       ],
+    },
+  },
+  {
+    files: ["app/api/**/*.ts", "app/api/**/*.tsx"],
+    rules: {
+      "func-style": "off",
+      "no-restricted-syntax": "off",
     },
   },
 ]);

@@ -1,6 +1,7 @@
-import { cn } from "@/shared/shadcn/lib/utils";
-import { FormInput } from "@/shared/form/ui/formInput";
 import { PatternFormat } from "react-number-format";
+
+import { FormInput } from "@/shared/form/ui/formInput";
+import { cn } from "@/shared/shadcn/lib/utils";
 
 type PhoneInputProps = {
   className?: string;
