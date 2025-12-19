@@ -39,8 +39,8 @@ export const MessageForm: React.FC<MessageFormProps> = ({
     <form className={cn('py-3 flex', className)} onSubmit={handleSubmit}>
       <div className="flex-1 flex flex-row-reverse">
         <div className="px-2">
-          <Button variant="ghost" size="icon-lg" asChild onClick={onAttachBtnClick} type="button">
-            <AttachBtn />
+          <Button variant="ghost" size="icon-auto" onClick={onAttachBtnClick} type="button">
+            <AttachBtn className="w-11 h-11" />
           </Button>
         </div>
       </div>
@@ -73,12 +73,12 @@ export const MessageForm: React.FC<MessageFormProps> = ({
       <div className="flex-1">
         <div className="px-2">
           {textMessage.trim() ? (
-            <Button variant="ghost" size="icon-lg" type="submit">
+            <Button variant="ghost" size="icon-auto" type="submit">
               <MessageSendBtn className="w-11 h-11" />
             </Button>
           ) : (
-            <Button variant="ghost" size="icon-lg" type="button">
-              <VoiceMessage />
+            <Button variant="ghost" size="icon-auto" type="button">
+              <VoiceMessage className="w-11 h-11" />
             </Button>
           )}
         </div>
