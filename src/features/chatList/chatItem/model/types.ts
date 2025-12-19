@@ -22,10 +22,10 @@ export interface ChatUser {
   nickname: string | null;
   first_name: string;
   last_name: string;
-  avatar: string | null;
-  avatar_url: string | null;
-  avatar_webp: string | null;
-  avatar_webp_url: string | null;
+  avatar?: string | null;
+  avatar_url?: string | null;
+  avatar_webp?: string | null;
+  avatar_webp_url?: string | null;
   is_blocked: boolean;
   is_online: boolean;
   was_online_at: number;
