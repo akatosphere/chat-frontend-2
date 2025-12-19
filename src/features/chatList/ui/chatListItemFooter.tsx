@@ -2,7 +2,7 @@ import Pin from "@icons/chat/pin.svg";
 
 import { cn } from "@/shared/shadcn/lib/utils";
 
-import { ChatItemData } from "../model/types";
+import { ChatItemData } from "../../../entities/chat/model/types";
 import { MessagePreview } from "./messagePreview";
 
 type ChatListItemFooterProps = {

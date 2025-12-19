@@ -1,7 +1,7 @@
 import { cn } from "@/shared/shadcn/lib/utils";
 
-import { ChatItemData } from "../model/types";
-import { Avatar } from "./avatar";
+import { ChatItemData } from "../../../entities/chat/model/types";
+import { Avatar } from "../../../entities/chat/ui/avatar";
 import { ChatListItemFooter } from "./chatListItemFooter";
 import { ChatListItemHeader } from "./chatListItemHeader";
 

@@ -6,7 +6,7 @@ import {
   IMAGE_TYPES,
   MAX_ICONS_DISPLAY,
   VIDEO_TYPES,
-} from "../model/constants";
+} from "../../../features/chatList/model/constants";
 import { GetLastMessagePreviewParams, LastMessagePreview, PreviewIconType } from "../model/types";
 
 export const getLastMessagePreview = ({

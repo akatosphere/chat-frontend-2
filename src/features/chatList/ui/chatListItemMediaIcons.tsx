@@ -2,7 +2,7 @@ import Photo from "@icons/chat/picture.svg";
 import Video from "@icons/chat/video.svg";
 import { ComponentType, SVGProps } from "react";
 
-import { PreviewIconType } from "../model/types";
+import { PreviewIconType } from "@/entities/chat/model/types";
 
 type SvgIcon = ComponentType<SVGProps<SVGSVGElement>>;
 

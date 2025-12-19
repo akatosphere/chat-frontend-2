@@ -2,8 +2,8 @@ import Forwarded from "@icons/chat/forwardedd.svg";
 
 import { cn } from "@/shared/shadcn/lib/utils";
 
-import { getLastMessagePreview } from "../lib/getLastMessagePreview";
-import { ChatItemData } from "../model/types";
+import { getLastMessagePreview } from "../../../entities/chat/lib/getLastMessagePreview";
+import { ChatItemData } from "../../../entities/chat/model/types";
 import { ChatListItemMediaIcons } from "./chatListItemMediaIcons";
 
 type MessagePreviewProps = {

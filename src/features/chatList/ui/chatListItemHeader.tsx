@@ -2,10 +2,10 @@ import Mute from "@icons/chat/mute.svg";
 
 import { cn } from "@/shared/shadcn/lib/utils";
 
-import { formatLastSeen } from "../lib/formatLastSeen";
-import { getChatDisplayName } from "../lib/getUserDisplayName";
-import { ChatItemData } from "../model/types";
-import { StatusIcon } from "./statusIcon";
+import { formatLastSeen } from "../../../entities/chat/lib/formatLastSeen";
+import { getChatDisplayName } from "../../../entities/chat/lib/getUserDisplayName";
+import { ChatItemData } from "../../../entities/chat/model/types";
+import { StatusIcon } from "../../../entities/chat/ui/statusIcon";
 
 type ChatListItemHeaderProps = {
   chat: ChatItemData;

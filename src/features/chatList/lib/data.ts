@@ -1,4 +1,4 @@
-import { ChatListResponse } from "../model/types";
+import { ChatListResponse } from "../../../entities/chat/model/types";
 
 export const mockChats: ChatListResponse = {
   count: 42,
