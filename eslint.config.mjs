@@ -21,6 +21,10 @@ export default defineConfig([
 
   {
     files: ["**/*.ts", "**/*.tsx"],
+    extends: [
+      // "plugin:@typescript-eslint/recommended",
+      // "plugin:prettier/recommended"
+    ],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -48,7 +52,7 @@ export default defineConfig([
       "func-style": ["error", "expression"],
 
       // 2 пробела
-      indent: ["error", 2],
+      indent: ["error", 2, { SwitchCase: 1 }],
 
       // console.log → warning
       "no-console": ["warn", { allow: ["warn", "error"] }],
