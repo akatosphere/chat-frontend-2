@@ -12,13 +12,11 @@ export interface SendCodeSuccess {
   code_length: number;
 }
 
-export const sendCode = async (
-  data: SendCodeData
-): Promise<Result<SendCodeSuccess>> => {
+export const sendCode = async (data: SendCodeData): Promise<Result<SendCodeSuccess>> => {
   try {
     const { data: response } = await api.post<SendCodeSuccess>(
       "/api/v1/auth/messenger/login/get/code/",
-      data
+      data,
     );
 
     return { success: true, data: response };

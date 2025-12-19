@@ -1,7 +1,8 @@
 import Photo from "@icons/chat/picture.svg";
 import Video from "@icons/chat/video.svg";
-import { PreviewIconType } from "../model/types";
 import { ComponentType, SVGProps } from "react";
+
+import { PreviewIconType } from "../model/types";
 
 type SvgIcon = ComponentType<SVGProps<SVGSVGElement>>;
 
@@ -12,21 +13,15 @@ const ICON_MAP: Record<PreviewIconType, SvgIcon> = {
 };
 
 type ChatListItemMediaIconsProps = {
-  className?: string;
   icons: PreviewIconType[];
 };
 
-export const ChatListItemMediaIcons: React.FC<ChatListItemMediaIconsProps> = ({
-  className,
-  icons,
-}) => {
+export const ChatListItemMediaIcons: React.FC<ChatListItemMediaIconsProps> = ({ icons }) => {
   return (
     <>
       {icons.map((type, index) => {
-        const Icon = ICON_MAP[type];
-        return (
-          <Icon key={`${type}-${index}`} className="w-3.5 h-3.5 shrink-0" />
-        );
+        const ICON = ICON_MAP[type];
+        return <ICON key={`${type}-${index}`} className="h-3.5 w-3.5 shrink-0" />;
       })}
     </>
   );

@@ -1,16 +1,13 @@
 import { pluralize } from "@/shared/lib/pluralize";
+
 import {
-  IMAGE_TYPES,
-  GIF_TYPES,
-  VIDEO_TYPES,
   FILE_TYPES,
+  GIF_TYPES,
+  IMAGE_TYPES,
   MAX_ICONS_DISPLAY,
+  VIDEO_TYPES,
 } from "../model/constants";
-import {
-  GetLastMessagePreviewParams,
-  LastMessagePreview,
-  PreviewIconType,
-} from "../model/types";
+import { GetLastMessagePreviewParams, LastMessagePreview, PreviewIconType } from "../model/types";
 
 export const getLastMessagePreview = ({
   content,
@@ -22,17 +19,13 @@ export const getLastMessagePreview = ({
 
   const { types, count } = files;
 
-  const hasImages = types.some(
-    (t) => IMAGE_TYPES.includes(t) || GIF_TYPES.includes(t)
-  );
+  const hasImages = types.some((t) => IMAGE_TYPES.includes(t) || GIF_TYPES.includes(t));
   const hasVideos = types.some((t) => VIDEO_TYPES.includes(t));
   const hasFiles = types.some((t) => FILE_TYPES.includes(t));
 
   // только картинки
   if (hasImages && !hasVideos && !hasFiles) {
-    const icons: PreviewIconType[] = Array(
-      Math.min(count, MAX_ICONS_DISPLAY)
-    ).fill("photo");
+    const icons: PreviewIconType[] = Array(Math.min(count, MAX_ICONS_DISPLAY)).fill("photo");
 
     return {
       icons,
@@ -42,9 +35,7 @@ export const getLastMessagePreview = ({
 
   // только видео
   if (hasVideos && !hasImages && !hasFiles) {
-    const icons: PreviewIconType[] = Array(
-      Math.min(count, MAX_ICONS_DISPLAY)
-    ).fill("video");
+    const icons: PreviewIconType[] = Array(Math.min(count, MAX_ICONS_DISPLAY)).fill("video");
 
     return {
       icons,
@@ -57,19 +48,15 @@ export const getLastMessagePreview = ({
     if (count === 1) {
       return {
         icons: [],
-        text:
-          content || `${count} ${pluralize(count, "файл", "файла", "файлов")}`,
+        text: content || `${count} ${pluralize(count, "файл", "файла", "файлов")}`,
       };
     }
 
-    const icons: PreviewIconType[] = Array(
-      Math.min(count, MAX_ICONS_DISPLAY)
-    ).fill("file");
+    const icons: PreviewIconType[] = Array(Math.min(count, MAX_ICONS_DISPLAY)).fill("file");
 
     return {
       icons,
-      text:
-        content || `${count} ${pluralize(count, "файл", "файла", "файлов")}`,
+      text: content || `${count} ${pluralize(count, "файл", "файла", "файлов")}`,
     };
   }
 

@@ -1,7 +1,9 @@
+import Pin from "@icons/chat/pin.svg";
+
+import { cn } from "@/shared/shadcn/lib/utils";
+
 import { ChatItemData } from "../model/types";
 import { MessagePreview } from "./messagePreview";
-import Pin from "@icons/chat/pin.svg";
-import { cn } from "@/shared/shadcn/lib/utils";
 
 type ChatListItemFooterProps = {
   isActive?: boolean;
@@ -17,22 +19,20 @@ export const ChatListItemFooter = ({
   totalUnread,
 }: ChatListItemFooterProps) => {
   return (
-    <div className="flex items-stretch justify-between gap-3 mt-1 h-full">
+    <div className="mt-1 flex h-full items-stretch justify-between gap-3">
       <MessagePreview lastMsg={lastMsg} isActive={isActive} />
-      <div className="shrink-0 flex items-center mt-auto mb-[6.5px] h-full">
+      <div className="mt-auto mb-[6.5px] flex h-full shrink-0 items-center">
         {totalUnread > 0 ? (
-          <div className="px-[5px] min-h-[18px] min-w-[18px] rounded-full bg-primary flex items-center justify-center">
-            <span className="text-white caption leading-none">
-              {totalUnread > 999
-                ? Math.floor(totalUnread / 1000) + "к"
-                : totalUnread}
+          <div className="bg-primary flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full px-[5px]">
+            <span className="caption leading-none text-white">
+              {totalUnread > 999 ? Math.floor(totalUnread / 1000) + "к" : totalUnread}
             </span>
           </div>
         ) : isFavorite ? (
           <Pin
             className={cn(
-              "w-[13px] h-[17px] text-gray shrink-0 transition-colors duration-200",
-              isActive && "text-white"
+              "text-gray h-[17px] w-[13px] shrink-0 transition-colors duration-200",
+              isActive && "text-white",
             )}
             aria-label="закреплено"
           />
