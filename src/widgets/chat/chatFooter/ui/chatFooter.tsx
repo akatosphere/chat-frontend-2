@@ -3,7 +3,6 @@
 import { MessageForm } from '@/features/chat/sendMessage/ui/messageForm'
 import { useKeyboardOffset } from '@/shared/lib/useKeyboardOffset'
 import { cn } from '@/shared/shadcn/lib/utils'
-import { Input } from '@/shared/shadcn/ui/input'
 
 type ChatFooterProps = {
   className?: string
