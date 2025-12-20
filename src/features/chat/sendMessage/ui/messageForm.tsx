@@ -36,16 +36,14 @@ export const MessageForm: React.FC<MessageFormProps> = ({
   }
 
   return (
-    <form className={cn('py-3 flex', className)} onSubmit={handleSubmit}>
-      <div className="flex-1 flex flex-row-reverse">
-        <div className="px-2">
-          <Button variant="ghost" size="icon-auto" onClick={onAttachBtnClick} type="button">
-            <AttachBtn className="w-11 h-11" />
-          </Button>
-        </div>
+    <form className={cn('py-3 flex items-end', className)} onSubmit={handleSubmit}>
+      <div className="flex-1 flex flex-row-reverse pr-3 h-11">
+        <Button variant="ghost" size="icon-auto" onClick={onAttachBtnClick} type="button">
+          <AttachBtn className="w-11 h-11" />
+        </Button>
       </div>
 
-      <InputGroup className="flex-4 bg-white rounded-3xl">
+      <InputGroup className="flex flex-4 bg-white rounded-3xl h-min max-h-[172px]">
         <InputGroupTextarea
           onInput={resize}
           rows={1}
@@ -55,6 +53,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           className="
             subtext
             h-11
+            desktop:h-11
             min-h-11
             max-h-[172px]
             overflow-y-auto
@@ -63,25 +62,23 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           "
         />
 
-        <InputGroupAddon align="inline-end" className='mb-2'>
-          <InputGroupButton onClick={onEmojiBtnClick} type="button">
-            <EmojiBtn />
+        <InputGroupAddon align="inline-end" className='pb-3'>
+          <InputGroupButton onClick={onEmojiBtnClick} type="button" size="icon-auto">
+            <EmojiBtn className="h-5 w-5" />
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
 
-      <div className="flex-1">
-        <div className="px-2">
-          {textMessage.trim() ? (
-            <Button variant="ghost" size="icon-auto" type="submit">
-              <MessageSendBtn className="w-11 h-11" />
-            </Button>
-          ) : (
-            <Button variant="ghost" size="icon-auto" type="button">
-              <VoiceMessage className="w-11 h-11" />
-            </Button>
-          )}
-        </div>
+      <div className="flex-1 pl-3 h-11">
+        {textMessage.trim() ? (
+          <Button variant="ghost" size="icon-auto" type="submit">
+            <MessageSendBtn className="w-11 h-11" />
+          </Button>
+        ) : (
+          <Button variant="ghost" size="icon-auto" type="button">
+            <VoiceMessage className="w-11 h-11" />
+          </Button>
+        )}
       </div>
     </form>
   )
