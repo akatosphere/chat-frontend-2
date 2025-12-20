@@ -2,12 +2,12 @@
 
 import { KeyboardEvent, RefObject, useRef, useState } from "react";
 
-interface UseVerificationCodeInputControllerProps {
+type UseVerificationCodeInputControllerProps = {
   length: number;
   onComplete: (code: string) => void;
 }
 
-interface UseVerificationCodeInputControllerReturn {
+type UseVerificationCodeInputControllerReturn = {
   values: string[];
   inputsRef: RefObject<(HTMLInputElement | null)[]>;
   setValues: (values: string[]) => void;

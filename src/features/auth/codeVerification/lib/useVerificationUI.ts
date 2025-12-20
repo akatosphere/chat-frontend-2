@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 type onCompleteResult = { success: boolean };
 
-interface UseVerificationUIOptions {
+type UseVerificationUIOptions = {
   onComplete: (code: string) => Promise<onCompleteResult>;
   attemptsLeft: number;
 }

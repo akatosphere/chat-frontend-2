@@ -6,7 +6,7 @@ import { sendCode } from "../../phoneForm/api/sendCode";
 import { loginByCodeAction } from "../api/loginByCodeAction";
 import { useAuthStore } from "@/shared/api/store";
 
-interface UseVerificationOptions {
+type UseVerificationOptions = {
   phone_number: string;
   initialAttemptsLeft?: number;
   resendBlockTime?: number;
