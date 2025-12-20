@@ -49,7 +49,7 @@
   --error: #ff0000;
   --black: #1c1c1e;
   --gray: #747474;
-  --light-gray: #C5C5C5;
+  --light-gray: #c5c5c5;
 
   --radius-lg: 12px;
   --radius-md: 8px;
@@ -241,6 +241,10 @@ body {
   }
 }
 
+.emojis {
+  font-family: var(--font-noto-color-emoji);
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -251,4 +255,3 @@ body {
   border-right: 1px solid transparent;
   background-clip: content-box;
 }
-
