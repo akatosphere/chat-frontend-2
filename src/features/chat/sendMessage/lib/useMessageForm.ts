@@ -1,53 +1,52 @@
-import { useEffect, useRef, useState } from 'react'
-import { resize } from './helpers'
+import { useRef, useState } from "react";
 
-type useMessageFormOptions = {
-  onSubmitMessage: (message: string) => void,
-  isKeyboardOpen: boolean
-}
+import { resize } from "./helpers";
 
-export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: useMessageFormOptions) => {
-  const [textMessage, setTextMessage] = useState('')
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const [isTouchDevice, setIsTouchDevice] = useState(false)
+type UseMessageFormOptions = {
+  onSubmitMessage: (message: string) => void;
+  isKeyboardOpen: boolean;
+};
 
-  useEffect(() => {
-    setIsTouchDevice(window.matchMedia('(pointer: coarse)').matches)
-  }, [])
+export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFormOptions) => {
+  const [textMessage, setTextMessage] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const isTouchDevice =
+    typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
   const submitMessage = () => {
-    const trimmedMessage = textMessage.trim()
-    if (!trimmedMessage) return
+    const trimmedMessage = textMessage.trim();
+    if (!trimmedMessage) return;
 
     if (isTouchDevice && !isKeyboardOpen) {
-      textareaRef.current?.blur()
+      textareaRef.current?.blur();
     }
 
-    onSubmitMessage(trimmedMessage)
-    setTextMessage('')
+    onSubmitMessage(trimmedMessage);
+    setTextMessage("");
 
     requestAnimationFrame(() => {
       if (!isTouchDevice || isKeyboardOpen) {
-        console.log(isKeyboardOpen)
-        textareaRef.current?.focus()
+        console.log(isKeyboardOpen);
+        textareaRef.current?.focus();
       }
       resize({
         currentTarget: textareaRef.current,
-      } as React.FormEvent<HTMLTextAreaElement>)
-    })
-  }
+      } as React.FormEvent<HTMLTextAreaElement>);
+    });
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    submitMessage()
-  }
+    event.preventDefault();
+    submitMessage();
+  };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey && !isTouchDevice) {
-      e.preventDefault()
-      submitMessage()
+    if (e.key === "Enter" && !e.shiftKey && !isTouchDevice) {
+      e.preventDefault();
+      submitMessage();
     }
-  }
+  };
 
   return {
     textMessage,
@@ -55,5 +54,5 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: useMessageFo
     textareaRef,
     handleSubmit,
     onKeyDown,
-  }
-}
+  };
+};

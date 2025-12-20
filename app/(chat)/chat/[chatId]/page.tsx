@@ -1,22 +1,23 @@
-import { ChatFooter } from '@/widgets/chat/chatFooter/ui/chatFooter'
-import { notFound } from 'next/navigation'
+import { notFound } from "next/navigation";
+
+import { ChatFooter } from "@/widgets/chat/chatFooter/ui/chatFooter";
 
 interface ChatPageProps {
-  params: Promise<{ chatId: string }>
+  params: Promise<{ chatId: string }>;
 }
 
 export default async function ChatPage({ params }: ChatPageProps) {
-  const { chatId } = await params
+  const { chatId } = await params;
 
   if (!chatId) {
-    notFound()
+    notFound();
   }
 
   return (
-    <div className="flex flex-col min-h-svh">
+    <div className="flex min-h-svh flex-col">
       <main className="flex-1 overflow-y-auto">{/* messages */}</main>
 
       <ChatFooter />
     </div>
-  )
+  );
 }

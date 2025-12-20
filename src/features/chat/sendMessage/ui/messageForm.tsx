@@ -1,22 +1,29 @@
-'use client'
+"use client";
 
-import { cn } from '@/shared/shadcn/lib/utils'
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from '@/shared/shadcn/ui/input-group'
-import { resize } from '../lib/helpers'
-import { Button } from '@/shared/shadcn/ui/button'
-import EmojiBtn from '@icons/chat/emojiBtn.svg'
-import MessageSendBtn from '@icons/chat/messageSendBtn.svg'
-import AttachBtn from '@icons/chat/attachBtn.svg'
-import VoiceMessage from '@icons/chat/voiceMessage.svg'
-import { useMessageForm } from '../lib/useMessageForm'
+import AttachBtn from "@icons/chat/attachBtn.svg";
+import EmojiBtn from "@icons/chat/emojiBtn.svg";
+import MessageSendBtn from "@icons/chat/messageSendBtn.svg";
+import VoiceMessage from "@icons/chat/voiceMessage.svg";
+
+import { cn } from "@/shared/shadcn/lib/utils";
+import { Button } from "@/shared/shadcn/ui/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupTextarea,
+} from "@/shared/shadcn/ui/input-group";
+
+import { resize } from "../lib/helpers";
+import { useMessageForm } from "../lib/useMessageForm";
 
 type MessageFormProps = {
-  className?: string
-  onEmojiBtnClick?: () => void
-  onAttachBtnClick?: () => void
-  onSubmitMessage: (message: string) => void
-  isKeyboardOpen: boolean
-}
+  className?: string;
+  onEmojiBtnClick?: () => void;
+  onAttachBtnClick?: () => void;
+  onSubmitMessage: (message: string) => void;
+  isKeyboardOpen: boolean;
+};
 
 export const MessageForm: React.FC<MessageFormProps> = ({
   className,
@@ -25,18 +32,20 @@ export const MessageForm: React.FC<MessageFormProps> = ({
   onSubmitMessage,
   isKeyboardOpen,
 }) => {
-  const { textMessage, setTextMessage, textareaRef, handleSubmit, onKeyDown } =
-    useMessageForm({onSubmitMessage, isKeyboardOpen})
+  const { textMessage, setTextMessage, textareaRef, handleSubmit, onKeyDown } = useMessageForm({
+    onSubmitMessage,
+    isKeyboardOpen,
+  });
 
   return (
-    <form className={cn('py-3 flex items-end', className)} onSubmit={handleSubmit}>
-      <div className="flex-1 flex flex-row-reverse pr-3 h-11">
+    <form className={cn("flex items-end py-3", className)} onSubmit={handleSubmit}>
+      <div className="flex h-11 flex-1 flex-row-reverse pr-3">
         <Button variant="ghost" size="icon-auto" onClick={onAttachBtnClick} type="button">
-          <AttachBtn className="w-11 h-11" />
+          <AttachBtn className="h-11 w-11" />
         </Button>
       </div>
 
-      <InputGroup className="flex flex-4 bg-white rounded-3xl h-min max-h-[172px]">
+      <InputGroup className="flex h-min max-h-[172px] flex-4 rounded-3xl bg-white">
         <InputGroupTextarea
           ref={textareaRef}
           onInput={resize}
@@ -44,37 +53,38 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           rows={1}
           placeholder="Сообщение"
           value={textMessage}
-          onChange={e => setTextMessage(e.target.value)}
-          className="
-            subtext
-            h-11
-            desktop:h-11
-            min-h-11
-            max-h-[172px]
-            overflow-y-auto
-            resize-none
-            [&::-webkit-scrollbar]:hidden
-          "
+          onChange={(e) => setTextMessage(e.target.value)}
+          className="subtext desktop:h-11 h-11 max-h-[172px] min-h-11 resize-none overflow-y-auto [&::-webkit-scrollbar]:hidden"
         />
 
         <InputGroupAddon align="inline-end" className="pb-3">
-          <InputGroupButton onClick={onEmojiBtnClick} type="button" size="icon-auto">
+          <InputGroupButton
+            onClick={onEmojiBtnClick}
+            type="button"
+            size="icon-auto"
+            variant="ghost"
+          >
             <EmojiBtn className="h-5 w-5" />
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
 
-      <div className="flex-1 pl-3 h-11">
+      <div className="h-11 flex-1 pl-3">
         {textMessage.trim() ? (
-          <Button variant="ghost" size="icon-auto" type="submit" onMouseDown={e => e.preventDefault()}>
-            <MessageSendBtn className="w-11 h-11" />
+          <Button
+            variant="ghost"
+            size="icon-auto"
+            type="submit"
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            <MessageSendBtn className="h-11 w-11" />
           </Button>
         ) : (
           <Button variant="ghost" size="icon-auto" type="button">
-            <VoiceMessage className="w-11 h-11" />
+            <VoiceMessage className="h-11 w-11" />
           </Button>
         )}
       </div>
     </form>
-  )
-}
+  );
+};
