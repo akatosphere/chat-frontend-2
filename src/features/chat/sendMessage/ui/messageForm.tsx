@@ -1,6 +1,5 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
 import { cn } from '@/shared/shadcn/lib/utils'
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from '@/shared/shadcn/ui/input-group'
 import { resize } from '../lib/helpers'
