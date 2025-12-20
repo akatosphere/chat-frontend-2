@@ -9,14 +9,13 @@ type ChatFooterProps = {
 }
 
 export const ChatFooter: React.FC<ChatFooterProps> = ({ className }) => {
-
-  useKeyboardOffset()
+  const { isKeyboardOpen } = useKeyboardOffset()
 
   return (
     <footer
       style={{ paddingBottom: 'var(--keyboard-offset)' }}
       className={cn('shrink-0 w-full bg-primary-gray/90', className)}>
-        <MessageForm onSubmitMessage={(m) => {console.log("сообщение: ", m)}}/>
+      <MessageForm isKeyboardOpen={isKeyboardOpen} onSubmitMessage={m => console.log('сообщение:', m)} />
     </footer>
   )
 }

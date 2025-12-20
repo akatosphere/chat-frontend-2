@@ -15,6 +15,7 @@ type MessageFormProps = {
   onEmojiBtnClick?: () => void
   onAttachBtnClick?: () => void
   onSubmitMessage: (message: string) => void
+  isKeyboardOpen: boolean
 }
 
 export const MessageForm: React.FC<MessageFormProps> = ({
@@ -22,6 +23,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
   onEmojiBtnClick,
   onAttachBtnClick,
   onSubmitMessage,
+  isKeyboardOpen,
 }) => {
   const [textMessage, setTextMessage] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -35,11 +37,18 @@ export const MessageForm: React.FC<MessageFormProps> = ({
     const trimmedMessage = textMessage.trim()
     if (!trimmedMessage) return
 
+    if (isTouchDevice && !isKeyboardOpen) {
+      textareaRef.current?.blur()
+    }
+
     onSubmitMessage(trimmedMessage)
     setTextMessage('')
-    
+
     requestAnimationFrame(() => {
-      textareaRef.current?.focus()
+      if (!isTouchDevice || isKeyboardOpen) {
+        console.log(isKeyboardOpen)
+        textareaRef.current?.focus()
+      }
       resize({
         currentTarget: textareaRef.current,
       } as React.FormEvent<HTMLTextAreaElement>)

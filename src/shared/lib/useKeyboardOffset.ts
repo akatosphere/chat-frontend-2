@@ -1,7 +1,9 @@
 // хук для создания отступа, соответствующего размеру клавиатуры на телефоне (чтобы контент не прятался под клавиатуру)
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export function useKeyboardOffset() {
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+
   useEffect(() => {
     const vv = window.visualViewport
     if (!vv) return
@@ -9,7 +11,11 @@ export function useKeyboardOffset() {
     const update = () => {
       const offset = window.innerHeight - vv.height - vv.offsetTop
 
+      const keyboardOpen = offset > 0
+
       document.documentElement.style.setProperty('--keyboard-offset', `${Math.max(0, offset)}px`)
+
+      setIsKeyboardOpen(keyboardOpen)
     }
 
     update()
@@ -21,4 +27,6 @@ export function useKeyboardOffset() {
       vv.removeEventListener('scroll', update)
     }
   }, [])
+
+  return { isKeyboardOpen }
 }
