@@ -1,17 +1,19 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+
+import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
-import { usePhoneStore } from "../model/store";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { phoneSchema, PhoneData } from "../model/schema";
+
 import { sendCode } from "../api/sendCode";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { savePhoneToCookie } from "../lib/savePhoneToCookie";
+import { savePhoneToCookie } from "../lib/actions/savePhoneToCookie";
+import { PhoneData, phoneSchema } from "../model/schema";
+import { usePhoneStore } from "../model/store";
 import { PhoneInput } from "./phoneInput";
-import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 
 type PhoneFormProps = {
   className?: string;
@@ -22,8 +24,8 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [pendingPhone, setPendingPhone] = useState('')
-  const [openModal, setOpenModal] = useState(false)
+  const [pendingPhone, setPendingPhone] = useState("");
+  const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
   const {
     handleSubmit,
@@ -36,8 +38,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
     defaultValues: { phone: "" },
   });
 
-  const showError =
-    !isFocused && touchedFields.phone ? errors.phone?.message : "";
+  const showError = !isFocused && touchedFields.phone ? errors.phone?.message : "";
 
   const onSubmit = async (data: PhoneData) => {
     setIsLoading(true);
@@ -61,14 +62,11 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
     if (!isValid) return;
 
     setPendingPhone(phone);
-    setOpenModal(true); 
-  }
+    setOpenModal(true);
+  };
 
   return (
-    <form
-      className={cn("flex flex-col gap-4 h-full", className)}
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <form className={cn("flex h-full flex-col gap-4", className)} onSubmit={handleSubmit(onSubmit)}>
       <Controller
         name="phone"
         control={control}
@@ -77,7 +75,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
             id="phone"
             value={field.value}
             onChange={field.onChange}
-            onBlur={(e) => {
+            onBlur={() => {
               setIsFocused(false);
               field.onBlur();
             }}
@@ -99,7 +97,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
         Далее
       </Button>
       <ModalDialog
-        title={pendingPhone} 
+        title={pendingPhone}
         description="Номер телефона указан верно?"
         cancelBtnText="Изменить"
         actionBtnText="Верно"
