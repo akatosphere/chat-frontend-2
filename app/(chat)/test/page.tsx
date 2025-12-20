@@ -2,15 +2,46 @@
 import { emojisCategories } from "@/features/emojiPicker/model/data";
 import { EmojiPickerss } from "@/features/emojiPicker/ui-2/emojiPicker";
 import { EmojiCategories } from "@/features/emojiPicker/ui/emojiCategories";
-import { EmojiPickers } from "@/features/emojiPicker/ui/emojiPicker";
-import { EmojiPicker } from "@/features/emojiPicker/ui/test";
-import { useState } from "react";
+import { EmojiPicker, EmojiPickers } from "@/features/emojiPicker/ui/emojiPicker";
+import { Textarea } from "@/shared/shadcn/ui/textarea";
+import { useRef, useState } from "react";
 
 export default function Test() {
+  const [message, setMessage] = useState<string>("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const onEmojiSelect = (emoji: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      // Если textarea не доступен, добавляем в конец
+      setMessage((prev) => prev + emoji);
+      return;
+    }
+
+    const cursorPosition = textarea.selectionStart;
+    const textBeforeCursor = message.substring(0, cursorPosition);
+    const textAfterCursor = message.substring(cursorPosition);
+
+    setMessage(textBeforeCursor + emoji + textAfterCursor);
+
+    // После обновления состояния, возвращаем курсор на правильную позицию
+    setTimeout(() => {
+      if (textarea) {
+        const newCursorPosition = cursorPosition + emoji.length;
+        textarea.focus();
+        textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+      }
+    }, 0);
+  };
   return (
     <div className="p-20">
-      <EmojiPickers />
-      <EmojiPickerss />
+      <Textarea
+        ref={textareaRef}
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        className="emojis"
+      />
+      <EmojiPicker onEmojiSelect={onEmojiSelect} />
     </div>
   );
 }

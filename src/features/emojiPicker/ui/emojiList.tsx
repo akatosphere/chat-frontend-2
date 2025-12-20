@@ -1,35 +1,30 @@
 import { cn } from "@/shared/shadcn/lib/utils";
-import { emojisCategories } from "../model/data";
+import { EmojiCategory } from "../model/data";
+import { EmojiGroup } from "./emojiGroup";
 
 type EmojiListProps = {
   className?: string;
   categoryId: string;
+  categories: EmojiCategory[];
+  onEmojiSelect?: (emoji: string) => void;
 };
 
 export const EmojiList: React.FC<EmojiListProps> = ({
   className,
   categoryId,
+  categories,
+  onEmojiSelect,
 }) => {
-  const category = emojisCategories.find((c) => c.id === categoryId);
+  const category = categories.find((c) => c.id === categoryId);
+  const recentCategory = categories.find((c) => c.id === "recent");
   const emojis = category?.emojis || [];
+  const recentEmojis = recentCategory?.emojis || [];
 
   return (
-    <div className="p-5 pr-3 overflow-y-auto max-h-[448px] min-h-[448px]">
-      <h4 className="text text-[#0000004D] font-semibold mb-4">
-        {category?.title}
-      </h4>
-      <div className={cn("flex flex-wrap gap-2 emojis ", className)}>
-        {emojis.map((emoji) => {
-          return (
-            <button
-              key={emoji}
-              className="text-2xl w-8 h-8 hover:scale-110 transition-all hover:bg-[#e4e4e4] rounded-md  duration-300 cursor-pointer"
-            >
-              {emoji}
-            </button>
-          );
-        })}
-      </div>
+    <div className={cn("p-5 pr-3 overflow-y-auto max-h-[448px] min-h-[448px]", className)}>
+      { recentEmojis.length > 0 && <EmojiGroup key={recentCategory?.id} emojis={recentEmojis} onEmojiSelect={onEmojiSelect} title={recentCategory?.title || "Недавние"} />}
+      { (category?.id === "recent" && recentEmojis.length === 0) && <EmojiGroup key={recentCategory?.id} emojis={[]} onEmojiSelect={onEmojiSelect} title={recentCategory?.title || "Недавние"} />}
+      {category?.id !== "recent" && <EmojiGroup key={category?.id} className={cn(recentEmojis.length > 0 && "mt-5")} emojis={emojis} onEmojiSelect={onEmojiSelect} title={category?.title || "Эмоджи"} />}
     </div>
   );
 };

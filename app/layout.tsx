@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto, Noto_Color_Emoji } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { SITE_TITLE } from "@/shared/lib/constants/siteInfo";
 
@@ -19,6 +20,14 @@ const notoColorEmoji = Noto_Color_Emoji({
   subsets: ["emoji"],
 });
 
+export const myCustomFont = localFont({
+  src: "./fonts/Emoji-subset.woff2", // путь относительно файла, где вызывается localFont
+  weight: "400", // укажи нужный weight
+  style: "normal", // или 'italic'
+  display: "swap", // рекомендуется для избежания FOIT
+  variable: "--my-custom-font", // если хочешь использовать как CSS variable (удобно с Tailwind)
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body
-        className={`${roboto.variable} ${notoColorEmoji.variable} font-sans antialiased`}
+        className={`${roboto.variable} ${notoColorEmoji.variable} ${myCustomFont.variable}  font-sans antialiased`}
       >
         {children}
       </body>

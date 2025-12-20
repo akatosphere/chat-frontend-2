@@ -242,7 +242,9 @@ body {
 }
 
 .emojis {
-  font-family: var(--font-noto-color-emoji);
+  font-family:
+    var(--font-roboto), var(--my-custom-font), Arial, Helvetica,
+    sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -254,4 +256,12 @@ body {
   border-radius: 4px;
   border-right: 1px solid transparent;
   background-clip: content-box;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
 }
