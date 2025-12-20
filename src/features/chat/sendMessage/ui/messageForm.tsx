@@ -1,7 +1,9 @@
-import { useState } from 'react'
+'use client'
+
+import { useRef, useState, useEffect } from 'react'
 import { cn } from '@/shared/shadcn/lib/utils'
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from '@/shared/shadcn/ui/input-group'
-import { resize } from '../lib/resizeTextareaHandler'
+import { resize } from '../lib/helpers'
 import { Button } from '@/shared/shadcn/ui/button'
 import EmojiBtn from '@icons/chat/emojiBtn.svg'
 import MessageSendBtn from '@icons/chat/messageSendBtn.svg'
@@ -22,17 +24,38 @@ export const MessageForm: React.FC<MessageFormProps> = ({
   onSubmitMessage,
 }) => {
   const [textMessage, setTextMessage] = useState('')
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  useEffect(() => {
+    setIsTouchDevice(window.matchMedia('(pointer: coarse)').matches)
+  }, [])
 
+  const submitMessage = () => {
     const trimmedMessage = textMessage.trim()
-    if (!trimmedMessage) {
-      return
-    }
+    if (!trimmedMessage) return
 
     onSubmitMessage(trimmedMessage)
     setTextMessage('')
+    
+    requestAnimationFrame(() => {
+      textareaRef.current?.focus()
+      resize({
+        currentTarget: textareaRef.current,
+      } as React.FormEvent<HTMLTextAreaElement>)
+    })
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    submitMessage()
+  }
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey && !isTouchDevice) {
+      e.preventDefault()
+      submitMessage()
+    }
   }
 
   return (
@@ -45,7 +68,9 @@ export const MessageForm: React.FC<MessageFormProps> = ({
 
       <InputGroup className="flex flex-4 bg-white rounded-3xl h-min max-h-[172px]">
         <InputGroupTextarea
+          ref={textareaRef}
           onInput={resize}
+          onKeyDown={onKeyDown}
           rows={1}
           placeholder="Сообщение"
           value={textMessage}
@@ -62,7 +87,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           "
         />
 
-        <InputGroupAddon align="inline-end" className='pb-3'>
+        <InputGroupAddon align="inline-end" className="pb-3">
           <InputGroupButton onClick={onEmojiBtnClick} type="button" size="icon-auto">
             <EmojiBtn className="h-5 w-5" />
           </InputGroupButton>
@@ -71,7 +96,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
 
       <div className="flex-1 pl-3 h-11">
         {textMessage.trim() ? (
-          <Button variant="ghost" size="icon-auto" type="submit">
+          <Button variant="ghost" size="icon-auto" type="submit" onMouseDown={e => e.preventDefault()}>
             <MessageSendBtn className="w-11 h-11" />
           </Button>
         ) : (
