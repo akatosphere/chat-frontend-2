@@ -9,6 +9,7 @@ import EmojiBtn from '@icons/chat/emojiBtn.svg'
 import MessageSendBtn from '@icons/chat/messageSendBtn.svg'
 import AttachBtn from '@icons/chat/attachBtn.svg'
 import VoiceMessage from '@icons/chat/voiceMessage.svg'
+import { useMessageForm } from '../lib/useMessageForm'
 
 type MessageFormProps = {
   className?: string
@@ -25,47 +26,8 @@ export const MessageForm: React.FC<MessageFormProps> = ({
   onSubmitMessage,
   isKeyboardOpen,
 }) => {
-  const [textMessage, setTextMessage] = useState('')
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const [isTouchDevice, setIsTouchDevice] = useState(false)
-
-  useEffect(() => {
-    setIsTouchDevice(window.matchMedia('(pointer: coarse)').matches)
-  }, [])
-
-  const submitMessage = () => {
-    const trimmedMessage = textMessage.trim()
-    if (!trimmedMessage) return
-
-    if (isTouchDevice && !isKeyboardOpen) {
-      textareaRef.current?.blur()
-    }
-
-    onSubmitMessage(trimmedMessage)
-    setTextMessage('')
-
-    requestAnimationFrame(() => {
-      if (!isTouchDevice || isKeyboardOpen) {
-        console.log(isKeyboardOpen)
-        textareaRef.current?.focus()
-      }
-      resize({
-        currentTarget: textareaRef.current,
-      } as React.FormEvent<HTMLTextAreaElement>)
-    })
-  }
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    submitMessage()
-  }
-
-  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey && !isTouchDevice) {
-      e.preventDefault()
-      submitMessage()
-    }
-  }
+  const { textMessage, setTextMessage, textareaRef, handleSubmit, onKeyDown } =
+    useMessageForm({onSubmitMessage, isKeyboardOpen})
 
   return (
     <form className={cn('py-3 flex items-end', className)} onSubmit={handleSubmit}>
