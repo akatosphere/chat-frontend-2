@@ -3,8 +3,8 @@ import { cn } from "@/shared/shadcn/lib/utils";
 import { useState } from "react";
 import { EmojiList } from "./emojiList";
 import { EmojiCategories } from "./emojiCategories";
-import { useRecentEmojiStore } from "../model/emojiRecentStore";
-import { useEmojisCategories } from "../lib/useRecentEmojiStore";
+import { useRecentEmojiStore } from "../../../features/emojiPicker/model/emojiRecentStore";
+import { useEmojisCategories } from "../../../features/emojiPicker/lib/useRecentEmojiStore";
 
 type EmojiPickerProps = {
   className?: string;
@@ -15,17 +15,16 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
   className,
   onEmojiSelect,
 }) => {
-  const [activeCategory, setActiveCategory] = useState<string>('smiles');
+  const [activeCategory, setActiveCategory] = useState<string>("smiles");
   const emojisCategories = useEmojisCategories();
   const recentEmojis = useRecentEmojiStore((state) => state.recent);
   const addRecent = useRecentEmojiStore((state) => state.addRecent);
 
   const handleEmojiSelect = (emoji: string) => {
     onEmojiSelect?.(emoji);
-    if(recentEmojis.includes(emoji)) return
+    if (recentEmojis.includes(emoji)) return;
     addRecent(emoji);
   };
-
 
   return (
     <div
@@ -40,7 +39,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
         categories={emojisCategories}
       />
       <EmojiCategories
-        categories={emojisCategories} 
+        categories={emojisCategories}
         activeCategory={activeCategory}
         onClick={(categoryId) => setActiveCategory(categoryId)}
       />

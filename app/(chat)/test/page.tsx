@@ -1,8 +1,5 @@
 "use client";
-import { emojisCategories } from "@/features/emojiPicker/model/data";
-import { EmojiPickerss } from "@/features/emojiPicker/ui-2/emojiPicker";
-import { EmojiCategories } from "@/features/emojiPicker/ui/emojiCategories";
-import { EmojiPicker, EmojiPickers } from "@/features/emojiPicker/ui/emojiPicker";
+import { EmojiPicker } from "@/widgets/emoji-picker/ui/emojiPicker";
 import { Textarea } from "@/shared/shadcn/ui/textarea";
 import { useRef, useState } from "react";
 
@@ -13,7 +10,6 @@ export default function Test() {
   const onEmojiSelect = (emoji: string) => {
     const textarea = textareaRef.current;
     if (!textarea) {
-      // Если textarea не доступен, добавляем в конец
       setMessage((prev) => prev + emoji);
       return;
     }
@@ -24,7 +20,6 @@ export default function Test() {
 
     setMessage(textBeforeCursor + emoji + textAfterCursor);
 
-    // После обновления состояния, возвращаем курсор на правильную позицию
     setTimeout(() => {
       if (textarea) {
         const newCursorPosition = cursorPosition + emoji.length;

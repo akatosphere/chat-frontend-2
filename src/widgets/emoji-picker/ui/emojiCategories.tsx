@@ -1,5 +1,5 @@
 import { cn } from "@/shared/shadcn/lib/utils";
-import { EmojiCategory } from "../model/data";
+import { EmojiCategory } from "../../../features/emojiPicker/model/data";
 import { Button } from "@/shared/shadcn/ui/button";
 
 type EmojiCategoriesProps = {
