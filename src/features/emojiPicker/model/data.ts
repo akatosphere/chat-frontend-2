@@ -1,16 +1,6 @@
-import emojiData from "unicode-emoji-json";
-import {
-  Smile,
-  Bag,
-  Cat,
-  Lamp,
-  Symbols,
-  People,
-  Clock,
-  Flag,
-  Food,
-} from "@icons/emojis";
+import { Bag, Cat, Clock, Flag, Food, Lamp, People, Smile, Symbols } from "@icons/emojis";
 import { ComponentType, SVGProps } from "react";
+import emojiData from "unicode-emoji-json";
 
 type EmojiCategory = {
   id: string;
@@ -31,9 +21,9 @@ const categories: EmojiCategory[] = [
   { id: "flags", title: "Флаги", emojis: [], icon: Flag },
 ];
 
-function isBaseEmoji(char: string) {
+const isBaseEmoji = (char: string) => {
   return !char.includes("\u200D") && !/[\u{1F3FB}-\u{1F3FF}]/u.test(char);
-}
+};
 
 for (const [char, data] of Object.entries(emojiData)) {
   if (!isBaseEmoji(char)) continue;

@@ -1,7 +1,8 @@
 "use client";
-import { EmojiPicker } from "@/widgets/emoji-picker/ui/emojiPicker";
-import { Textarea } from "@/shared/shadcn/ui/textarea";
 import { useRef, useState } from "react";
+
+import { Textarea } from "@/shared/shadcn/ui/textarea";
+import { EmojiPicker } from "@/widgets/emoji-picker/ui/emojiPicker";
 
 export default function Test() {
   const [message, setMessage] = useState<string>("");

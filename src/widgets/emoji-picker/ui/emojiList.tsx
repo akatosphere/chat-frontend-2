@@ -1,4 +1,5 @@
 import { cn } from "@/shared/shadcn/lib/utils";
+
 import { EmojiCategory } from "../../../features/emojiPicker/model/data";
 import { EmojiGroup } from "./emojiGroup";
 
@@ -21,12 +22,7 @@ export const EmojiList: React.FC<EmojiListProps> = ({
   const recentEmojis = recentCategory?.emojis || [];
 
   return (
-    <div
-      className={cn(
-        "p-5 pr-3 overflow-y-auto max-h-[448px] min-h-[448px]",
-        className
-      )}
-    >
+    <div className={cn("max-h-[448px] min-h-[448px] overflow-y-auto p-5 pr-3", className)}>
       {recentEmojis.length > 0 && (
         <EmojiGroup
           key={recentCategory?.id}

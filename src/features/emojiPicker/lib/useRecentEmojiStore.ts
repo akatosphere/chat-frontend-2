@@ -1,5 +1,5 @@
-import { emojisCategories as originalCategories } from "../model/data";
 import type { EmojiCategory } from "../model/data";
+import { emojisCategories as originalCategories } from "../model/data";
 import { useRecentEmojiStore } from "../model/emojiRecentStore";
 
 export const useEmojisCategories = (): EmojiCategory[] => {

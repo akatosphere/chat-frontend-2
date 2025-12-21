@@ -241,10 +241,12 @@ body {
   }
 }
 
-.emojis {
-  font-family:
-    var(--font-roboto), var(--my-custom-font), Arial, Helvetica,
-    sans-serif;
+.emojis-google {
+  font-family: var(--font-roboto), var(--font-noto-color-emoji), Arial, Helvetica, sans-serif;
+}
+
+.emojis-apple {
+  font-family: var(--font-roboto), var(--font-apple-color-emoji), Arial, Helvetica, sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -262,6 +264,6 @@ body {
   display: none;
 }
 .scrollbar-hide {
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
   scrollbar-width: none;
 }

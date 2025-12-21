@@ -1,20 +1,19 @@
 "use client";
-import { cn } from "@/shared/shadcn/lib/utils";
 import { useState } from "react";
-import { EmojiList } from "./emojiList";
-import { EmojiCategories } from "./emojiCategories";
-import { useRecentEmojiStore } from "../../../features/emojiPicker/model/emojiRecentStore";
+
+import { cn } from "@/shared/shadcn/lib/utils";
+
 import { useEmojisCategories } from "../../../features/emojiPicker/lib/useRecentEmojiStore";
+import { useRecentEmojiStore } from "../../../features/emojiPicker/model/emojiRecentStore";
+import { EmojiCategories } from "./emojiCategories";
+import { EmojiList } from "./emojiList";
 
 type EmojiPickerProps = {
   className?: string;
   onEmojiSelect?: (emoji: string) => void;
 };
 
-export const EmojiPicker: React.FC<EmojiPickerProps> = ({
-  className,
-  onEmojiSelect,
-}) => {
+export const EmojiPicker: React.FC<EmojiPickerProps> = ({ className, onEmojiSelect }) => {
   const [activeCategory, setActiveCategory] = useState<string>("smiles");
   const emojisCategories = useEmojisCategories();
   const recentEmojis = useRecentEmojiStore((state) => state.recent);
@@ -29,8 +28,8 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
   return (
     <div
       className={cn(
-        "w-[361px] desktop:w-[472px] shadow-[-8px_0px_20px_0px_#6C688A24] rounded-md",
-        className
+        "desktop:w-[472px] w-[361px] rounded-md shadow-[-8px_0px_20px_0px_#6C688A24]",
+        className,
       )}
     >
       <EmojiList

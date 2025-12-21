@@ -1,6 +1,7 @@
 import { cn } from "@/shared/shadcn/lib/utils";
-import { EmojiCategory } from "../../../features/emojiPicker/model/data";
 import { Button } from "@/shared/shadcn/ui/button";
+
+import { EmojiCategory } from "../../../features/emojiPicker/model/data";
 
 type EmojiCategoriesProps = {
   className?: string;
@@ -18,22 +19,22 @@ export const EmojiCategories: React.FC<EmojiCategoriesProps> = ({
   return (
     <ul
       className={cn(
-        "py-5.5  desktop:py-5 pb-8 px-5.5 desktop:px-5 flex gap-4.5 border-t border-[#e4e4e4] overflow-x-auto scrollbar-hide ",
-        className
+        "desktop:py-5 desktop:px-5 scrollbar-hide flex gap-4.5 overflow-x-auto border-t border-[#e4e4e4] px-5.5 py-5.5 pb-8",
+        className,
       )}
     >
       {categories.map((category) => (
-        <li key={category.title} className="flex shrink-0 min-w-0">
+        <li key={category.title} className="flex min-w-0 shrink-0">
           <Button
             onClick={() => onClick(category.id)}
             variant="text"
             size={"inline"}
-            className="w-8 h-8"
+            className="h-8 w-8"
           >
             <category.icon
               className={cn(
-                "size-6.5 text-gray hover:text-primary transition-colors duration-200 object-cover",
-                activeCategory === category.id && "text-primary"
+                "text-gray hover:text-primary size-6.5 object-cover transition-colors duration-200",
+                activeCategory === category.id && "text-primary",
               )}
             />
           </Button>

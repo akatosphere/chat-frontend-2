@@ -1,10 +1,6 @@
 // lib/api.ts или src/lib/api.ts
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  InternalAxiosRequestConfig,
-  AxiosHeaders,
-} from "axios";
+import axios, { AxiosError, AxiosHeaders, AxiosInstance, InternalAxiosRequestConfig } from "axios";
+
 import { useAuthStore } from "./store";
 
 interface CustomConfig extends InternalAxiosRequestConfig {
@@ -106,7 +102,7 @@ api.interceptors.response.use(
       isRefreshing = false;
       failedQueue = [];
     }
-  }
+  },
 );
 
 export default api;
