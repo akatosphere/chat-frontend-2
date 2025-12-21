@@ -35,7 +35,7 @@ export default function Test() {
         ref={textareaRef}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        className="emojis"
+        className="emojis-apple" // emojis-apple - apple эмодзи, emojis-google - google эмодзи
       />
       <EmojiPicker onEmojiSelect={onEmojiSelect} />
     </div>
