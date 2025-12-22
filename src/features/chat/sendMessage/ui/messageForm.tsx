@@ -46,9 +46,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
       </div>
 
       <InputGroup className="relative flex h-min flex-4 rounded-3xl bg-white">
-        {/* Scroll + clip wrapper */}
         <div className="desktop:max-h-[448px] flex max-h-[172px] flex-1 overflow-hidden rounded-3xl">
-          {/* Реальный scroll-контейнер */}
           <div className="desktop:[&::-webkit-scrollbar]:inline flex flex-1 overflow-y-auto pr-10 [&::-webkit-scrollbar]:hidden">
             <InputGroupTextarea
               ref={textareaRef}
@@ -63,7 +61,6 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           </div>
         </div>
 
-        {/* Emoji button */}
         <InputGroupAddon align="inline-end" className="absolute right-0 bottom-3 pr-2 pb-0">
           <InputGroupButton
             onClick={onEmojiBtnClick}
