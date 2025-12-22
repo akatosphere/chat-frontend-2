@@ -38,7 +38,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
   });
 
   return (
-    <form className={cn("flex items-end py-3", className)} onSubmit={handleSubmit}>
+    <form className={cn("relative flex items-end py-3", className)} onSubmit={handleSubmit}>
       <div className="flex h-11 flex-1 flex-row-reverse pr-3">
         <Button variant="ghost" size="icon-auto" onClick={onAttachBtnClick} type="button">
           <AttachBtn className="h-11 w-11" />
@@ -89,6 +89,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           </Button>
         )}
       </div>
+      {/* <EmojiPicker className="absolute bottom-18 left-1/2 -translate-x-1/2 transform" /> */}
     </form>
   );
 };
