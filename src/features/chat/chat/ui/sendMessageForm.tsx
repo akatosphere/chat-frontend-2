@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Message, User } from "../model/types";
+
 import { sendMessageMock } from "../lib/sendMessage";
+import { Message, User } from "../model/types";
 
 type Props = {
   currentUser: User;
@@ -28,14 +29,14 @@ export const SendMessageForm = ({ currentUser, onSend }: Props) => {
         type="text"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="flex-1 rounded px-3 py-2 border"
+        className="flex-1 rounded border px-3 py-2"
         placeholder="Написать сообщение..."
         disabled={loading}
       />
       <button
         type="submit"
         disabled={loading}
-        className="bg-light-green px-4 py-2 rounded text-white"
+        className="bg-light-green rounded px-4 py-2 text-white"
       >
         {loading ? "..." : "Отправить"}
       </button>

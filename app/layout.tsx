@@ -1,6 +1,9 @@
+import "./globals.css";
+import "./globals.css";
+
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import "./globals.css";
+
 import { SITE_TITLE } from "@/shared/lib/constants/siteInfo";
 
 const roboto = Roboto({
@@ -20,9 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${roboto.variable} font-sans antialiased`}>
-        {children}
-      </body>
+      <body className={`${roboto.variable} font-sans antialiased`}>{children}</body>
     </html>
   );
 }

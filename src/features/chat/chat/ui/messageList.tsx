@@ -1,6 +1,7 @@
 import { cn } from "@/shared/shadcn/lib/utils";
-import { Message } from "../model/types";
+
 import { groupMessagesByDate } from "../lib/getMessageByDate";
+import { Message } from "../model/types";
 import { MessageGroup } from "./messageGroup";
 
 type MessageListProps = {
@@ -8,16 +9,13 @@ type MessageListProps = {
   messages: Message[];
 };
 
-export const MessageList: React.FC<MessageListProps> = ({
-  className,
-  messages,
-}) => {
+export const MessageList: React.FC<MessageListProps> = ({ className, messages }) => {
   const groups = groupMessagesByDate(messages);
   return (
     <div
       className={cn(
-        "flex flex-col justify-end gap-3 desktop:gap-5 px-4 py-4 desktop:py-2 bg-accent  desktop:bg-light-tone-gray overflow-y-scroll h-full",
-        className
+        "desktop:gap-5 desktop:py-2 bg-accent desktop:bg-light-tone-gray flex h-full flex-col justify-end gap-3 overflow-y-scroll px-4 py-4",
+        className,
       )}
     >
       {groups.map((group) => (

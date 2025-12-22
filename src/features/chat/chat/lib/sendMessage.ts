@@ -2,11 +2,11 @@ import { Message, User } from "../model/types";
 
 let nextId = 1000;
 
-export async function sendMessageMock(
+export const sendMessageMock = async (
   content: string,
   currentUser: User,
-  files: Message["files"] = []
-): Promise<Message> {
+  files: Message["files"] = [],
+): Promise<Message> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
@@ -21,4 +21,4 @@ export async function sendMessageMock(
       });
     }, 300);
   });
-}
+};

@@ -1,8 +1,9 @@
 "use client";
-import { Button } from "@/shared/shadcn/ui/button";
+import Link from "next/link";
+
 import { VerificationCodeInputTimer } from "@/features/auth/codeVerification/ui/verificationCodeTimer";
 import { cn } from "@/shared/shadcn/lib/utils";
-import Link from "next/link";
+import { Button } from "@/shared/shadcn/ui/button";
 
 interface Props {
   className?: string;
@@ -25,7 +26,7 @@ export const VerificationCodeResend = ({
         <Button
           variant="text"
           size="inline"
-          className="pt-0 pb-0 lg:pt-4 lg:pb-4 text-primary w-full text-center text font-medium"
+          className="text-primary text w-full pt-0 pb-0 text-center font-medium lg:pt-4 lg:pb-4"
           onClick={onResend}
         >
           Отправить новый код
@@ -34,7 +35,7 @@ export const VerificationCodeResend = ({
       <Button
         variant={"text"}
         size="inline"
-        className="pt-0 pb-0 lg:pt-4 lg:pb-4 mt-5 desktop:mt-3 w-full text-center text font-medium"
+        className="desktop:mt-3 text mt-5 w-full pt-0 pb-0 text-center font-medium lg:pt-4 lg:pb-4"
         asChild
       >
         <Link href="/auth/support">Не приходит код?</Link>

@@ -1,15 +1,18 @@
 import { format, isToday, isYesterday } from "date-fns";
 import { ru } from "date-fns/locale";
+
 import { Message } from "../model/types";
 
-export function groupMessagesByDate(messages: Message[]): {
+export const groupMessagesByDate = (
+  messages: Message[],
+): {
   id: string;
   date: string;
   label: string;
   messages: Message[];
-}[] {
+}[] => {
   const sortedMessages = [...messages].sort(
-    (a, b) => a.createdAt.getTime() - b.createdAt.getTime()
+    (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
   );
 
   const groups = new Map<string, Message[]>();
@@ -38,13 +41,9 @@ export function groupMessagesByDate(messages: Message[]): {
         const currentYear = new Date().getFullYear();
         const messageYear = date.getFullYear();
 
-        label = format(
-          date,
-          messageYear === currentYear ? "d MMMM" : "d MMMM yyyy",
-          {
-            locale: ru,
-          }
-        );
+        label = format(date, messageYear === currentYear ? "d MMMM" : "d MMMM yyyy", {
+          locale: ru,
+        });
       }
 
       return {
@@ -54,4 +53,4 @@ export function groupMessagesByDate(messages: Message[]): {
         messages,
       };
     });
-}
+};

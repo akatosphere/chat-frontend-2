@@ -1,4 +1,5 @@
 import { cn } from "@/shared/shadcn/lib/utils";
+
 import { Message } from "../model/types";
 
 type MessageBubbleProps = {
@@ -6,42 +7,27 @@ type MessageBubbleProps = {
   chatMessage: Message;
 };
 
-export const MessageBubble: React.FC<MessageBubbleProps> = ({
-  className,
-  chatMessage,
-}) => {
+export const MessageBubble: React.FC<MessageBubbleProps> = ({ className, chatMessage }) => {
   const time = chatMessage.createdAt.toLocaleTimeString("ru-RU", {
     hour: "2-digit",
     minute: "2-digit",
   });
 
   const statusIcon =
-    chatMessage.status === "sent"
-      ? "✓"
-      : chatMessage.status === "delivered"
-      ? "✓✓"
-      : "✓✓";
+    chatMessage.status === "sent" ? "✓" : chatMessage.status === "delivered" ? "✓✓" : "✓✓";
 
   return (
-    <div
-      className={cn(
-        "flex",
-        chatMessage.isMine ? "justify-end" : "justify-start",
-        className
-      )}
-    >
+    <div className={cn("flex", chatMessage.isMine ? "justify-end" : "justify-start", className)}>
       <div
         className={cn(
-          "relative max-w-[83%] w-fit min-w-0 desktop:max-w-[500px] px-3 py-2.5 rounded-2xl flex items-stretch",
+          "desktop:max-w-[500px] relative flex w-fit max-w-[83%] min-w-0 items-stretch rounded-2xl px-3 py-2.5",
           chatMessage.isMine
             ? "bg-teal desktop:bg-light-green rounded-br-sm"
-            : "bg-white desktop:bg-tone-gray rounded-bl-sm"
+            : "desktop:bg-tone-gray rounded-bl-sm bg-white",
         )}
       >
         {chatMessage.content && (
-          <p className="subtext wrap-break-word min-w-0 pr-2">
-            {chatMessage.content}
-          </p>
+          <p className="subtext min-w-0 pr-2 wrap-break-word">{chatMessage.content}</p>
         )}
 
         {/* {chatMessage.files.length > 0 && (
@@ -52,8 +38,8 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
           </div>
         )} */}
 
-        <div className={cn("h-full flex flex-col justify-end")}>
-          <div className="mt-auto flex items-center gap-0.5 minitext text-gray select-none leading-subtext">
+        <div className={cn("flex h-full flex-col justify-end")}>
+          <div className="minitext text-gray leading-subtext mt-auto flex items-center gap-0.5 select-none">
             <span className="">{time}</span>
             {chatMessage.isMine && <span>{statusIcon}</span>}
           </div>

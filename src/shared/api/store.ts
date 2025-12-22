@@ -1,6 +1,7 @@
 // src/store/authStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+
 import api from "./apiClient";
 
 interface AuthState {
@@ -14,7 +15,7 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set, get) => ({
+    (set, _get) => ({
       accessToken: null,
       isAuthenticated: false,
 
@@ -49,11 +50,9 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({ accessToken: state.accessToken }),
       onRehydrateStorage: () => (state) => {
         if (state?.accessToken) {
-          api.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${state.accessToken}`;
+          api.defaults.headers.common["Authorization"] = `Bearer ${state.accessToken}`;
         }
       },
-    }
-  )
+    },
+  ),
 );

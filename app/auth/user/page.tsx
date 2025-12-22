@@ -8,17 +8,17 @@ export default async function Page() {
   return (
     <BackgroundCardLayout variant="form" className="pt-6">
       <BackAuthHeader backHref="/auth/code" className="mb-5" />
-      <Logo size="sm" withTitle className="mb-8 hidden desktop:flex" />
-      <h3 className="font-semibold subheadline mb-5 desktop:mb-6 text-center text-black">
+      <Logo size="sm" withTitle className="desktop:flex mb-8 hidden" />
+      <h3 className="subheadline desktop:mb-6 mb-5 text-center font-semibold text-black">
         Личная информация
       </h3>
-      <span className="text-black text text-center mb-5 desktop:mb-6 ">
+      <span className="text desktop:mb-6 mb-5 text-center text-black">
         Пожалуйста, заполните данные
       </span>
       <UserForm />
       <BackButton
         href="/auth/code"
-        className="absolute top-0 desktop:left-0 left-4 hidden desktop:block"
+        className="desktop:left-0 desktop:block absolute top-0 left-4 hidden"
       />
     </BackgroundCardLayout>
   );

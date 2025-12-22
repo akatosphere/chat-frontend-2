@@ -1,10 +1,8 @@
 import { ApiMessage } from "@/shared/api/types";
+
 import { Message } from "../model/types";
 
-export function mapApiMessage(
-  api: ApiMessage,
-  currentUserUid: string
-): Message {
+export const mapApiMessage = (api: ApiMessage, currentUserUid: string): Message => {
   return {
     id: api.id,
     uid: api.uid,
@@ -25,4 +23,4 @@ export function mapApiMessage(
     status: api.new ? "sent" : "delivered",
     replyTo: api.replied_messages?.map((m) => mapApiMessage(m, currentUserUid)),
   };
-}
+};
