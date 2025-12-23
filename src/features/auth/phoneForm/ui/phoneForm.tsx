@@ -1,37 +1,39 @@
-'use client'
+"use client";
 
-import { cn } from '@/shared/shadcn/lib/utils'
-import { Button } from '@/shared/shadcn/ui/button'
-import { usePhoneStore } from '../model/store'
-import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { phoneSchema, PhoneData } from '../model/schema'
-import { sendCode } from '../api/sendCode'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { savePhoneToCookie } from '../lib/savePhoneToCookie'
-import { PhoneInput } from './phoneInput'
-import { ModalDialog } from '@/shared/modalDialog/ui/modalDialog'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+
+import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
+import { cn } from "@/shared/shadcn/lib/utils";
 import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/shared/shadcn/ui/alert-dialog'
+} from "@/shared/shadcn/ui/alert-dialog";
+import { Button } from "@/shared/shadcn/ui/button";
+
 import { useVerificationStore } from "../../codeVerification/model/userVerificationStore";
+import { sendCode } from "../api/sendCode";
+import { savePhoneToCookie } from "../lib/actions/savePhoneToCookie";
+import { PhoneData, phoneSchema } from "../model/schema";
+import { usePhoneStore } from "../model/store";
+import { PhoneInput } from "./phoneInput";
 
 type PhoneFormProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
-  const setPhone = usePhoneStore(state => state.setPhone)
+  const setPhone = usePhoneStore((state) => state.setPhone);
 
-  const [isFocused, setIsFocused] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [pendingPhone, setPendingPhone] = useState('')
-  const [openModal, setOpenModal] = useState(false)
-  const router = useRouter()
+  const [isFocused, setIsFocused] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pendingPhone, setPendingPhone] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const router = useRouter();
   const {
     handleSubmit,
     control,
@@ -44,15 +46,15 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
   });
   const { resetVerification } = useVerificationStore();
 
-  const showError = !isFocused && touchedFields.phone ? errors.phone?.message : ''
+  const showError = !isFocused && touchedFields.phone ? errors.phone?.message : "";
 
   const onSubmit = async (data: PhoneData) => {
-    setIsLoading(true)
-    setOpenModal(false)
+    setIsLoading(true);
+    setOpenModal(false);
     const result = await sendCode({
-      phone_number: data.phone.replaceAll(' ', ''),
+      phone_number: data.phone.replaceAll(" ", ""),
       code_length: 5,
-    })
+    });
 
     if (result.success) {
       setPhone(data.phone);
@@ -60,21 +62,21 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
       await savePhoneToCookie(data.phone);
       router.push("/auth/code");
     } else {
-      alert(result.error)
+      alert(result.error);
     }
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   const openModalHandler = () => {
-    const phone = getValues('phone')
-    if (!isValid) return
+    const phone = getValues("phone");
+    if (!isValid) return;
 
     setPendingPhone(phone);
     setOpenModal(true);
   };
 
   return (
-    <form className={cn('flex flex-col gap-4 h-full', className)} onSubmit={handleSubmit(onSubmit)}>
+    <form className={cn("flex h-full flex-col gap-4", className)} onSubmit={handleSubmit(onSubmit)}>
       <Controller
         name="phone"
         control={control}
@@ -83,9 +85,9 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
             id="phone"
             value={field.value}
             onChange={field.onChange}
-            onBlur={e => {
-              setIsFocused(false)
-              field.onBlur()
+            onBlur={() => {
+              setIsFocused(false);
+              field.onBlur();
             }}
             onFocus={() => setIsFocused(true)}
             error={field.value && showError}
@@ -100,33 +102,38 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
         type="button"
         disabled={!isValid || isSubmitting || isLoading}
         className="desktop:mt-auto"
-        onClick={openModalHandler}>
+        onClick={openModalHandler}
+      >
         Далее
       </Button>
-      <ModalDialog open={openModal} onOpenChange={setOpenModal} overlay='card'>
-        <AlertDialogHeader className="mt-2 desktop:mt-0">
-          <AlertDialogTitle className="text-tight text-black font-medium">{pendingPhone}</AlertDialogTitle>
+      <ModalDialog open={openModal} onOpenChange={setOpenModal} overlay="card">
+        <AlertDialogHeader className="desktop:mt-0 mt-2">
+          <AlertDialogTitle className="text-tight font-medium text-black">
+            {pendingPhone}
+          </AlertDialogTitle>
         </AlertDialogHeader>
-        <AlertDialogDescription className="text-gray subtext-tight font-normal desktop:mb-4">
+        <AlertDialogDescription className="text-gray subtext-tight desktop:mb-4 font-normal">
           Номер телефона указан верно?
         </AlertDialogDescription>
-        <AlertDialogFooter className="flex-row gap-6 desktop:gap-2 justify-end">
+        <AlertDialogFooter className="desktop:gap-2 flex-row justify-end gap-6">
           <Button
             variant="outline"
             size="sm"
-            className="flex flex-1 desktop:flex-0"
-            onClick={() => setOpenModal(false)}>
+            className="desktop:flex-0 flex flex-1"
+            onClick={() => setOpenModal(false)}
+          >
             Изменить
           </Button>
           <Button
             variant="default"
             size="sm"
-            className="flex flex-1 desktop:flex-0"
-            onClick={() => handleSubmit(onSubmit)()}>
+            className="desktop:flex-0 flex flex-1"
+            onClick={() => handleSubmit(onSubmit)()}
+          >
             Верно
           </Button>
         </AlertDialogFooter>
       </ModalDialog>
     </form>
-  )
-}
+  );
+};

@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 import { cn } from "@/shared/shadcn/lib/utils";
+
+import { useVerificationCodeInputController } from "../lib/useVerificationCodeInputCotroller";
 import { VerificationCodeInputCell } from "./verificationCodeInputCell";
 import { VerificationCodeInputError } from "./verificationCodeInputError";
-import { useVerificationCodeInputController } from "../lib/useVerificationCodeInputCotroller";
-import { useEffect, useRef } from "react";
 
 interface Props {
   className?: string;
@@ -29,18 +31,11 @@ export const VerificationCodeInput: React.FC<Props> = ({
   onComplete,
   onErrorReset,
 }) => {
-  const {
-    values,
-    inputsRef,
-    handleChange,
-    handleKeyDown,
-    handlePasteFull,
-    focus,
-    setValues,
-  } = useVerificationCodeInputController({
-    length,
-    onComplete,
-  });
+  const { values, inputsRef, handleChange, handleKeyDown, handlePasteFull, focus, setValues } =
+    useVerificationCodeInputController({
+      length,
+      onComplete,
+    });
 
   useEffect(() => {
     if (!error) return;
@@ -60,10 +55,7 @@ export const VerificationCodeInput: React.FC<Props> = ({
 
   useEffect(() => {
     console.log(isCodeExpired);
-    if (
-      (wasBannedRef.current && !isBanned) ||
-      (!wasExpiredRef.current && isCodeExpired)
-    ) {
+    if ((wasBannedRef.current && !isBanned) || (!wasExpiredRef.current && isCodeExpired)) {
       setValues(Array.from({ length }, () => ""));
       onErrorReset?.();
       focus(0);
@@ -77,7 +69,7 @@ export const VerificationCodeInput: React.FC<Props> = ({
     <div>
       <VerificationCodeInputError error={error} className="mb-1" />
 
-      <div className={cn("flex gap-2 items-center", className)}>
+      <div className={cn("flex items-center gap-2", className)}>
         {values.map((v, i) => (
           <VerificationCodeInputCell
             key={i}

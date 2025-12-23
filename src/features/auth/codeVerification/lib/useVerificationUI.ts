@@ -1,6 +1,8 @@
-import { useState } from "react";
-import { pluralize } from "@/shared/lib/pluralize";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+import { pluralize } from "@/shared/lib/pluralize";
+
 import { VerificationResult } from "../model/types";
 
 interface UseVerificationUIOptions {
@@ -8,10 +10,7 @@ interface UseVerificationUIOptions {
   attemptsLeft: number;
 }
 
-export const useVerificationUI = ({
-  onComplete,
-  attemptsLeft,
-}: UseVerificationUIOptions) => {
+export const useVerificationUI = ({ onComplete, attemptsLeft }: UseVerificationUIOptions) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -25,8 +24,8 @@ export const useVerificationUI = ({
           attemptsLeft - 1,
           "попытка",
           "попытки",
-          "попыток"
-        )}.`
+          "попыток",
+        )}.`,
       );
     else if (res.success) {
       setError("");

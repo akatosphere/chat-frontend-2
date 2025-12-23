@@ -1,7 +1,8 @@
 "use client";
 
-import { getMessengerProfile } from "@/features/auth/userForm/api/updateUserProfile";
 import { useQuery } from "@tanstack/react-query";
+
+import { getMessengerProfile } from "@/features/auth/userForm/api/updateUserProfile";
 
 export default function Page() {
   const { data, isLoading, isError } = useQuery({
