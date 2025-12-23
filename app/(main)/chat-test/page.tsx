@@ -1,5 +1,5 @@
-import { ChatList } from "@/features/chatList/ui/chatList";
+import { ChatSidebar } from "@/features/chatList/ui/chatSidebar";
 
 export default function Page() {
-  return <ChatList />;
+  return <ChatSidebar />;
 }

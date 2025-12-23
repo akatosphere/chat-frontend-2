@@ -53,6 +53,7 @@
   --gray: #747474;
   --light-gray: #c5c5c5;
   --main-gray: #f5f6f8;
+  --gray-tone: #eeeeee;
 
   --radius-lg: 12px;
   --radius-md: 8px;
@@ -133,6 +134,7 @@
   --color-gray: var(--gray);
   --color-light-gray: var(--light-gray);
   --color-main-gray: var(--main-gray);
+  --color-gray-tone: var(--gray-tone);
 
   --radius-lg: var(--radius-lg);
   --radius-md: var(--radius-md);

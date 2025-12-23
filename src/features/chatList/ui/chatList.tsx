@@ -1,24 +1,55 @@
 "use client";
 import { useState } from "react";
 
-import { mockChats } from "../lib/data";
+import { ChatItemData } from "@/entities/chat/model/types";
+import { cn } from "@/shared/shadcn/lib/utils";
+import { Button } from "@/shared/shadcn/ui/button";
+import { InfoMessage } from "@/shared/ui/infoMessage";
+
 import { ChatListItem } from "./chatListItem";
 
-export const ChatList = () => {
-  const chats = mockChats.results;
+interface ChatListProps {
+  className?: string;
+  chats: ChatItemData[];
+  isSearch?: boolean;
+}
 
+export const ChatList: React.FC<ChatListProps> = ({ chats, className, isSearch }) => {
   const [activeId, setActiveId] = useState<number>();
-
   return (
-    <div className="desktop:w-[360px] bg-main-gray list-scrollbar flex w-full flex-col overflow-y-scroll px-2">
-      {chats.map((chat) => (
-        <ChatListItem
-          key={chat.id}
-          chat={chat}
-          isActive={activeId === chat.id}
-          onClick={() => setActiveId(chat.id)}
-        />
-      ))}
+    <div className={cn("list-scrollbar flex flex-1 flex-col overflow-y-auto px-2", className)}>
+      {chats.length > 0 ? (
+        chats.map((chat) => (
+          <ChatListItem
+            key={chat.id}
+            chat={chat}
+            isActive={activeId === chat.id}
+            onClick={() => setActiveId(chat.id)}
+          />
+        ))
+      ) : (
+        <div className="flex flex-1 justify-center px-2 pt-40">
+          {!isSearch && (
+            <div className="flex w-full flex-col items-center">
+              <InfoMessage
+                imgSrc="/info/chatsNotExist.svg"
+                title="У вас пока нет чатов"
+                description="Начните общение и здесь всё появится"
+              />
+              <Button variant="default" size="lg" className="mt-10 w-full">
+                Начать чат
+              </Button>
+            </div>
+          )}
+          {isSearch && (
+            <InfoMessage
+              imgSrc="/info/chatNotFound.svg"
+              title="Поиск не дал результатов"
+              description="По вашему запросу ничего не найдено. Измените запрос и попробуйте снова"
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };

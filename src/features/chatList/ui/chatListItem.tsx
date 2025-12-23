@@ -30,7 +30,7 @@ export const ChatListItem = ({ chat, isActive, onClick }: ChatListItemProps) => 
           isOnline={user.is_online}
           avatarUrl={user.avatar_webp_url || user.avatar_url || ""}
         />
-        <div className="after:bg-gray relative flex min-w-0 flex-1 flex-col justify-between after:absolute after:top-[calc(100%+10px)] after:right-0 after:left-0 after:h-px after:opacity-15 after:content-['']">
+        <div className="after:bg-gray relative flex min-w-0 flex-1 flex-col justify-between after:absolute after:top-[calc(100%+10px)] after:right-0 after:left-0 after:h-px after:opacity-15 after:content-[''] last:after:hidden">
           <ChatListItemHeader chat={chat} isActive={isActive} />
           <ChatListItemFooter
             isFavorite={chat.is_favorite}
