@@ -18,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/shadcn/ui/alert-dialog'
+import { useVerificationStore } from "../../codeVerification/model/userVerificationStore";
 
 type PhoneFormProps = {
   className?: string
@@ -38,9 +39,10 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
     formState: { errors, isValid, isSubmitting, touchedFields },
   } = useForm<PhoneData>({
     resolver: zodResolver(phoneSchema),
-    mode: 'onChange',
-    defaultValues: { phone: '' },
-  })
+    mode: "onChange",
+    defaultValues: { phone: "" },
+  });
+  const { resetVerification } = useVerificationStore();
 
   const showError = !isFocused && touchedFields.phone ? errors.phone?.message : ''
 
@@ -53,9 +55,10 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
     })
 
     if (result.success) {
-      setPhone(data.phone)
-      await savePhoneToCookie(data.phone)
-      router.push('/auth/code')
+      setPhone(data.phone);
+      resetVerification();
+      await savePhoneToCookie(data.phone);
+      router.push("/auth/code");
     } else {
       alert(result.error)
     }
@@ -66,9 +69,9 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
     const phone = getValues('phone')
     if (!isValid) return
 
-    setPendingPhone(phone)
-    setOpenModal(true)
-  }
+    setPendingPhone(phone);
+    setOpenModal(true);
+  };
 
   return (
     <form className={cn('flex flex-col gap-4 h-full', className)} onSubmit={handleSubmit(onSubmit)}>

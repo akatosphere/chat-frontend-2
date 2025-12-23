@@ -5,6 +5,7 @@ import { useVerificationStore } from "../model/userVerificationStore";
 import { sendCode } from "../../phoneForm/api/sendCode";
 import { loginByCodeAction } from "../api/loginByCodeAction";
 import { useAuthStore } from "@/shared/api/store";
+import { VerificationResult } from "../model/types";
 
 interface UseVerificationOptions {
   phone_number: string;
@@ -19,12 +20,11 @@ interface UseVerificationOptions {
 const DEFAULTS = {
   initialAttemptsLeft: 5,
   resendBlockTime: 120,
-  banTime: { firstBan: 600, repeatBan: 3600 },
+  banTime: { firstBan: 600, repeatBan: 3599 },
 } as const;
 
 export const useVerification = ({
   phone_number,
-  initialAttemptsLeft = DEFAULTS.initialAttemptsLeft,
   resendBlockTime = DEFAULTS.resendBlockTime,
   banTime = DEFAULTS.banTime,
 }: UseVerificationOptions) => {
@@ -37,6 +37,7 @@ export const useVerification = ({
     resendTimer,
     isResendAvailable,
     isBanned,
+    isCodeExpired,
 
     setAttemptsLeft,
     setBanLevel,
@@ -45,6 +46,7 @@ export const useVerification = ({
     setResendTimer,
     setIsResendAvailable,
     setIsBanned,
+    setIsCodeExpired,
     hasHydrated,
     resetVerification,
   } = useVerificationStore();
@@ -78,6 +80,9 @@ export const useVerification = ({
       setResendTimer(remaining);
       setIsResendAvailable(resendRemaining <= 0 && banRemaining <= 0);
       setIsBanned(banRemaining > 0);
+      if (banRemaining <= 0 && isBanned) {
+        setAttemptsLeft(() => 1);
+      }
     };
 
     updateTimers();
@@ -85,7 +90,7 @@ export const useVerification = ({
     const interval = setInterval(updateTimers, 1000);
 
     return () => clearInterval(interval);
-  }, [lastResendAt, banUntil, resendBlockTime]);
+  }, [lastResendAt, banUntil, resendBlockTime, isBanned]);
 
   const applyBan = () => {
     const level = banLevel + 1;
@@ -96,7 +101,7 @@ export const useVerification = ({
     setIsBanned(true);
   };
 
-  const onComplete = async (code: string) => {
+  const onComplete = async (code: string): Promise<VerificationResult> => {
     if (isBanned || !code || code.length !== 5) {
       return { success: false };
     }
@@ -104,8 +109,6 @@ export const useVerification = ({
     const response = await loginByCodeAction({ phone_number, code });
 
     if (!response.success) {
-      console.log(phone_number);
-      console.log(response);
       setAttemptsLeft((prev) => {
         const next = prev - 1;
         if (next <= 0) {
@@ -113,11 +116,21 @@ export const useVerification = ({
         }
         return Math.max(0, next);
       });
-      return { success: false };
+      const isExpired =
+        response.error.includes("истек") ||
+        response.error.includes("Запросите");
+
+      if (isExpired) {
+        setIsCodeExpired(true);
+      }
+      return {
+        success: false,
+        error: response.error,
+      };
     }
 
     if (response.access_token) {
-      console.log("success!!!");
+      setIsCodeExpired(false);
       setAccessToken(response.access_token);
       resetVerification();
       return { success: true };
@@ -129,11 +142,21 @@ export const useVerification = ({
   const onResend = async () => {
     if (!isResendAvailable) return;
 
-    setLastResendAt(Date.now());
-    setResendTimer(resendBlockTime);
-    setIsResendAvailable(false);
+    // resetVerification();
+    // setLastResendAt(Date.now());
+    // setResendTimer(resendBlockTime);
+    // setIsResendAvailable(false);
+    // setIsCodeExpired(false);
+    const result = await sendCode({
+      phone_number: phone_number.replaceAll(" ", ""),
+      code_length: 5,
+    });
 
-    await sendCode({ phone_number, code_length: 5 });
+    if (result.success) {
+      resetVerification();
+    } else {
+      alert(result.error);
+    }
   };
 
   return {
@@ -142,7 +165,8 @@ export const useVerification = ({
     resendTimer,
     isBanned,
     isResendAvailable,
-
+    isCodeExpired,
+    setIsCodeExpired,
     onComplete,
     onResend,
   };

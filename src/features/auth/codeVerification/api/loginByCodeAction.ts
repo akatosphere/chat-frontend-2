@@ -29,8 +29,13 @@ export async function loginByCodeAction(
     );
 
     if (!res.ok) {
+      console.log(res);
       const error = await res.json();
-      return { success: false, error: error.detail || "Неверный код" };
+      console.log(error);
+      return {
+        success: false,
+        error: error.detail || error.message || "Неверный код",
+      };
     }
 
     const { access, refresh } = await res.json();

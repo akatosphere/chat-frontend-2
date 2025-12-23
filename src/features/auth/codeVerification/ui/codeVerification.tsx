@@ -22,6 +22,7 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
     isBanned,
     resendTimer,
     isResendAvailable,
+    isCodeExpired,
     onComplete,
     onResend,
   } = useVerification({ phone_number: phone.replaceAll(" ", "") });
@@ -30,14 +31,20 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
     onComplete,
     attemptsLeft,
   });
-  
+
   const [openModal, setOpenModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState("")
 
   useEffect(() => {
     if (isBanned) {
+      setModalTitle('Лимит исчерпан')
       setOpenModal(true)
     }
-  }, [isBanned])
+    if (isCodeExpired) {
+      setModalTitle('Срок действия кода истек')
+      setOpenModal(true)
+    }
+  }, [isBanned, isCodeExpired])
 
   return (
     <div className={cn('flex flex-col items-center justify-center', className)}>
@@ -53,7 +60,14 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
         length={5}
         attemptsLeft={attemptsLeft}
         onComplete={handleComplete}
-        error={error || (isBanned && 'Слишком много неверных попыток.') || ''}
+        isBanned={isBanned}
+        isCodeExpired={isCodeExpired}
+        error={
+          (isCodeExpired && 'Запросите код повторно.') ||
+          (attemptsLeft >= 1 && error) ||
+          (isBanned && 'Слишком много неверных попыток.') ||
+          ''
+        }
         loading={loading}
         onErrorReset={() => setError('')}
         className="mb-6 lg:mb-4"
@@ -61,13 +75,18 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
 
       <VerificationCodeResend onResend={onResend} resendTimer={resendTimer} isResendAvailable={isResendAvailable} />
 
-      <ModalDialog overlay="card" variant='vertical' open={openModal} onOpenChange={setOpenModal} className="gap-5 py-8">
+      <ModalDialog
+        overlay="card"
+        variant="vertical"
+        open={openModal}
+        onOpenChange={setOpenModal}
+        className="gap-5 py-8">
         <div>
           <AlertDialogHeader>
-            <AlertDialogTitle className="title text-black font-medium">Лимит исчерпан</AlertDialogTitle>
+            <AlertDialogTitle className="title text-black font-medium">{modalTitle}</AlertDialogTitle>
           </AlertDialogHeader>
         </div>
-        <AlertDialogDescription className="text text-black" >Попробуйте позднее</AlertDialogDescription>
+        {isBanned && <AlertDialogDescription className="text text-black">Попробуйте позднее</AlertDialogDescription>}
         <div>
           <AlertDialogFooter className="flex flex-col sm:flex-col  gap-4 desktop:gap-3">
             <Button variant="default" size="md" className="flex flex-1" asChild>
