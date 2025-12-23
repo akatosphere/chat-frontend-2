@@ -1,7 +1,6 @@
 "use client";
 
 import AttachBtn from "@icons/chat/attachBtn.svg";
-import EmojiBtn from "@icons/chat/emojiBtn.svg";
 import MessageSendBtn from "@icons/chat/messageSendBtn.svg";
 import VoiceMessage from "@icons/chat/voiceMessage.svg";
 
@@ -16,6 +15,7 @@ import {
 
 import { resize } from "../lib/helpers";
 import { useMessageForm } from "../lib/useMessageForm";
+import { EmojiBtnToggle } from "./emojiBtnToggle";
 
 type MessageFormProps = {
   className?: string;
@@ -67,8 +67,9 @@ export const MessageForm: React.FC<MessageFormProps> = ({
             type="button"
             size="icon-auto"
             variant="ghost"
+            asChild
           >
-            <EmojiBtn className="h-5 w-5" />
+            <EmojiBtnToggle className="h-5 w-5" />
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
