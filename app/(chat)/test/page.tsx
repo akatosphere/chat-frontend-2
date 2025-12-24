@@ -1,13 +1,8 @@
 import { fetchMessagesPage } from "@/features/chat/chat/api/mockChatApi";
 import { mapApiMessage } from "@/features/chat/chat/lib/mapper";
 import { ChatWidget } from "@/features/chat/chat/ui/chatWidget";
-import { cn } from "@/shared/shadcn/lib/utils";
 
-type ChatWidgetProps = {
-  className?: string;
-};
-
-export const ChatLayoutWidget: React.FC<ChatWidgetProps> = async ({ className }) => {
+export default async function ChatPage() {
   const CURRENT_USER_UID = "user-1";
 
   const page = await fetchMessagesPage();
@@ -19,11 +14,10 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = async ({ className })
     username: "Unknown",
     avatarUrl: "",
   };
+
   return (
-    <div className={cn("flex h-full w-full flex-col", className)}>
-      <div className="min-h-15 w-full bg-white">Header</div>
-      <ChatWidget initialMessages={messages} currentUser={currentUser} className="flex-1" />
-      <div className="min-h-15 w-full bg-white">Footer</div>
+    <div className="desktop:w-[744px] desktop:h-[936px] h-screen w-full rounded-md border">
+      <ChatWidget initialMessages={messages} currentUser={currentUser} />
     </div>
   );
-};
+}
