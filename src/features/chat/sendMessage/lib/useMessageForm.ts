@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 
+import { useIsMobileStore } from "@/shared/model/isMobile.store";
+
 import { resize } from "./helpers";
 
 type UseMessageFormOptions = {
@@ -9,16 +11,16 @@ type UseMessageFormOptions = {
 
 export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFormOptions) => {
   const [textMessage, setTextMessage] = useState("");
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const isTouchDevice =
-    typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+  const isMobile = useIsMobileStore((state) => state.isMobile);
 
   const submitMessage = () => {
     const trimmedMessage = textMessage.trim();
     if (!trimmedMessage) return;
 
-    if (isTouchDevice && !isKeyboardOpen) {
+    if (isMobile && !isKeyboardOpen) {
       textareaRef.current?.blur();
     }
 
@@ -26,7 +28,7 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
     setTextMessage("");
 
     requestAnimationFrame(() => {
-      if (!isTouchDevice || isKeyboardOpen) {
+      if (!isMobile || isKeyboardOpen) {
         console.log(isKeyboardOpen);
         textareaRef.current?.focus();
       }
@@ -42,10 +44,16 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey && !isTouchDevice) {
+    if (e.key === "Enter" && !e.shiftKey && !isMobile) {
       e.preventDefault();
       submitMessage();
     }
+  };
+
+  const onToggle = () => {
+    setEmojiPickerOpen(!emojiPickerOpen);
+    if (!isMobile) textareaRef.current?.focus();
+    if (emojiPickerOpen) textareaRef.current?.focus();
   };
 
   return {
@@ -54,5 +62,8 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
     textareaRef,
     handleSubmit,
     onKeyDown,
+    emojiPickerOpen,
+    setEmojiPickerOpen,
+    onToggle,
   };
 };

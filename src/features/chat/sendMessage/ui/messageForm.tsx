@@ -3,9 +3,10 @@
 import AttachBtn from "@icons/chat/attachBtn.svg";
 import MessageSendBtn from "@icons/chat/messageSendBtn.svg";
 import VoiceMessage from "@icons/chat/voiceMessage.svg";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import { useClickOutside } from "@/shared/lib/useClickOutside";
+import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 import {
@@ -34,15 +35,22 @@ export const MessageForm: React.FC<MessageFormProps> = ({
   onSubmitMessage,
   isKeyboardOpen,
 }) => {
-  const { textMessage, setTextMessage, textareaRef, handleSubmit, onKeyDown } = useMessageForm({
+  const {
+    textMessage,
+    setTextMessage,
+    textareaRef,
+    handleSubmit,
+    onKeyDown,
+    emojiPickerOpen,
+    setEmojiPickerOpen,
+    onToggle,
+  } = useMessageForm({
     onSubmitMessage,
     isKeyboardOpen,
   });
-  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
-
+  const isMobile = useIsMobileStore((state) => state.isMobile);
   const pickerRef = useRef<HTMLDivElement>(null);
   const emojiBtnRef = useRef<HTMLDivElement>(null);
-
   useClickOutside(pickerRef, () => {
     if (emojiPickerOpen) setEmojiPickerOpen(false);
   }, [emojiBtnRef]);
@@ -63,6 +71,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
     setTimeout(() => {
       if (textarea) {
         const newCursorPosition = cursorPosition + emoji.length;
+        if (!isMobile) textarea.focus();
         textarea.setSelectionRange(newCursorPosition, newCursorPosition);
       }
     }, 0);
@@ -108,11 +117,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
               variant="ghost"
               asChild
             >
-              <EmojiBtnToggle
-                className="h-5 w-5"
-                pressed={emojiPickerOpen}
-                onToggle={() => setEmojiPickerOpen(!emojiPickerOpen)}
-              />
+              <EmojiBtnToggle className="h-5 w-5" pressed={emojiPickerOpen} onToggle={onToggle} />
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>

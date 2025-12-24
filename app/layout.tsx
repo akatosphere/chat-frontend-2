@@ -5,6 +5,7 @@ import { Noto_Color_Emoji, Roboto } from "next/font/google";
 import localFont from "next/font/local";
 
 import { SITE_TITLE } from "@/shared/lib/constants/siteInfo";
+import { IsMobileProvider } from "@/shared/providers/isMobileProvider";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -40,7 +41,7 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} ${notoColorEmoji.variable} ${appleColorEmoji.variable} font-sans antialiased`}
       >
-        {children}
+        <IsMobileProvider>{children}</IsMobileProvider>
       </body>
     </html>
   );
