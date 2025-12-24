@@ -1,7 +1,8 @@
 "use client";
 
-import { getMessengerProfile } from "@/features/auth/userForm/api/updateUserProfile";
 import { useQuery } from "@tanstack/react-query";
+
+import { getMessengerProfile } from "@/features/auth/userForm/api/updateUserProfile";
 
 export default function Page() {
   const { data, isLoading, isError } = useQuery({
@@ -19,10 +20,13 @@ export default function Page() {
   if (!data?.success) return null;
 
   return (
-    <div className="flex flex-col gap-2">
-      <span>Никнейм: {data.data.nickname}</span>
-      <span>Имя: {data.data.first_name}</span>
-      <span>Телефон: {data.data.phone}</span>
-    </div>
+    // <div className="flex flex-col gap-2">
+    //   <span>Никнейм: {data.data.nickname}</span>
+    //   <span>Имя: {data.data.first_name}</span>
+    //   <span>Телефон: {data.data.phone}</span>
+    // </div>
+    <>
+      <div className="bg-gray w-full text-white">Chat</div>
+    </>
   );
 }

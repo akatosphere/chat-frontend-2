@@ -1,18 +1,19 @@
+import Link from "next/link";
+
 import { BackgroundCardLayout } from "@/shared/layouts/card/backgroundCardLayout";
 import { Button } from "@/shared/shadcn/ui/button";
 import { Logo } from "@/shared/ui/logo";
-import Link from "next/link";
 
 export default function Page() {
   return (
     <BackgroundCardLayout>
-      <Logo size="lg" withTitle className="mb-4 desktop:mb-6" />
-      <div className="flex flex-col gap-1 desktop:gap-0.5 text-primary-dark text-center">
+      <Logo size="lg" withTitle className="desktop:mb-6 mb-4" />
+      <div className="desktop:gap-0.5 text-primary-dark flex flex-col gap-1 text-center">
         <span className="text">Привет!</span>
         <span className="text">Давай знакомиться!</span>
       </div>
       <Button
-        className="mt-6 desktop:mt-auto max-w-[326px] desktop:max-w-full w-full mx-auto"
+        className="desktop:mt-auto desktop:max-w-full mx-auto mt-6 w-full max-w-[326px]"
         variant={"default"}
         size={"lg"}
         asChild

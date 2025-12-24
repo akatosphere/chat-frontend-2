@@ -44,10 +44,7 @@ export const useVerificationCodeInputController = ({
 
   const handlePasteFull = (text: string) => {
     const pastedValues = text.slice(0, length).split("");
-    if (
-      !pastedValues.every((value) => /^\d?$/.test(value)) ||
-      pastedValues.length !== length
-    )
+    if (!pastedValues.every((value) => /^\d?$/.test(value)) || pastedValues.length !== length)
       return;
     const newValues = [...values];
     for (let i = 0; i < pastedValues.length; i++) {

@@ -39,8 +39,7 @@ export const useVerificationStore = create<VerificationState>()(
       hasHydrated: false,
       setHasHydrated: (v) => set({ hasHydrated: v }),
 
-      setAttemptsLeft: (fn) =>
-        set((state) => ({ attemptsLeft: fn(state.attemptsLeft) })),
+      setAttemptsLeft: (fn) => set((state) => ({ attemptsLeft: fn(state.attemptsLeft) })),
       setBanLevel: (level) => set({ banLevel: level }),
       setLastResendAt: (time) => set({ lastResendAt: time }),
       setBanUntil: (time) => set({ banUntil: time }),
@@ -70,6 +69,6 @@ export const useVerificationStore = create<VerificationState>()(
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
-    }
-  )
+    },
+  ),
 );

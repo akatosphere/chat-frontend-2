@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { useVerificationStore } from "../model/userVerificationStore";
-import { sendCode } from "../../phoneForm/api/sendCode";
-import { loginByCodeAction } from "../api/loginByCodeAction";
+
 import { useAuthStore } from "@/shared/api/store";
+
+import { sendCode } from "../../phoneForm/api/sendCode";
+import { loginByCodeAction } from "../actions/api/loginByCodeAction";
+import { useVerificationStore } from "../model/userVerificationStore";
 
 interface UseVerificationOptions {
   phone_number: string;
@@ -19,12 +21,13 @@ interface UseVerificationOptions {
 const DEFAULTS = {
   initialAttemptsLeft: 5,
   resendBlockTime: 120,
-  banTime: { firstBan: 600, repeatBan: 3600 },
+  banTime: { firstBan: 600, repeatBan: 3599 },
 } as const;
 
 export const useVerification = ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   phone_number,
-  initialAttemptsLeft = DEFAULTS.initialAttemptsLeft,
+  // initialAttemptsLeft = DEFAULTS.initialAttemptsLeft,
   resendBlockTime = DEFAULTS.resendBlockTime,
   banTime = DEFAULTS.banTime,
 }: UseVerificationOptions) => {
@@ -65,13 +68,10 @@ export const useVerification = ({
     const updateTimers = () => {
       const now = Date.now();
 
-      const sinceLastResendSec = lastResendAt
-        ? (now - lastResendAt) / 1000
-        : Infinity;
+      const sinceLastResendSec = lastResendAt ? (now - lastResendAt) / 1000 : Infinity;
       const resendRemaining = Math.max(0, resendBlockTime - sinceLastResendSec);
 
-      const banRemaining =
-        banUntil > 0 ? Math.max(0, (banUntil - now) / 1000) : 0;
+      const banRemaining = banUntil > 0 ? Math.max(0, (banUntil - now) / 1000) : 0;
 
       const remaining = Math.ceil(Math.max(resendRemaining, banRemaining));
 
