@@ -28,7 +28,10 @@ export const EmojiGroup: React.FC<EmojiGroupProps> = ({
                 size={"inline"}
                 variant={"text"}
                 className="h-8 w-8 cursor-pointer rounded-md text-2xl transition-all duration-300 hover:scale-105 hover:bg-[#e4e4e4] active:scale-105 active:bg-gray-200"
-                onClick={() => onEmojiSelect?.(emoji)}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  onEmojiSelect?.(emoji);
+                }}
               >
                 {emoji}
               </Button>

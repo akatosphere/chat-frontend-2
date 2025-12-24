@@ -5,14 +5,16 @@ import { Toggle } from "@/shared/shadcn/ui/toggle";
 
 type EmojiBtnToggleProps = {
   className?: string;
-  handleToggle?: () => void;
+  pressed: boolean; // внешний стейт
+  onToggle: () => void;
 };
 
-export const EmojiBtnToggle: React.FC<EmojiBtnToggleProps> = ({ className, handleToggle }) => {
+export const EmojiBtnToggle: React.FC<EmojiBtnToggleProps> = ({ className, pressed, onToggle }) => {
   return (
     <Toggle
+      pressed={pressed}
+      onPressedChange={onToggle}
       className={cn("text-gray data-[state=on]:text-primary", className)}
-      onClick={handleToggle}
     >
       <EmojiBtn className="h-5 w-5" />
     </Toggle>
