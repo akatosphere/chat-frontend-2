@@ -1,7 +1,9 @@
 import { AxiosError } from "axios";
+
 import { MessageError, ValidationError } from "./types";
 
 export const errorHandler = (error: unknown): string => {
+  console.log(error);
   if (!(error instanceof AxiosError)) {
     return "Неизвестная ошибка";
   }
