@@ -2,10 +2,10 @@
 import { useState } from "react";
 
 import { cn } from "@/shared/shadcn/lib/utils";
+import { ChatFooter } from "@/widgets/chat/chatFooter/ui/chatFooter";
 
 import { Message } from "../model/types";
 import { MessageList } from "./messageList";
-import { SendMessageForm } from "./sendMessageForm";
 
 type ChatWidgetProps = {
   className?: string;
@@ -16,7 +16,18 @@ type ChatWidgetProps = {
 export const ChatWidget = ({ className, initialMessages, currentUser }: ChatWidgetProps) => {
   const [messages, setMessages] = useState(initialMessages);
 
-  const handleSend = (message: Message) => {
+  const handleSendMessage = (text: string) => {
+    const message: Message = {
+      id: +crypto.randomUUID(),
+      content: text,
+      author: currentUser,
+      files: [],
+      createdAt: new Date(),
+      isMine: true,
+      status: "delivered",
+      uid: `msg-${crypto.randomUUID()}`,
+    };
+
     setMessages((prev) => [...prev, message]);
   };
 
@@ -25,9 +36,8 @@ export const ChatWidget = ({ className, initialMessages, currentUser }: ChatWidg
       <div className="flex-1 overflow-y-auto">
         <MessageList messages={messages} />
       </div>
-      <div className="border-t p-3">
-        <SendMessageForm currentUser={currentUser} onSend={handleSend} />
-      </div>
+
+      <ChatFooter onSendMessage={handleSendMessage} />
     </div>
   );
 };

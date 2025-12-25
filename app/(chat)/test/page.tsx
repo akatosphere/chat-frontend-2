@@ -1,23 +1,43 @@
-import { fetchMessagesPage } from "@/features/chat/chat/api/mockChatApi";
-import { mapApiMessage } from "@/features/chat/chat/lib/mapper";
-import { ChatWidget } from "@/features/chat/chat/ui/chatWidget";
+"use client";
+import { useRef, useState } from "react";
 
-export default async function ChatPage() {
-  const CURRENT_USER_UID = "user-1";
+import { Textarea } from "@/shared/shadcn/ui/textarea";
+import { EmojiPicker } from "@/widgets/emoji-picker/ui/emojiPicker";
 
-  const page = await fetchMessagesPage();
+export default function Test() {
+  const [message, setMessage] = useState<string>("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const messages = page.results.map((apiMessage) => mapApiMessage(apiMessage, CURRENT_USER_UID));
+  const onEmojiSelect = (emoji: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      setMessage((prev) => prev + emoji);
+      return;
+    }
 
-  const currentUser = messages.find((m) => m.author.uid === CURRENT_USER_UID)?.author || {
-    uid: CURRENT_USER_UID,
-    username: "Unknown",
-    avatarUrl: "",
+    const cursorPosition = textarea.selectionStart;
+    const textBeforeCursor = message.substring(0, cursorPosition);
+    const textAfterCursor = message.substring(cursorPosition);
+
+    setMessage(textBeforeCursor + emoji + textAfterCursor);
+
+    setTimeout(() => {
+      if (textarea) {
+        const newCursorPosition = cursorPosition + emoji.length;
+        textarea.focus();
+        textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+      }
+    }, 0);
   };
-
   return (
-    <div className="desktop:w-[744px] desktop:h-[936px] h-screen w-full rounded-md border">
-      <ChatWidget initialMessages={messages} currentUser={currentUser} />
+    <div className="p-20">
+      <Textarea
+        ref={textareaRef}
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        className="emojis-apple" // emojis-apple - apple эмодзи, emojis-google - google эмодзи
+      />
+      <EmojiPicker onEmojiSelect={onEmojiSelect} />
     </div>
   );
 }

@@ -9,11 +9,11 @@ import { filterChats } from "../lib/filterChats";
 import { ChatList } from "./chatList";
 import { Searchbar } from "./searchbar";
 
-type ChatSidebarProps = {
+type ChatsListPanelProps = {
   className?: string;
 };
 
-export const ChatSidebar: React.FC<ChatSidebarProps> = ({ className }) => {
+export const ChatsListPanel: React.FC<ChatsListPanelProps> = ({ className }) => {
   const chats = mockChats.results;
 
   const [search, setSearch] = useState("");
@@ -24,12 +24,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ className }) => {
 
   const filteredChats = filterChats(chats, search);
   return (
-    <div
-      className={cn(
-        "desktop:w-[360px] bg-main-gray desktop:min-h-[936px] desktop:max-h-[936px] flex h-dvh flex-col",
-        className,
-      )}
-    >
+    <div className={cn("", className)}>
       <Searchbar onChange={onSearch} value={search} className="p-4" />
       <ChatList chats={filteredChats} isSearch={search.length > 0} />
     </div>

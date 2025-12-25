@@ -5,15 +5,16 @@ import * as React from "react";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 const buttonVariants = cva(
-  "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 disabled:bg-muted disabled:border-muted disabled:text-muted-foreground aria-invalid:border-destructive inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 text-sm whitespace-nowrap transition-all outline-none disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "disabled:bg-muted disabled:text-muted-foreground aria-invalid:ring-destructive/20 aria-invalid:border-destructive inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 text-sm whitespace-nowrap transition-all outline-none disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
           "border-primary bg-primary desktop:hover:bg-primary-light desktop:hover:border-primary-light desktop:hover:text-primary active:bg-primary-light active:border-primary-light active:text-primary border-[2px] text-white",
         outline:
-          "border-primary text-primary desktop:hover:border-accent desktop:hover:text-primary-dark active:border-accent active:text-primary-dark disabled:border-muted dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border border-[2px]",
+          "border-primary text-primary desktop:hover:border-accent desktop:hover:text-primary-dark active:border-accent active:text-primary-dark disabled:border-muted border border-[2px]",
         text: "text-primary desktop:hover:text-primary-light active:text-primary-light bg-transparent p-0",
+        ghost: "",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
@@ -24,6 +25,7 @@ const buttonVariants = cva(
         icon: "size-9",
         "icon-sm": "size-8",
         "icon-lg": "size-10",
+        "icon-auto": "h-auto w-auto p-0",
       },
     },
     defaultVariants: {

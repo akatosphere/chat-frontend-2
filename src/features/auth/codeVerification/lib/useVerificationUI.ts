@@ -5,10 +5,10 @@ import { pluralize } from "@/shared/lib/pluralize";
 
 import { VerificationResult } from "../model/types";
 
-interface UseVerificationUIOptions {
+type UseVerificationUIOptions = {
   onComplete: (code: string) => Promise<VerificationResult>;
   attemptsLeft: number;
-}
+};
 
 export const useVerificationUI = ({ onComplete, attemptsLeft }: UseVerificationUIOptions) => {
   const [error, setError] = useState("");

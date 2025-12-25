@@ -18,7 +18,7 @@ export const ChatHeaderUser = ({ name, status, photo, onPhotoClick, onInfoClick 
   const statusData = STATUS_CONFIG[status];
 
   return (
-    <div className="border-light-gray flex h-[60px] min-w-0 flex-1 items-center gap-3 border-b pl-4 md:border-none">
+    <div className="border-light-gray flex h-[60px] min-w-0 flex-1 items-center gap-3 border-b md:border-none">
       <button
         onClick={onPhotoClick}
         className="relative h-10 w-10 shrink-0 cursor-pointer overflow-hidden rounded-full"

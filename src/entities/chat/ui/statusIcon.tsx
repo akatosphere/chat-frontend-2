@@ -4,18 +4,13 @@ import Clock from "@icons/chat/clock.svg";
 
 import { cn } from "@/shared/shadcn/lib/utils";
 
-import { getMessageStatus } from "../lib/getMessageStatus";
-
 type StatusIconProps = {
-  isMessageNew: boolean | undefined;
-  fromUser: string;
-  userId: string;
-  isActive: boolean;
+  status: string | null;
+  isActive?: boolean;
 };
 
-export const StatusIcon = ({ isMessageNew, fromUser, userId, isActive }: StatusIconProps) => {
-  const status = getMessageStatus(fromUser, userId, isMessageNew);
-
+export const StatusIcon = ({ status, isActive }: StatusIconProps) => {
+  if (!status) return null;
   switch (status) {
     case "delivered": {
       return (

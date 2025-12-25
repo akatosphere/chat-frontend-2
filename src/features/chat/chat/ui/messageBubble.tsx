@@ -1,3 +1,4 @@
+import { StatusIcon } from "@/entities/chat/ui/statusIcon";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { Message } from "../model/types";
@@ -13,9 +14,6 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ className, chatMes
     minute: "2-digit",
   });
 
-  const statusIcon =
-    chatMessage.status === "sent" ? "✓" : chatMessage.status === "delivered" ? "✓✓" : "✓✓";
-
   return (
     <div className={cn("flex", chatMessage.isMine ? "justify-end" : "justify-start", className)}>
       <div
@@ -27,7 +25,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ className, chatMes
         )}
       >
         {chatMessage.content && (
-          <p className="subtext min-w-0 pr-2 wrap-break-word">{chatMessage.content}</p>
+          <p className="subtext emojis-apple min-w-0 pr-2 wrap-break-word">{chatMessage.content}</p>
         )}
 
         {/* {chatMessage.files.length > 0 && (
@@ -41,7 +39,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ className, chatMes
         <div className={cn("flex h-full flex-col justify-end")}>
           <div className="minitext text-gray leading-subtext mt-auto flex items-center gap-0.5 select-none">
             <span className="">{time}</span>
-            {chatMessage.isMine && <span>{statusIcon}</span>}
+            {chatMessage.isMine && <StatusIcon status={chatMessage.status} />}
           </div>
         </div>
       </div>

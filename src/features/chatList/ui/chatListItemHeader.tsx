@@ -1,5 +1,6 @@
 import Mute from "@icons/chat/mute.svg";
 
+import { getMessageStatus } from "@/entities/chat/lib/getMessageStatus";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { formatLastSeen } from "../../../entities/chat/lib/formatLastSeen";
@@ -17,6 +18,7 @@ export const ChatListItemHeader = ({ chat, isActive }: ChatListItemHeaderProps) 
   const lastMsg = chat.last_message;
   const displayName = getChatDisplayName(chat);
   const time = lastMsg ? formatLastSeen(lastMsg.created_at) : "";
+  const status = getMessageStatus(lastMsg?.from_user || null, user.uid, lastMsg?.new);
 
   return (
     <div className="flex min-w-0 items-center justify-between">
@@ -39,14 +41,7 @@ export const ChatListItemHeader = ({ chat, isActive }: ChatListItemHeaderProps) 
         )}
       </div>
       <div className="flex shrink-0 items-center gap-1 pl-2">
-        {lastMsg && (
-          <StatusIcon
-            isMessageNew={lastMsg?.new}
-            fromUser={lastMsg?.from_user}
-            isActive={Boolean(isActive)}
-            userId={user.uid}
-          />
-        )}
+        {lastMsg && <StatusIcon status={status} isActive={Boolean(isActive)} />}
         <span
           className={cn(
             "desktop:minitext caption text-gray leading-none transition-colors duration-200",

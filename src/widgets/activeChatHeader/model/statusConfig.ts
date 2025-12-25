@@ -2,19 +2,19 @@ import { UserStatus } from "./types";
 
 export const STATUS_CONFIG: Record<UserStatus, { label: string; className: string }> = {
   online: {
-    label: "В сети",
+    label: "в сети",
     className: "text-primary",
   },
   offline: {
-    label: "Не в сети",
+    label: "не в сети",
     className: "text-gray",
   },
   connecting: {
-    label: "Соединение…",
+    label: "соединение…",
     className: "text-gray",
   },
   typing: {
-    label: "Печатает…",
+    label: "печатает…",
     className: "text-primary",
   },
 };

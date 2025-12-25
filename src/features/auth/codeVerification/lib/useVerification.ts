@@ -9,7 +9,7 @@ import { loginByCodeAction } from "../actions/api/loginByCodeAction";
 import { VerificationResult } from "../model/types";
 import { useVerificationStore } from "../model/userVerificationStore";
 
-interface UseVerificationOptions {
+type UseVerificationOptions = {
   phone_number: string;
   initialAttemptsLeft?: number;
   resendBlockTime?: number;
@@ -17,7 +17,7 @@ interface UseVerificationOptions {
     firstBan: number;
     repeatBan: number;
   };
-}
+};
 
 const DEFAULTS = {
   initialAttemptsLeft: 5,
