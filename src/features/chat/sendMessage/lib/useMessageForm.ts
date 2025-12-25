@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 
+import { useClickOutside } from "@/shared/lib/useClickOutside";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
 
 import { resize } from "./helpers";
@@ -13,6 +14,8 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
   const [textMessage, setTextMessage] = useState("");
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const pickerRef = useRef<HTMLDivElement>(null);
+  const emojiBtnRef = useRef<HTMLDivElement>(null);
 
   const isMobile = useIsMobileStore((state) => state.isMobile);
 
@@ -29,7 +32,6 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
 
     requestAnimationFrame(() => {
       if (!isMobile || isKeyboardOpen) {
-        console.log(isKeyboardOpen);
         textareaRef.current?.focus();
       }
       resize({
@@ -46,6 +48,7 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey && !isMobile) {
       e.preventDefault();
+      setEmojiPickerOpen(false);
       submitMessage();
     }
   };
@@ -56,6 +59,32 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
     if (emojiPickerOpen) textareaRef.current?.focus();
   };
 
+  const onEmojiSelect = (emoji: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      setTextMessage((prev) => prev + emoji);
+      return;
+    }
+
+    const cursorPosition = textarea.selectionStart;
+    const textBeforeCursor = textMessage.substring(0, cursorPosition);
+    const textAfterCursor = textMessage.substring(cursorPosition);
+
+    setTextMessage(textBeforeCursor + emoji + textAfterCursor);
+
+    setTimeout(() => {
+      if (textarea) {
+        const newCursorPosition = cursorPosition + emoji.length;
+        if (!isMobile) textarea.focus();
+        textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+      }
+    }, 0);
+  };
+
+  useClickOutside(pickerRef, () => {
+    if (emojiPickerOpen) setEmojiPickerOpen(false);
+  }, [emojiBtnRef]);
+
   return {
     textMessage,
     setTextMessage,
@@ -65,5 +94,8 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
     emojiPickerOpen,
     setEmojiPickerOpen,
     onToggle,
+    onEmojiSelect,
+    pickerRef,
+    emojiBtnRef,
   };
 };
