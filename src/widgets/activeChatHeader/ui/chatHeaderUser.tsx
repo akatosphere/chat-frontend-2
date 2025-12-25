@@ -1,56 +1,43 @@
-import Image from "next/image"
-import { cn } from "@/shared/shadcn/lib/utils"
-import { UserStatus } from "../model/types"
-import { STATUS_CONFIG } from "../model/statusConfig"
+import Image from "next/image";
+
+import { cn } from "@/shared/shadcn/lib/utils";
+import ProfilePhoto from "@/shared/ui/icons/chat/header/profilePhoto.svg";
+
+import { STATUS_CONFIG } from "../model/statusConfig";
+import { UserStatus } from "../model/types";
 
 type Props = {
-  name: string
-  status: UserStatus
-  photo?: string
-  onPhotoClick: () => void
-  onInfoClick: () => void
-}
+  name: string;
+  status: UserStatus;
+  photo?: string;
+  onPhotoClick: () => void;
+  onInfoClick: () => void;
+};
 
-export const ChatHeaderUser = ({
-  name,
-  status,
-  photo,
-  onPhotoClick,
-  onInfoClick,
-}: Props) => {
-  const statusData = STATUS_CONFIG[status]
+export const ChatHeaderUser = ({ name, status, photo, onPhotoClick, onInfoClick }: Props) => {
+  const statusData = STATUS_CONFIG[status];
 
   return (
-    <div className="flex items-center flex-1 min-w-0 gap-3 h-[60px] pl-4 border-b border-light-gray md:border-none">
-
+    <div className="border-light-gray flex h-[60px] min-w-0 flex-1 items-center gap-3 border-b pl-4 md:border-none">
       <button
         onClick={onPhotoClick}
-        className="relative w-10 h-10 shrink-0 overflow-hidden rounded-full"
+        className="relative h-10 w-10 shrink-0 cursor-pointer overflow-hidden rounded-full"
       >
-        <Image
-          src={photo ?? "/icons/profilePhoto.svg"}
-          alt="profile"
-          fill
-          className="object-cover"
-        />
+        {photo ? (
+          <Image src={photo} alt="profile" fill className="object-cover" />
+        ) : (
+          <ProfilePhoto className="text-primary h-10 w-10" />
+        )}
       </button>
 
-      <button
-        onClick={onInfoClick}
-        className="flex flex-col min-w-0 text-left"
-      >
-        <p className="truncate text-sm font-medium md:text-lg">
-          {name}
-        </p>
+      <button onClick={onInfoClick} className="flex min-w-0 cursor-pointer flex-col text-left">
+        <p className="truncate text-sm font-medium md:text-lg">{name}</p>
         <p
-          className={cn(
-            "truncate text-xs mt-1 md:text-sm transition-colors",
-            statusData.className
-          )}
+          className={cn("mt-1 truncate text-xs transition-colors md:text-sm", statusData.className)}
         >
           {statusData.label}
         </p>
       </button>
     </div>
-  )
-}
+  );
+};
