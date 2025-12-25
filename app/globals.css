@@ -54,6 +54,10 @@
   --light-gray: #c5c5c5;
   --main-gray: #f5f6f8;
 
+  /* добавлены цвета для цвета иконок меню навигации */
+  --nav-border: #eeeeee;
+  --nav-bg-active: #f5f6f8;
+
   --radius-lg: 12px;
   --radius-md: 8px;
   --radius-sm: 4px;
@@ -134,6 +138,10 @@
   --color-gray: var(--gray);
   --color-light-gray: var(--light-gray);
   --color-main-gray: var(--main-gray);
+
+  /* добавлены переменные для цвета иконок меню навигации */
+  --color-nav-border: var(--nav-border);
+  --color-nav-bg-active: var(--nav-bg-active);
 
   --radius-lg: var(--radius-lg);
   --radius-md: var(--radius-md);

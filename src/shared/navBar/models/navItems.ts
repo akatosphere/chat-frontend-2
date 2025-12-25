@@ -1,14 +1,14 @@
 // src/shared/navBar/model/navItems.ts
-import { MessageDesktop } from "@/shared/icons/navBar/desktop/message";
-import { PersonSearchDesktop } from "@/shared/icons/navBar/desktop/person_search";
-import { ServicesDesktop } from "@/shared/icons/navBar/desktop/services";
-import { SettingsDesktop } from "@/shared/icons/navBar/desktop/settings";
-
-import { MessageMobile } from "@/shared/icons/navBar/mobile/message";
-import { ContactsMobile } from "@/shared/icons/navBar/mobile/contacts";
-import { ServicesMobile } from "@/shared/icons/navBar/mobile/services";
-import { SettingsMobile } from "@/shared/icons/navBar/mobile/settings";
 import { ComponentType, SVGProps } from "react";
+
+import ServicesDesktop from "@/shared/ui/icons/navBar/desktop/a-service.svg";
+import MessageDesktop from "@/shared/ui/icons/navBar/desktop/message.svg";
+import PersonSearchDesktop from "@/shared/ui/icons/navBar/desktop/person_search.svg";
+import SettingsDesktop from "@/shared/ui/icons/navBar/desktop/settings.svg";
+import ContactsMobile from "@/shared/ui/icons/navBar/mobile/contacts.svg";
+import MessageMobile from "@/shared/ui/icons/navBar/mobile/message.svg";
+import ServicesMobile from "@/shared/ui/icons/navBar/mobile/services.svg";
+import SettingsMobile from "@/shared/ui/icons/navBar/mobile/settings.svg";
 
 export type NavItemModel = {
   label: string;
@@ -51,4 +51,3 @@ export const navItems: NavItemModel[] = [
     order: { mobile: 4, desktop: 4 },
   },
 ];
-
