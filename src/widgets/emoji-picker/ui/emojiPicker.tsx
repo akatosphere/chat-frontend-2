@@ -28,7 +28,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({ className, onEmojiSele
   return (
     <div
       className={cn(
-        "desktop:w-[472px] w-[361px] rounded-md shadow-[-8px_0px_20px_0px_#6C688A24]",
+        "desktop:w-[472px] w-[361px] rounded-md bg-white shadow-[-8px_0px_20px_0px_#6C688A24]",
         className,
       )}
     >

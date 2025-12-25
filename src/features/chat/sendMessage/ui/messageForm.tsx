@@ -79,15 +79,15 @@ export const MessageForm: React.FC<MessageFormProps> = ({
 
   return (
     <div className="relative w-full">
-      <form className={cn("relative flex items-end py-3", className)} onSubmit={handleSubmit}>
-        <div className="flex h-11 flex-1 flex-row-reverse pr-3">
+      <form className={cn("relative flex items-end px-4 py-3", className)} onSubmit={handleSubmit}>
+        <div className="flex h-11 flex-row-reverse pr-3">
           <Button variant="ghost" size="icon-auto" onClick={onAttachBtnClick} type="button">
             <AttachBtn className="h-11 w-11" />
           </Button>
         </div>
 
-        <InputGroup className="relative flex h-min flex-4 rounded-3xl bg-white">
-          <div className="desktop:max-h-[448px] flex max-h-[172px] flex-1 overflow-hidden rounded-3xl">
+        <InputGroup className="relative flex h-min w-full rounded-3xl bg-white">
+          <div className="reletive desktop:max-h-[448px] flex max-h-[172px] flex-1 overflow-hidden rounded-3xl">
             <div className="desktop:[&::-webkit-scrollbar]:inline flex flex-1 overflow-y-auto pr-10 [&::-webkit-scrollbar]:hidden">
               <InputGroupTextarea
                 ref={textareaRef}
@@ -100,6 +100,14 @@ export const MessageForm: React.FC<MessageFormProps> = ({
                 className="subtext h-11 min-h-11 resize-none overflow-hidden"
               />
             </div>
+            {emojiPickerOpen && (
+              <div
+                ref={pickerRef}
+                className="desktop:right-0 desktop:left-auto desktop:translate-x-0 absolute bottom-18 left-1/2 -translate-x-1/2 transform"
+              >
+                <EmojiPicker onEmojiSelect={onEmojiSelect} />
+              </div>
+            )}
           </div>
 
           <InputGroupAddon
@@ -122,7 +130,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           </InputGroupAddon>
         </InputGroup>
 
-        <div className="h-11 flex-1 pl-3">
+        <div className="h-11 pl-3">
           {textMessage.trim() ? (
             <Button
               variant="ghost"
@@ -139,11 +147,6 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           )}
         </div>
       </form>
-      {emojiPickerOpen && (
-        <div ref={pickerRef} className="absolute bottom-18 left-1/2 -translate-x-1/2 transform">
-          <EmojiPicker onEmojiSelect={onEmojiSelect} />
-        </div>
-      )}
     </div>
   );
 };
