@@ -7,8 +7,15 @@ import { Controller, useForm } from "react-hook-form";
 
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 import { cn } from "@/shared/shadcn/lib/utils";
+import {
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/shared/shadcn/ui/alert-dialog";
 import { Button } from "@/shared/shadcn/ui/button";
 
+import { useVerificationStore } from "../../codeVerification/model/userVerificationStore";
 import { sendCode } from "../api/sendCode";
 import { savePhoneToCookie } from "../lib/actions/savePhoneToCookie";
 import { PhoneData, phoneSchema } from "../model/schema";
@@ -37,11 +44,13 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
     mode: "onChange",
     defaultValues: { phone: "" },
   });
+  const { resetVerification } = useVerificationStore();
 
   const showError = !isFocused && touchedFields.phone ? errors.phone?.message : "";
 
   const onSubmit = async (data: PhoneData) => {
     setIsLoading(true);
+    setOpenModal(false);
     const result = await sendCode({
       phone_number: data.phone.replaceAll(" ", ""),
       code_length: 5,
@@ -49,6 +58,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
 
     if (result.success) {
       setPhone(data.phone);
+      resetVerification();
       await savePhoneToCookie(data.phone);
       router.push("/auth/code");
     } else {
@@ -96,15 +106,34 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
       >
         Далее
       </Button>
-      <ModalDialog
-        title={pendingPhone}
-        description="Номер телефона указан верно?"
-        cancelBtnText="Изменить"
-        actionBtnText="Верно"
-        open={openModal}
-        onOpenChange={setOpenModal}
-        onConfirm={() => handleSubmit(onSubmit)()}
-      />
+      <ModalDialog open={openModal} onOpenChange={setOpenModal} overlay="card">
+        <AlertDialogHeader className="desktop:mt-0 mt-2">
+          <AlertDialogTitle className="text-tight font-medium text-black">
+            {pendingPhone}
+          </AlertDialogTitle>
+        </AlertDialogHeader>
+        <AlertDialogDescription className="text-gray subtext-tight desktop:mb-4 font-normal">
+          Номер телефона указан верно?
+        </AlertDialogDescription>
+        <AlertDialogFooter className="desktop:gap-2 flex-row justify-end gap-6">
+          <Button
+            variant="outline"
+            size="sm"
+            className="desktop:flex-0 flex flex-1"
+            onClick={() => setOpenModal(false)}
+          >
+            Изменить
+          </Button>
+          <Button
+            variant="default"
+            size="sm"
+            className="desktop:flex-0 flex flex-1"
+            onClick={() => handleSubmit(onSubmit)()}
+          >
+            Верно
+          </Button>
+        </AlertDialogFooter>
+      </ModalDialog>
     </form>
   );
 };

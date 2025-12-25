@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { cn } from "@/shared/shadcn/lib/utils";
 
@@ -14,6 +14,8 @@ interface Props {
   attemptsLeft: number;
   error: string;
   loading: boolean;
+  isCodeExpired: boolean;
+  isBanned: boolean;
   onComplete: (code: string) => void;
   onErrorReset?: () => void;
 }
@@ -24,6 +26,8 @@ export const VerificationCodeInput: React.FC<Props> = ({
   attemptsLeft,
   error,
   loading,
+  isCodeExpired,
+  isBanned,
   onComplete,
   onErrorReset,
 }) => {
@@ -34,17 +38,32 @@ export const VerificationCodeInput: React.FC<Props> = ({
     });
 
   useEffect(() => {
-    if (!error || !attemptsLeft) return;
+    if (!error) return;
+    if (isBanned) return;
 
     const timer = setTimeout(() => {
       setValues(Array.from({ length }, () => ""));
       onErrorReset?.();
-      focus(1);
+      focus(0);
     }, 2000);
 
     return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error, length]);
+  }, [error, isBanned, length]);
+
+  const wasBannedRef = useRef(isBanned);
+  const wasExpiredRef = useRef(isCodeExpired);
+
+  useEffect(() => {
+    console.log(isCodeExpired);
+    if ((wasBannedRef.current && !isBanned) || (!wasExpiredRef.current && isCodeExpired)) {
+      setValues(Array.from({ length }, () => ""));
+      onErrorReset?.();
+      focus(0);
+    }
+
+    wasBannedRef.current = isBanned;
+    wasExpiredRef.current = isCodeExpired;
+  }, [isBanned, isCodeExpired, length]);
 
   return (
     <div>

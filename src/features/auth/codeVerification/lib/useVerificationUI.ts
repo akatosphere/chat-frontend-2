@@ -3,10 +3,10 @@ import { useState } from "react";
 
 import { pluralize } from "@/shared/lib/pluralize";
 
-type OnCompleteResult = { success: boolean };
+import { VerificationResult } from "../model/types";
 
 interface UseVerificationUIOptions {
-  onComplete: (code: string) => Promise<OnCompleteResult>;
+  onComplete: (code: string) => Promise<VerificationResult>;
   attemptsLeft: number;
 }
 
@@ -18,7 +18,7 @@ export const useVerificationUI = ({ onComplete, attemptsLeft }: UseVerificationU
   const handleComplete = async (code: string) => {
     setLoading(true);
     const res = await onComplete(code);
-    if (!res?.success && attemptsLeft > 1)
+    if (!res?.success && attemptsLeft > 1 && res?.error)
       setError(
         `Код введен неверно. Осталось ${attemptsLeft - 1} ${pluralize(
           attemptsLeft - 1,
