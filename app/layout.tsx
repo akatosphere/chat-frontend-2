@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 
 import { SITE_TITLE } from "@/shared/lib/constants/siteInfo";
+import { WSProvider } from "@/shared/providers/wsProvider";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -23,7 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${roboto.variable} font-sans antialiased`}>{children}</body>
+      <body className={`${roboto.variable} font-sans antialiased`}>
+        <WSProvider>{children}</WSProvider>
+      </body>
     </html>
   );
 }
