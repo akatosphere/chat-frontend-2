@@ -1,15 +1,17 @@
 "use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import z from "zod";
+
 import { FormInput } from "@/shared/form/ui/formInput";
 import { FormTextarea } from "@/shared/form/ui/formTextarea";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
-import Link from "next/link";
-import z from "zod";
-import { supportSchema } from "../model/schema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { sendSupport } from "../api/sendSupport";
-import { useRouter } from "next/navigation";
+import { supportSchema } from "../model/schema";
 
 type SupportFormProps = {
   className?: string;
@@ -20,7 +22,7 @@ export const SupportForm: React.FC<SupportFormProps> = ({ className }) => {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty, isSubmitting },
-    reset,
+    // reset,
   } = useForm<z.infer<typeof supportSchema>>({
     resolver: zodResolver(supportSchema),
     mode: "onChange",
@@ -45,7 +47,7 @@ export const SupportForm: React.FC<SupportFormProps> = ({ className }) => {
 
   return (
     <form
-      className={cn("flex flex-col gap-3 desktop:gap-0 h-full", className)}
+      className={cn("desktop:gap-0 flex h-full flex-col gap-3", className)}
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
@@ -66,14 +68,14 @@ export const SupportForm: React.FC<SupportFormProps> = ({ className }) => {
         className="flex-1"
       />
 
-      <p className="minitext font-regular desktop:font-medium  text-gray desktop:mb-5 desktop:mt-2">
+      <p className="minitext font-regular desktop:font-medium text-gray desktop:mb-5 desktop:mt-2">
         Ознакомьтесь со
         <Link
           href="https://achat.ktsf.ru/faq"
           target="_blank"
-          className="text-primary desktop:hover:text-primary-light transition-color duration-200 active:text-primary-light"
+          className="text-primary desktop:hover:text-primary-light transition-color active:text-primary-light duration-200"
         >
-           списком известных проблем и их решениями.
+          списком известных проблем и их решениями.
         </Link>
       </p>
 

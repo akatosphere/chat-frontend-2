@@ -10,6 +10,7 @@ interface VerificationState {
   resendTimer: number;
   isResendAvailable: boolean;
   isBanned: boolean;
+  isCodeExpired: boolean;
 
   hasHydrated: boolean;
   setHasHydrated: (v: boolean) => void;
@@ -21,6 +22,7 @@ interface VerificationState {
   setResendTimer: (value: number) => void;
   setIsResendAvailable: (value: boolean) => void;
   setIsBanned: (value: boolean) => void;
+  setIsCodeExpired: (v: boolean) => void;
   resetVerification: () => void;
 }
 
@@ -35,15 +37,16 @@ export const useVerificationStore = create<VerificationState>()(
       resendTimer: 0,
       isResendAvailable: true,
       isBanned: false,
+      isCodeExpired: false,
 
       hasHydrated: false,
       setHasHydrated: (v) => set({ hasHydrated: v }),
 
-      setAttemptsLeft: (fn) =>
-        set((state) => ({ attemptsLeft: fn(state.attemptsLeft) })),
+      setAttemptsLeft: (fn) => set((state) => ({ attemptsLeft: fn(state.attemptsLeft) })),
       setBanLevel: (level) => set({ banLevel: level }),
       setLastResendAt: (time) => set({ lastResendAt: time }),
       setBanUntil: (time) => set({ banUntil: time }),
+      setIsCodeExpired: (v) => set({ isCodeExpired: v }),
       setResendTimer: (value) => set({ resendTimer: value }),
       setIsResendAvailable: (value) => set({ isResendAvailable: value }),
       setIsBanned: (value) => set({ isBanned: value }),
@@ -55,6 +58,7 @@ export const useVerificationStore = create<VerificationState>()(
           lastResendAt: null,
           banUntil: 0,
           resendTimer: 0,
+          isCodeExpired: false,
           isResendAvailable: true,
           isBanned: false,
         }),
@@ -66,10 +70,11 @@ export const useVerificationStore = create<VerificationState>()(
         banLevel: state.banLevel,
         lastResendAt: state.lastResendAt,
         banUntil: state.banUntil,
+        isCodeExpired: state.isCodeExpired,
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
-    }
-  )
+    },
+  ),
 );

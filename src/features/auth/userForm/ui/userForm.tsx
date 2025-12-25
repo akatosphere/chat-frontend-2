@@ -1,21 +1,19 @@
 "use client";
 
-import { cn } from "@/shared/shadcn/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/shared/shadcn/ui/button";
-import { FormInput } from "@/shared/form/ui/formInput";
-import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
-import {
-  nicknameSchema,
-  UserFormData,
-  userFormSchema,
-} from "../model/validation";
-import { useUserFormStore } from "../model/store";
-import { updateMessengerProfile } from "../api/updateUserProfile";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
+
+import { FormInput } from "@/shared/form/ui/formInput";
+import { cn } from "@/shared/shadcn/lib/utils";
+import { Button } from "@/shared/shadcn/ui/button";
+
 import { checkNickname } from "../api/checkNickname";
+import { updateMessengerProfile } from "../api/updateUserProfile";
+import { useUserFormStore } from "../model/store";
+import { nicknameSchema, UserFormData, userFormSchema } from "../model/validation";
 
 type UserFormProps = {
   className?: string;
@@ -95,7 +93,7 @@ export const UserForm: React.FC<UserFormProps> = ({ className }) => {
   return (
     <div className={cn("h-full", className)}>
       <form
-        className="flex flex-col h-full place-content-between"
+        className="flex h-full flex-col place-content-between"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-2">
@@ -114,16 +112,10 @@ export const UserForm: React.FC<UserFormProps> = ({ className }) => {
           />
         </div>
 
-        <div className="flex flex-col gap-4 mt-auto">
-          <p className="caption font-medium text-gray">
+        <div className="mt-auto flex flex-col gap-4">
+          <p className="caption text-gray font-medium">
             Нажимая на «Зарегистрироваться», вы соглашаетесь c{" "}
-            <Button
-              type="button"
-              variant="text"
-              size="inline"
-              className="caption"
-              asChild
-            >
+            <Button type="button" variant="text" size="inline" className="caption" asChild>
               <Link href="https://achat.ktsf.ru/agreement" target="_blank">
                 Пользовательским соглашением
               </Link>
@@ -131,12 +123,7 @@ export const UserForm: React.FC<UserFormProps> = ({ className }) => {
             .
           </p>
 
-          <Button
-            variant="default"
-            size="lg"
-            type="submit"
-            disabled={!isFormValid}
-          >
+          <Button variant="default" size="lg" type="submit" disabled={!isFormValid}>
             Далее
           </Button>
         </div>

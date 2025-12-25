@@ -1,5 +1,6 @@
-import { cn } from "@/shared/shadcn/lib/utils";
 import React, { KeyboardEvent } from "react";
+
+import { cn } from "@/shared/shadcn/lib/utils";
 
 interface Props {
   className?: string;
@@ -38,11 +39,11 @@ export const VerificationCodeInputCell: React.FC<Props> = ({
       disabled={disabled || error}
       inputMode="numeric"
       className={cn(
-        "w-[60px] h-[60px] flex items-center justify-center rounded-sm border border-primary transition-colors duration-200 text text-center",
-        "focus:outline-none focus:border-2",
-        error && "border-2 border-error",
+        "border-primary text flex h-[60px] w-[60px] items-center justify-center rounded-sm border text-center transition-colors duration-200",
+        "focus:border-2 focus:outline-none",
+        error && "border-error border-2",
         disabled && "border-muted cursor-not-allowed",
-        className
+        className,
       )}
       maxLength={1}
       onChange={(e) => onChange(index, e.target.value)}

@@ -1,8 +1,17 @@
 "use client";
-import { Button } from "@/shared/shadcn/ui/button";
-import { VerificationCodeInputTimer } from "@/features/auth/codeVerification/ui/verificationCodeTimer";
-import { cn } from "@/shared/shadcn/lib/utils";
 import Link from "next/link";
+import { useState } from "react";
+
+import { VerificationCodeInputTimer } from "@/features/auth/codeVerification/ui/verificationCodeTimer";
+import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
+import { cn } from "@/shared/shadcn/lib/utils";
+import {
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/shared/shadcn/ui/alert-dialog";
+import { Button } from "@/shared/shadcn/ui/button";
 
 interface Props {
   className?: string;
@@ -17,6 +26,8 @@ export const VerificationCodeResend = ({
   resendTimer,
   onResend,
 }: Props) => {
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <div className={cn(className)}>
       {!isResendAvailable ? (
@@ -25,7 +36,7 @@ export const VerificationCodeResend = ({
         <Button
           variant="text"
           size="inline"
-          className="pt-0 pb-0 lg:pt-4 lg:pb-4 text-primary w-full text-center text font-medium"
+          className="text-primary text w-full pt-0 pb-0 text-center font-medium lg:pt-4 lg:pb-4"
           onClick={onResend}
         >
           Отправить новый код
@@ -34,11 +45,41 @@ export const VerificationCodeResend = ({
       <Button
         variant={"text"}
         size="inline"
-        className="pt-0 pb-0 lg:pt-4 lg:pb-4 mt-5 desktop:mt-3 w-full text-center text font-medium"
-        asChild
+        className="desktop:mt-3 text mt-5 w-full pt-0 pb-0 text-center font-medium lg:pt-4 lg:pb-4"
+        onClick={() => setOpenModal(true)}
       >
-        <Link href="/auth/support">Не приходит код?</Link>
+        Не приходит код?
       </Button>
+      <ModalDialog
+        overlay="card"
+        open={openModal}
+        onOpenChange={setOpenModal}
+        className="gap-5 py-8"
+      >
+        <div>
+          <AlertDialogHeader className="desktop:mt-0 mt-2">
+            <AlertDialogTitle className="title text-center font-medium text-black">
+              Код не пришел?
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+        </div>
+        <div>
+          <AlertDialogDescription />
+          <AlertDialogFooter className="flex flex-col gap-3 sm:flex-col">
+            <Button variant="default" size="md" className="flex flex-1" asChild>
+              <Link href="/auth/support">Обратиться в поддержку</Link>
+            </Button>
+            <Button
+              variant="outline"
+              size="md"
+              className="flex flex-1"
+              onClick={() => setOpenModal(false)}
+            >
+              Закрыть
+            </Button>
+          </AlertDialogFooter>
+        </div>
+      </ModalDialog>
     </div>
   );
 };

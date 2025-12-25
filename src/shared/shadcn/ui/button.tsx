@@ -1,46 +1,53 @@
-import * as React from 'react'
-import { Slot } from '@radix-ui/react-slot'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
 
-import { cn } from '@/shared/shadcn/lib/utils'
+import { cn } from "@/shared/shadcn/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 cursor-pointer disabled:pointer-events-none disabled:bg-muted disabled:text-muted-foreground whitespace-nowrap text-sm transition-all  [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 disabled:bg-muted disabled:border-muted disabled:text-muted-foreground aria-invalid:border-destructive inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 text-sm whitespace-nowrap transition-all outline-none disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         default:
-          'bg-primary text-white desktop:hover:bg-primary-light desktop:hover:text-primary active:bg-primary-light active:text-primary',
+          "border-primary bg-primary desktop:hover:bg-primary-light desktop:hover:border-primary-light desktop:hover:text-primary active:bg-primary-light active:border-primary-light active:text-primary border-[2px] text-white",
         outline:
-          'border border-primary border-[2px] text-primary desktop:hover:border-accent desktop:hover:text-primary-dark active:border-accent active:text-primary-dark disabled:border-muted dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-        text: 'p-0 bg-transparent text-primary desktop:hover:text-primary-light active:text-primary-light',
+          "border-primary text-primary desktop:hover:border-accent desktop:hover:text-primary-dark active:border-accent active:text-primary-dark disabled:border-muted dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border border-[2px]",
+        text: "text-primary desktop:hover:text-primary-light active:text-primary-light bg-transparent p-0",
       },
       size: {
-        default: 'h-9 px-4 py-2 has-[>svg]:px-3',
-        lg: 'h-[56px] text-tight font-medium rounded-md px-[150px] py-[26px] has-[>svg]:px-4',
-        md: 'h-[56px] text-tight font-medium rounded-md px-[150px] py-[26px]',
-        sm: 'h-[44px] desktop:h-[32px] subtext-tight desktop:text-tight font-normal rounded-md desktop:rounded-sm gap-1 px-[28px] desktop:px-[16px] py-[10px] desktop:py-[6px] desktop:border-none has-[>svg]:px-2.5',
-        inline: 'h-auto p-0 leading-none',
-        icon: 'size-9',
-        'icon-sm': 'size-8',
-        'icon-lg': 'size-10',
+        default: "h-9 px-4 py-2 has-[>svg]:px-3",
+        lg: "text-tight h-[56px] rounded-md px-[150px] py-[26px] font-medium has-[>svg]:px-4",
+        md: "text-tight h-[56px] rounded-md px-[24px] py-[18px] font-medium",
+        sm: "desktop:h-[32px] subtext-tight desktop:text-tight desktop:rounded-sm desktop:px-[16px] desktop:py-[6px] desktop:border-none h-[44px] gap-1 rounded-md px-[28px] py-[10px] font-normal has-[>svg]:px-2.5",
+        inline: "h-auto p-0 leading-none",
+        icon: "size-9",
+        "icon-sm": "size-8",
+        "icon-lg": "size-10",
       },
     },
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: "default",
+      size: "default",
     },
   },
-)
+);
 
-export interface ButtonProps extends React.ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+export interface ButtonProps
+  extends React.ComponentProps<"button">, VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
 }
 
 function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
-  const Comp = asChild ? Slot : 'button'
+  const Comp = asChild ? Slot : "button";
 
-  return <Comp data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />
+  return (
+    <Comp
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

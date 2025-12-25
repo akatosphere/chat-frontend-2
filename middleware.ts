@@ -1,16 +1,16 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
-const protectedRoutes = ["/chat", "/auth/user", "/auth/success"];
-const authRoutes = [
-  "/auth",
-  "/auth/phone",
-  "/auth/code",
-  "/auth/support",
-  "/auth/support/success",
-];
+// const protectedRoutes = ["/chat", "/auth/user", "/auth/success"];
+// const authRoutes = [
+//   "/auth",
+//   "/auth/phone",
+//   "/auth/code",
+//   "/auth/support",
+//   "/auth/support/success",
+// ];
 
-export function middleware(request: NextRequest) {
+export function middleware(_request: NextRequest) {
   // const path = request.nextUrl.pathname;
   // const refreshToken = request.cookies.get("refresh_token")?.value;
 

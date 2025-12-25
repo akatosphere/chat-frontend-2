@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 import { cn } from "@/shared/shadcn/lib/utils";
+
+import { useVerificationCodeInputController } from "../lib/useVerificationCodeInputCotroller";
 import { VerificationCodeInputCell } from "./verificationCodeInputCell";
 import { VerificationCodeInputError } from "./verificationCodeInputError";
-import { useVerificationCodeInputController } from "../lib/useVerificationCodeInputCotroller";
-import { useEffect } from "react";
 
 interface Props {
   className?: string;
@@ -12,6 +14,8 @@ interface Props {
   attemptsLeft: number;
   error: string;
   loading: boolean;
+  isCodeExpired: boolean;
+  isBanned: boolean;
   onComplete: (code: string) => void;
   onErrorReset?: () => void;
 }
@@ -22,40 +26,50 @@ export const VerificationCodeInput: React.FC<Props> = ({
   attemptsLeft,
   error,
   loading,
+  isCodeExpired,
+  isBanned,
   onComplete,
   onErrorReset,
 }) => {
-  const {
-    values,
-    inputsRef,
-    handleChange,
-    handleKeyDown,
-    handlePasteFull,
-    focus,
-    setValues,
-  } = useVerificationCodeInputController({
-    length,
-    onComplete,
-  });
+  const { values, inputsRef, handleChange, handleKeyDown, handlePasteFull, focus, setValues } =
+    useVerificationCodeInputController({
+      length,
+      onComplete,
+    });
 
   useEffect(() => {
-    if (!error || !attemptsLeft) return;
+    if (!error) return;
+    if (isBanned) return;
 
     const timer = setTimeout(() => {
       setValues(Array.from({ length }, () => ""));
       onErrorReset?.();
-      focus(1);
+      focus(0);
     }, 2000);
 
     return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error, length]);
+  }, [error, isBanned, length]);
+
+  const wasBannedRef = useRef(isBanned);
+  const wasExpiredRef = useRef(isCodeExpired);
+
+  useEffect(() => {
+    console.log(isCodeExpired);
+    if ((wasBannedRef.current && !isBanned) || (!wasExpiredRef.current && isCodeExpired)) {
+      setValues(Array.from({ length }, () => ""));
+      onErrorReset?.();
+      focus(0);
+    }
+
+    wasBannedRef.current = isBanned;
+    wasExpiredRef.current = isCodeExpired;
+  }, [isBanned, isCodeExpired, length]);
 
   return (
     <div>
       <VerificationCodeInputError error={error} className="mb-1" />
 
-      <div className={cn("flex gap-2 items-center", className)}>
+      <div className={cn("flex items-center gap-2", className)}>
         {values.map((v, i) => (
           <VerificationCodeInputCell
             key={i}
