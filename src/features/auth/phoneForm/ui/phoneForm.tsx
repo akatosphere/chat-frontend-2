@@ -48,6 +48,14 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
 
   const showError = !isFocused && touchedFields.phone ? errors.phone?.message : "";
 
+  const handleFormAttemptSubmit = () => {
+    const phone = getValues("phone");
+    if (!isValid) return;
+
+    setPendingPhone(phone);
+    setOpenModal(true);
+  };
+
   const onSubmit = async (data: PhoneData) => {
     setIsLoading(true);
     setOpenModal(false);
@@ -76,7 +84,13 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
   };
 
   return (
-    <form className={cn("flex h-full flex-col gap-4", className)} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className={cn("flex h-full flex-col gap-4", className)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleFormAttemptSubmit();
+      }}
+    >
       <Controller
         name="phone"
         control={control}
@@ -99,7 +113,7 @@ export const PhoneForm: React.FC<PhoneFormProps> = ({ className }) => {
       <Button
         variant="default"
         size="lg"
-        type="button"
+        type="submit"
         disabled={!isValid || isSubmitting || isLoading}
         className="desktop:mt-auto"
         onClick={openModalHandler}
