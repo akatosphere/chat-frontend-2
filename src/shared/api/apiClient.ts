@@ -48,6 +48,12 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    const { hasLoggedOut } = useAuthStore.getState();
+
+    if (hasLoggedOut) {
+      return Promise.reject(error);
+    }
+
     config._retry = true;
 
     // Если уже идёт рефреш — ждём в очереди
