@@ -1,9 +1,12 @@
-import { ChatLayoutWidget } from "@/features/chatList/ui/chatWidget";
+import { ChatsListPanel } from "@/features/chatList/ui/chatsListPanel";
 
-export default function Page() {
+export default function ChatsPage() {
   return (
     <>
-      <ChatLayoutWidget />
+      <ChatsListPanel className="desktop:hidden" />
+      <span className="desktop:flex text text-gray hidden h-full items-center justify-center">
+        Выберите контакт для начала общения
+      </span>
     </>
   );
 }

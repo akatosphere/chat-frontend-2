@@ -20,8 +20,8 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ className, chatMes
         className={cn(
           "desktop:max-w-[500px] relative flex w-fit max-w-[83%] min-w-0 items-stretch rounded-2xl px-3 py-2.5",
           chatMessage.isMine
-            ? "bg-teal desktop:bg-light-green rounded-br-sm"
-            : "desktop:bg-tone-gray rounded-bl-sm bg-white",
+            ? "bg-light-green desktop:bg-light-green rounded-br-sm"
+            : "desktop:bg-gray-tone rounded-bl-sm bg-white",
         )}
       >
         {chatMessage.content && (
@@ -39,7 +39,9 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ className, chatMes
         <div className={cn("flex h-full flex-col justify-end")}>
           <div className="minitext text-gray leading-subtext mt-auto flex items-center gap-0.5 select-none">
             <span className="">{time}</span>
-            {chatMessage.isMine && <StatusIcon status={chatMessage.status} />}
+            {chatMessage.isMine && (
+              <StatusIcon status={chatMessage.status} className="h-2.5 w-3.5" />
+            )}
           </div>
         </div>
       </div>

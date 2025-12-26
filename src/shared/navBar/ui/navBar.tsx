@@ -2,15 +2,29 @@
 
 import { usePathname } from "next/navigation";
 
+import { cn } from "@/shared/shadcn/lib/utils";
+
 import { navItems } from "../models/navItems";
 import { NavItem } from "./navItem";
 
-export const NavBar = () => {
+type NavBarProps = {
+  className?: string;
+};
+
+export const NavBar: React.FC<NavBarProps> = ({ className }) => {
   const pathname = usePathname();
 
+  const isChatPage = pathname?.startsWith("/chats/");
+
   return (
-    <nav className="border-gray text-gray desktop:w-auto desktop:border-t-0 fixed bottom-0 left-0 w-full border-t md:static md:flex md:flex-col md:gap-2">
-      <div className="mx-4 flex h-[83px] justify-between py-2 text-sm md:hidden md:h-[228px] md:w-12 md:flex-col md:items-center md:gap-2">
+    <nav
+      className={cn(
+        "border-gray text-gray desktop:w-auto desktop:border-t-0 desktop:static desktop:flex desktop:flex-col desktop:gap-2 fixed bottom-0 left-0 w-full border-t",
+        isChatPage && "desktop:flex hidden",
+        className,
+      )}
+    >
+      <div className="desktop:hidden desktop:h-[228px] desktop:w-12 desktop:flex-col desktop:items-center desktop:gap-2 mx-4 flex h-[83px] justify-between py-2 text-sm">
         {navItems
           .slice()
           .sort((a, b) => a.order.mobile - b.order.mobile)
@@ -22,12 +36,12 @@ export const NavBar = () => {
               iconDesktop={item.IconDesktop}
               iconMobile={item.IconMobile}
               order={item.order}
-              isActive={pathname === item.href}
+              isActive={pathname?.startsWith(item.href)}
             />
           ))}
       </div>
 
-      <div className="hidden h-[83px] justify-between text-sm md:flex md:h-[228px] md:w-12 md:flex-col md:items-center md:gap-2">
+      <div className="desktop:flex desktop:h-[228px] desktop:w-12 desktop:flex-col desktop:items-center desktop:gap-2 hidden h-[83px] justify-between text-sm">
         {navItems
           .slice()
           .sort((a, b) => a.order.desktop - b.order.desktop)
@@ -39,7 +53,7 @@ export const NavBar = () => {
               iconDesktop={item.IconDesktop}
               iconMobile={item.IconMobile}
               order={item.order}
-              isActive={pathname === item.href}
+              isActive={pathname?.startsWith(item.href)}
             />
           ))}
       </div>

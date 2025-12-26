@@ -23,6 +23,7 @@ export const InfoMessage: React.FC<InfoMessageProps> = ({
         height={200}
         alt={title}
         className="h-[200px] w-[200px] object-contain"
+        priority
       />
       <h2 className="desktop:mt-6 subtext desktop:text desktop:font-normal text-gray mt-4 font-medium">
         {title}

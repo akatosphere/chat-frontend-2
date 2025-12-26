@@ -3,6 +3,9 @@ export type User = {
   uid: string;
   username: string;
   avatarUrl: string;
+  nickname: string;
+  firstName: string;
+  lastName: string;
 };
 
 export type FileAttachment = {

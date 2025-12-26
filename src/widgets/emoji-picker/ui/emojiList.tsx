@@ -22,7 +22,7 @@ export const EmojiList: React.FC<EmojiListProps> = ({
   const recentEmojis = recentCategory?.emojis || [];
 
   return (
-    <div className={cn("max-h-[448px] min-h-[448px] overflow-y-auto p-5 pr-3", className)}>
+    <div className={cn("max-h-[448px] min-h-[448px] overflow-y-auto p-5 pr-2", className)}>
       {recentEmojis.length > 0 && (
         <EmojiGroup
           key={recentCategory?.id}

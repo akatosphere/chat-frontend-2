@@ -12,7 +12,7 @@ import SettingsMobile from "@/shared/ui/icons/navBar/mobile/settings.svg";
 
 export type NavItemModel = {
   label: string;
-  href?: string;
+  href: string;
   IconDesktop: ComponentType<SVGProps<SVGSVGElement>>;
   IconMobile: ComponentType<SVGProps<SVGSVGElement>>;
   order: {

@@ -18,7 +18,7 @@ export const ChatWidget = ({ className, initialMessages, currentUser }: ChatWidg
 
   const handleSendMessage = (text: string) => {
     const message: Message = {
-      id: +crypto.randomUUID(),
+      id: Math.random(),
       content: text,
       author: currentUser,
       files: [],
@@ -27,12 +27,12 @@ export const ChatWidget = ({ className, initialMessages, currentUser }: ChatWidg
       status: "delivered",
       uid: `msg-${crypto.randomUUID()}`,
     };
-
+    console.log("id:", message.id);
     setMessages((prev) => [...prev, message]);
   };
 
   return (
-    <div className={cn("flex h-full flex-col", className)}>
+    <div className={cn("flex h-full min-h-0 flex-col", className)}>
       <div className="flex-1 overflow-y-auto">
         <MessageList messages={messages} />
       </div>

@@ -51,12 +51,8 @@
   --black: #1c1c1e;
   --gray: #747474;
   --light-gray: #c5c5c5;
-  --main-gray: #f5f6f8;
   --gray-tone: #eeeeee;
   --light-green: #d8f5f0;
-  --tone-gray: #eeeeee;
-  --light-tone-gray: #f5f6f880;
-  --teal: #d8f5f0;
   --accent: #d6d2f6;
 
   /* добавлены цвета для цвета иконок меню навигации */
@@ -145,12 +141,8 @@
   --color-black: var(--black);
   --color-gray: var(--gray);
   --color-light-gray: var(--light-gray);
-  --color-main-gray: var(--main-gray);
   --color-gray-tone: var(--gray-tone);
   --color-light-green: var(--light-green);
-  --color-tone-gray: var(--tone-gray);
-  --color-light-tone-gray: var(--light-tone-gray);
-  --color-teal: var(--teal);
 
   /* добавлены переменные для цвета иконок меню навигации */
   --color-nav-border: var(--nav-border);

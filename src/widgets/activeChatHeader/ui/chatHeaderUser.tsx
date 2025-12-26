@@ -18,7 +18,7 @@ export const ChatHeaderUser = ({ name, status, photo, onPhotoClick, onInfoClick 
   const statusData = STATUS_CONFIG[status];
 
   return (
-    <div className="border-light-gray flex h-[60px] min-w-0 flex-1 items-center gap-3 border-b md:border-none">
+    <div className="border-light-gray desktop:border-none flex h-[60px] min-w-0 flex-1 items-center gap-3 border-b">
       <button
         onClick={onPhotoClick}
         className="relative h-10 w-10 shrink-0 cursor-pointer overflow-hidden rounded-full"
@@ -31,9 +31,12 @@ export const ChatHeaderUser = ({ name, status, photo, onPhotoClick, onInfoClick 
       </button>
 
       <button onClick={onInfoClick} className="flex min-w-0 cursor-pointer flex-col text-left">
-        <p className="truncate text-sm font-medium md:text-lg">{name}</p>
+        <p className="desktop:text-lg truncate text-sm font-medium">{name}</p>
         <p
-          className={cn("mt-1 truncate text-xs transition-colors md:text-sm", statusData.className)}
+          className={cn(
+            "desktop:text-sm mt-1 truncate text-xs transition-colors",
+            statusData.className,
+          )}
         >
           {statusData.label}
         </p>

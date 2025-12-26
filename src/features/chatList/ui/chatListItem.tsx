@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { ChatItemData } from "../../../entities/chat/model/types";
@@ -16,7 +18,7 @@ export const ChatListItem = ({ chat, isActive, onClick }: ChatListItemProps) => 
   const user = chat.chat;
 
   return (
-    <div className="py-1">
+    <Link href={`/chats/${chat.id}`} className="py-1">
       <div
         className={cn(
           "flex cursor-pointer items-stretch gap-2 rounded-md px-2.5 py-1.5 transition-colors duration-200",
@@ -40,6 +42,6 @@ export const ChatListItem = ({ chat, isActive, onClick }: ChatListItemProps) => 
           />
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

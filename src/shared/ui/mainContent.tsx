@@ -7,7 +7,12 @@ type MainContentProps = {
 
 export const MainContent: React.FC<MainContentProps> = ({ className, children }) => {
   return (
-    <div className={cn("bg-main-gray h-full w-full overflow-hidden rounded-md", className)}>
+    <div
+      className={cn(
+        "bg-main-light-gray desktop:rounded-md h-full w-full overflow-hidden",
+        className,
+      )}
+    >
       {children}
     </div>
   );

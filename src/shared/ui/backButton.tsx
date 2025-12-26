@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Back from "@icons/back.svg";
 import Link from "next/link";
 
 import { cn } from "@/shared/shadcn/lib/utils";
@@ -18,12 +18,12 @@ export const BackButton: React.FC<BackButtonProps> = ({
 }) => {
   return (
     <Link className={cn("", className)} href={href}>
-      <Image
-        src="/icons/back.svg"
-        width={width}
-        height={height}
+      <Back
         alt="Назад"
-        className="transition-all duration-200 ease-in-out hover:scale-[0.9]"
+        className={cn(
+          "object-cover transition-all duration-200 ease-in-out hover:scale-[0.9]",
+          `w-${width} h-${height}`,
+        )}
       />
     </Link>
   );

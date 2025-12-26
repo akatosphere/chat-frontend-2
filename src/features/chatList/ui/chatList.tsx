@@ -16,6 +16,7 @@ interface ChatListProps {
 
 export const ChatList: React.FC<ChatListProps> = ({ chats, className, isSearch }) => {
   const [activeId, setActiveId] = useState<number>();
+
   return (
     <div className={cn("list-scrollbar flex flex-1 flex-col overflow-y-auto px-2", className)}>
       {chats.length > 0 ? (

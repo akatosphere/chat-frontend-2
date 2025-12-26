@@ -16,7 +16,7 @@ export const ChatFooter: React.FC<ChatFooterProps> = ({ className, onSendMessage
     <footer
       style={{ paddingBottom: "var(--keyboard-offset)" }}
       className={cn(
-        "bg-primary-gray/90 desktop:bg-main-light-gray border-muted w-full shrink-0 border",
+        "bg-primary-gray/90 desktop:bg-main-light-gray border-muted w-full shrink-0 border-t",
         className,
       )}
     >
