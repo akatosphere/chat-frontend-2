@@ -1,5 +1,5 @@
 export type VerificationResult =
-  | { success: true }
+  | { success: true; is_filled: boolean }
   | {
       success: false;
       error?: string;

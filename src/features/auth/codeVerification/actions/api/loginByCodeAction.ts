@@ -36,7 +36,7 @@ export async function loginByCodeAction(data: z.infer<typeof LoginByCodeSchema>)
       };
     }
 
-    const { access, refresh } = await res.json();
+    const { access, refresh, is_filled } = await res.json();
     const cookieStore = await cookies();
     cookieStore.set({
       name: "refresh_token",
@@ -48,7 +48,7 @@ export async function loginByCodeAction(data: z.infer<typeof LoginByCodeSchema>)
       maxAge: 60 * 60 * 24 * 30,
     });
 
-    return { success: true, access_token: access };
+    return { success: true, access_token: access, is_filled };
   } catch {
     return { success: false, error: "Сервер недоступен. Попробуйте позже" };
   }

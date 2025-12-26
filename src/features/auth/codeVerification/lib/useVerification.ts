@@ -131,7 +131,7 @@ export const useVerification = ({
       setIsCodeExpired(false);
       setAccessToken(response.access_token);
       resetVerification();
-      return { success: true };
+      return { success: true, is_filled: response.is_filled };
     }
 
     return { success: false };
