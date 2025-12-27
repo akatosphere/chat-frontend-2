@@ -10,6 +10,7 @@ export default function ChatHeaderClient() {
 
   return (
     <ChatHeader
+      backHref="/chats"
       name="Ксения Ярыгина"
       status={"online"}
       photo="/icons/test.jpg"
