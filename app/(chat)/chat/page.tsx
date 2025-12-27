@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 
+import { LogoutBtn } from "@/features/auth/logoutBtn";
 import { getMessengerProfile } from "@/features/auth/userForm/api/updateUserProfile";
 
 export default function Page() {
@@ -24,6 +25,7 @@ export default function Page() {
       <span>Никнейм: {data.data.nickname}</span>
       <span>Имя: {data.data.first_name}</span>
       <span>Телефон: {data.data.phone}</span>
+      <LogoutBtn />
     </div>
   );
 }
