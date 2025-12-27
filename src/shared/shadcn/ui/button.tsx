@@ -5,7 +5,7 @@ import * as React from "react";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 const buttonVariants = cva(
-  "disabled:bg-muted disabled:text-muted-foreground aria-invalid:ring-destructive/20 aria-invalid:border-destructive inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 text-sm whitespace-nowrap transition-all outline-none disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "disabled:bg-muted disabled:text-muted-foreground aria-invalid:ring-destructive/20 aria-invalid:border-destructive disabled:border-muted inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 text-sm whitespace-nowrap transition-all outline-none disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {

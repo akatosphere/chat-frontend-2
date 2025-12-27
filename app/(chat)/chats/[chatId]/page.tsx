@@ -1,4 +1,4 @@
-import { ChatLayoutWidget } from "@/features/chatList/ui/chatWidget";
+import { ChatLayoutWidget } from "@/features/chatList/ui/chatLayoutWidget";
 
 type ChatPageParams = {
   params: Promise<{ chatId: string }>;

@@ -25,7 +25,9 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ className, chatMes
         )}
       >
         {chatMessage.content && (
-          <p className="subtext emojis-apple min-w-0 pr-2 wrap-break-word">{chatMessage.content}</p>
+          <p className="subtext emojis-apple min-w-0 pr-2 wrap-break-word whitespace-pre-wrap">
+            {chatMessage.content}
+          </p>
         )}
 
         {/* {chatMessage.files.length > 0 && (

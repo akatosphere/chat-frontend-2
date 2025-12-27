@@ -10,19 +10,13 @@ type BackButtonProps = {
   height?: number;
 };
 
-export const BackButton: React.FC<BackButtonProps> = ({
-  className,
-  href,
-  width = 12,
-  height = 12,
-}) => {
+export const BackButton: React.FC<BackButtonProps> = ({ className, href }) => {
   return (
-    <Link className={cn("", className)} href={href}>
+    <Link className={cn("flex h-6 w-6 items-center justify-center", className)} href={href}>
       <Back
         alt="Назад"
         className={cn(
-          "object-cover transition-all duration-200 ease-in-out hover:scale-[0.9]",
-          `w-${width} h-${height}`,
+          "h-5 w-[11px] object-cover transition-all duration-200 ease-in-out hover:scale-[0.9]",
         )}
       />
     </Link>

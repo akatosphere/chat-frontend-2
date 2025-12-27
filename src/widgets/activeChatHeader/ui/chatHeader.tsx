@@ -29,12 +29,7 @@ export const ChatHeader = ({
 }: Props) => {
   return (
     <header className="desktop:bg-main-light-gray desktop:border-muted desktop:rounded-t-lg desktop:border-b flex h-[60px] items-center justify-between px-4">
-      <BackButton
-        href={backHref}
-        className="desktop:hidden ml-2.5 h-6 w-6 shrink-0"
-        width={12}
-        height={20}
-      />
+      <BackButton href={backHref} className="desktop:hidden mr-6 shrink-0" width={12} height={20} />
 
       <ChatHeaderUser
         name={name}

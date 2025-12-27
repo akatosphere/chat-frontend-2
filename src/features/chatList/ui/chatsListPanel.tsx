@@ -3,11 +3,11 @@
 import { useState } from "react";
 
 import { cn } from "@/shared/shadcn/lib/utils";
+import { Searchbar } from "@/shared/ui/searchbar";
 
 import { mockChats } from "../lib/data";
 import { filterChats } from "../lib/filterChats";
 import { ChatList } from "./chatList";
-import { Searchbar } from "./searchbar";
 
 type ChatsListPanelProps = {
   className?: string;

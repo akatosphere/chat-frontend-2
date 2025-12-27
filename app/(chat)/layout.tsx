@@ -7,7 +7,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
     <div className="desktop:pb-1 desktop:px-3 mx-auto flex h-screen max-h-screen min-h-screen max-w-300 flex-col gap-4 overflow-hidden">
       <AppHeader />
 
-      <div className="mx-auto flex w-full flex-1 flex-row gap-4">
+      <div className="mx-auto flex h-full min-h-0 w-full flex-row gap-4">
         <NavBar />
 
         <QueryCustomProvider>{children}</QueryCustomProvider>

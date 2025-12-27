@@ -65,7 +65,7 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({ className, chatId 
     (receiver?.last_name ? receiver?.last_name : "");
 
   return (
-    <div className={cn("flex h-full min-h-0 w-full flex-col", className)}>
+    <div className={cn("flex h-full w-full flex-col", className)}>
       <ChatHeader
         name={username}
         status={"online"}
@@ -76,7 +76,9 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({ className, chatId 
         onPhotoClick={() => {}}
         onInfoClick={() => {}}
       />
-      <ChatWidget initialMessages={messages} currentUser={sender} />
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <ChatWidget initialMessages={messages} currentUser={sender} />
+      </div>
     </div>
   );
 };

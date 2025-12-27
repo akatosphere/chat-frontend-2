@@ -18,14 +18,21 @@ export const ChatList: React.FC<ChatListProps> = ({ chats, className, isSearch }
   const [activeId, setActiveId] = useState<number>();
 
   return (
-    <div className={cn("list-scrollbar flex flex-1 flex-col overflow-y-auto px-2", className)}>
+    <div
+      className={cn(
+        "list-scrollbar desktop:px-2 flex flex-1 flex-col overflow-y-auto px-4",
+        className,
+      )}
+    >
       {chats.length > 0 ? (
         chats.map((chat) => (
           <ChatListItem
+            className="last:after:hidden"
             key={chat.id}
             chat={chat}
             isActive={activeId === chat.id}
             onClick={() => setActiveId(chat.id)}
+            isLast={chat.id === chats[chats.length - 1].id}
           />
         ))
       ) : (
