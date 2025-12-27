@@ -19,7 +19,7 @@ export const NavBar: React.FC<NavBarProps> = ({ className }) => {
   return (
     <nav
       className={cn(
-        "border-gray text-gray desktop:w-auto desktop:border-t-0 desktop:static desktop:flex desktop:flex-col desktop:gap-2 fixed bottom-0 left-0 w-full border-t bg-white",
+        "border-gray text-gray desktop:w-auto desktop:border-t-0 desktop:static desktop:flex desktop:flex-col desktop:gap-2 w-full border-t",
         isChatPage && "desktop:flex hidden",
         className,
       )}

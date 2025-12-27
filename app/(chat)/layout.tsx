@@ -4,12 +4,11 @@ import { AppHeader } from "@/shared/ui/appHeader";
 
 export default function ChatLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="desktop:pb-1 desktop:px-3 mx-auto flex h-screen max-h-screen min-h-screen max-w-300 flex-col gap-4 overflow-hidden">
+    <div className="desktop:pb-1 desktop:px-3 mx-auto flex h-dvh max-h-dvh min-h-dvh max-w-300 flex-col gap-4 overflow-hidden">
       <AppHeader />
 
-      <div className="mx-auto flex h-full min-h-0 w-full flex-row gap-4">
-        <NavBar />
-
+      <div className="desktop:flex-row desktop:gap-4 mx-auto flex h-full min-h-0 w-full flex-col">
+        <NavBar className="desktop:order-1 order-2" />
         <QueryCustomProvider>{children}</QueryCustomProvider>
       </div>
     </div>
