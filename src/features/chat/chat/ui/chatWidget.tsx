@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ChatFooter } from "@/widgets/chat/chatFooter/ui/chatFooter";
@@ -25,7 +26,7 @@ export const ChatWidget = ({ className, initialMessages, currentUser }: ChatWidg
       createdAt: new Date(),
       isMine: true,
       status: "delivered",
-      uid: `msg-${crypto.randomUUID()}`,
+      uid: `msg-${uuidv4()}`,
     };
     setMessages((prev) => [...prev, message]);
   };
