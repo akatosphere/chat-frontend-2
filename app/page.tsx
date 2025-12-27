@@ -7,6 +7,7 @@ export default function Home() {
         <Link href="auth">Авторизация</Link>
         <Link href="chats">Чаты</Link>
         <Link href="chatHeader">Хедер чата</Link>
+        <Link href="chatFooter">Футер чата</Link>
       </main>
     </div>
   );
