@@ -85,7 +85,8 @@ export const UserForm: React.FC<UserFormProps> = ({ className }) => {
 
     setUser(data);
     reset();
-    router.push("/chat");
+    document.cookie = "is_filled=true; path=/";
+    router.push("/auth/success");
   };
 
   const isFormValid = isValid && !errors.nickname;

@@ -1,34 +1,53 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const protectedRoutes = ["/chat", "/auth/user", "/auth/success"];
-const authRoutes = ["/auth", "/auth/phone", "/auth/code", "/auth/support", "/auth/support/success"];
+const protectedRoutes = ["/chat", "/auth/success"];
+const authRoutes = [
+  "/auth",
+  "/auth/phone",
+  "/auth/code",
+  "/auth/support",
+  "/auth/support/success",
+  "/auth/user",
+];
 
-/**
- * Middleware для защиты маршрутов
- * Логика:
- * 1. Protected route + (нет refresh token ИЛИ logged_out=true) → редирект на /auth
- * 2. Auth route + refresh token + logged_out != true → редирект на /chat
- */
 export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const refreshToken = request.cookies.get("refresh_token")?.value;
-  const loggedOut = request.cookies.get("logged_out")?.value === "true";
+  const isAuthenticated = request.cookies.get("is_authenticated")?.value === "true";
+  const isFilled = request.cookies.get("is_filled")?.value === "true";
 
   const isProtectedRoute = protectedRoutes.some((route) => path.startsWith(route));
   const isAuthRoute = authRoutes.includes(path);
 
-  // Защита приватных маршрутов
-  if (isProtectedRoute && (!refreshToken || loggedOut)) {
+  // 1. Защита приватных маршрутов
+  if (isProtectedRoute && (!refreshToken || !isAuthenticated)) {
     const url = new URL("/auth", request.url);
     url.searchParams.set("from", path);
     return NextResponse.redirect(url);
   }
 
-  // Перенаправление авторизованных пользователей с auth-страниц
-  if (isAuthRoute && refreshToken && !loggedOut) {
+  // 1a. Пользователь авторизован, но профиль не заполнен → редирект на страницу заполнения
+  if (isProtectedRoute && refreshToken && !isFilled) {
+    return NextResponse.redirect(new URL("/auth/user", request.url));
+  }
+
+  // 2. Перенаправление авторизованных пользователей с auth-страниц
+  if (isAuthRoute && refreshToken && isAuthenticated && isFilled) {
     const redirectTo = request.nextUrl.searchParams.get("from") || "/chat";
     return NextResponse.redirect(new URL(redirectTo, request.url));
+  }
+
+  // 3. если есть refresh_token и isAuthenticated, запретить доступ к /auth/code
+  if (path === "/auth/code" && refreshToken && isAuthenticated) {
+    return NextResponse.redirect(new URL("/auth/phone", request.url));
+  }
+
+  // 4. сброс статуса аутентификации при переходе на страницу ввода телефона
+  if (path === "/auth/phone") {
+    const res = NextResponse.next();
+    res.cookies.set("is_authenticated", "false", { path: "/" });
+    return res;
   }
 
   return NextResponse.next();

@@ -130,7 +130,8 @@ export const useVerification = ({
     if (response.access_token) {
       setIsCodeExpired(false);
       setAccessToken(response.access_token);
-      document.cookie = "logged_out=false; path=/";
+      document.cookie = "is_authenticated=true; path=/";
+      document.cookie = `is_filled=${response.is_filled ? "true" : "false"}; path=/`;
       resetVerification();
       return { success: true, is_filled: response.is_filled };
     }

@@ -9,7 +9,7 @@ export const logout = () => {
   // 2. Очистка Authorization header в axios
   delete api.defaults.headers.common["Authorization"];
 
-  // 3. Ставим флаг logged_out для middleware
-  document.cookie = "logged_out=true; path=/";
+  // 3. Ставим флаг is_authenticated для middleware
+  document.cookie = "is_authenticated=false; path=/";
   window.location.href = "/auth";
 };
