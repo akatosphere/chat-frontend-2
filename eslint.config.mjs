@@ -147,7 +147,6 @@ export default defineConfig([
     },
   },
 
-  // Server Actions — разрешаем function
   {
     files: ["**/*actions.ts", "**/actions/**/*.ts", "**/actions/**/*.tsx"],
     rules: {
