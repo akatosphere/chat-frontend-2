@@ -149,18 +149,32 @@ export default defineConfig([
 
   // Server Actions — разрешаем function
   {
-    files: ["**/*actions.ts", "**/actions/**/*.ts", "**/actions/**/*.tsx", "middleware.ts"],
+    files: ["**/*actions.ts", "**/actions/**/*.ts", "**/actions/**/*.tsx"],
     rules: {
       "func-style": "off",
       "no-restricted-syntax": [
         "error",
         {
-          selector: "ExportNamedDeclaration > VariableDeclaration",
+          selector: "ExportNamedDeclaration > VariableDeclaration:has(ArrowFunctionExpression)",
           message: "Server Actions must be declared with `export function`, not arrow functions",
         },
       ],
     },
   },
+  {
+    files: ["middleware.ts"],
+    rules: {
+      "func-style": "off",
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "ExportNamedDeclaration > VariableDeclaration:has(ArrowFunctionExpression)",
+          message: "Middleware must be declared with `export function`, not arrow functions",
+        },
+      ],
+    },
+  },
+
   {
     files: ["src/shared/shadcn/**/*.ts", "src/shared/shadcn/**/*.tsx"],
     rules: {
