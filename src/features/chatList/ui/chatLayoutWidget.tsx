@@ -65,7 +65,7 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({ className, chatId 
     (receiver?.last_name ? receiver?.last_name : "");
 
   return (
-    <div className={cn("flex h-dvh w-full flex-col", className)}>
+    <div className={cn("desktop:h-full flex h-dvh w-full flex-col", className)}>
       <ChatHeader
         name={username}
         status={"online"}
