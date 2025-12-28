@@ -1,6 +1,7 @@
 // lib/api.ts или src/lib/api.ts
 import axios, { AxiosError, AxiosHeaders, AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
+import { logout } from "./logout";
 import { useAuthStore } from "./store";
 
 interface CustomConfig extends InternalAxiosRequestConfig {
@@ -48,15 +49,8 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    const { hasLoggedOut } = useAuthStore.getState();
-
-    if (hasLoggedOut) {
-      return Promise.reject(error);
-    }
-
     config._retry = true;
 
-    // Если уже идёт рефреш — ждём в очереди
     if (isRefreshing) {
       return new Promise((resolve, reject) => {
         failedQueue.push({ resolve, reject });
@@ -71,37 +65,24 @@ api.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      const res = await fetch("http://localhost:3000/api/refresh-token", {
+      const res = await fetch("/api/refresh-token", {
         method: "POST",
-        credentials: "include", // важно для httpOnly куки
+        credentials: "include", // важно для httpOnly cookie
       });
 
-      if (!res.ok) {
-        throw new Error("Refresh failed");
-      }
+      if (!res.ok) throw new Error("Refresh failed");
 
       const data = await res.json();
       const newAccessToken = data.access;
+      if (!newAccessToken) throw new Error("No access token in refresh response");
 
-      if (!newAccessToken) {
-        throw new Error("No access token in refresh response");
-      }
-
-      // КЛЮЧЕВОЙ МОМЕНТ: обновляем токен ТОЛЬКО через Zustand!
-      useAuthStore.getState()._updateToken(newAccessToken);
-
-      // Обновляем дефолтные заголовки (на всякий случай)
-      api.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
-
-      // Разрешаем все запросы в очереди
+      useAuthStore.getState().setAccessToken(newAccessToken);
       processQueue(null, newAccessToken);
 
-      // Повторяем исходный запрос с новым токеном
       config.headers?.set("Authorization", `Bearer ${newAccessToken}`);
       return api(config);
     } catch (err) {
-      // Полный логаут при любой ошибке рефреша
-      useAuthStore.getState().logout();
+      logout();
       processQueue(err as Error, null);
       return Promise.reject(err);
     } finally {
