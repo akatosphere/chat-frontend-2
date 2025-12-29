@@ -1,6 +1,27 @@
 let socket: WebSocket | null = null;
 let currentToken: string | null = null;
 
+export const disconnectWS = () => {
+  if (!socket) return;
+
+  /**
+   * ПРЕДОТВРАЩЕНИЕ ОШИБКИ: "WebSocket is closed before the connection is established"
+   * Если сокет в состоянии CONNECTING (0), мы перехватываем момент открытия,
+   * чтобы закрыть его сразу после того, как он установится.
+   */
+  if (socket.readyState === WebSocket.CONNECTING) {
+    socket.onopen = () => {
+      socket?.close();
+      socket = null;
+      currentToken = null;
+    };
+  } else {
+    socket.close();
+    socket = null;
+    currentToken = null;
+  }
+};
+
 export const connectWS = (accessToken: string) => {
   // 1. Если сокет уже в процессе подключения или открыт с тем же токеном — ничего не делаем
   if (
@@ -47,25 +68,4 @@ export const connectWS = (accessToken: string) => {
   socket.onerror = (event) => {
     console.error("WS error ⚠️", event);
   };
-};
-
-export const disconnectWS = () => {
-  if (!socket) return;
-
-  /**
-   * ПРЕДОТВРАЩЕНИЕ ОШИБКИ: "WebSocket is closed before the connection is established"
-   * Если сокет в состоянии CONNECTING (0), мы перехватываем момент открытия,
-   * чтобы закрыть его сразу после того, как он установится.
-   */
-  if (socket.readyState === WebSocket.CONNECTING) {
-    socket.onopen = () => {
-      socket?.close();
-      socket = null;
-      currentToken = null;
-    };
-  } else {
-    socket.close();
-    socket = null;
-    currentToken = null;
-  }
 };
