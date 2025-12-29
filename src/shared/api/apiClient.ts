@@ -1,5 +1,4 @@
-// lib/api.ts или src/lib/api.ts
-import axios, { AxiosError, AxiosHeaders, AxiosInstance, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
 import { logout } from "./logout";
 import { useAuthStore } from "./store";
@@ -28,11 +27,26 @@ const processQueue = (error: Error | null, token: string | null = null) => {
 };
 
 // Request Interceptor — берём токен ТОЛЬКО из Zustand
-api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().accessToken;
+api.interceptors.request.use(async (config) => {
+  const state = useAuthStore.getState();
 
+  // Если приложение еще не инициализировано (идет первый рефреш)
+  // заставляем запрос подождать
+  if (!state.isInitialized) {
+    // Ждем, пока флаг изменится
+    await new Promise<void>((resolve) => {
+      const unsubscribe = useAuthStore.subscribe((newState) => {
+        if (newState.isInitialized) {
+          unsubscribe();
+          resolve();
+        }
+      });
+    });
+  }
+
+  // Теперь берем актуальный токен
+  const token = useAuthStore.getState().accessToken;
   if (token) {
-    config.headers ??= new AxiosHeaders();
     config.headers.set("Authorization", `Bearer ${token}`);
   }
 

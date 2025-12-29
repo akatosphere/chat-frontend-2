@@ -1,9 +1,12 @@
-// src/lib/useLogout.ts
 import api from "./apiClient";
 import { useAuthStore } from "./store";
 
 export const logout = async () => {
   const store = useAuthStore.getState();
+
+  if (!store.accessToken) {
+    return;
+  }
 
   // чистим access token
   store.clearAccessToken();

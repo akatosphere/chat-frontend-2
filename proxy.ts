@@ -37,10 +37,6 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL(redirectTo, request.url));
   }
 
-  if (path === "/auth/user" && !refreshToken) {
-    return NextResponse.redirect(new URL("/auth/phone", request.url));
-  }
-
   return NextResponse.next();
 }
 

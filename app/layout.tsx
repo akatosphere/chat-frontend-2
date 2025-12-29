@@ -5,6 +5,7 @@ import { Noto_Color_Emoji, Roboto } from "next/font/google";
 import localFont from "next/font/local";
 
 import { SITE_TITLE } from "@/shared/lib/constants/siteInfo";
+import { AuthProvider } from "@/shared/providers/authProvider";
 import { IsMobileProvider } from "@/shared/providers/isMobileProvider";
 import { WSProvider } from "@/shared/providers/wsProvider";
 
@@ -42,9 +43,11 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} ${notoColorEmoji.variable} ${appleColorEmoji.variable} font-sans antialiased`}
       >
-        <WSProvider>
-          <IsMobileProvider>{children}</IsMobileProvider>
-        </WSProvider>
+        <AuthProvider>
+          <WSProvider>
+            <IsMobileProvider>{children}</IsMobileProvider>
+          </WSProvider>
+        </AuthProvider>
       </body>
     </html>
   );
