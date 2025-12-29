@@ -11,5 +11,7 @@ export const logout = () => {
 
   // 3. Ставим флаг is_authenticated для middleware
   document.cookie = "is_authenticated=false; path=/";
+  document.cookie = "is_filled=false; path=/";
+  document.cookie = "phone=; path=/";
   window.location.href = "/auth"; // router.push надо сделать
 };
