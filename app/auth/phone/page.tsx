@@ -1,9 +1,17 @@
+"use client";
+
+import { useEffect } from "react";
+
 import { PhoneForm } from "@/features/auth/phoneForm/ui/phoneForm";
+import { logout } from "@/shared/api/logout";
 import { BackgroundCardLayout } from "@/shared/layouts/card/backgroundCardLayout";
 import { BackButton } from "@/shared/ui/backButton";
 import { Logo } from "@/shared/ui/logo";
 
 export default function Page() {
+  useEffect(() => {
+    logout();
+  }, []);
   return (
     <BackgroundCardLayout variant="form">
       <Logo size="sm" withTitle={true} className="mb-8" />

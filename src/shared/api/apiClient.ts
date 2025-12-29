@@ -83,6 +83,7 @@ api.interceptors.response.use(
       return api(config);
     } catch (err) {
       logout();
+      window.location.href = "/auth";
       processQueue(err as Error, null);
       return Promise.reject(err);
     } finally {

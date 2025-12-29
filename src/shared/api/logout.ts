@@ -10,7 +10,6 @@ export const logout = async () => {
   delete api.defaults.headers.common["Authorization"];
 
   // чистим client-side куки
-  document.cookie = "is_authenticated=false; path=/";
   document.cookie = "is_filled=false; path=/";
   document.cookie = "phone=; Max-Age=0; path=/";
 

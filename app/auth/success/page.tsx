@@ -26,7 +26,7 @@ export default function Page() {
         size={"lg"}
         asChild
       >
-        <Link href="/chat">Далее</Link>
+        <Link href="/chats">Далее</Link>
       </Button>
     </BackgroundCardLayout>
   );
