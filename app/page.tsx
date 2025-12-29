@@ -8,8 +8,6 @@ export default function Home() {
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center gap-4 bg-white px-16 py-32 sm:items-start">
         <Link href="auth">Авторизация</Link>
         <Link href="chats">Чаты</Link>
-        <Link href="chatHeader">Хедер чата</Link>
-        <Link href="chatFooter">Футер чата</Link>
       </main>
     </div>
   );
