@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const protectedRoutes = ["/chat", "/auth/success"];
+const protectedRoutes = ["/chats", "/auth/success"];
 const authRoutes = [
   "/auth",
   "/auth/phone",
@@ -35,7 +35,7 @@ export function proxy(request: NextRequest) {
 
   // 2. Перенаправление авторизованных пользователей с auth-страниц
   if (isAuthRoute && isAuth && isFilled) {
-    const redirectTo = request.nextUrl.searchParams.get("from") || "/chat";
+    const redirectTo = request.nextUrl.searchParams.get("from") || "/chats";
     return NextResponse.redirect(new URL(redirectTo, request.url));
   }
 

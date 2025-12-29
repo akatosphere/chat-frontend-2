@@ -8,7 +8,7 @@ type LogoutBtnProps = {
 
 export const LogoutBtn: React.FC<LogoutBtnProps> = ({ className }) => {
   return (
-    <Button className={cn("", className)} onClick={logout}>
+    <Button variant="default" size="md" className={cn("", className)} onClick={logout}>
       Выйти
     </Button>
   );
