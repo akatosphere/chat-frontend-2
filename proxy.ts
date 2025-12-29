@@ -51,9 +51,9 @@ export function proxy(request: NextRequest) {
     return res;
   }
 
-  // 5. если есть refresh_token и isAuthenticated, запретить доступ к /auth/code
+  // 5. запрет на доступ к странице /auth/user не авторизованным пользователям
   if (path === "/auth/user" && !isAuth) {
-    return NextResponse.redirect(new URL("/auth/phone", request.url));
+    return NextResponse.redirect(new URL("/auth/", request.url));
   }
 
   return NextResponse.next();

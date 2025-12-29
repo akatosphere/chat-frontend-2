@@ -1,17 +1,15 @@
-// src/lib/logout.ts
+// src/lib/useLogout.ts
 import api from "./apiClient";
 import { useAuthStore } from "./store";
 
 export const logout = () => {
-  // 1. Очистка access token из памяти
-  useAuthStore.getState().clearAccessToken();
+  const store = useAuthStore.getState();
 
-  // 2. Очистка Authorization header в axios
+  store.clearAccessToken();
+
   delete api.defaults.headers.common["Authorization"];
 
-  // 3. Ставим флаг is_authenticated для middleware
   document.cookie = "is_authenticated=false; path=/";
   document.cookie = "is_filled=false; path=/";
-  document.cookie = "phone=; path=/";
-  window.location.href = "/auth"; // router.push надо сделать
+  document.cookie = "phone=; Max-Age=0; path=/";
 };
