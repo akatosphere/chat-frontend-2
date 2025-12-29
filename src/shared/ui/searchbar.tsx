@@ -2,6 +2,7 @@ import CloseIcon from "@icons/chat/close.svg";
 import SearchIcon from "@icons/chat/search.svg";
 import { useRef } from "react";
 
+import { CreateGroupBtn } from "@/features/createGroup/ui/createGroupBtn";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 import { Input } from "@/shared/shadcn/ui/input";
@@ -25,8 +26,8 @@ export const Searchbar: React.FC<SearchbarProps> = ({ className, onChange, value
   };
 
   return (
-    <div className={cn("", className)}>
-      <div className="relative">
+    <div className={cn("flex flex-row gap-2", className)}>
+      <div className="relative flex-1">
         <Input
           ref={inputRef}
           placeholder="Поиск"
@@ -46,6 +47,7 @@ export const Searchbar: React.FC<SearchbarProps> = ({ className, onChange, value
           </Button>
         )}
       </div>
+      <CreateGroupBtn />
     </div>
   );
 };
