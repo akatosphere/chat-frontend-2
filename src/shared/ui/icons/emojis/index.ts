@@ -1,0 +1,9 @@
+export { default as Bag } from "./bag.svg";
+export { default as Cat } from "./cat.svg";
+export { default as Clock } from "./clock.svg";
+export { default as Flag } from "./flag.svg";
+export { default as Food } from "./food.svg";
+export { default as Lamp } from "./lamp.svg";
+export { default as People } from "./people.svg";
+export { default as Smile } from "./smile.svg";
+export { default as Symbols } from "./symbols.svg";

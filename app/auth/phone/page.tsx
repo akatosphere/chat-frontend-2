@@ -11,6 +11,7 @@ export default function Page() {
         Вход/регистрация
       </h3>
       <PhoneForm />
+
       <BackButton href="/auth" className="desktop:left-0 absolute top-0 left-4" />
     </BackgroundCardLayout>
   );
