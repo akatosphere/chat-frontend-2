@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { cn } from "@/shared/shadcn/lib/utils";
+import { useChatListItemContextMenu } from "@/widgets/contextMenu/useChatListItemContextMenu";
 
 import { ChatItemData } from "../../../entities/chat/model/types";
 import { Avatar } from "../../../entities/chat/ui/avatar";
@@ -24,14 +25,21 @@ export const ChatListItem = ({
 }: ChatListItemProps) => {
   const totalUnread = chat.new_message_count + chat.new_file_count;
   const user = chat.chat;
+  const { onContextMenu, isOpen } = useChatListItemContextMenu(chat);
 
   return (
-    <Link href={`/chats/${chat.id}`} className={cn("py-1", className)} onClick={onClick}>
+    <Link
+      href={`/chats/${chat.id}`}
+      className={cn("py-1", className)}
+      onClick={onClick}
+      onContextMenu={onContextMenu}
+    >
       <div
         className={cn(
           "flex cursor-pointer items-stretch gap-2 rounded-md px-2.5 py-1.5 transition-colors duration-200",
           "hover:bg-primary-hover",
           chat.is_favorite && "bg-white",
+          isOpen && "bg-primary-hover",
           isActive && "bg-primary-accent hover:bg-primary-accent",
         )}
       >

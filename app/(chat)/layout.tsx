@@ -1,6 +1,7 @@
 import { NavBar } from "@/shared/navBar/ui/navBar";
 import QueryCustomProvider from "@/shared/providers/queryProvider";
 import { AppHeader } from "@/shared/ui/appHeader";
+import { ContextMenuProvider } from "@/widgets/contextMenu/contextMenu";
 
 export default function ChatLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,7 +10,9 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
 
       <div className="desktop:flex-row desktop:gap-4 mx-auto flex h-full min-h-0 w-full flex-col">
         <NavBar className="desktop:order-1 order-2" />
-        <QueryCustomProvider>{children}</QueryCustomProvider>
+        <QueryCustomProvider>
+          <ContextMenuProvider>{children}</ContextMenuProvider>
+        </QueryCustomProvider>
       </div>
     </div>
   );
