@@ -2,9 +2,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { CodeVerification } from "@/features/auth/codeVerification";
+import { AuthHeader } from "@/features/auth/codeVerification/ui/authHeader";
 import { BackgroundCardLayout } from "@/shared/layouts/card/backgroundCardLayout";
-import { BackButton } from "@/shared/ui/backButton";
-import { Logo } from "@/shared/ui/logo";
 
 export default async function Page() {
   const cookieStore = await cookies();
@@ -16,7 +15,13 @@ export default async function Page() {
 
   return (
     <BackgroundCardLayout variant="form">
-      <Logo size="sm" withTitle={true} className="mb-8" />
+      <AuthHeader
+        backHref="/auth/phone"
+        withTitle
+        logoSize="sm"
+        className="desktop:mt-[72px] mt-11 mb-8"
+        classBackButton="absolute desktop:left-20 top-2 left-8"
+      />
       <h3 className="subheadline desktop:mb-6 mb-5 text-center font-semibold text-black">
         Подтвердите вход
       </h3>
@@ -26,7 +31,6 @@ export default async function Page() {
       </p>
       <span className="text mt-2 text-center font-medium text-black">{phone}</span>
       <CodeVerification className="desktop:mt-6 mt-7" />
-      <BackButton href="/auth/phone" className="desktop:left-0 absolute top-0 left-4" />
     </BackgroundCardLayout>
   );
 }

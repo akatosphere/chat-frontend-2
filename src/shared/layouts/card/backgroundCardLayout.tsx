@@ -4,7 +4,8 @@ import * as React from "react";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 const backgroundCardLayoutVariants = cva(
-  "desktop:p-16 desktop:pt-18 desktop:pb-20 desktop:border-none flex flex-col items-center overflow-hidden rounded-lg rounded-md border-2 border-white p-4 pt-11",
+  // "desktop:p-16 desktop:pt-18 desktop:pb-20 desktop:border-none flex flex-col items-center overflow-hidden rounded-lg rounded-md border-2 border-white p-4 pt-11",
+  "desktop:border-none relative flex flex-col items-center overflow-hidden rounded-lg rounded-md",
   {
     variants: {
       variant: {
