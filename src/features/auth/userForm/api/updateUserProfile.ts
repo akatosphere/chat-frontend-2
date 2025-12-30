@@ -50,7 +50,6 @@ export interface MessengerProfileResponse {
 export const getMessengerProfile = async (): Promise<Result<MessengerProfileResponse>> => {
   try {
     const result = await api.post<MessengerProfileResponse>("/api/v1/auth/messenger/profile/", {});
-    console.log(result);
     return { success: true, data: result.data };
   } catch (error) {
     return { success: false, error: errorHandler(error) };

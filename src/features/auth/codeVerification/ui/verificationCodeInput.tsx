@@ -54,7 +54,6 @@ export const VerificationCodeInput: React.FC<Props> = ({
   const wasExpiredRef = useRef(isCodeExpired);
 
   useEffect(() => {
-    console.log(isCodeExpired);
     if ((wasBannedRef.current && !isBanned) || (!wasExpiredRef.current && isCodeExpired)) {
       setValues(Array.from({ length }, () => ""));
       onErrorReset?.();
