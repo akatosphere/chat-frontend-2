@@ -20,7 +20,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ className, chatMes
   return (
     <div
       className={cn(
-        "flex",
+        "flex px-4",
         chatMessage.isMine ? "justify-end" : "justify-start",
         isOpen && "bg-primary-hover",
         className,
