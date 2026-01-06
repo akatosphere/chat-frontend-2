@@ -5,9 +5,11 @@ import { NextResponse } from "next/server";
 
 export async function POST() {
   const cookieStore = await cookies();
-  const refreshToken = cookieStore.get("refresh_token")?.value;
-
+  console.log("cookieStore", cookieStore.get("refresh_token")?.value);
+  const refreshToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc3MDE1NjY3NiwiaWF0IjoxNzY3NTY0Njc2LCJqdGkiOiI4NGRjNTc2ZTA1ZGM0ZWU4YTQwNzBhNDM0N2QwZTJlYSIsInVzZXJfaWQiOiI1NzNjZjBmYi01YzFmLTQwYjctYmMxOS0zODdkNjQ0ODM1ZmMifQ.rGVZkuGND9wZyL2-wOvcHLdrlDnC3Sg0yZnE5dkLuiI";
   if (!refreshToken) {
+    console.log("result");
     return NextResponse.json({ error: "Нет refresh токена" }, { status: 401 });
   }
 
@@ -17,7 +19,7 @@ export async function POST() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh: refreshToken }),
     });
-
+    console.log("res", res);
     const data = await res.json();
 
     if (!res.ok) {

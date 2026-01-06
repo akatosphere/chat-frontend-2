@@ -71,7 +71,7 @@ api.interceptors.response.use(
       });
 
       if (!res.ok) {
-        throw new Error("Refresh failed");
+        throw new Error(res.statusText);
       }
 
       const data = await res.json();

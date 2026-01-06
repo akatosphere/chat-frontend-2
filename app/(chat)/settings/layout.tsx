@@ -4,11 +4,9 @@ import { Sidebar } from "@/shared/ui/sidebar";
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Sidebar className="desktop:block hidden">
-        <span>Settings</span>
-      </Sidebar>
+      <Sidebar className="desktop:flex">{children}</Sidebar>
 
-      <MainContent>{children}</MainContent>
+      <MainContent></MainContent>
     </>
   );
 }
