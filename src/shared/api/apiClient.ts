@@ -1,10 +1,6 @@
-// lib/api.ts или src/lib/api.ts
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  InternalAxiosRequestConfig,
-  AxiosHeaders,
-} from "axios";
+import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from "axios";
+
+import { logout } from "./logout";
 import { useAuthStore } from "./store";
 
 interface CustomConfig extends InternalAxiosRequestConfig {
@@ -31,11 +27,26 @@ const processQueue = (error: Error | null, token: string | null = null) => {
 };
 
 // Request Interceptor — берём токен ТОЛЬКО из Zustand
-api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().accessToken;
+api.interceptors.request.use(async (config) => {
+  const state = useAuthStore.getState();
 
+  // Если приложение еще не инициализировано (идет первый рефреш)
+  // заставляем запрос подождать
+  if (!state.isInitialized) {
+    // Ждем, пока флаг изменится
+    await new Promise<void>((resolve) => {
+      const unsubscribe = useAuthStore.subscribe((newState) => {
+        if (newState.isInitialized) {
+          unsubscribe();
+          resolve();
+        }
+      });
+    });
+  }
+
+  // Теперь берем актуальный токен
+  const token = useAuthStore.getState().accessToken;
   if (token) {
-    config.headers ??= new AxiosHeaders();
     config.headers.set("Authorization", `Bearer ${token}`);
   }
 
@@ -54,7 +65,6 @@ api.interceptors.response.use(
 
     config._retry = true;
 
-    // Если уже идёт рефреш — ждём в очереди
     if (isRefreshing) {
       return new Promise((resolve, reject) => {
         failedQueue.push({ resolve, reject });
@@ -69,44 +79,32 @@ api.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      const res = await fetch("http://localhost:3000/api/refresh-token", {
+      const res = await fetch("/api/refresh-token", {
         method: "POST",
-        credentials: "include", // важно для httpOnly куки
+        credentials: "include", // важно для httpOnly cookie
       });
 
-      if (!res.ok) {
-        throw new Error("Refresh failed");
-      }
+      if (!res.ok) throw new Error("Refresh failed");
 
       const data = await res.json();
       const newAccessToken = data.access;
+      if (!newAccessToken) throw new Error("No access token in refresh response");
 
-      if (!newAccessToken) {
-        throw new Error("No access token in refresh response");
-      }
-
-      // КЛЮЧЕВОЙ МОМЕНТ: обновляем токен ТОЛЬКО через Zustand!
-      useAuthStore.getState()._updateToken(newAccessToken);
-
-      // Обновляем дефолтные заголовки (на всякий случай)
-      api.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
-
-      // Разрешаем все запросы в очереди
+      useAuthStore.getState().setAccessToken(newAccessToken);
       processQueue(null, newAccessToken);
 
-      // Повторяем исходный запрос с новым токеном
       config.headers?.set("Authorization", `Bearer ${newAccessToken}`);
       return api(config);
     } catch (err) {
-      // Полный логаут при любой ошибке рефреша
-      useAuthStore.getState().logout();
+      logout();
+      window.location.href = "/auth";
       processQueue(err as Error, null);
       return Promise.reject(err);
     } finally {
       isRefreshing = false;
       failedQueue = [];
     }
-  }
+  },
 );
 
 export default api;

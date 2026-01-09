@@ -2,12 +2,12 @@
 
 import { KeyboardEvent, RefObject, useRef, useState } from "react";
 
-interface UseVerificationCodeInputControllerProps {
+type UseVerificationCodeInputControllerProps = {
   length: number;
   onComplete: (code: string) => void;
-}
+};
 
-interface UseVerificationCodeInputControllerReturn {
+type UseVerificationCodeInputControllerReturn = {
   values: string[];
   inputsRef: RefObject<(HTMLInputElement | null)[]>;
   setValues: (values: string[]) => void;
@@ -15,7 +15,7 @@ interface UseVerificationCodeInputControllerReturn {
   focus: (index: number) => void;
   handleKeyDown: (index: number, e: KeyboardEvent<HTMLInputElement>) => void;
   handlePasteFull: (text: string) => void;
-}
+};
 
 export const useVerificationCodeInputController = ({
   length,
@@ -44,10 +44,7 @@ export const useVerificationCodeInputController = ({
 
   const handlePasteFull = (text: string) => {
     const pastedValues = text.slice(0, length).split("");
-    if (
-      !pastedValues.every((value) => /^\d?$/.test(value)) ||
-      pastedValues.length !== length
-    )
+    if (!pastedValues.every((value) => /^\d?$/.test(value)) || pastedValues.length !== length)
       return;
     const newValues = [...values];
     for (let i = 0; i < pastedValues.length; i++) {

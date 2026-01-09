@@ -1,7 +1,8 @@
+import z from "zod";
+
 import api from "@/shared/api/apiClient";
 import { errorHandler } from "@/shared/api/errorHandler";
 import { Result } from "@/shared/api/types";
-import z from "zod";
 
 export const messengerProfileSchema = z.object({
   nickname: z.string().optional(),
@@ -46,15 +47,9 @@ export interface MessengerProfileResponse {
   is_staff: boolean;
 }
 
-export const getMessengerProfile = async (): Promise<
-  Result<MessengerProfileResponse>
-> => {
+export const getMessengerProfile = async (): Promise<Result<MessengerProfileResponse>> => {
   try {
-    const result = await api.post<MessengerProfileResponse>(
-      "/api/v1/auth/messenger/profile/",
-      {}
-    );
-    console.log(result);
+    const result = await api.post<MessengerProfileResponse>("/api/v1/auth/messenger/profile/", {});
     return { success: true, data: result.data };
   } catch (error) {
     return { success: false, error: errorHandler(error) };
@@ -62,12 +57,12 @@ export const getMessengerProfile = async (): Promise<
 };
 
 export const updateMessengerProfile = async (
-  data: MessengerProfileData
+  data: MessengerProfileData,
 ): Promise<Result<MessengerProfileResponse>> => {
   try {
     const { data: response } = await api.post<MessengerProfileResponse>(
       "/api/v1/auth/messenger/profile/",
-      data
+      data,
     );
 
     return { success: true, data: response };
