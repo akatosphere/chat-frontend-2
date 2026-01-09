@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosHeaders, AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
 import { logout } from "./logout";
 import { useAuthStore } from "./store";
@@ -47,6 +47,7 @@ api.interceptors.request.use(async (config) => {
   // Теперь берем актуальный токен
   const token = useAuthStore.getState().accessToken;
   if (token) {
+    config.headers ??= new AxiosHeaders();
     config.headers.set("Authorization", `Bearer ${token}`);
   }
 
