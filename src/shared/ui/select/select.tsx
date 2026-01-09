@@ -82,8 +82,10 @@ export const Select = ({
         type="button"
         onClick={() => setIsOpen((v) => !v)}
         onKeyDown={onKeyDown}
-        className={`text border-gray flex h-14 w-full items-center justify-between border bg-white px-2.5 focus:outline-none ${
-          isOpen ? "border-primary rounded-t-md rounded-b-none" : "rounded-md"
+        className={`text border-gray flex h-14 w-full items-center justify-between bg-white px-2.5 focus:outline-none ${
+          isOpen
+            ? "border-primary rounded-t-md rounded-b-none border"
+            : "desktop:border-transparent rounded-md border"
         } `}
         aria-haspopup="listbox"
         aria-expanded={isOpen}

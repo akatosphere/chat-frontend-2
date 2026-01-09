@@ -1,9 +1,10 @@
-import { MenuItem } from "../model/types";
+import { MenuItem } from "@/shared/ui/menuList/model/types";
 
 export const DESCTRUCTIVE_MENU: MenuItem[] = [
   {
     label: "Удалить аккаунт",
     icon: "exit",
-    action: "delete",
+    action: "deleteProfile",
+    isDestructive: true,
   },
 ];

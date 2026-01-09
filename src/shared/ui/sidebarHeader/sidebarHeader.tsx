@@ -17,9 +17,12 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ className, title, 
     <div className={cn("border-muted h-14 w-full border-b p-5", className)}>
       {!backButton && <h2 className="text text-center font-semibold">{title}</h2>}
       {backButton && (
-        <div className="flex items-center gap-4">
-          <button onClick={() => router.back()}>
-            <BackArrow />
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => router.back()}
+            className="group-hover:text-primary group flex h-6 w-6 cursor-pointer items-center"
+          >
+            <BackArrow className="text-black" />
           </button>
           <h2 className="text font-semibold">{title}</h2>
         </div>

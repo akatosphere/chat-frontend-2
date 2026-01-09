@@ -17,12 +17,17 @@ export const UserProfile: React.FC<UserProfileProps> = ({
   tag,
 }) => {
   return (
-    <div className={cn("flex items-center gap-3 rounded-lg bg-white p-3", className)}>
+    <div
+      className={cn(
+        "border-primary desktop:border-none flex items-center gap-3 rounded-lg border bg-white p-3",
+        className,
+      )}
+    >
       <Avatar avatarUrl={avatarUrl || ""} size="lg" />
       <div className="flex min-w-0 flex-col gap-1">
         <h3 className="truncate font-semibold text-black">{name}</h3>
-        <span className="subtext text-black">{phone}</span>
-        <span className="subtext text-black">{tag}</span>
+        <span className="subtext truncate text-black">{phone}</span>
+        <span className="subtext truncate text-black">@{tag}</span>
       </div>
     </div>
   );

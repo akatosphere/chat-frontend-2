@@ -7,7 +7,7 @@ export async function POST() {
   const cookieStore = await cookies();
   console.log("cookieStore", cookieStore.get("refresh_token")?.value);
   const refreshToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc3MDE1NjY3NiwiaWF0IjoxNzY3NTY0Njc2LCJqdGkiOiI4NGRjNTc2ZTA1ZGM0ZWU4YTQwNzBhNDM0N2QwZTJlYSIsInVzZXJfaWQiOiI1NzNjZjBmYi01YzFmLTQwYjctYmMxOS0zODdkNjQ0ODM1ZmMifQ.rGVZkuGND9wZyL2-wOvcHLdrlDnC3Sg0yZnE5dkLuiI";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc3MDQ5NDIxNywiaWF0IjoxNzY3OTAyMjE3LCJqdGkiOiI2Mzg5MzBiODQxYzI0Y2JjYTE3ODYxZWFlMzIwYzI3NyIsInVzZXJfaWQiOiJiYzY3NTQ2OC03OWM2LTQ5NjUtYTY3My1mMzVkZDg2N2Y5OTIifQ.-gFzcjKS23uLbrxeD3NLu65ArEet2PdVjWzsU0umFdU";
   if (!refreshToken) {
     console.log("result");
     return NextResponse.json({ error: "Нет refresh токена" }, { status: 401 });

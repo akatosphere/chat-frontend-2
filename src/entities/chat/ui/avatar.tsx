@@ -3,9 +3,10 @@ import Image from "next/image";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 type AvatarProps = {
+  className?: string;
   isOnline?: boolean;
   avatarUrl: string;
-  size: "sm" | "md" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "settingsAvatar";
 };
 
 const AVATAR_SIZES = {
@@ -13,19 +14,22 @@ const AVATAR_SIZES = {
   md: "w-15 h-15",
   lg: "w-20.5 h-20.5",
   xl: "w-50 h-50",
+  settingsAvatar:
+    "max-h-[390px] h-[390px] w-full desktop:w-50 desktop:max-h-50 desktop:h-50 object-cover rounded-md desktop:rounded-full",
 };
 
-export const Avatar = ({ isOnline, avatarUrl, size = "md" }: AvatarProps) => {
+export const Avatar = ({ isOnline, avatarUrl, size = "md", className }: AvatarProps) => {
   const avatarSrc = avatarUrl || "/chat/avatar.svg";
   return (
-    <div className="relative shrink-0">
-      <div className={cn("rounded-full", AVATAR_SIZES[size])}>
+    <div className={cn("relative shrink-0", className)}>
+      <div className={cn("overflow-hidden rounded-full", AVATAR_SIZES[size])}>
         <Image
           src={avatarSrc}
-          width={100}
-          height={100}
+          width={200}
+          height={200}
           alt="аватар"
-          className="w-full rounded-full object-cover"
+          priority={size === "settingsAvatar"}
+          className={cn("h-full w-full object-cover")}
         />
       </div>
       {isOnline && (

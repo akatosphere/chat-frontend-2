@@ -3,7 +3,7 @@ import Exit from "@icons/menu/exit.svg";
 import None from "@icons/menu/none.svg";
 import Pen from "@icons/menu/pen.svg";
 
-import { MenuIcon, MenuItem } from "../model/types";
+import { MenuIcon, MenuItem } from "@/shared/ui/menuList/model/types";
 
 export const SETTINGS_MENU: MenuItem[] = [
   {
@@ -25,6 +25,7 @@ export const SETTINGS_MENU: MenuItem[] = [
     label: "Выйти из аккаунта",
     icon: "exit",
     action: "logout",
+    isDestructive: true,
   },
 ];
 

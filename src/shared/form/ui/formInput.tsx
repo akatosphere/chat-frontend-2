@@ -6,6 +6,7 @@ import { Label } from "@/shared/shadcn/ui/label";
 
 type FormInputProps = {
   className?: string;
+  inputClassName?: string;
   id: string;
   label?: string;
   placeholder?: string;
@@ -15,7 +16,7 @@ type FormInputProps = {
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
-  ({ className, id, label, placeholder, error, disabled, ...props }, ref) => {
+  ({ className, id, label, placeholder, inputClassName, error, disabled, ...props }, ref) => {
     return (
       <div className={cn("flex flex-col gap-1", className)}>
         <Label variant={error ? "error" : "default"} htmlFor={id}>
@@ -26,6 +27,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
           id={id}
           ref={ref}
           placeholder={placeholder}
+          className={cn(inputClassName)}
           variant={error ? "error" : "default"}
           disabled={disabled}
           {...props}

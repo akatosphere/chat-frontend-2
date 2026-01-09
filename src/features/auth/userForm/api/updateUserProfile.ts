@@ -68,7 +68,6 @@ export const MessengerProfileSchema = z.object({
 export const getMessengerProfile = async (): Promise<Result<MessengerProfileResponse>> => {
   try {
     const result = await api.post<MessengerProfileResponse>("/api/v1/auth/messenger/profile/", {});
-    console.log(result);
     return { success: true, data: result.data };
   } catch (error) {
     console.log(error);
