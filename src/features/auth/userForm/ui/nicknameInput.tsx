@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { FormInput } from "@/shared/form/ui/formInput";
+import { cn } from "@/shared/shadcn/lib/utils";
 
 import { checkNickname } from "../api/checkNickname";
 import { nicknameSchema } from "../model/validation";
@@ -12,11 +13,13 @@ import { UserFormData } from "../model/validation";
 type NicknameInputProps = {
   name: "nickname";
   label?: string;
+  isBordered?: boolean;
 };
 
 export const NicknameInput: React.FC<NicknameInputProps> = ({
   name,
   label = "Придумайте никнейм",
+  isBordered = true,
 }) => {
   const {
     register,
@@ -65,7 +68,7 @@ export const NicknameInput: React.FC<NicknameInputProps> = ({
       label={label}
       error={errors[name]?.message}
       {...register(name)}
-      inputClassName="desktop:border-0 font-normal"
+      inputClassName={cn(!isBordered && "desktop:border-0 font-normal")}
     />
   );
 };

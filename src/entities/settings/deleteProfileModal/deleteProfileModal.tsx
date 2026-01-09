@@ -1,6 +1,7 @@
 import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
 import { useRouter } from "next/navigation";
 
+import { logout } from "@/shared/api/logout";
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 import { cn } from "@/shared/shadcn/lib/utils";
 import {
@@ -28,7 +29,10 @@ export const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
   const router = useRouter();
   const onDelete = async () => {
     const result = await deleteProfile(uid);
-    if (result.success) router.replace("/auth");
+    if (result.success) {
+      logout();
+      router.replace("/auth");
+    }
   };
   return (
     <ModalDialog className={cn(className)} open={isOpen} onOpenChange={onClose}>
@@ -42,7 +46,7 @@ export const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
           </span>
         </AlertDialogDescription>
       </AlertDialogHeader>
-      <AlertDialogFooter className="flex-row gap-2">
+      <AlertDialogFooter className="flex-row flex-wrap gap-2">
         <Button
           variant="default"
           size="smSubtext"

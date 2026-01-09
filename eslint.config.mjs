@@ -147,7 +147,6 @@ export default defineConfig([
     },
   },
 
-  // Server Actions — разрешаем function
   {
     files: ["**/*actions.ts", "**/actions/**/*.ts", "**/actions/**/*.tsx"],
     rules: {
@@ -162,14 +161,14 @@ export default defineConfig([
     },
   },
   {
-    files: ["middleware.ts"],
+    files: ["proxy.ts"],
     rules: {
       "func-style": "off",
       "no-restricted-syntax": [
         "error",
         {
           selector: "ExportNamedDeclaration > VariableDeclaration:has(ArrowFunctionExpression)",
-          message: "Middleware must be declared with `export function`, not arrow functions",
+          message: "Proxy must be declared with `export function`, not arrow functions",
         },
       ],
     },

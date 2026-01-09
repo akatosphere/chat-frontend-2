@@ -29,8 +29,9 @@ export const useVerificationUI = ({ onComplete, attemptsLeft }: UseVerificationU
       );
     else if (res.success) {
       setError("");
-      router.push("/auth/user");
+      router.push(res.is_filled ? "/chats" : "/auth/user");
     }
+
     setLoading(false);
     return res;
   };

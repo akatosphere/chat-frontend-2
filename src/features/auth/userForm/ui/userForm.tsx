@@ -52,7 +52,9 @@ export const UserForm: React.FC<UserFormProps> = ({ className }) => {
 
     setUser(data);
     reset();
-    router.push("/chat");
+    /* eslint-disable-next-line */
+    document.cookie = "is_filled=true; path=/";
+    router.push("/auth/success");
   };
 
   return (

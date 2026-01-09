@@ -99,7 +99,7 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
             {...register("lastName")}
             inputClassName="desktop:border-0 font-normal"
           />
-          <NicknameInput name="nickname" label="Изменить никнейм" />
+          <NicknameInput name="nickname" label="Изменить никнейм" isBordered={false} />
 
           <BirthdaySelect control={control} />
 

@@ -55,7 +55,7 @@ export const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({
             name="avatar"
           />
           {error && <span className="text-error">{error}</span>}
-          <div className="flex flex-row gap-2 self-end">
+          <div className="flex flex-row flex-wrap gap-2 self-end">
             <Button
               variant="default"
               size="smSubtext"
