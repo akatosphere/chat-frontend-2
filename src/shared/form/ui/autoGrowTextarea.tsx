@@ -1,25 +1,26 @@
-'use client'
+"use client";
 
-import { useRef } from 'react'
-import { Textarea } from '@/shared/shadcn/ui/textarea'
+import { useRef } from "react";
 
-type Props = React.ComponentProps<typeof Textarea>
+import { Textarea } from "@/shared/shadcn/ui/textarea";
 
-export function AutoGrowTextarea(props: Props) {
-    const ref = useRef<HTMLTextAreaElement>(null)
+type Props = React.ComponentProps<typeof Textarea>;
 
-    const handleInput = () => {
-        if (!ref.current) return
-        ref.current.style.height = '56px'
-        ref.current.style.height = `${ref.current.scrollHeight}px`
-    }
+export const AutoGrowTextarea = (props: Props) => {
+  const ref = useRef<HTMLTextAreaElement>(null);
 
-    return (
-        <Textarea
-            ref={ref}
-            onInput={handleInput}
-            className="h-[56px] min-h-[56px] resize-none overflow-hidden"
-            {...props}
-        />
-    )
-}
+  const handleInput = () => {
+    if (!ref.current) return;
+    ref.current.style.height = "56px";
+    ref.current.style.height = `${ref.current.scrollHeight}px`;
+  };
+
+  return (
+    <Textarea
+      ref={ref}
+      onInput={handleInput}
+      className="h-[56px] min-h-[56px] resize-none overflow-hidden"
+      {...props}
+    />
+  );
+};

@@ -1,4 +1,4 @@
-export const resize: React.FormEventHandler<HTMLTextAreaElement> = (e) => {
+export const resizeTextarea: React.FormEventHandler<HTMLTextAreaElement> = (e) => {
   const el = e.currentTarget;
   const style = window.getComputedStyle(el);
 

@@ -4,6 +4,7 @@ import AttachBtn from "@icons/chat/attachBtn.svg";
 import MessageSendBtn from "@icons/chat/messageSendBtn.svg";
 import VoiceMessage from "@icons/chat/voiceMessage.svg";
 
+import { resizeTextarea } from "@/shared/form/lib/resizeTextarea";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 import {
@@ -14,7 +15,6 @@ import {
 } from "@/shared/shadcn/ui/input-group";
 import { EmojiPicker } from "@/widgets/emoji-picker/ui/emojiPicker";
 
-import { resize } from "../lib/helpers";
 import { useMessageForm } from "../lib/useMessageForm";
 import { EmojiBtnToggle } from "./emojiBtnToggle";
 
@@ -63,7 +63,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
             <div className="desktop:[&::-webkit-scrollbar]:inline flex flex-1 overflow-y-auto pr-10 [&::-webkit-scrollbar]:hidden">
               <InputGroupTextarea
                 ref={textareaRef}
-                onInput={resize}
+                onInput={resizeTextarea}
                 onKeyDown={onKeyDown}
                 rows={1}
                 placeholder="Сообщение"

@@ -3,7 +3,7 @@ import { StoreBadge } from "@/shared/ui/storeBadge";
 
 export const AppHeader = () => {
   return (
-    <header className="desktop:block mx-auto hidden h-[60px] w-full max-w-[1260px] rounded-sm bg-[#F5F6F8]">
+    <header className="desktop:block desktop:border desktop:border-muted mx-auto hidden h-[60px] w-full max-w-[1260px] rounded-sm bg-[#F5F6F8]">
       <div className="flex h-full items-center justify-between px-4 py-2">
         <Logo size="xs" />
         <div className="flex gap-2">
