@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { LogoutBtn } from "@/features/auth/logoutBtn";
 import { getMessengerProfile } from "@/features/auth/userForm/api/updateUserProfile";
+import { getSocket } from "@/shared/api/wsClient";
+import { Button } from "@/shared/shadcn/ui/button";
 
 export default function SettingsPage() {
   const { data, isLoading, isError } = useQuery({
@@ -15,6 +17,10 @@ export default function SettingsPage() {
     refetchOnReconnect: false,
     gcTime: 60 * 60 * 1000,
   });
+  const wsDisconnect = () => {
+    const socket = getSocket();
+    socket?.close();
+  };
 
   if (isLoading) return <div>Загрузка...</div>;
   if (isError) return <div>Ошибка</div>;
@@ -26,6 +32,9 @@ export default function SettingsPage() {
       <span>Имя: {data.data.first_name}</span>
       <span>Телефон: {data.data.phone}</span>
       <LogoutBtn className="w-50" />
+      <Button className="w-50" size="md" onClick={wsDisconnect}>
+        Разорвать сокет
+      </Button>
     </div>
   );
 }
