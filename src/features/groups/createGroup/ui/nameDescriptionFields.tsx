@@ -19,7 +19,8 @@ export const NameDescriptionFields: React.FC<NameDescriptionFieldsProps> = ({ cl
           <InputGroupTextarea
             name="groupName"
             placeholder=" "
-            className="subtext z-10 h-14 min-h-14 resize-none overflow-hidden p-0 pt-6 pl-3"
+            rows={1}
+            className="subtext z-10 h-14 min-h-14 resize-none overflow-hidden p-0 pt-6 pr-9 pl-3"
             onInput={resizeTextarea}
           />
         </div>
@@ -43,7 +44,7 @@ export const NameDescriptionFields: React.FC<NameDescriptionFieldsProps> = ({ cl
           <InputGroupTextarea
             name="groupName"
             placeholder=" "
-            className="subtext z-10 h-14 min-h-14 resize-none overflow-hidden p-0 pt-6 pl-3"
+            className="subtext z-10 h-14 min-h-14 resize-none overflow-hidden p-0 pt-6 pr-9 pl-3"
             onInput={resizeTextarea}
           />
         </div>

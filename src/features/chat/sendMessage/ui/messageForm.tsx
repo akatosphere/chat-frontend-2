@@ -69,7 +69,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
                 placeholder="Сообщение"
                 value={textMessage}
                 onChange={(e) => setTextMessage(e.target.value)}
-                className="subtext emojis-apple h-11 min-h-11 resize-none overflow-hidden"
+                className="subtext emojis-apple h-12 min-h-12 resize-none overflow-hidden pt-3.5"
               />
             </div>
             {emojiPickerOpen && (
@@ -85,7 +85,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           <InputGroupAddon
             ref={emojiBtnRef}
             align="inline-end"
-            className="absolute right-0 bottom-3 pr-2 pb-0"
+            className="absolute right-0 bottom-3 pr-2 pb-0.5"
           >
             <InputGroupButton
               onClick={(e) => {

@@ -1,9 +1,8 @@
 import { useRef, useState } from "react";
 
+import { resizeTextarea } from "@/shared/form/lib/resizeTextarea";
 import { useClickOutside } from "@/shared/lib/useClickOutside";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
-
-import { resize } from "./helpers";
 
 type UseMessageFormOptions = {
   onSubmitMessage: (message: string) => void;
@@ -34,7 +33,7 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
       if (!isMobile || isKeyboardOpen) {
         textareaRef.current?.focus();
       }
-      resize({
+      resizeTextarea({
         currentTarget: textareaRef.current,
       } as React.FormEvent<HTMLTextAreaElement>);
     });
