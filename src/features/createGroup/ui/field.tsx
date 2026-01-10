@@ -94,7 +94,7 @@ export const Field = ({ name, title, maxLength, position, className }: FieldProp
         align="absolute"
         className="smooth top-5 right-3 z-10 opacity-0 group-focus-within:opacity-100"
       >
-        <Button variant="ghost" size="icon-auto" type="button" onClick={clear} disabled={!value}>
+        <Button variant="ghost" size="icon-auto" type="button" onClick={clear}>
           <CloseCircle className="h-4 w-4" />
         </Button>
       </InputGroupAddon>

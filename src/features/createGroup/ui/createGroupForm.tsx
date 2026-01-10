@@ -1,18 +1,23 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { EditPhotoForm } from "@/shared/form/ui/editPhotoForm";
+import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
+import { BackButton } from "@/shared/ui/backButton";
 
 import { formSchema } from "../model/shema";
 import { Field } from "./field";
-import { GroupTypeSelect } from "./GroupTypeSelect";
+import { GroupTypeSelect } from "./groupTypeSelect";
 
-export const CreateGroupForm = () => {
+type CreateGroupFormProps = {
+  className?: string;
+};
+
+export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) => {
   const [groupType, setGroupType] = useState<"open" | "closed">("closed");
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -23,23 +28,9 @@ export const CreateGroupForm = () => {
   });
 
   return (
-    <section className="px-4">
+    <section className={cn("px-4", className)}>
       <div className="border-b-muted mb-4 flex h-14 items-center gap-2 border-b">
-        <Link
-          href="/"
-          aria-label="Назад"
-          className="inline-flex h-10 w-10 items-center justify-center"
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M16 7H3.83L9.42 1.41L8 0L0 8L8 16L9.41 14.59L3.83 9H16V7Z" fill="#1C1C1E" />
-          </svg>
-        </Link>
+        <BackButton href="/chats" />
 
         <h2 className="text-tight font-medium">Создать группу</h2>
       </div>

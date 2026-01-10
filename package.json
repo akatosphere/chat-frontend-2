@@ -12,7 +12,8 @@
     "format": "prettier . --write",
     "check": "eslint . && prettier . --check",
     "fix": "eslint . --fix && prettier . --write",
-    "prepare": "husky"
+    "prepare": "husky",
+    "clean": "rmdir /s /q .next && rmdir /s /q node_modules\\.cache"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

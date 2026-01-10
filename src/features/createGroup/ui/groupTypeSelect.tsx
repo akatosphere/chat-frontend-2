@@ -46,12 +46,12 @@ export const GroupTypeSelect = ({ value, onChange, label = "Тип группы"
 
   return (
     <div ref={rootRef} className="relative">
-      <div className="text-muted-foreground mb-2 text-sm">{label}</div>
+      <div className="text-gray mb-2 text-sm">{label}</div>
 
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex h-[56px] w-full items-center justify-between rounded-[16px] bg-white px-5"
+        className="flex h-14 w-full items-center justify-between rounded-2xl bg-white px-5"
       >
         <span className="text-base">{selected.title}</span>
         <span className={open ? "rotate-180 transition-transform" : "transition-transform"}>
@@ -68,7 +68,7 @@ export const GroupTypeSelect = ({ value, onChange, label = "Тип группы"
       </button>
 
       {open && (
-        <div className="mt-2 rounded-[16px] bg-white p-4 shadow-sm">
+        <div className="mt-2 rounded-2xl bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-4">
             {options.map((opt) => {
               const checked = opt.value === value;
@@ -86,10 +86,10 @@ export const GroupTypeSelect = ({ value, onChange, label = "Тип группы"
                   <span
                     className={[
                       "mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full",
-                      checked ? "border-2 border-[var(--primary)]" : "border border-[var(--muted)]",
+                      checked ? "border-primary border-2" : "border-muted border",
                     ].join(" ")}
                   >
-                    {checked && <span className="h-3 w-3 rounded-full bg-[var(--primary)]" />}
+                    {checked && <span className="bg-primary h-3 w-3 rounded-full" />}
                   </span>
 
                   <span className="flex flex-col">
