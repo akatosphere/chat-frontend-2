@@ -24,7 +24,7 @@ export const ChatsListPanel: React.FC<ChatsListPanelProps> = ({ className }) => 
 
   const filteredChats = filterChats(chats, search);
   return (
-    <div className={cn("", className)}>
+    <div className={cn("flex h-full flex-col", className)}>
       <Searchbar onChange={onSearch} value={search} className="p-4" />
       <ChatList chats={filteredChats} isSearch={search.length > 0} className="" />
     </div>

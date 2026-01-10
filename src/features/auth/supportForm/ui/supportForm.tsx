@@ -1,7 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -10,40 +9,23 @@ import { FormTextarea } from "@/shared/form/ui/formTextarea";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
-import { sendSupport } from "../api/sendSupport";
 import { supportSchema } from "../model/schema";
 
 type SupportFormProps = {
   className?: string;
+  onSubmit: (data: z.infer<typeof supportSchema>) => Promise<void>;
 };
 
-export const SupportForm: React.FC<SupportFormProps> = ({ className }) => {
+export const SupportForm: React.FC<SupportFormProps> = ({ className, onSubmit }) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty, isSubmitting },
-    // reset,
   } = useForm<z.infer<typeof supportSchema>>({
     resolver: zodResolver(supportSchema),
     mode: "onChange",
-    defaultValues: {
-      email: "",
-      text: "",
-    },
+    defaultValues: { email: "", text: "" },
   });
-
-  const router = useRouter();
-
-  const onSubmit = async (data: z.infer<typeof supportSchema>) => {
-    const isValid = supportSchema.safeParse(data).success;
-    if (!isValid) return;
-    const result = await sendSupport(data);
-    if (result.success) {
-      router.push("/auth/support/success");
-    } else {
-      alert(result.error);
-    }
-  };
 
   return (
     <form
@@ -68,13 +50,14 @@ export const SupportForm: React.FC<SupportFormProps> = ({ className }) => {
         className="flex-1"
       />
 
-      <p className="minitext font-regular desktop:font-medium text-gray desktop:mb-5 desktop:mt-2">
+      <p className="minitext font-regular desktop:font-regular text-gray desktop:mb-5 desktop:mt-2">
         Ознакомьтесь со
         <Link
           href="https://achat.ktsf.ru/faq"
           target="_blank"
           className="text-primary desktop:hover:text-primary-light transition-color active:text-primary-light duration-200"
         >
+          {" "}
           списком известных проблем и их решениями.
         </Link>
       </p>

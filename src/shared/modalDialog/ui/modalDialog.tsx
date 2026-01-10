@@ -10,7 +10,7 @@ import {
 const modalDialogVariants = cva("desktop:rounded-md rounded-lg bg-white", {
   variants: {
     variant: {
-      default: "desktop:text-start flex flex-col text-center",
+      default: "desktop:text-start",
       vertical: "text-center",
     },
     size: {

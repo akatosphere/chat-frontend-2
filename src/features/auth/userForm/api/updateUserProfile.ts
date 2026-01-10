@@ -47,17 +47,36 @@ export interface MessengerProfileResponse {
   is_staff: boolean;
 }
 
+export const MessengerProfileSchema = z.object({
+  nickname: z.string().min(1).optional(),
+  username: z.string().min(1).optional(),
+  first_name: z.string().min(1).optional(),
+  last_name: z.string().min(1).optional(),
+  patronymic: z.string().optional(),
+  additional_information: z.string().optional(),
+  birthday: z.number().int().optional(),
+  gender: z.enum(["male", "female"]).optional(),
+  email: z.string().email().or(z.literal("")).optional(),
+  country: z.string().optional(),
+  city_id: z.number().int().optional(),
+  phone: z
+    .string()
+    .regex(/^\+7 \d{3} \d{3} \d{2} \d{2}$/, "Неверный формат телефона")
+    .optional(),
+});
+
 export const getMessengerProfile = async (): Promise<Result<MessengerProfileResponse>> => {
   try {
     const result = await api.post<MessengerProfileResponse>("/api/v1/auth/messenger/profile/", {});
     return { success: true, data: result.data };
   } catch (error) {
-    return { success: false, error: errorHandler(error) };
+    console.log(error);
+    return { success: false, error: "error" };
   }
 };
 
 export const updateMessengerProfile = async (
-  data: MessengerProfileData,
+  data: z.infer<typeof MessengerProfileSchema>,
 ): Promise<Result<MessengerProfileResponse>> => {
   try {
     const { data: response } = await api.post<MessengerProfileResponse>(

@@ -21,6 +21,8 @@ const buttonVariants = cva(
         lg: "text-tight h-[56px] rounded-md px-[150px] py-[26px] font-medium has-[>svg]:px-4",
         md: "text-tight h-[56px] rounded-md px-[24px] py-[18px] font-medium",
         sm: "desktop:h-[32px] subtext-tight desktop:text-tight desktop:rounded-sm desktop:px-[16px] desktop:py-[6px] desktop:border-none h-[44px] gap-1 rounded-md px-[28px] py-[10px] font-normal has-[>svg]:px-2.5",
+        smSubtext:
+          "desktop:h-[32px] subtext desktop:rounded-sm desktop:px-[16px] desktop:py-[6px] desktop:border-none h-[44px] gap-1 rounded-md px-[28px] py-[10px] font-normal has-[>svg]:px-2.5",
         inline: "h-auto p-0 leading-none",
         icon: "size-9",
         "icon-sm": "size-8",
