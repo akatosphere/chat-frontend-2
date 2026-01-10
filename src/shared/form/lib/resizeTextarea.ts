@@ -1,6 +1,6 @@
-export const resizeTextarea: React.FormEventHandler<HTMLTextAreaElement> = (e) => {
-  const el = e.currentTarget;
+export const resizeTextarea = (textarea: HTMLTextAreaElement | null) => {
+  if (!textarea) return;
 
-  el.style.height = "auto";
-  el.style.height = `${el.scrollHeight}px`;
+  textarea.style.height = "auto";
+  textarea.style.height = `${textarea.scrollHeight}px`;
 };

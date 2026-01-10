@@ -63,7 +63,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
             <div className="desktop:[&::-webkit-scrollbar]:inline flex flex-1 overflow-y-auto pr-10 [&::-webkit-scrollbar]:hidden">
               <InputGroupTextarea
                 ref={textareaRef}
-                onInput={resizeTextarea}
+                onInput={() => resizeTextarea(textareaRef.current)}
                 onKeyDown={onKeyDown}
                 rows={1}
                 placeholder="Сообщение"
