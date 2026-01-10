@@ -9,7 +9,10 @@ import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 import { BackButton } from "@/shared/ui/backButton";
 
-import { formSchema } from "../model/shema";
+import { createGroup } from "../api/ws";
+import { mapGroupType } from "../model/mapping";
+import { formSchema } from "../model/schema";
+import { CreateGroupFormValues } from "../model/types";
 import { Field } from "./field";
 import { GroupTypeSelect } from "./groupTypeSelect";
 
@@ -27,6 +30,15 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
     },
   });
 
+  const onSubmit = (data: CreateGroupFormValues) => {
+    createGroup({
+      name: data.title,
+      description: data.description,
+      chat_type: mapGroupType(groupType),
+      uid_users_list: [], // пока только создатель
+    });
+  };
+
   return (
     <section className={cn("px-4", className)}>
       <div className="border-b-muted mb-4 flex h-14 items-center gap-2 border-b">
@@ -39,15 +51,15 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
         <EditPhotoForm />
       </div>
       <FormProvider {...form}>
-        <form className="mb-4 flex flex-col gap-4">
+        <form className="mb-4 flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)}>
           <div>
             <Field name="title" title="Название*" maxLength={100} position="upper" />
             <Field name="description" title="Описание" maxLength={250} position="lower" />
           </div>
           <GroupTypeSelect value={groupType} onChange={setGroupType} />
 
-          <Button variant="default" size="md">
-            Далее
+          <Button variant="default" size="md" type="submit">
+            Создать
           </Button>
         </form>
       </FormProvider>
