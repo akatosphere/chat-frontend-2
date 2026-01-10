@@ -37,7 +37,7 @@ export const Toast = ({
       role="status"
       aria-live="polite"
       aria-atomic="true"
-      className="animate-in fade-in slide-in-from-bottom-2 pointer-events-none absolute left-0 w-full rounded-md bg-[rgba(0,0,0,0.6)] p-3 text-white duration-200 md:bottom-0 md:left-1/2 md:mb-6 md:max-w-[360px] md:-translate-x-1/2"
+      className="desktop:top-auto animate-in fade-in slide-in-from-bottom-2 desktop:bottom-0 desktop:left-1/2 desktop:mb-6 desktop:max-w-[360px] desktop:-translate-x-1/2 pointer-events-none absolute top-0 left-0 w-full rounded-md bg-[rgba(0,0,0,0.6)] p-3 text-white duration-200"
     >
       <div className="flex items-center">
         <Image

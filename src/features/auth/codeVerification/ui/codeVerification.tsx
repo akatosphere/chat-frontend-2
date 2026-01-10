@@ -1,5 +1,8 @@
 "use client";
+import { useCallback, useState } from "react";
+
 import { cn } from "@/shared/shadcn/lib/utils";
+import { Toast } from "@/shared/toast/ui/toast";
 import { Tooltip } from "@/shared/ui/tooltip";
 
 import { usePhoneStore } from "../../phoneForm/model/store";
@@ -31,6 +34,17 @@ export const CodeVerification: React.FC<{ className?: string }> = ({ className }
 
   const { showBanned, showExpired, closeBanned, closeExpired } = useModals(isBanned, isCodeExpired);
 
+  const [showToast, setShowToast] = useState(false);
+
+  const handleResend = async () => {
+    await onResend();
+    setShowToast(true);
+  };
+
+  const handleToastClose = useCallback(() => {
+    setShowToast(false);
+  }, []);
+
   return (
     <div className={cn("flex flex-col items-center justify-center", className)}>
       <div className="mb-4 flex items-center gap-2">
@@ -59,7 +73,7 @@ export const CodeVerification: React.FC<{ className?: string }> = ({ className }
       />
 
       <VerificationCodeResend
-        onResend={onResend}
+        onResend={handleResend}
         resendTimer={resendTimer}
         isResendAvailable={isResendAvailable}
       />
@@ -67,6 +81,16 @@ export const CodeVerification: React.FC<{ className?: string }> = ({ className }
       <BannedModal open={showBanned} onClose={closeBanned} />
 
       <ExpiredCodeModal open={showExpired} onClose={closeExpired} />
+
+      {showToast && (
+        <Toast
+          onClose={handleToastClose}
+          icon={{
+            mobile: "/icons/toast/checkMobile.svg",
+            desktop: "/icons/toast/checkDesktop.svg",
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -17,9 +17,10 @@ import { nicknameSchema, UserFormData, userFormSchema } from "../model/validatio
 
 type UserFormProps = {
   className?: string;
+  buttonName?: string;
 };
 
-export const UserForm: React.FC<UserFormProps> = ({ className }) => {
+export const UserForm: React.FC<UserFormProps> = ({ className, buttonName = "Далее" }) => {
   const router = useRouter();
   const setUser = useUserFormStore((state) => state.setUser);
 
@@ -124,7 +125,7 @@ export const UserForm: React.FC<UserFormProps> = ({ className }) => {
           </p>
 
           <Button variant="default" size="lg" type="submit" disabled={!isFormValid}>
-            Далее
+            {buttonName}
           </Button>
         </div>
       </form>
