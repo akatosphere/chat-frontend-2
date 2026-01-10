@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { resizeTextarea } from "@/shared/form/lib/resizeTextarea";
 import { useClickOutside } from "@/shared/lib/useClickOutside";
@@ -33,11 +33,12 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
       if (!isMobile || isKeyboardOpen) {
         textareaRef.current?.focus();
       }
-      resizeTextarea({
-        currentTarget: textareaRef.current,
-      } as React.FormEvent<HTMLTextAreaElement>);
     });
   };
+
+  useEffect(() => {
+    resizeTextarea(textareaRef.current);
+  }, [textMessage]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
