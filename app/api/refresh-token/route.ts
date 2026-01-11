@@ -6,7 +6,6 @@ import { NextResponse } from "next/server";
 export async function POST() {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get("refresh_token")?.value;
-
   if (!refreshToken) {
     return NextResponse.json({ error: "Нет refresh токена" }, { status: 401 });
   }
@@ -17,7 +16,6 @@ export async function POST() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh: refreshToken }),
     });
-
     const data = await res.json();
 
     if (!res.ok) {

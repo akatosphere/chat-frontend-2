@@ -30,7 +30,7 @@ export const MessagePreview = ({ lastMsg, isActive }: MessagePreviewProps) => {
       {!lastMsg?.has_replied_message && lastMsg?.has_forwarded_message && (
         <Forwarded
           className={cn(
-            "text-gray mt-[2px] mr-1.5 h-3 w-3.5 shrink-0 transition-colors duration-200",
+            "text-gray mt-0.5 mr-1.5 h-3 w-3.5 shrink-0 transition-colors duration-200",
             isActive && "text-white",
           )}
         />

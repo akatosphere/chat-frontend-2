@@ -42,6 +42,7 @@
   --primary-light: #cec8ff;
   --primary-dark: #615aa3;
   --primary-accent: #615aa399;
+  --primary-accent-light: #f5f4ff;
   --primary-hover: #efeef7;
   --primary-gray: #efeef7;
   --muted: #e4e4e4;
@@ -143,6 +144,7 @@
   --color-light-gray: var(--light-gray);
   --color-gray-tone: var(--gray-tone);
   --color-light-green: var(--light-green);
+  --color-primary-accent-light: var(--primary-accent-light);
 
   /* добавлены переменные для цвета иконок меню навигации */
   --color-nav-border: var(--nav-border);
@@ -243,9 +245,19 @@ body {
   background-clip: content-box;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
 }
+
+.scrollbar-xs::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-content {
+  scrollbar-gutter: stable;
+  padding-right: 6px;
+}
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;

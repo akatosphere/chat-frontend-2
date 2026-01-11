@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { useAuthStore } from "@/shared/api/store";
 import { connectWS, disconnectWS } from "@/shared/api/wsClient";
@@ -9,23 +9,25 @@ export const WSProvider = ({ children }: { children: React.ReactNode }) => {
   const accessToken = useAuthStore((s) => s.accessToken);
   const isInitialized = useAuthStore((s) => s.isInitialized);
 
+  const prevTokenRef = useRef<string | null>(null);
+
   useEffect(() => {
-    // Если приложение еще не определилось с авторизацией — ничего не делаем
     if (!isInitialized) return;
 
+    // LOGIN или REFRESH TOKEN
     if (accessToken) {
-      // Подключаемся только при наличии токена
-      connectWS(accessToken);
-    } else {
-      // Если токена нет (разлогинились) — отключаемся
-      disconnectWS();
+      if (prevTokenRef.current !== accessToken) {
+        connectWS(accessToken);
+        prevTokenRef.current = accessToken;
+      }
+      return;
     }
 
-    // Cleanup-функция: сработает при размонтировании провайдера (редко в layout)
-    // или перед повторным запуском эффекта (например, при смене accessToken)
-    return () => {
+    // LOGOUT
+    if (!accessToken && prevTokenRef.current) {
       disconnectWS();
-    };
+      prevTokenRef.current = null;
+    }
   }, [accessToken, isInitialized]);
 
   return <>{children}</>;
