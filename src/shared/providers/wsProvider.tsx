@@ -2,14 +2,31 @@
 
 import { useEffect, useRef } from "react";
 
+import { chatWSHandler } from "@/entities/chat/model/wsHandler";
 import { useAuthStore } from "@/shared/api/store";
-import { connectWS, disconnectWS } from "@/shared/api/wsClient";
+import { connectWS, disconnectWS, subscribeToWS } from "@/shared/api/wsClient";
+
+import { useWSRequestStore } from "../model/wsRequest.store";
 
 export const WSProvider = ({ children }: { children: React.ReactNode }) => {
   const accessToken = useAuthStore((s) => s.accessToken);
   const isInitialized = useAuthStore((s) => s.isInitialized);
 
   const prevTokenRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToWS((data) => {
+      // 1. Сначала проверяем, не является ли это ответом на конкретный запрос (по UID)
+      if (data.request_uid) {
+        useWSRequestStore.getState().fulfillRequest(data.request_uid, data);
+      }
+
+      // 2. Затем пробрасываем в роутеры
+      chatWSHandler(data);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (!isInitialized) return;

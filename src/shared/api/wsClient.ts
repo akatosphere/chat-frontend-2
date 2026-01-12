@@ -1,6 +1,9 @@
 // wsClient.ts
 
+import { WSBaseResponse } from "../types/wsTypes";
+
 type WSStatus = "idle" | "connecting" | "connected" | "reconnecting" | "closed";
+type WSHandler = (data: WSBaseResponse<unknown>) => void;
 
 let socket: WebSocket | null = null;
 let currentToken: string | null = null;
@@ -12,6 +15,8 @@ let manualClose = false;
 
 const MAX_RECONNECT_DELAY = 30_000;
 
+const handlers = new Set<WSHandler>();
+
 const getReconnectDelay = () => Math.min(1000 * 2 ** reconnectAttempts, MAX_RECONNECT_DELAY);
 
 const clearReconnectTimeout = () => {
@@ -19,6 +24,13 @@ const clearReconnectTimeout = () => {
     clearTimeout(reconnectTimeout);
     reconnectTimeout = null;
   }
+};
+
+export const subscribeToWS = (handler: WSHandler) => {
+  handlers.add(handler);
+  return () => {
+    handlers.delete(handler);
+  };
 };
 
 const attachHandlers = (ws: WebSocket) => {
@@ -31,7 +43,8 @@ const attachHandlers = (ws: WebSocket) => {
 
   ws.onmessage = (event) => {
     try {
-      const data = JSON.parse(event.data);
+      const data = JSON.parse(event.data) as WSBaseResponse<unknown>;
+      handlers.forEach((handler) => handler(data));
       console.log("WS message 📩", data);
     } catch {
       console.log("WS raw message:", event.data);

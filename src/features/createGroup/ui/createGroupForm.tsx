@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -29,14 +30,27 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
       description: "",
     },
   });
+  const router = useRouter();
 
-  const onSubmit = (data: CreateGroupFormValues) => {
-    createGroup({
-      name: data.title,
-      description: data.description,
-      chat_type: mapGroupType(groupType),
-      uid_users_list: [], // пока только создатель
-    });
+  const onSubmit = async (data: CreateGroupFormValues) => {
+    try {
+      const response = await createGroup({
+        name: data.title,
+        description: data.description,
+        chat_type: mapGroupType(groupType),
+        uid_users_list: [], // пока только создатель
+      });
+      if (response.status === "OK") {
+        const chatId = response.object.chat_id; // Используем chat_id из вашего JSON
+        router.push(`/chats/${chatId}`);
+      } else {
+        // Обработка ошибки, если статус не "OK"
+        console.error("Ошибка сервера:", response.error);
+        alert(`Ошибка: ${response.error}`);
+      }
+    } catch (error) {
+      console.error("Ошибка при создании чата:", error);
+    }
   };
 
   return (
