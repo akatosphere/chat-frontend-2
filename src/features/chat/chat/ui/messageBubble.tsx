@@ -1,6 +1,6 @@
 import { StatusIcon } from "@/entities/chat/ui/statusIcon";
 import { cn } from "@/shared/shadcn/lib/utils";
-import { useMessageContextMenu } from "@/widgets/contextMenu/useMessageContextMenu";
+import { useMessageContextMenu } from "@/widgets/contextMenu/lib/useMessageContextMenu";
 
 import { Message } from "../model/types";
 

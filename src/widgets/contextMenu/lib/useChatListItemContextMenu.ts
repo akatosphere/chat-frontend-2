@@ -6,10 +6,11 @@ import Favorite from "@icons/chat/pin.svg";
 import { MouseEvent } from "react";
 
 import { ChatItemData } from "@/entities/chat/model/types";
+import { ChatActions } from "@/features/chatList/model/types";
 
-import { useContextMenu } from "./contextMenu";
+import { useContextMenu } from "../ui/contextMenu";
 
-export const useChatListItemContextMenu = (chat: ChatItemData) => {
+export const useChatListItemContextMenu = (chat: ChatItemData, actions: ChatActions) => {
   const { openMenu, activeMenuId } = useContextMenu();
 
   const menuId = `chat-${chat.id}`;
@@ -23,28 +24,28 @@ export const useChatListItemContextMenu = (chat: ChatItemData) => {
           {
             label: "Добавить в контакты",
             icon: PersonAdd,
-            onClick: () => console.log("Добавить", chat.id),
+            onClick: () => console.log("Добавить в контакты", chat.id),
           },
           {
             label: "Выключить уведомления",
             icon: Mute,
-            onClick: () => console.log("Мут", chat.id),
+            onClick: () => actions.toggleMuteStatus(chat.id, chat.notifications),
           },
           {
             label: chat.is_favorite ? "Снять закрепление" : "Закрепить",
             icon: Favorite,
-            onClick: () => console.log("Закрепить", chat.id),
+            onClick: () => actions.toggleFavorite(chat.id, chat.is_favorite),
           },
           {
             label: "Пометить прочитанным",
             icon: SetRead,
-            onClick: () => console.log("Прочитано", chat.id),
+            onClick: () => actions.toggleReadStatus(chat.id),
           },
           {
             label: "Удалить",
             icon: Delete,
             destructive: true,
-            onClick: () => console.log("Удалить", chat.id),
+            onClick: () => actions.deleteChat(chat.id),
           },
         ],
         e.clientX,

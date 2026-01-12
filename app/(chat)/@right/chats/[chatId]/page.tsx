@@ -1,10 +1,10 @@
 import { ChatLayoutWidget } from "@/features/chatList/ui/chatLayoutWidget";
 
-type ChatPageParams = {
+type Props = {
   params: Promise<{ chatId: string }>;
 };
 
-export default async function ChatPage({ params }: ChatPageParams) {
+export default async function ChatPage({ params }: Props) {
   const { chatId } = await params;
   return <ChatLayoutWidget chatId={chatId} />;
 }

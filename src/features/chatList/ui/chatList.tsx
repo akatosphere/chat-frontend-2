@@ -6,15 +6,17 @@ import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 import { InfoMessage } from "@/shared/ui/infoMessage";
 
+import { ChatActions } from "../model/types";
 import { ChatListItem } from "./chatListItem";
 
 interface ChatListProps {
   className?: string;
   chats: ChatItemData[];
   isSearch?: boolean;
+  actions: ChatActions;
 }
 
-export const ChatList: React.FC<ChatListProps> = ({ chats, className, isSearch }) => {
+export const ChatList: React.FC<ChatListProps> = ({ chats, className, isSearch, actions }) => {
   const [activeId, setActiveId] = useState<number>();
 
   return (
@@ -28,6 +30,7 @@ export const ChatList: React.FC<ChatListProps> = ({ chats, className, isSearch }
         chats.map((chat) => (
           <ChatListItem
             className="last:after:hidden"
+            actions={actions}
             key={chat.id}
             chat={chat}
             isActive={activeId === chat.id}

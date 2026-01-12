@@ -1,10 +1,11 @@
 import Link from "next/link";
 
 import { cn } from "@/shared/shadcn/lib/utils";
-import { useChatListItemContextMenu } from "@/widgets/contextMenu/useChatListItemContextMenu";
+import { useChatListItemContextMenu } from "@/widgets/contextMenu/lib/useChatListItemContextMenu";
 
 import { ChatItemData } from "../../../entities/chat/model/types";
 import { Avatar } from "../../../entities/chat/ui/avatar";
+import { ChatActions } from "../model/types";
 import { ChatListItemFooter } from "./chatListItemFooter";
 import { ChatListItemHeader } from "./chatListItemHeader";
 
@@ -13,6 +14,7 @@ type ChatListItemProps = {
   chat: ChatItemData;
   isActive?: boolean;
   isLast?: boolean;
+  actions: ChatActions;
   onClick: () => void;
 };
 
@@ -21,11 +23,12 @@ export const ChatListItem = ({
   chat,
   isActive,
   isLast = false,
+  actions,
   onClick,
 }: ChatListItemProps) => {
   const totalUnread = chat.new_message_count + chat.new_file_count;
   const user = chat.chat;
-  const { onContextMenu, isOpen } = useChatListItemContextMenu(chat);
+  const { onContextMenu, isOpen } = useChatListItemContextMenu(chat, actions);
 
   return (
     <Link

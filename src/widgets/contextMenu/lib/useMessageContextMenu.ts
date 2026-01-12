@@ -4,7 +4,7 @@ import Select from "@icons/chat/context-menu/select.svg";
 import Forwarded from "@icons/chat/forwardedd.svg";
 import { MouseEvent } from "react";
 
-import { useContextMenu } from "./contextMenu";
+import { useContextMenu } from "../ui/contextMenu";
 
 export const useMessageContextMenu = (messageId: string) => {
   const { openMenu, activeMenuId } = useContextMenu();

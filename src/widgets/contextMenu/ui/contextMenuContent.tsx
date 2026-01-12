@@ -17,7 +17,6 @@ export const ContextMenuContent = ({ items, position, onClose }: Props) => {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [ready, setReady] = useState(false);
 
-  // Обработка закрытия
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) onClose();
@@ -41,7 +40,6 @@ export const ContextMenuContent = ({ items, position, onClose }: Props) => {
     };
   }, [onClose]);
 
-  // Корректировка позиции
   useEffect(() => {
     if (!menuRef.current) return;
 
@@ -55,39 +53,27 @@ export const ContextMenuContent = ({ items, position, onClose }: Props) => {
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
 
-      // НОВАЯ ЛОГИКА: позиционируем НАД курсором и СЛЕВА от него
-      // Начальные координаты: курсор - размеры меню
-      let adjustedX = position.x - rect.width; // слева от курсора
-      let adjustedY = position.y - rect.height; // над курсором
+      let adjustedX = position.x - rect.width;
+      let adjustedY = position.y - rect.height;
 
-      // КОРРЕКЦИЯ ЕСЛИ НЕ ВЛЕЗАЕТ:
-
-      // 1. Если меню вылезает за левый край экрана
       if (adjustedX < 10) {
-        // Пробуем справа от курсора
         adjustedX = position.x;
-        // Если и справа не влезает, прижимаем к левому краю
         if (adjustedX + rect.width > viewportWidth) {
           adjustedX = 10;
         }
       }
 
-      // 2. Если меню вылезает за верхний край экрана
       if (adjustedY < 10) {
-        // Пробуем под курсором
         adjustedY = position.y;
-        // Если и снизу не влезает, прижимаем к верхнему краю
         if (adjustedY + rect.height > viewportHeight) {
           adjustedY = 10;
         }
       }
 
-      // 3. Если всё ещё вылезает за правый край
       if (adjustedX + rect.width > viewportWidth) {
         adjustedX = Math.max(10, viewportWidth - rect.width - 10);
       }
 
-      // 4. Если всё ещё вылезает за нижний край
       if (adjustedY + rect.height > viewportHeight) {
         adjustedY = Math.max(10, viewportHeight - rect.height - 10);
       }
@@ -96,7 +82,6 @@ export const ContextMenuContent = ({ items, position, onClose }: Props) => {
       setReady(true);
     };
 
-    // Даем React отрендерить меню с нулевой прозрачностью, потом корректируем
     requestAnimationFrame(() => {
       requestAnimationFrame(adjust);
     });
@@ -106,7 +91,7 @@ export const ContextMenuContent = ({ items, position, onClose }: Props) => {
     <div
       ref={menuRef}
       className={cn(
-        "fixed z-50 max-w-[250px] min-w-[250px] overflow-hidden rounded-md bg-white shadow-lg transition-opacity",
+        "fixed z-50 max-w-[250px] min-w-[250px] overflow-hidden rounded-md bg-white shadow-[0_2px_12px_0_rgba(0,0,0,0.2)] transition-opacity",
         !ready && "pointer-events-none opacity-0",
       )}
       style={{ left: coords.x, top: coords.y }}
@@ -118,7 +103,7 @@ export const ContextMenuContent = ({ items, position, onClose }: Props) => {
             item.onClick();
             onClose();
           }}
-          className={`space-x-full subtext border-light-gray flex w-full items-center justify-between gap-1.5 border-b px-4 py-2.5 text-left transition-colors last:border-0 hover:bg-gray-100 ${
+          className={`space-x-full subtext border-light-gray flex w-full cursor-pointer items-center justify-between gap-1.5 border-b px-4 py-2.5 text-left transition-colors last:border-0 hover:bg-gray-100 ${
             item.destructive ? "text-error" : "text-black"
           }`}
         >
@@ -126,7 +111,7 @@ export const ContextMenuContent = ({ items, position, onClose }: Props) => {
           {item.icon && (
             <item.icon
               className={cn(
-                "text-gray min-h-6 w-auto object-contain",
+                "text-gray h-min max-h-5 min-h-5 w-min max-w-5 min-w-5",
                 item.destructive && "text-error",
               )}
             />
