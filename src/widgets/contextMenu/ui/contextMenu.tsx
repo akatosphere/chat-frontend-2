@@ -1,62 +1,46 @@
-"use client";
+import { cn } from "@/shared/shadcn/lib/utils";
 
-import { createContext, ReactNode, useContext, useState } from "react";
-import { createPortal } from "react-dom";
+import { MenuItem } from "./contextMenuProvider";
 
-import { ContextMenuContent } from "./contextMenuContent";
-
-export type MenuItem = {
-  label: string;
-  icon?: React.ReactNode;
-  onClick: () => void;
-  destructive?: boolean; // для красных пунктов
-};
-
-export type ContextMenuState = {
-  isOpen: boolean;
-  position: { x: number; y: number };
+type ContextMenuProps = {
   items: MenuItem[];
+  onClose?: () => void;
+  className?: string;
+  style?: React.CSSProperties;
 };
 
-const contextMenuContext = createContext<{
-  openMenu: (menuId: string, items: MenuItem[], x: number, y: number) => void;
-  closeMenu: () => void;
-  activeMenuId: string | null;
-}>({
-  openMenu: () => {},
-  closeMenu: () => {},
-  activeMenuId: null,
-});
-
-export const ContextMenuProvider = ({ children }: { children: ReactNode }) => {
-  const [state, setState] = useState<ContextMenuState>({
-    isOpen: false,
-    position: { x: 0, y: 0 },
-    items: [],
-  });
-
-  const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
-
-  const openMenu = (menuId: string, items: MenuItem[], x: number, y: number) => {
-    setActiveMenuId(menuId);
-    setState({ isOpen: true, position: { x, y }, items });
-  };
-
-  const closeMenu = () => {
-    setActiveMenuId(null);
-    setState((prev) => ({ ...prev, isOpen: false }));
-  };
-
+export const ContextMenu = ({ items, onClose, className, style }: ContextMenuProps) => {
   return (
-    <contextMenuContext.Provider value={{ openMenu, closeMenu, activeMenuId }}>
-      {children}
-      {state.isOpen &&
-        createPortal(
-          <ContextMenuContent items={state.items} position={state.position} onClose={closeMenu} />,
-          document.body,
-        )}
-    </contextMenuContext.Provider>
+    <div
+      className={cn(
+        "max-w-[250px] min-w-[250px] overflow-hidden rounded-md bg-white shadow-[0_2px_12px_0_rgba(0,0,0,0.2)]",
+        className,
+      )}
+      style={style}
+    >
+      {items.map((item, i) => (
+        <button
+          key={i}
+          onClick={() => {
+            item.onClick();
+            onClose?.();
+          }}
+          className={cn(
+            "space-x-full subtext border-light-gray flex w-full cursor-pointer items-center justify-between gap-1.5 border-b px-4 py-2.5 text-left transition-colors last:border-0 hover:bg-gray-100",
+            item.destructive ? "text-error" : "text-black",
+          )}
+        >
+          <span>{item.label}</span>
+          {item.icon && (
+            <item.icon
+              className={cn(
+                "text-gray h-min max-h-5 min-h-5 w-min max-w-5 min-w-5",
+                item.destructive && "text-error",
+              )}
+            />
+          )}
+        </button>
+      ))}
+    </div>
   );
 };
-
-export const useContextMenu = () => useContext(contextMenuContext);

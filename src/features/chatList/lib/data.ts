@@ -73,7 +73,7 @@ export const mockChats: ChatListResponse = {
         uid: "m2",
         from_user: "2",
         content: "Привет. Я оставил две стерманки и два шуруповёрта. Один в кейсе, а др...",
-        new: false,
+        new: true,
         has_forwarded_message: true,
         created_at: Date.now() / 1000 - 120,
         updated_at: Date.now() / 1000 - 120,
@@ -137,7 +137,7 @@ export const mockChats: ChatListResponse = {
       last_message: {
         id: 107,
         uid: "m7",
-        from_user: "me",
+        from_user: "7",
         content: "Сходили в парк прогуляться. Смотри какая красота!",
         files_summary: { types: ["jpg", "mp4"], count: 2 },
         // has_forwarded_message: true,
