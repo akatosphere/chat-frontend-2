@@ -68,9 +68,7 @@ export const GroupTypeSelect = ({ value, onChange, label = "Тип группы"
         </span>
       </button>
 
-      <div
-        className={["mt-2 rounded-2xl shadow-sm", open ? "flex" : "desktop:hidden flex"].join(" ")}
-      >
+      <div className={["mt-2 rounded-2xl", open ? "flex" : "desktop:hidden flex"].join(" ")}>
         <div className="flex flex-col">
           {options.map((opt, index) => {
             const checked = opt.value === value;

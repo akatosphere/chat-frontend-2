@@ -1,5 +1,7 @@
 // wsClient.ts
+import { v4 as uuidv4 } from "uuid";
 
+import { useWSRequestStore } from "../model/wsRequest.store";
 import { WSBaseResponse } from "../types/wsTypes";
 
 type WSStatus = "idle" | "connecting" | "connected" | "reconnecting" | "closed";
@@ -75,6 +77,32 @@ const attachHandlers = (ws: WebSocket) => {
     // чтобы гарантированно попасть в onclose
     ws.close();
   };
+};
+
+export const sendWSRequest = <TResponse>(action: string, payload: unknown): Promise<TResponse> => {
+  const socket = getSocket();
+
+  if (!socket || socket.readyState !== WebSocket.OPEN) {
+    // Вместо простого throw можно сделать более умную логику (например, очередь)
+    // Но для начала — просто ошибка, как и было
+    return Promise.reject(new Error("WebSocket is not connected"));
+  }
+
+  const request_uid = uuidv4();
+
+  const message = {
+    action,
+    request_uid,
+    object: payload,
+  };
+
+  // Регистрируем ожидание ответа в сторе
+  const promise = useWSRequestStore.getState().trackRequest<TResponse>(request_uid);
+
+  // Отправляем
+  socket.send(JSON.stringify(message));
+
+  return promise;
 };
 
 const scheduleReconnect = () => {

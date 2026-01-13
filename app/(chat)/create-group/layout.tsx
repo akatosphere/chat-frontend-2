@@ -6,10 +6,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <>
       <Sidebar className="desktop:flex desktop:bg-main-light-gray bg-white">{children}</Sidebar>
 
-      <MainContent className="desktop:flex hidden">
-        <span className="desktop:flex text text-gray hidden h-full items-center justify-center">
-          Выберите контакт для начала общения
-        </span>
+      <MainContent className="desktop:flex text text-gray hidden h-full items-center justify-center">
+        <span>Выберите контакт для начала общения</span>
       </MainContent>
     </>
   );
