@@ -68,10 +68,12 @@ export const GroupTypeSelect = ({ value, onChange, label = "Тип группы"
       </button>
 
       {open && (
-        <div className="mt-2 rounded-2xl bg-white p-4 shadow-sm">
-          <div className="flex flex-col gap-4">
-            {options.map((opt) => {
+        <div className="mt-2 rounded-2xl bg-white shadow-sm">
+          <div className="flex flex-col">
+            {options.map((opt, index) => {
               const checked = opt.value === value;
+
+              const roundedClass = index === 0 ? "rounded-t-2xl" : "rounded-b-2xl";
 
               return (
                 <button
@@ -81,7 +83,7 @@ export const GroupTypeSelect = ({ value, onChange, label = "Тип группы"
                     onChange(opt.value);
                     setOpen(false);
                   }}
-                  className="flex w-full items-start gap-4 text-left"
+                  className={`${roundedClass} hover:bg-primary-gray smooth flex w-full items-start bg-white p-4 text-left`}
                 >
                   <span
                     className={[
@@ -94,9 +96,7 @@ export const GroupTypeSelect = ({ value, onChange, label = "Тип группы"
 
                   <span className="flex flex-col">
                     <span className="text-base">{opt.title}</span>
-                    <span className="text-muted-foreground text-sm leading-snug">
-                      {opt.description}
-                    </span>
+                    <span className="text-gray text-sm leading-snug">{opt.description}</span>
                   </span>
                 </button>
               );
