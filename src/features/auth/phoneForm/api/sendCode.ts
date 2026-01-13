@@ -1,4 +1,4 @@
-import api from "@/shared/api/apiClient";
+import { apiClient } from "@/shared/api/apiClient";
 import { errorHandler } from "@/shared/api/errorHandler";
 import { Result } from "@/shared/api/types";
 
@@ -14,7 +14,7 @@ export interface SendCodeSuccess {
 
 export const sendCode = async (data: SendCodeData): Promise<Result<SendCodeSuccess>> => {
   try {
-    const { data: response } = await api.post<SendCodeSuccess>(
+    const { data: response } = await apiClient.post<SendCodeSuccess>(
       "/api/v1/auth/messenger/login/get/code/",
       data,
     );

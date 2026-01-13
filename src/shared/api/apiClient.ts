@@ -1,5 +1,6 @@
-import axios, { AxiosError, AxiosHeaders, AxiosInstance, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosHeaders, InternalAxiosRequestConfig } from "axios";
 
+import { API_CONFIG } from "./base";
 import { logout } from "./logout";
 import { useAuthStore } from "./store";
 
@@ -7,10 +8,7 @@ interface CustomConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
-export const api: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  timeout: 15_000,
-});
+export const apiClient = axios.create(API_CONFIG);
 
 let isRefreshing = false;
 let failedQueue: Array<{
@@ -27,7 +25,7 @@ const processQueue = (error: Error | null, token: string | null = null) => {
 };
 
 // Request Interceptor — берём токен ТОЛЬКО из Zustand
-api.interceptors.request.use(async (config) => {
+apiClient.interceptors.request.use(async (config) => {
   const state = useAuthStore.getState();
 
   // Если приложение еще не инициализировано (идет первый рефреш)
@@ -55,7 +53,7 @@ api.interceptors.request.use(async (config) => {
 });
 
 // Response Interceptor — рефреш + очередь + обновление Zustand
-api.interceptors.response.use(
+apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const config = error.config as CustomConfig;
@@ -72,7 +70,7 @@ api.interceptors.response.use(
       })
         .then((token) => {
           config.headers?.set("Authorization", `Bearer ${token}`);
-          return api(config);
+          return apiClient(config);
         })
         .catch((err) => Promise.reject(err));
     }
@@ -95,7 +93,7 @@ api.interceptors.response.use(
       processQueue(null, newAccessToken);
 
       config.headers?.set("Authorization", `Bearer ${newAccessToken}`);
-      return api(config);
+      return apiClient(config);
     } catch (err) {
       logout();
       window.location.href = "/auth";
@@ -108,4 +106,4 @@ api.interceptors.response.use(
   },
 );
 
-export default api;
+export default apiClient;

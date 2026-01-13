@@ -1,6 +1,6 @@
 import z from "zod";
 
-import api from "@/shared/api/apiClient";
+import { apiClient } from "@/shared/api/apiClient";
 import { errorHandler } from "@/shared/api/errorHandler";
 import { Result } from "@/shared/api/types";
 
@@ -67,7 +67,10 @@ export const MessengerProfileSchema = z.object({
 
 export const getMessengerProfile = async (): Promise<Result<MessengerProfileResponse>> => {
   try {
-    const result = await api.post<MessengerProfileResponse>("/api/v1/auth/messenger/profile/", {});
+    const result = await apiClient.post<MessengerProfileResponse>(
+      "/api/v1/auth/messenger/profile/",
+      {},
+    );
     return { success: true, data: result.data };
   } catch (error) {
     console.log(error);
@@ -79,7 +82,7 @@ export const updateMessengerProfile = async (
   data: z.infer<typeof MessengerProfileSchema>,
 ): Promise<Result<MessengerProfileResponse>> => {
   try {
-    const { data: response } = await api.post<MessengerProfileResponse>(
+    const { data: response } = await apiClient.post<MessengerProfileResponse>(
       "/api/v1/auth/messenger/profile/",
       data,
     );

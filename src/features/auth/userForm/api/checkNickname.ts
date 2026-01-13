@@ -1,6 +1,6 @@
 import z from "zod";
 
-import api from "@/shared/api/apiClient";
+import { apiClient } from "@/shared/api/apiClient";
 import { errorHandler } from "@/shared/api/errorHandler";
 import { Result } from "@/shared/api/types";
 
@@ -16,7 +16,7 @@ export const checkNickname = async (
   data: CheckNicknameData,
 ): Promise<Result<CheckNicknameResponse>> => {
   try {
-    const result = await api.get<CheckNicknameResponse>(
+    const result = await apiClient.get<CheckNicknameResponse>(
       `/api/v1/auth/messenger/profile/unique_nickname_check/${data}/`,
       {},
     );

@@ -1,6 +1,6 @@
 import z from "zod";
 
-import api from "@/shared/api/apiClient";
+import { apiClient } from "@/shared/api/apiClient";
 import { errorHandler } from "@/shared/api/errorHandler";
 import { Result } from "@/shared/api/types";
 
@@ -15,7 +15,10 @@ export const sendSupport = async (
   data: z.infer<typeof supportSchema>,
 ): Promise<Result<SendCodeSuccess>> => {
   try {
-    const { data: response } = await api.post<SendCodeSuccess>("/api/v1/service/message/", data);
+    const { data: response } = await apiClient.post<SendCodeSuccess>(
+      "/api/v1/service/message/",
+      data,
+    );
 
     return { success: true, data: response };
   } catch (error) {

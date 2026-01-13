@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Noto_Color_Emoji, Roboto } from "next/font/google";
 import localFont from "next/font/local";
+import { cookies } from "next/headers";
 
 import { SITE_TITLE } from "@/shared/lib/constants/siteInfo";
 import { AuthProvider } from "@/shared/providers/authProvider";
@@ -33,17 +34,19 @@ export const appleColorEmoji = localFont({
   variable: "--font-apple-color-emoji",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("accessToken")?.value || null;
   return (
     <html lang="ru">
       <body
         className={`${roboto.variable} ${notoColorEmoji.variable} ${appleColorEmoji.variable} font-sans antialiased`}
       >
-        <AuthProvider>
+        <AuthProvider initialToken={token}>
           <WSProvider>
             <IsMobileProvider>{children}</IsMobileProvider>
           </WSProvider>

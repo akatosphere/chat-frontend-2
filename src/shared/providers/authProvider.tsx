@@ -1,4 +1,3 @@
-// components/providers/auth-provider.tsx
 "use client";
 
 import { usePathname } from "next/navigation";
@@ -6,7 +5,7 @@ import { useEffect } from "react";
 
 import { useAuthStore } from "../api/store";
 
-// Список публичных путей, где рефреш не нужен
+// Список публичных путей (ваша исходная логика)
 const PUBLIC_ROUTES = [
   "/auth",
   "/auth/phone",
@@ -15,40 +14,62 @@ const PUBLIC_ROUTES = [
   "/auth/support/success",
 ];
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+interface AuthProviderProps {
+  children: React.ReactNode;
+  initialToken: string | null;
+}
+
+export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
   const pathname = usePathname();
-  const { isInitialized, finishInitialization, setAccessToken } = useAuthStore();
+  // Берем только нужные функции (не берем всё состояние, чтобы не было лишних ререндеров)
+  const syncToken = useAuthStore((s) => s.syncToken);
+  const finishInitialization = useAuthStore((s) => s.finishInitialization);
+  const isInitialized = useAuthStore((s) => s.isInitialized);
 
   useEffect(() => {
-    // Проверяем, является ли текущий путь публичным
+    // 1. Синхронизируем токен, полученный от SSR
+    if (initialToken) {
+      syncToken(initialToken);
+    }
+
     const isPublicRoute = pathname ? PUBLIC_ROUTES.includes(pathname) : false;
 
     if (isPublicRoute) {
-      finishInitialization(); // Просто помечаем готовым без запроса
+      finishInitialization();
       return;
     }
 
+    // 2. Если токена нет, пробуем рефреш
     const initAuth = async () => {
-      try {
-        const res = await fetch("/api/refresh-token", {
-          method: "POST",
-          credentials: "include",
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setAccessToken(data.access);
+      if (!initialToken) {
+        try {
+          const res = await fetch("/api/refresh-token", {
+            method: "POST",
+            credentials: "include",
+          });
+          if (res.ok) {
+            const data = await res.json();
+            // Здесь используем syncToken, так как сервер уже сам обновит куки
+            // при запросе к /api/refresh-token (если вы так настроили)
+            syncToken(data.access);
+          }
+        } catch (e) {
+          console.error(e);
         }
-      } finally {
-        finishInitialization();
       }
+      finishInitialization();
     };
 
     initAuth();
-  }, []);
+  }, [initialToken, pathname, syncToken, finishInitialization]);
 
-  // Для публичных маршрутов мы можем рендерить детей сразу,
-  // либо всё равно ждать флага, но он выставится мгновенно.
-  if (!isInitialized) return null;
+  const isPublicRoute = pathname ? PUBLIC_ROUTES.includes(pathname) : false;
+
+  // Если мы еще не готовы, показываем ничего или лоадер
+  // НО: если у нас есть initialToken, мы можем разрешить рендер сразу!
+  if (!isInitialized && !initialToken && !isPublicRoute) {
+    return null;
+  }
 
   return <>{children}</>;
 };

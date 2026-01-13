@@ -1,4 +1,4 @@
-import api from "./apiClient";
+import { apiClient } from "./apiClient";
 import { useAuthStore } from "./store";
 
 export const logout = async () => {
@@ -10,7 +10,7 @@ export const logout = async () => {
 
   // чистим access token
   store.clearAccessToken();
-  delete api.defaults.headers.common["Authorization"];
+  delete apiClient.defaults.headers.common["Authorization"];
 
   // чистим client-side куки
   document.cookie = "is_filled=false; path=/";
