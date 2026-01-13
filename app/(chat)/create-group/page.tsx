@@ -1,12 +1,14 @@
 import { CreateGroupForm } from "@/features/createGroup/ui/createGroupForm";
+import { SidebarContainer } from "@/shared/ui/sidebarContainer";
+import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
-export default function ChatsPage() {
+export default function CreateGroupPage() {
   return (
     <>
-      <CreateGroupForm className="desktop:hidden flex h-full min-h-0 flex-col" />
-      <span className="desktop:flex text text-gray hidden h-full items-center justify-center">
-        Выберите контакт для начала общения
-      </span>
+      <SidebarHeader title="Создать группу" backButton />
+      <SidebarContainer className="">
+        <CreateGroupForm className="" />
+      </SidebarContainer>
     </>
   );
 }

@@ -51,7 +51,7 @@ export const GroupTypeSelect = ({ value, onChange, label = "Тип группы"
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex h-14 w-full items-center justify-between rounded-2xl bg-white px-5"
+        className="desktop:flex hidden h-14 w-full items-center justify-between rounded-2xl bg-white px-5"
       >
         <span className="text-base">{selected.title}</span>
         <span className={open ? "rotate-180 transition-transform" : "transition-transform"}>
@@ -61,49 +61,51 @@ export const GroupTypeSelect = ({ value, onChange, label = "Тип группы"
             viewBox="0 0 12 8"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="rotate-180"
           >
             <path d="M1.41 7.41L6 2.83L10.59 7.41L12 6L6 0L0 6L1.41 7.41Z" fill="#747474" />
           </svg>
         </span>
       </button>
 
-      {open && (
-        <div className="mt-2 rounded-2xl bg-white shadow-sm">
-          <div className="flex flex-col">
-            {options.map((opt, index) => {
-              const checked = opt.value === value;
+      <div
+        className={["mt-2 rounded-2xl shadow-sm", open ? "flex" : "desktop:hidden flex"].join(" ")}
+      >
+        <div className="flex flex-col">
+          {options.map((opt, index) => {
+            const checked = opt.value === value;
 
-              const roundedClass = index === 0 ? "rounded-t-2xl" : "rounded-b-2xl";
+            const roundedClass =
+              index === 0 ? "rounded-t-2xl pt-2 pb-1.5" : "rounded-b-2xl pt-1.5 pb-2";
 
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => {
-                    onChange(opt.value);
-                    setOpen(false);
-                  }}
-                  className={`${roundedClass} hover:bg-primary-gray smooth flex w-full items-start bg-white p-4 text-left`}
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => {
+                  onChange(opt.value);
+                  setOpen(false);
+                }}
+                className={`${roundedClass} hover:bg-primary-gray smooth desktop:bg-white bg-main-light-gray flex w-full items-center gap-4 px-4 text-left`}
+              >
+                <span
+                  className={[
+                    "mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full",
+                    checked ? "border-primary border-2" : "border-muted border",
+                  ].join(" ")}
                 >
-                  <span
-                    className={[
-                      "mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full",
-                      checked ? "border-primary border-2" : "border-muted border",
-                    ].join(" ")}
-                  >
-                    {checked && <span className="bg-primary h-3 w-3 rounded-full" />}
-                  </span>
+                  {checked && <span className="bg-primary h-3 w-3 rounded-full" />}
+                </span>
 
-                  <span className="flex flex-col">
-                    <span className="text-base">{opt.title}</span>
-                    <span className="text-gray text-sm leading-snug">{opt.description}</span>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+                <span className="flex flex-col">
+                  <span className="text-base">{opt.title}</span>
+                  <span className="text-gray text-sm leading-snug">{opt.description}</span>
+                </span>
+              </button>
+            );
+          })}
         </div>
-      )}
+      </div>
     </div>
   );
 };

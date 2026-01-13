@@ -52,7 +52,7 @@ export const Field = ({ name, title, maxLength, position, className }: FieldProp
         position === "upper"
           ? "rounded-t-lg rounded-b-none border-b"
           : "rounded-t-none rounded-b-lg border-t",
-        "group border-muted relative flex h-min w-full bg-white",
+        "group border-muted desktop:bg-white bg-main-light-gray relative flex h-min w-full",
         className,
       )}
     >

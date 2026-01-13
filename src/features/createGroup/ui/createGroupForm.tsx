@@ -8,7 +8,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { EditPhotoForm } from "@/shared/form/ui/editPhotoForm";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
-import { BackButton } from "@/shared/ui/backButton";
 
 import { createGroup } from "../api/ws";
 import { mapGroupType } from "../model/mapping";
@@ -24,12 +23,14 @@ type CreateGroupFormProps = {
 export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) => {
   const [groupType, setGroupType] = useState<"open" | "closed">("closed");
   const form = useForm({
+    mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
     },
   });
+  const { isValid, isSubmitting } = form.formState;
   const router = useRouter();
 
   const onSubmit = async (data: CreateGroupFormValues) => {
@@ -54,13 +55,7 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
   };
 
   return (
-    <section className={cn("px-4", className)}>
-      <div className="border-b-muted mb-4 flex h-14 items-center gap-2 border-b">
-        <BackButton href="/chats" />
-
-        <h2 className="text-tight font-medium">Создать группу</h2>
-      </div>
-
+    <section className={cn("", className)}>
       <div className="flex justify-center">
         <EditPhotoForm />
       </div>
@@ -72,7 +67,13 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
           </div>
           <GroupTypeSelect value={groupType} onChange={setGroupType} />
 
-          <Button variant="default" size="md" type="submit">
+          <Button
+            variant="default"
+            size="md"
+            type="submit"
+            className="mt-4"
+            disabled={!isValid || isSubmitting}
+          >
             Создать
           </Button>
         </form>
