@@ -12,7 +12,7 @@ export const CreateGroupBtn: React.FC<CreateGroupBtnProps> = ({ className }) => 
   return (
     <Button asChild variant="ghost" size="icon-auto" className={cn(className)}>
       <Link href="/create-group">
-        <CreateGroup className="h-11 w-11" />
+        <CreateGroup className="text-primary h-6 w-6" />
       </Link>
     </Button>
   );

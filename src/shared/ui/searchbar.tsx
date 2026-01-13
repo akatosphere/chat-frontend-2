@@ -26,7 +26,7 @@ export const Searchbar: React.FC<SearchbarProps> = ({ className, onChange, value
   };
 
   return (
-    <div className={cn("flex flex-row gap-2", className)}>
+    <div className={cn("flex flex-row gap-4", className)}>
       <div className="relative flex-1">
         <Input
           ref={inputRef}
