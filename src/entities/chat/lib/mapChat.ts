@@ -32,18 +32,20 @@ export interface MappedChatDetails {
  * Функция-маппер
  */
 export const mapChatDetails = (raw: ChatDetails): MappedChatDetails => {
-  // Выносим обработку сообщения отдельно.
-  // Это убирает вложенный тернарный оператор из return,
-  // и линтер перестает путаться в отступах.
-  const lastMessageData = raw.last_message
-    ? {
-        text: raw.last_message.content,
-        sender: raw.last_message.from_user,
-        createdAt: raw.last_message.created_at,
-        hasFiles: raw.last_message.files_list.length > 0,
-      }
-    : null;
+  // 1. Используем let и обычный if вместо тернарного оператора.
+  // Это самый надежный способ избежать проблем с отступами.
+  let lastMessageData: MappedChatDetails["lastMessage"] = null;
 
+  if (raw.last_message) {
+    lastMessageData = {
+      text: raw.last_message.content,
+      sender: raw.last_message.from_user,
+      createdAt: raw.last_message.created_at,
+      hasFiles: raw.last_message.files_list.length > 0,
+    };
+  }
+
+  // 2. Возвращаем объект
   return {
     id: raw.id,
     uid: raw.chat.uid,
@@ -56,7 +58,6 @@ export const mapChatDetails = (raw: ChatDetails): MappedChatDetails => {
     unreadCount: raw.new_message_count,
     totalMessages: raw.message_count,
 
-    // Теперь здесь простая переменная
     lastMessage: lastMessageData,
 
     membersCount: raw.participants.length,
