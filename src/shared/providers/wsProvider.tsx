@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-import { chatWSHandler } from "@/entities/chat/model/wsHandler";
 import { useAuthStore } from "@/shared/api/store";
 import { connectWS, disconnectWS, subscribeToWS } from "@/shared/api/wsClient";
 
@@ -22,7 +21,6 @@ export const WSProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       // 2. Затем пробрасываем в роутеры
-      chatWSHandler(data);
     });
 
     return () => unsubscribe();

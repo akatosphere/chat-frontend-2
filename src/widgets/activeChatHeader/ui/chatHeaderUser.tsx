@@ -8,14 +8,18 @@ import { UserStatus } from "../model/types";
 
 type Props = {
   name: string;
-  status: UserStatus;
+  status: UserStatus | string;
   photo?: string;
   onPhotoClick: () => void;
   onInfoClick: () => void;
 };
 
 export const ChatHeaderUser = ({ name, status, photo, onPhotoClick, onInfoClick }: Props) => {
-  const statusData = STATUS_CONFIG[status];
+  const isSystemStatus = status in STATUS_CONFIG;
+
+  const statusData = isSystemStatus
+    ? STATUS_CONFIG[status as UserStatus]
+    : { label: status, className: "text-gray" }; // Дефолтный стиль для "5 участников"
 
   return (
     <div className="border-light-gray desktop:border-none flex h-[60px] min-w-0 flex-1 items-center gap-3 border-b">

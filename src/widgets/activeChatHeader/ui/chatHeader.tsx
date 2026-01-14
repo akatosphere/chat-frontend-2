@@ -8,7 +8,7 @@ import { ChatHeaderUser } from "./chatHeaderUser";
 
 type Props = {
   name: string;
-  status: UserStatus;
+  status: UserStatus | string;
   photo?: string;
   backHref: string;
   onCallClick: () => void;

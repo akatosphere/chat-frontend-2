@@ -42,8 +42,8 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
         uid_users_list: [], // пока только создатель
       });
       if (response.status === "OK") {
-        const chatId = response.object.chat_id; // Используем chat_id из вашего JSON
-        router.push(`/chats/${chatId}`);
+        const chatKey = response.object.chat_key;
+        router.push(`/chats/${chatKey}`);
       } else {
         // Обработка ошибки, если статус не "OK"
         console.error("Ошибка сервера:", response.error);

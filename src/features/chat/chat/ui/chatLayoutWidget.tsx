@@ -1,22 +1,29 @@
 "use client";
 
+import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { mapApiMessage } from "@/features/chat/chat/lib/mapper";
 import { mockMessagesPage } from "@/features/chat/chat/lib/mock";
 import { Message } from "@/features/chat/chat/model/types";
 import { ChatWidget } from "@/features/chat/chat/ui/chatWidget";
+import { pluralize } from "@/shared/lib/pluralize";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ChatHeader } from "@/widgets/activeChatHeader/ui/chatHeader";
 
-import { mockChats } from "../lib/data";
+import { mockChats } from "../../../chatList/lib/data";
 
 type ChatWidgetProps = {
   className?: string;
-  chatId: string;
+  chatKey: string;
+  initialData: MappedChatDetails;
 };
 
 // const CURRENT_USER_UID = "user-1"; // временно, потом из api
 
-export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({ className, chatId }) => {
+export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({
+  className,
+  chatKey,
+  initialData,
+}) => {
   // const [messages, setMessages] = useState<Message[]>([]);
   // const [sender, setSender] = useState<User | null>(null);
   // const [receiver, setReceiver] = useState<User | null>(null);
@@ -44,6 +51,20 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({ className, chatId 
   // if(!sender || !receiver) {
   //   return null;
   // }
+  // Определяем текст статуса
+  const getStatusText = () => {
+    // Если это группа или канал — показываем кол-во участников
+    if (
+      initialData.type === "private-group" ||
+      initialData.type === "public-group" ||
+      initialData.type === "channel"
+    ) {
+      return `${initialData.membersCount + 1} ${pluralize(initialData.membersCount + 1, "участник", "участника", "участников")}`;
+    }
+
+    // Если это личный чат — пока оставляем "online" (в будущем будет приходить из WS)
+    return "online";
+  };
 
   const sender = {
     uid: "user-1",
@@ -54,21 +75,21 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({ className, chatId 
     nickname: "",
   };
 
-  const receiver = mockChats.results.find((chat) => chat.id === +chatId)?.chat;
+  const receiver = mockChats.results.find((chat) => chat.id === +chatKey)?.chat;
   const testMessages = mockMessagesPage.results;
   const messages: Message[] =
-    chatId === "3" ? testMessages.map((apiMessage) => mapApiMessage(apiMessage, sender.uid)) : [];
+    chatKey === "3" ? testMessages.map((apiMessage) => mapApiMessage(apiMessage, sender.uid)) : [];
 
-  const username =
-    (receiver?.first_name ? receiver?.first_name : "") +
-    " " +
-    (receiver?.last_name ? receiver?.last_name : "");
+  // const username =
+  //   (receiver?.first_name ? receiver?.first_name : "") +
+  //   " " +
+  //   (receiver?.last_name ? receiver?.last_name : "");
 
   return (
     <div className={cn("desktop:h-full flex h-dvh w-full flex-col", className)}>
       <ChatHeader
-        name={username}
-        status={"online"}
+        name={initialData.title}
+        status={getStatusText()}
         backHref="/chats"
         photo={receiver?.avatar_url || ""}
         onCallClick={() => {}}
