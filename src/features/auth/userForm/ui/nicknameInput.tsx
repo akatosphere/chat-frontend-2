@@ -3,10 +3,10 @@
 import { useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
+import { checkNickname } from "@/entities/user/api/checkNickname";
 import { FormInput } from "@/shared/form/ui/formInput";
 import { cn } from "@/shared/shadcn/lib/utils";
 
-import { checkNickname } from "../api/checkNickname";
 import { nicknameSchema } from "../model/validation";
 import { UserFormData } from "../model/validation";
 

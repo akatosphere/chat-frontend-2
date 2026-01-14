@@ -1,3 +1,5 @@
+"use client";
+
 import { getSocket } from "@/shared/api/wsClient";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";

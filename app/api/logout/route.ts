@@ -12,5 +12,20 @@ export const POST = async () => {
     maxAge: 0,
   });
 
+  res.cookies.set({
+    name: "accessToken",
+    value: "",
+    httpOnly: false,
+    path: "/",
+    maxAge: 0,
+  });
+
+  res.cookies.set({
+    name: "phone",
+    value: "",
+    path: "/",
+    maxAge: 0,
+  });
+
   return res;
 };

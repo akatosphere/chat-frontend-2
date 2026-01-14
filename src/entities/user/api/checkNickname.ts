@@ -1,10 +1,9 @@
 import z from "zod";
 
+import { nicknameSchema } from "@/features/auth/userForm/model/validation";
 import { apiClient } from "@/shared/api/apiClient";
 import { errorHandler } from "@/shared/api/errorHandler";
 import { Result } from "@/shared/api/types";
-
-import { nicknameSchema } from "../model/validation";
 
 export type CheckNicknameData = z.infer<typeof nicknameSchema>;
 

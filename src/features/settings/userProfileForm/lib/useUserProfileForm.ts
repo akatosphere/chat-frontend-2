@@ -2,8 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useState } from "react";
 
-import { uploadAvatar } from "@/features/auth/userForm/api/changeAvatar";
-import { MessengerProfileResponse } from "@/features/auth/userForm/api/updateUserProfile";
+import { uploadAvatar } from "@/entities/user/api/changeAvatar";
+import { MessengerProfileResponse } from "@/entities/user/api/updateUserProfile";
 
 import { getDefaultBirthday } from "./getDefaultBirthday";
 

@@ -8,7 +8,7 @@ import {
   getMessengerProfile,
   MessengerProfileSchema,
   updateMessengerProfile,
-} from "@/features/auth/userForm/api/updateUserProfile";
+} from "@/entities/user/api/updateUserProfile";
 import { UserProfileForm } from "@/features/settings/userProfileForm/ui/userProfileForm";
 
 import { ProfilePageClientSkeleton } from "./profilePageClientSkeleton";
