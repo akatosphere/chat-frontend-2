@@ -4,7 +4,7 @@ export const getProfileServer = async () => {
   try {
     const api = await getApiServer();
 
-    const res = await api.get("/api/v1/messenger/profile/");
+    const res = await api.post("/api/v1/auth/messenger/profile/");
 
     return { success: true, data: res.data };
   } catch {
