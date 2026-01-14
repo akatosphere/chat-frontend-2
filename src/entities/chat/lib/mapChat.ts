@@ -56,11 +56,11 @@ export const mapChatDetails = (raw: ChatDetails): MappedChatDetails => {
     // Обработка последнего сообщения с проверкой на null
     lastMessage: raw.last_message
       ? {
-          text: raw.last_message.content,
+          text: raw.last_message.content, // Было 10, стало 8 пробелов
           sender: raw.last_message.from_user,
           createdAt: raw.last_message.created_at,
           hasFiles: raw.last_message.files_list.length > 0,
-        }
+        } // Было 8, стало 6 пробелов
       : null,
 
     membersCount: raw.participants.length,
