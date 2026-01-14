@@ -2,7 +2,6 @@ import { ChatDetails } from "../model/schema";
 
 /**
  * Интерфейс, который будет использовать фронтенд (UI)
- * Избавляемся от лишней вложенности и snake_case
  */
 export interface MappedChatDetails {
   id: number;
@@ -12,27 +11,19 @@ export interface MappedChatDetails {
   type: "private-group" | "public-group" | "channel";
   description: string;
   avatar: string | null;
-
-  // Информация о счетчиках
   unreadCount: number;
   totalMessages: number;
-
-  // Упрощенная информация о последнем сообщении
   lastMessage: {
     text: string;
     sender: string;
     createdAt: number;
     hasFiles: boolean;
   } | null;
-
-  // Участники
   membersCount: number;
   members: Array<{
     uid: string;
     name: string;
   }>;
-
-  // Настройки
   isFavorite: boolean;
   isNotificationsEnabled: boolean;
 }
@@ -41,6 +32,18 @@ export interface MappedChatDetails {
  * Функция-маппер
  */
 export const mapChatDetails = (raw: ChatDetails): MappedChatDetails => {
+  // Выносим обработку сообщения отдельно.
+  // Это убирает вложенный тернарный оператор из return,
+  // и линтер перестает путаться в отступах.
+  const lastMessageData = raw.last_message
+    ? {
+        text: raw.last_message.content,
+        sender: raw.last_message.from_user,
+        createdAt: raw.last_message.created_at,
+        hasFiles: raw.last_message.files_list.length > 0,
+      }
+    : null;
+
   return {
     id: raw.id,
     uid: raw.chat.uid,
@@ -53,15 +56,8 @@ export const mapChatDetails = (raw: ChatDetails): MappedChatDetails => {
     unreadCount: raw.new_message_count,
     totalMessages: raw.message_count,
 
-    // Обработка последнего сообщения с проверкой на null
-    lastMessage: raw.last_message
-      ? {
-          text: raw.last_message.content, // Было 10, стало 8 пробелов
-          sender: raw.last_message.from_user,
-          createdAt: raw.last_message.created_at,
-          hasFiles: raw.last_message.files_list.length > 0,
-        } // Было 8, стало 6 пробелов
-      : null,
+    // Теперь здесь простая переменная
+    lastMessage: lastMessageData,
 
     membersCount: raw.participants.length,
     members: raw.participants.map((p) => ({
