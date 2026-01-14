@@ -8,7 +8,7 @@ interface CustomConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
-export const apiClient = axios.create(API_CONFIG);
+export const getApiClient = axios.create(API_CONFIG);
 
 let isRefreshing = false;
 let failedQueue: Array<{
@@ -25,7 +25,7 @@ const processQueue = (error: Error | null, token: string | null = null) => {
 };
 
 // Request Interceptor — берём токен ТОЛЬКО из Zustand
-apiClient.interceptors.request.use(async (config) => {
+getApiClient.interceptors.request.use(async (config) => {
   const state = useAuthStore.getState();
 
   // Если приложение еще не инициализировано (идет первый рефреш)
@@ -53,7 +53,7 @@ apiClient.interceptors.request.use(async (config) => {
 });
 
 // Response Interceptor — рефреш + очередь + обновление Zustand
-apiClient.interceptors.response.use(
+getApiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const config = error.config as CustomConfig;
@@ -70,7 +70,7 @@ apiClient.interceptors.response.use(
       })
         .then((token) => {
           config.headers?.set("Authorization", `Bearer ${token}`);
-          return apiClient(config);
+          return getApiClient(config);
         })
         .catch((err) => Promise.reject(err));
     }
@@ -93,7 +93,7 @@ apiClient.interceptors.response.use(
       processQueue(null, newAccessToken);
 
       config.headers?.set("Authorization", `Bearer ${newAccessToken}`);
-      return apiClient(config);
+      return getApiClient(config);
     } catch (err) {
       logout();
       window.location.href = "/auth";
@@ -106,4 +106,4 @@ apiClient.interceptors.response.use(
   },
 );
 
-export default apiClient;
+export default getApiClient;

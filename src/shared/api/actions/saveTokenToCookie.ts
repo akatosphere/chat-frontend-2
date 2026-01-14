@@ -13,7 +13,7 @@ export async function saveTokenToCookie(token: string | null) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
-      maxAge: 60 * 15,
+      maxAge: 1800,
     });
   } else {
     cookieStore.delete("accessToken");
