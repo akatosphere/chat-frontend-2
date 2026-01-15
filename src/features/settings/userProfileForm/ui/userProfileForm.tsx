@@ -49,6 +49,7 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
     isAvatarChangeModalOpen,
     defaultValues,
     setIsAvatarChangeModalOpen,
+    onAvatarDelete,
     onAvatarChangeHandler,
   } = useUserProfileForm({
     profile,
@@ -78,6 +79,7 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
     <div className={cn("", className)}>
       <AvatarSection
         avatarUrl={currentAvatarUrl}
+        onAvatarDelete={onAvatarDelete}
         onAvatarChange={onAvatarChangeHandler}
         isAvatarChangeModalOpen={isAvatarChangeModalOpen}
         setIsAvatarChangeModalOpen={setIsAvatarChangeModalOpen}

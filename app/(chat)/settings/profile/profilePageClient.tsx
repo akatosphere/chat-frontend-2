@@ -28,7 +28,6 @@ export const ProfilePageClient: React.FC = () => {
   const mutation = useMutation({
     mutationFn: updateMessengerProfile,
     onSuccess: () => {
-      // После успешного обновления — обновляем кэш
       queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
     },
   });

@@ -1,4 +1,6 @@
-import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
+"use client";
+
+import { useRef, useState } from "react";
 
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 import { cn } from "@/shared/shadcn/lib/utils";
@@ -8,12 +10,16 @@ import {
   AlertDialogTitle,
 } from "@/shared/shadcn/ui/alert-dialog";
 import { Button } from "@/shared/shadcn/ui/button";
+import { checkAvatarParams } from "@/widgets/imageCropper/lib/checkAvatarParams";
+import { ImageCropperModal } from "@/widgets/imageCropper/ui/imageCropperModal";
 
 type AvatarSelectionModalProps = {
   className?: string;
   isOpen: boolean;
   error?: string;
+  avatarUrl: string;
   onAvatarChange: (file: File) => void;
+  onAvatarDelete: () => void;
   onClose: () => void;
 };
 
@@ -21,60 +27,98 @@ export const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({
   className,
   isOpen,
   error,
+  avatarUrl,
   onClose,
+  onAvatarDelete,
   onAvatarChange,
 }) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [localError, setLocalError] = useState<string | null>(error || null);
+
+  const handleCropComplete = async (croppedUrl: string) => {
+    const res = await fetch(croppedUrl);
+    const blob = await res.blob();
+    const file = new File([blob], selectedFile?.name || "avatar.png", {
+      type: blob.type,
+    });
+    setSelectedFile(null);
+    onAvatarChange(file);
+  };
+
+  const handleDelete = () => {
+    setSelectedFile(null);
+    onAvatarDelete();
+  };
+
+  const handleSelectFile = async (file: File | null) => {
+    if (!file) return;
+    const { isValid, error } = await checkAvatarParams(file);
+    if (!isValid) {
+      setLocalError(error || "");
+      return;
+    }
+    setSelectedFile(file);
+    setLocalError(null);
+  };
+
+  const handleUpload = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
   return (
-    <ModalDialog className={cn(className)} open={isOpen} onOpenChange={onClose}>
-      <AlertDialogHeader>
-        <AlertDialogTitle>
-          <span className="font-medium">Смена аватар</span>
-        </AlertDialogTitle>
-        <AlertDialogDescription>
-          <span className="subtext text-gray">
-            Добавить сюда кроппер для аватарки потом и возможность удаления
-          </span>
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter className="flex flex-col items-center justify-center gap-2 sm:justify-center">
-        <form
-          className="flex w-full flex-col items-center gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const formData = new FormData(e.currentTarget);
-            const file = formData.get("avatar") as File | null;
-            if (file) {
-              onAvatarChange(file);
-            }
-          }}
-        >
-          <input
-            className="border-muted hover:bg-accent mb-2 w-full cursor-pointer border p-2"
-            type="file"
-            accept="image/png, image/jpeg, image/bmp"
-            name="avatar"
-          />
-          {error && <span className="text-error">{error}</span>}
-          <div className="flex flex-row flex-wrap gap-2 self-end">
+    <>
+      {selectedFile && (
+        <ImageCropperModal
+          isOpen={!!selectedFile}
+          onClose={() => setSelectedFile(null)}
+          imgSrc={URL.createObjectURL(selectedFile)}
+          onCropComplete={handleCropComplete}
+        />
+      )}
+      <ModalDialog className={cn(className)} open={isOpen} onOpenChange={onClose}>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            <span className="font-medium">Смена аватара</span>
+          </AlertDialogTitle>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="">
+          {!selectedFile && (
+            <input
+              className="border-muted hover:bg-accent w-full cursor-pointer border p-2"
+              type="file"
+              hidden
+              ref={inputRef}
+              accept="image/png, image/jpeg, image/bmp"
+              onChange={(e) => handleSelectFile(e.target.files?.[0] || null)}
+            />
+          )}
+
+          <div className="flex w-full flex-col gap-2">
+            {localError && <span className="text-error mb-2">{localError}</span>}
             <Button
               variant="default"
-              size="smSubtext"
-              className="text-primary desktop:flex-0 flex-1 bg-transparent"
-              onClick={onClose}
+              size="inline"
+              className="text-primary subtext flex-1 justify-start rounded-md border-0 bg-transparent p-2"
+              onClick={handleUpload}
             >
-              Отмена
+              Загрузить новое фото
             </Button>
-            <Button
-              type="submit"
-              variant="default"
-              size="smSubtext"
-              className="desktop:flex-0 flex-1"
-            >
-              Загрузить аватар
-            </Button>
+            {avatarUrl && (
+              <Button
+                variant="default"
+                size="inline"
+                className="text-error subtext justify-start rounded-md border-0 bg-transparent p-2"
+                onClick={handleDelete}
+              >
+                Удалить фото
+              </Button>
+            )}
           </div>
-        </form>
-      </AlertDialogFooter>
-    </ModalDialog>
+        </AlertDialogFooter>
+      </ModalDialog>
+    </>
   );
 };
