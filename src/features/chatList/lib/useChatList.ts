@@ -15,10 +15,14 @@ export const useChatList = () => {
       try {
         setLoading(true);
         const chats = await getChatList();
-        if (!cancelled) setChats(chats);
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (e) {
+        if (!cancelled)
+          setChats({
+            results: chats.results,
+            next: chats.next,
+            count: chats.count,
+            append: false,
+          });
+      } catch {
         if (!cancelled) setError("Не удалось загрузить чаты");
       } finally {
         if (!cancelled) setLoading(false);
