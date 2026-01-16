@@ -22,14 +22,14 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
   const pathname = usePathname();
   // Берем только нужные функции (не берем всё состояние, чтобы не было лишних ререндеров)
-  const syncToken = useAuthStore((s) => s.syncToken);
+  const setAccessToken = useAuthStore((s) => s.setAccessToken);
   const finishInitialization = useAuthStore((s) => s.finishInitialization);
   const isInitialized = useAuthStore((s) => s.isInitialized);
 
   useEffect(() => {
     // 1. Синхронизируем токен, полученный от SSR
     if (initialToken) {
-      syncToken(initialToken);
+      setAccessToken(initialToken);
     }
 
     const isPublicRoute = pathname ? PUBLIC_ROUTES.includes(pathname) : false;
@@ -49,9 +49,7 @@ export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
           });
           if (res.ok) {
             const data = await res.json();
-            // Здесь используем syncToken, так как сервер уже сам обновит куки
-            // при запросе к /api/refresh-token (если вы так настроили)
-            syncToken(data.access);
+            setAccessToken(data.access);
           }
         } catch (e) {
           console.error(e);
@@ -61,7 +59,7 @@ export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
     };
 
     initAuth();
-  }, [initialToken, pathname, syncToken, finishInitialization]);
+  }, [initialToken, pathname, setAccessToken, finishInitialization]);
 
   const isPublicRoute = pathname ? PUBLIC_ROUTES.includes(pathname) : false;
 

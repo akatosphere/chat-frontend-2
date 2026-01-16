@@ -6,8 +6,7 @@ export const chatWSHandler = (data: WSBaseResponse) => {
 
   switch (data.action) {
     case "create_chat":
-      // const chatData = data.object as ChatObject;
-      console.log("wsHandler create_group");
+      // console.log("wsHandler create_group");
 
       break;
   }
