@@ -21,7 +21,7 @@ export default function Page() {
         <span className="text text-black">Регистрация прошла успешно</span>
       </div>
       <Button
-        className="desktop:max-w-full desktop:mt-auto desktop:mb-20 desktop:mx-16 mx-4 max-w-[329px]"
+        className="desktop:max-w-full desktop:mt-auto desktop:mb-20 desktop:mx-16 mx-auto max-w-[329px]"
         variant={"default"}
         size={"lg"}
         asChild
