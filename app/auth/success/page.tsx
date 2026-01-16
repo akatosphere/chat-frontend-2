@@ -1,33 +1,32 @@
+import Image from "next/image";
+import Link from "next/link";
+
 import { BackgroundCardLayout } from "@/shared/layouts/card/backgroundCardLayout";
 import { Button } from "@/shared/shadcn/ui/button";
 import { Logo } from "@/shared/ui/logo";
-import Image from "next/image";
-import Link from "next/link";
 
 export default function Page() {
   return (
     <BackgroundCardLayout className="pt-[95px]" variant={"form"}>
-      <Logo size="lg" className="hidden desktop:flex desktop:mb-16" />
+      <Logo size="lg" className="desktop:flex desktop:mb-16 hidden" />
       <Image
         src="/auth/success.svg"
         alt="Успех"
         width={154}
         height={154}
-        className="mx-auto object-contain mb-5 desktop:hidden desktop:mb-0"
+        className="desktop:hidden desktop:mb-0 mx-auto mb-5 object-contain"
       />
-      <div className="flex flex-col text-center mb-8">
-        <span className="subheadline font-medium mb-4 text-black">
-          Поздравляем!
-        </span>
+      <div className="mb-8 flex flex-col text-center">
+        <span className="subheadline mb-4 font-medium text-black">Поздравляем!</span>
         <span className="text text-black">Регистрация прошла успешно</span>
       </div>
       <Button
-        className="max-w-[329px] desktop:max-w-full w-full mx-auto desktop:mt-auto"
+        className="desktop:max-w-full desktop:mt-auto desktop:mb-20 desktop:mx-16 mx-4 max-w-[329px]"
         variant={"default"}
         size={"lg"}
         asChild
       >
-        <Link href="/chat">Далее</Link>
+        <Link href="/chats">Далее</Link>
       </Button>
     </BackgroundCardLayout>
   );

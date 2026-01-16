@@ -1,22 +1,29 @@
+"use client";
+
+import { useEffect } from "react";
+
+import { AuthHeader } from "@/features/auth/codeVerification/ui/authHeader";
 import { PhoneForm } from "@/features/auth/phoneForm/ui/phoneForm";
+import { logout } from "@/shared/api/logout";
 import { BackgroundCardLayout } from "@/shared/layouts/card/backgroundCardLayout";
-import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
-import { BackButton } from "@/shared/ui/backButton";
-import { Logo } from "@/shared/ui/logo";
 
 export default function Page() {
+  useEffect(() => {
+    logout();
+  }, []);
   return (
     <BackgroundCardLayout variant="form">
-      <Logo size="sm" withTitle={true} className="mb-8" />
-      <h3 className="font-semibold subheadline mb-5 desktop:mb-6 text-center text-black">
+      <AuthHeader
+        backHref="/auth"
+        withTitle
+        logoSize="sm"
+        className="desktop:mt-[72px] mt-11"
+        classBackButton="absolute desktop:left-20 top-2 left-8"
+      />
+      <h3 className="subheadline desktop:mb-6 mb-5 text-center font-semibold text-black">
         Вход/регистрация
       </h3>
-      <PhoneForm />
-      <BackButton
-        href="/auth"
-        className="absolute top-0 desktop:left-0 left-4"
-      />
-      <ModalDialog/>
+      <PhoneForm className="desktop:mx-16 desktop:mb-20 mx-4" />
     </BackgroundCardLayout>
   );
 }

@@ -6,27 +6,22 @@ import { NextResponse } from "next/server";
 export async function POST() {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get("refresh_token")?.value;
-
   if (!refreshToken) {
     return NextResponse.json({ error: "Нет refresh токена" }, { status: 401 });
   }
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login/refresh/token/`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refresh: refreshToken }),
-      }
-    );
-
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login/refresh/token/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh: refreshToken }),
+    });
     const data = await res.json();
 
     if (!res.ok) {
       return NextResponse.json(
         { error: data.detail || "Ошибка обновления refresh токена" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -43,7 +38,7 @@ export async function POST() {
     }
 
     return NextResponse.json({ access: data.access });
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: "Серверная ошибка" }, { status: 500 });
   }
 }

@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-
 :root {
   /* Headline */
   --text-headline: 34px;
@@ -43,13 +41,25 @@
   --primary: #7769e1;
   --primary-light: #cec8ff;
   --primary-dark: #615aa3;
+  --primary-accent: #615aa399;
+  --primary-accent-light: #f5f4ff;
+  --primary-hover: #efeef7;
+  --primary-gray: #efeef7;
   --muted: #e4e4e4;
   --muted-foreground: #00000033;
   --caption: #ffffff;
   --error: #ff0000;
   --black: #1c1c1e;
   --gray: #747474;
-  --light-gray: #C5C5C5;
+  --light-gray: #c5c5c5;
+  --gray-tone: #eeeeee;
+  --light-green: #d8f5f0;
+  --accent: #d6d2f6;
+
+  /* добавлены цвета для цвета иконок меню навигации */
+  --nav-border: #eeeeee;
+  --nav-bg-active: #f5f6f8;
+  --main-light-gray: #f5f6f8;
 
   --radius-lg: 12px;
   --radius-md: 8px;
@@ -57,6 +67,7 @@
   --radius-lg: 16px;
 
   --safe-h: 100svh;
+  --keyboard-offset: 0px;
 }
 
 @utility headline {
@@ -116,10 +127,14 @@
 
 @theme inline {
   --breakpoint-desktop: 1023px;
+  --breakpoint-card-not-compressed: 536px;
 
   --color-primary: var(--primary);
   --color-primary-light: var(--primary-light);
   --color-primary-dark: var(--primary-dark);
+  --color-primary-accent: var(--primary-accent);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-gray: var(--primary-gray);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-caption: var(--caption);
@@ -127,6 +142,14 @@
   --color-black: var(--black);
   --color-gray: var(--gray);
   --color-light-gray: var(--light-gray);
+  --color-gray-tone: var(--gray-tone);
+  --color-light-green: var(--light-green);
+  --color-primary-accent-light: var(--primary-accent-light);
+
+  /* добавлены переменные для цвета иконок меню навигации */
+  --color-nav-border: var(--nav-border);
+  --color-nav-bg-active: var(--nav-bg-active);
+  --color-main-light-gray: var(--main-light-gray);
 
   --radius-lg: var(--radius-lg);
   --radius-md: var(--radius-md);
@@ -168,51 +191,11 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--black);
   font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  overflow: hidden;
 }
 
 @layer base {
@@ -221,6 +204,7 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    @apply min-h-full;
   }
 }
 
@@ -241,14 +225,46 @@ body {
   }
 }
 
+.emojis-google {
+  font-family: var(--font-roboto), var(--font-noto-color-emoji), Arial, Helvetica, sans-serif;
+}
+
+.emojis-apple {
+  font-family: var(--font-roboto), var(--font-apple-color-emoji), Arial, Helvetica, sans-serif;
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 10px; /* было 6px */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--light-gray);
-  border-radius: 4px;
-  border-right: 1px solid transparent;
+  background-color: var(--light-gray);
+  border-radius: 9999px;
+
+  border: 3px solid transparent;
   background-clip: content-box;
 }
 
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-xs::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-content {
+  scrollbar-gutter: stable;
+  padding-right: 6px;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@utility smooth {
+  transition-property: all;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}

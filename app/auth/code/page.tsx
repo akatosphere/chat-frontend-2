@@ -1,9 +1,9 @@
-import { CodeVerification } from "@/features/auth/codeVerification";
-import { BackgroundCardLayout } from "@/shared/layouts/card/backgroundCardLayout";
-import { BackButton } from "@/shared/ui/backButton";
-import { Logo } from "@/shared/ui/logo";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+import { CodeVerification } from "@/features/auth/codeVerification";
+import { AuthHeader } from "@/features/auth/codeVerification/ui/authHeader";
+import { BackgroundCardLayout } from "@/shared/layouts/card/backgroundCardLayout";
 
 export default async function Page() {
   const cookieStore = await cookies();
@@ -15,22 +15,22 @@ export default async function Page() {
 
   return (
     <BackgroundCardLayout variant="form">
-      <Logo size="sm" withTitle={true} className="mb-8" />
-      <h3 className="font-semibold subheadline mb-5 desktop:mb-6 text-center text-black">
+      <AuthHeader
+        backHref="/auth/phone"
+        withTitle
+        logoSize="sm"
+        className="desktop:mt-[72px] mt-11"
+        classBackButton="absolute desktop:left-20 top-2 left-8"
+      />
+      <h3 className="subheadline desktop:mb-6 mb-5 text-center font-semibold text-black">
         Подтвердите вход
       </h3>
-      <p className="text-black text text-center">
+      <p className="text text-center text-black">
         Код подтверждения отправлен
-        <br /> на следующий номер:
+        <br /> на следующий номер:
       </p>
-      <span className="text-black text font-medium text-center mt-2">
-        {phone}
-      </span>
-      <CodeVerification className="mt-7 desktop:mt-6" />
-      <BackButton
-        href="/auth/phone"
-        className="absolute top-0 desktop:left-0 left-4"
-      />
+      <span className="text mt-2 text-center font-medium text-black">{phone}</span>
+      <CodeVerification className="desktop:mt-6 mt-7" />
     </BackgroundCardLayout>
   );
 }

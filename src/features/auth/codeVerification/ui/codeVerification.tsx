@@ -1,16 +1,20 @@
 "use client";
-import React from "react";
-import { Tooltip } from "@/shared/ui/tooltip";
-import { cn } from "@/shared/shadcn/lib/utils";
-import { VerificationCodeInput } from "./verificationCodeInput";
-import { useVerificationUI } from "../lib/useVerificationUI";
-import { useVerification } from "../lib/useVerification";
-import { VerificationCodeResend } from "./verificationCodeResend";
-import { usePhoneStore } from "../../phoneForm/model/store";
+import { useCallback, useState } from "react";
 
-export const CodeVerification: React.FC<{ className?: string }> = ({
-  className,
-}) => {
+import { cn } from "@/shared/shadcn/lib/utils";
+import { Toast } from "@/shared/toast/ui/toast";
+import { Tooltip } from "@/shared/ui/tooltip";
+
+import { usePhoneStore } from "../../phoneForm/model/store";
+import { useModals } from "../lib/useModals";
+import { useVerification } from "../lib/useVerification";
+import { useVerificationUI } from "../lib/useVerificationUI";
+import { BannedModal } from "./BannedModal";
+import { ExpiredCodeModal } from "./CodeExpiredModal";
+import { VerificationCodeInput } from "./verificationCodeInput";
+import { VerificationCodeResend } from "./verificationCodeResend";
+
+export const CodeVerification: React.FC<{ className?: string }> = ({ className }) => {
   const { phone } = usePhoneStore();
 
   const {
@@ -18,6 +22,7 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
     isBanned,
     resendTimer,
     isResendAvailable,
+    isCodeExpired,
     onComplete,
     onResend,
   } = useVerification({ phone_number: phone.replaceAll(" ", "") });
@@ -27,13 +32,26 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
     attemptsLeft,
   });
 
+  const { showBanned, showExpired, closeBanned, closeExpired } = useModals(isBanned, isCodeExpired);
+
+  const [showToast, setShowToast] = useState(false);
+
+  const handleResend = async () => {
+    await onResend();
+    setShowToast(true);
+  };
+
+  const handleToastClose = useCallback(() => {
+    setShowToast(false);
+  }, []);
+
   return (
     <div className={cn("flex flex-col items-center justify-center", className)}>
-      <div className="flex mb-4 gap-2 items-center">
-        <h3 className="font-medium text text-black">Введите код</h3>
+      <div className="mb-4 flex items-center gap-2">
+        <h3 className="text font-medium text-black">Введите код</h3>
         <Tooltip>
           <p>Код должен содержать только цифры.</p>
-          <p>Не более 10 запросов кода в час. При превышении — блокировка.</p>
+          <p>Не более 10 запросов кода в час. При превышении — блокировка.</p>
         </Tooltip>
       </div>
 
@@ -41,17 +59,38 @@ export const CodeVerification: React.FC<{ className?: string }> = ({
         length={5}
         attemptsLeft={attemptsLeft}
         onComplete={handleComplete}
-        error={error || (isBanned && "Слишком много неверных попыток.") || ""}
+        isBanned={isBanned}
+        isCodeExpired={isCodeExpired}
+        error={
+          (isCodeExpired && "Запросите код повторно.") ||
+          (attemptsLeft >= 1 && error) ||
+          (isBanned && "Слишком много неверных попыток.") ||
+          ""
+        }
         loading={loading}
         onErrorReset={() => setError("")}
         className="mb-6 lg:mb-4"
       />
 
       <VerificationCodeResend
-        onResend={onResend}
+        onResend={handleResend}
         resendTimer={resendTimer}
         isResendAvailable={isResendAvailable}
       />
+
+      <BannedModal open={showBanned} onClose={closeBanned} />
+
+      <ExpiredCodeModal open={showExpired} onClose={closeExpired} />
+
+      {showToast && (
+        <Toast
+          onClose={handleToastClose}
+          icon={{
+            mobile: "/icons/toast/checkMobile.svg",
+            desktop: "/icons/toast/checkDesktop.svg",
+          }}
+        />
+      )}
     </div>
   );
 };

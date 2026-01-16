@@ -1,7 +1,8 @@
+import { forwardRef } from "react";
+
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Label } from "@/shared/shadcn/ui/label";
 import { Textarea } from "@/shared/shadcn/ui/textarea";
-import { forwardRef } from "react";
 
 type FormTextareaProps = {
   className?: string;
@@ -31,7 +32,7 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
       disabled,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <div className={cn("flex flex-col gap-1", className)}>
@@ -53,7 +54,7 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
         />
       </div>
     );
-  }
+  },
 );
 
 FormTextarea.displayName = "FormTextarea";

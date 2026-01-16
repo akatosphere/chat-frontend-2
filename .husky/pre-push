@@ -1,0 +1,5 @@
+echo "🚀 Running ESLint before push..."
+npm run lint
+
+echo "🔧 Building project to ensure no runtime errors..."
+npm run build 
