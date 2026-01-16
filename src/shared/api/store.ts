@@ -7,7 +7,6 @@ interface AuthState {
   accessToken: string | null;
   isInitialized: boolean;
   setAccessToken: (token: string) => void;
-  syncToken: (token: string) => void;
   clearAccessToken: () => void;
   finishInitialization: () => void;
 }
@@ -21,9 +20,11 @@ export const useAuthStore = create<AuthState>((set) => ({
       console.error("Failed to sync token with cookies", err);
     });
   },
-  syncToken: (token) => {
-    set({ accessToken: token });
+  clearAccessToken: () => {
+    set({ accessToken: null });
+    saveTokenToCookie(null).catch((err) => {
+      console.error("Failed to delete token from cookies", err);
+    });
   },
-  clearAccessToken: () => set({ accessToken: null }),
   finishInitialization: () => set({ isInitialized: true }),
 }));
