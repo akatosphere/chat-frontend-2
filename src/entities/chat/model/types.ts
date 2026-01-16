@@ -30,6 +30,10 @@ export interface ChatUser {
   is_online: boolean;
   was_online_at: number;
   is_in_contacts: boolean;
+  chat_id?: number | null;
+  birthday?: number | null;
+  phone?: string | null;
+  additional_information?: string | null;
 }
 
 export interface ChatItemData {
