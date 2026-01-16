@@ -1,5 +1,5 @@
 import { ChatListResponse } from "@/entities/chat/model/types";
-import api from "@/shared/api/apiClient";
+import { getApiClient } from "@/shared/api/getApiClient";
 
 export const getChatList = async (url?: string): Promise<ChatListResponse> => {
   let endpoint = "/api/v1/chat/list/";
@@ -9,6 +9,6 @@ export const getChatList = async (url?: string): Promise<ChatListResponse> => {
     endpoint = parsed.pathname + parsed.search;
   }
 
-  const res = await api.get<ChatListResponse>(endpoint);
+  const res = await getApiClient.get<ChatListResponse>(endpoint);
   return res.data;
 };

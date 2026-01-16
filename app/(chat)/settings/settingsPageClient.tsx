@@ -13,7 +13,7 @@ export const SettingsPageClient: React.FC = async () => {
   const data = res.data;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex h-full flex-col">
       <UserProfile
         avatarUrl={data.avatar_url}
         name={`${data.first_name} ${data.last_name}`}
