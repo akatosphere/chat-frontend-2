@@ -44,7 +44,7 @@ export default function Page() {
       <span className="text desktop:mb-6 mb-5 text-center text-black">
         Пожалуйста, заполните данные
       </span>
-      <UserForm className="desktop:mx-16 mx-4 mb-10" buttonName="Зарегистрироваться" />
+      <UserForm className="desktop:mx-16 mx-4 mb-10" />
     </BackgroundCardLayout>
   );
 }
