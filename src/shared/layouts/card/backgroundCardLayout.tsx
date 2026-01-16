@@ -4,12 +4,13 @@ import * as React from "react";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 const backgroundCardLayoutVariants = cva(
-  "desktop:p-16 desktop:pt-18 desktop:pb-20 desktop:border-none flex flex-col items-center overflow-hidden rounded-lg rounded-md border-2 border-white p-4 pt-11",
+  // "desktop:p-16 desktop:pt-18 desktop:pb-20 desktop:border-none flex flex-col items-center overflow-hidden rounded-lg rounded-md border-2 border-white p-4 pt-11",
+  "desktop:border-none relative flex flex-col items-center overflow-hidden rounded-lg rounded-md",
   {
     variants: {
       variant: {
         start:
-          "desktop:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)] bg-[#E9E7FE]",
+          "desktop:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)] border-[2px] border-white bg-[#E9E7FE]",
         form: "desktop:bg-[#E9E7FE] desktop:shadow-[-24px_-24px_80px_rgba(105,92,122,0.15),24px_24px_80px_rgba(105,92,122,0.15)] bg-white",
       },
       size: {
