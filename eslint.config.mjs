@@ -6,6 +6,7 @@ import tsParser from "@typescript-eslint/parser";
 import nextCore from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
+import eslintConfigPrettier from "eslint-config-prettier";
 
 export default defineConfig([
   {
@@ -21,10 +22,6 @@ export default defineConfig([
 
   {
     files: ["**/*.ts", "**/*.tsx"],
-    extends: [
-      // "plugin:@typescript-eslint/recommended",
-      // "plugin:prettier/recommended"
-    ],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -188,4 +185,5 @@ export default defineConfig([
       "no-restricted-syntax": "off",
     },
   },
+  eslintConfigPrettier,
 ]);
