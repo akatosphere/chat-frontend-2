@@ -47,7 +47,6 @@ const attachHandlers = (ws: WebSocket) => {
     try {
       const data = JSON.parse(event.data) as WSBaseResponse<unknown>;
       handlers.forEach((handler) => handler(data));
-      console.log("WS message 📩", data);
     } catch {
       console.log("WS raw message:", event.data);
     }
