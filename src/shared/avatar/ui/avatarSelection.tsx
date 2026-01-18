@@ -3,9 +3,11 @@
 import Plus from "@icons/plus.svg";
 
 import { Avatar } from "@/entities/chat/ui/avatar";
+import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
 import { AvatarSelectionModal } from "./avatarSelectionModal";
+import { containerVariants, plusIconVariants, triggerButtonVariants } from "./avatarVariants";
 
 type AvatarSectionProps = {
   avatarUrl: string;
@@ -27,9 +29,9 @@ export const AvatarSection: React.FC<AvatarSectionProps> = ({
   avatarVariant = "user",
 }) => {
   return (
-    <div className="relative mb-4 flex flex-col items-center gap-2">
+    <div className={cn(containerVariants({ variant: avatarVariant }))}>
       <Avatar
-        size="settingsAvatar"
+        size={avatarVariant == "user" ? "settingsAvatar" : "createGroupAvatar"}
         className="flex w-full justify-center"
         avatarUrl={avatarUrl}
         variant={avatarVariant}
@@ -37,11 +39,11 @@ export const AvatarSection: React.FC<AvatarSectionProps> = ({
       <Button
         variant="text"
         size="inline"
-        className="bg-primary desktop:bg-transparent desktop:p-0 desktop:text-primary desktop:static desktop:rounded-none desktop:text-[17px] minitext absolute bottom-4 left-4 rounded-md px-3 py-3.5 font-medium text-white"
+        className={cn(triggerButtonVariants({ variant: avatarVariant }))}
         onClick={() => setIsAvatarChangeModalOpen(true)}
       >
         <div className="flex items-center">
-          <Plus className="desktop:hidden desktop:mr-0 mr-2 h-3.5 w-3.5" />
+          <Plus className={cn(plusIconVariants({ variant: avatarVariant }))} />
           <span className="leading-none">Изменить фото</span>
         </div>
       </Button>

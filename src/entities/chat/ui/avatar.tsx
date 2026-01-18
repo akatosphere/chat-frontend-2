@@ -6,7 +6,7 @@ type AvatarProps = {
   className?: string;
   isOnline?: boolean;
   avatarUrl: string;
-  size?: "sm" | "md" | "lg" | "xl" | "settingsAvatar";
+  size?: "sm" | "md" | "lg" | "xl" | "settingsAvatar" | "createGroupAvatar";
   variant?: "user" | "group";
 };
 
@@ -17,6 +17,8 @@ const AVATAR_SIZES = {
   xl: "w-50 h-50",
   settingsAvatar:
     "max-h-[390px] h-[390px] w-full desktop:w-50 desktop:max-h-50 desktop:h-50 object-cover rounded-md desktop:rounded-full",
+  createGroupAvatar:
+    "h-[88px] max-h-[88px] desktop:w-50 desktop:max-h-50 desktop:h-50 rounded-full",
 };
 
 export const Avatar = ({

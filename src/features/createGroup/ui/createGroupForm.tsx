@@ -94,33 +94,38 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
   };
 
   return (
-    <section className={cn("", className)}>
+    <section className={cn("h-full pb-4", className)}>
       <FormProvider {...form}>
-        <form className="mb-4 flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-          <AvatarSection
-            avatarUrl={previewUrl} // Прокидываем наше превью
-            onAvatarDelete={handleAvatarDelete}
-            onAvatarChange={handleAvatarChange} // Передаем функцию обработки файла
-            isAvatarChangeModalOpen={isModalOpen}
-            setIsAvatarChangeModalOpen={setIsModalOpen}
-            error={errors.avatar?.message as string}
-            avatarVariant="group"
-          />
-          <div>
-            <Field name="title" title="Название*" maxLength={100} position="upper" />
-            <Field name="description" title="Описание" maxLength={250} position="lower" />
+        <form className="mb-4 flex h-full flex-col px-2" onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="flex h-full w-full flex-col justify-between">
+            <div className="flex w-full flex-col gap-4">
+              <AvatarSection
+                avatarUrl={previewUrl} // Прокидываем наше превью
+                onAvatarDelete={handleAvatarDelete}
+                onAvatarChange={handleAvatarChange} // Передаем функцию обработки файла
+                isAvatarChangeModalOpen={isModalOpen}
+                setIsAvatarChangeModalOpen={setIsModalOpen}
+                error={errors.avatar?.message as string}
+                avatarVariant="group"
+              />
+              <div>
+                <Field name="title" title="Название*" maxLength={100} position="upper" />
+                <Field name="description" title="Описание" maxLength={250} position="lower" />
+              </div>
+              <GroupTypeSelect value={groupType} onChange={setGroupType} />
+            </div>
+            <div className="w-full">
+              <Button
+                variant="default"
+                size="md"
+                type="submit"
+                className="mt-4 mb-4 w-full"
+                disabled={!isValid || isSubmitting}
+              >
+                Создать
+              </Button>
+            </div>
           </div>
-          <GroupTypeSelect value={groupType} onChange={setGroupType} />
-
-          <Button
-            variant="default"
-            size="md"
-            type="submit"
-            className="mt-4"
-            disabled={!isValid || isSubmitting}
-          >
-            Создать
-          </Button>
         </form>
       </FormProvider>
     </section>
