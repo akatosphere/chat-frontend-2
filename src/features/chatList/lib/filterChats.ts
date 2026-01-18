@@ -3,7 +3,7 @@ import { ChatItemData } from "@/entities/chat/model/types";
 export const filterChats = (chats: ChatItemData[], search: string) => {
   const q = search.trim().toLowerCase();
   if (!chats || !chats.length) return [];
-  /* eslint-disable */
+
   const filtered = !q
     ? [...chats]
     : chats.filter((chat) => {
@@ -19,7 +19,6 @@ export const filterChats = (chats: ChatItemData[], search: string) => {
 
         return false;
       });
-  /* eslint-enable */
 
   return filtered.sort((a, b) => {
     if (a.is_favorite && !b.is_favorite) return -1;
