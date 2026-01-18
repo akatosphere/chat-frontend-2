@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { uploadAvatar } from "@/entities/user/api/changeAvatar";
 import { MessengerProfileResponse } from "@/entities/user/api/updateUserProfile";
+import { checkAvatarParams } from "@/widgets/imageCropper/lib/checkAvatarParams";
 
 import { getDefaultBirthday } from "./getDefaultBirthday";
 
@@ -37,11 +38,12 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
   });
 
   const avatarMutation = useMutation({
-    mutationFn: (file: File) => uploadAvatar(file),
+    mutationFn: (file: File | null) => uploadAvatar(file),
     onSuccess: (res) => {
       if (res.data.file_url) {
         setCurrentAvatarUrl(res.data.file_url);
         setIsAvatarChangeModalOpen(false);
+        setAvatarError("");
         queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
       }
     },
@@ -51,18 +53,26 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
     },
   });
 
-  const onAvatarChangeHandler = (file: File) => {
-    const allowedTypes = ["image/png", "image/jpeg", "image/x-ms-bmp"];
+  const deleteAvatarMutation = useMutation({
+    mutationFn: () => uploadAvatar(null),
+    onSuccess: () => {
+      setCurrentAvatarUrl("");
+      setIsAvatarChangeModalOpen(false);
+      setAvatarError("");
+      queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
+    },
+  });
 
-    if (file.size === 0) {
-      setAvatarError("Файл не выбран.");
+  const onAvatarDelete = () => {
+    deleteAvatarMutation.mutate();
+  };
+
+  const onAvatarChangeHandler = async (file: File) => {
+    const { isValid, error } = await checkAvatarParams(file);
+    if (!isValid) {
+      setAvatarError(error || "");
       return;
     }
-    if (!allowedTypes.includes(file.type)) {
-      setAvatarError("Недопустимый формат файла. Допустимые форматы: PNG, JPG, JPEG, BMP.");
-      return;
-    }
-
     avatarMutation.mutate(file);
   };
 
@@ -73,6 +83,7 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
     defaultBirthday: getDefaultBirthday(birthday),
     defaultValues: getDefaultValues,
     setCurrentAvatarUrl,
+    onAvatarDelete,
     setAvatarError,
     setIsAvatarChangeModalOpen,
     onAvatarChangeHandler,

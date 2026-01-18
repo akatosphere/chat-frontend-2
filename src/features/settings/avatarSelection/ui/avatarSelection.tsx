@@ -12,6 +12,7 @@ type AvatarSectionProps = {
   error?: string;
   isAvatarChangeModalOpen: boolean;
   setIsAvatarChangeModalOpen: (value: boolean) => void;
+  onAvatarDelete: () => void;
   onAvatarChange: (file: File) => void;
 };
 
@@ -21,6 +22,7 @@ export const AvatarSection: React.FC<AvatarSectionProps> = ({
   isAvatarChangeModalOpen,
   setIsAvatarChangeModalOpen,
   onAvatarChange,
+  onAvatarDelete,
 }) => {
   return (
     <div className="relative mb-4 flex flex-col items-center gap-2">
@@ -40,6 +42,8 @@ export const AvatarSection: React.FC<AvatarSectionProps> = ({
       {isAvatarChangeModalOpen && (
         <AvatarSelectionModal
           isOpen={isAvatarChangeModalOpen}
+          onAvatarDelete={onAvatarDelete}
+          avatarUrl={avatarUrl}
           onClose={() => setIsAvatarChangeModalOpen(false)}
           onAvatarChange={onAvatarChange}
           error={error}
