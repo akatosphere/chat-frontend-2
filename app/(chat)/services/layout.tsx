@@ -1,4 +1,4 @@
-import { CreateGroupForm } from "@/features/createGroup/ui/createGroupForm";
+import { CreateGroupForm } from "@/features/createGroupOrChannel/ui/createGroupForm";
 import { MainContent } from "@/shared/ui/mainContent";
 import { Sidebar } from "@/shared/ui/sidebar";
 
