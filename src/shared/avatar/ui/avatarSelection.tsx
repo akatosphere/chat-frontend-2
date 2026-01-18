@@ -5,7 +5,7 @@ import Plus from "@icons/plus.svg";
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { Button } from "@/shared/shadcn/ui/button";
 
-import { AvatarSelectionModal } from "../../../../entities/settings/avatarSelectionModal/avatarSelectionModal";
+import { AvatarSelectionModal } from "./avatarSelectionModal";
 
 type AvatarSectionProps = {
   avatarUrl: string;
@@ -14,6 +14,7 @@ type AvatarSectionProps = {
   setIsAvatarChangeModalOpen: (value: boolean) => void;
   onAvatarDelete: () => void;
   onAvatarChange: (file: File) => void;
+  avatarVariant?: "user" | "group";
 };
 
 export const AvatarSection: React.FC<AvatarSectionProps> = ({
@@ -23,10 +24,16 @@ export const AvatarSection: React.FC<AvatarSectionProps> = ({
   setIsAvatarChangeModalOpen,
   onAvatarChange,
   onAvatarDelete,
+  avatarVariant = "user",
 }) => {
   return (
     <div className="relative mb-4 flex flex-col items-center gap-2">
-      <Avatar size="settingsAvatar" className="flex w-full justify-center" avatarUrl={avatarUrl} />
+      <Avatar
+        size="settingsAvatar"
+        className="flex w-full justify-center"
+        avatarUrl={avatarUrl}
+        variant={avatarVariant}
+      />
       <Button
         variant="text"
         size="inline"

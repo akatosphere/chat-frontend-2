@@ -13,7 +13,7 @@ import { FormInput } from "@/shared/form/ui/formInput";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
-import { AvatarSection } from "../../avatarSelection/ui/avatarSelection";
+import { AvatarSection } from "../../../../shared/avatar/ui/avatarSelection";
 import { useUserProfileForm } from "../lib/useUserProfileForm";
 import { prepareSubmitData } from "../model/prepareSubmitData";
 import { changeProfileSchema } from "../model/schema";

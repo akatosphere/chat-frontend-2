@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 
+import { checkAvatarParams } from "@/shared/avatar/lib/checkAvatarParams";
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 import { cn } from "@/shared/shadcn/lib/utils";
 import {
@@ -10,8 +11,8 @@ import {
   AlertDialogTitle,
 } from "@/shared/shadcn/ui/alert-dialog";
 import { Button } from "@/shared/shadcn/ui/button";
-import { checkAvatarParams } from "@/widgets/imageCropper/lib/checkAvatarParams";
-import { ImageCropperModal } from "@/widgets/imageCropper/ui/imageCropperModal";
+
+import { ImageCropperModal } from "./imageCropper/imageCropperModal";
 
 type AvatarSelectionModalProps = {
   className?: string;
@@ -105,6 +106,14 @@ export const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({
               onClick={handleUpload}
             >
               Загрузить новое фото
+            </Button>
+            <Button
+              variant="default"
+              size="inline"
+              className="text-primary subtext flex-1 justify-start rounded-md border-0 bg-transparent p-2"
+              onClick={onClose}
+            >
+              Отмена
             </Button>
             {avatarUrl && (
               <Button

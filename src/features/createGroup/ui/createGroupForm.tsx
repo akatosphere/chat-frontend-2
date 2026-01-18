@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { EditPhotoForm } from "@/shared/form/ui/editPhotoForm";
+import { AvatarSection } from "@/shared/avatar/ui/avatarSelection";
+import { fileToBase64 } from "@/shared/lib/files/fileToBase64";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
@@ -22,25 +23,63 @@ type CreateGroupFormProps = {
 
 export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) => {
   const [groupType, setGroupType] = useState<"open" | "closed">("closed");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const router = useRouter();
   const form = useForm({
     mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
+      avatar: null,
     },
   });
-  const { isValid, isSubmitting } = form.formState;
-  const router = useRouter();
+
+  const { isValid, isSubmitting, errors } = form.formState;
+
+  const handleAvatarChange = (file: File) => {
+    // 1. Сохраняем файл в форму
+    form.setValue("avatar", file, { shouldValidate: true });
+
+    // 2. Создаем временную ссылку для отображения превью
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewUrl(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    // Закрываем модалку (если логика компонента это предполагает)
+    setIsModalOpen(false);
+  };
+
+  // Обработчик удаления файла
+  const handleAvatarDelete = () => {
+    form.setValue("avatar", null);
+    setPreviewUrl("");
+    setIsModalOpen(false);
+  };
 
   const onSubmit = async (data: CreateGroupFormValues) => {
     try {
+      let avatarBase64 = null;
+      // Если файл выбран, конвертируем его в формат для WS
+      if (data.avatar instanceof File) {
+        const base64String = await fileToBase64(data.avatar);
+        avatarBase64 = {
+          filename: data.avatar.name,
+          data: base64String.split(",")[1], // Чистый base64 без префикса
+        };
+      }
+
       const response = await createGroup({
         name: data.title,
         description: data.description,
         chat_type: mapGroupType(groupType),
         uid_users_list: [], // пока только создатель
+        avatar: avatarBase64,
       });
+
       if (response.status === "OK") {
         const chatKey = response.object.chat_key;
         router.push(`/chats/${chatKey}`);
@@ -56,11 +95,17 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
 
   return (
     <section className={cn("", className)}>
-      <div className="flex justify-center">
-        <EditPhotoForm />
-      </div>
       <FormProvider {...form}>
         <form className="mb-4 flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+          <AvatarSection
+            avatarUrl={previewUrl} // Прокидываем наше превью
+            onAvatarDelete={handleAvatarDelete}
+            onAvatarChange={handleAvatarChange} // Передаем функцию обработки файла
+            isAvatarChangeModalOpen={isModalOpen}
+            setIsAvatarChangeModalOpen={setIsModalOpen}
+            error={errors.avatar?.message as string}
+            avatarVariant="group"
+          />
           <div>
             <Field name="title" title="Название*" maxLength={100} position="upper" />
             <Field name="description" title="Описание" maxLength={250} position="lower" />

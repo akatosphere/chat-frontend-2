@@ -7,6 +7,7 @@ type AvatarProps = {
   isOnline?: boolean;
   avatarUrl: string;
   size?: "sm" | "md" | "lg" | "xl" | "settingsAvatar";
+  variant?: "user" | "group";
 };
 
 const AVATAR_SIZES = {
@@ -18,8 +19,14 @@ const AVATAR_SIZES = {
     "max-h-[390px] h-[390px] w-full desktop:w-50 desktop:max-h-50 desktop:h-50 object-cover rounded-md desktop:rounded-full",
 };
 
-export const Avatar = ({ isOnline, avatarUrl, size = "md", className }: AvatarProps) => {
-  const avatarSrc = avatarUrl || "/chat/avatar.svg";
+export const Avatar = ({
+  isOnline,
+  avatarUrl,
+  size = "md",
+  className,
+  variant = "user",
+}: AvatarProps) => {
+  const avatarSrc = avatarUrl || (variant == "user" ? "/chat/avatar.svg" : "/chat/avatarGroup.svg");
   return (
     <div className={cn("relative shrink-0", className)}>
       <div className={cn("overflow-hidden rounded-full", AVATAR_SIZES[size])}>

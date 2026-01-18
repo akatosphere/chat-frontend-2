@@ -6,11 +6,12 @@ export type CreateGroupArgs = {
   description?: string;
   chat_type: "private-group" | "public-group";
   uid_users_list: string[];
+  avatar: {
+    filename: string;
+    data: string; // здесь будет чистый base64
+  } | null;
 };
 
 export const createGroup = (args: CreateGroupArgs): Promise<WSBaseResponse<ChatObject>> => {
-  return sendWSRequest<WSBaseResponse<ChatObject>>("create_chat", {
-    ...args,
-    avatar: null,
-  });
+  return sendWSRequest<WSBaseResponse<ChatObject>>("create_chat", args);
 };

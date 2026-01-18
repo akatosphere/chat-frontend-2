@@ -4,7 +4,7 @@ import Confirm from "@icons/confirm.svg";
 import { useCallback, useState } from "react";
 import Cropper, { Area } from "react-easy-crop";
 
-import { getCroppedImg } from "../lib/cropImage";
+import { getCroppedImg } from "../../lib/cropImage";
 import { ZoomSlider } from "./zoomSlider";
 
 type Props = {

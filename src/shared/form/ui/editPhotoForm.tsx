@@ -1,22 +1,18 @@
-import { IconPhoto } from "@/shared/ui/icons/photo";
+import { Avatar } from "@/entities/chat/ui/avatar";
+import { Button } from "@/shared/shadcn/ui/button";
 
 export const EditPhotoForm = () => {
   return (
-    <>
-      <div className="mb-4 flex flex-col gap-2">
-        <div className="flex justify-center">
-          <div className="bg-primary-light desktop:size-[200px] flex size-[88px] items-center justify-center rounded-full">
-            <IconPhoto className="desktop:size-[76px] size-[34px]" />
-          </div>
-        </div>
-        <label
-          className="text-primary block cursor-pointer text-center hover:underline"
-          role="button"
-        >
-          Выбрать фотографию
-          <input type="file" accept="image/*" className="hidden" />
-        </label>
-      </div>
-    </>
+    <div className="flex flex-col items-center gap-2">
+      <Avatar
+        size="settingsAvatar"
+        className="flex w-full justify-center"
+        avatarUrl={""}
+        variant="group"
+      />
+      <Button variant="text" size="inline" className="text">
+        Выбрать фотографию
+      </Button>
+    </div>
   );
 };

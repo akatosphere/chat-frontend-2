@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { uploadAvatar } from "@/entities/user/api/changeAvatar";
 import { MessengerProfileResponse } from "@/entities/user/api/updateUserProfile";
-import { checkAvatarParams } from "@/widgets/imageCropper/lib/checkAvatarParams";
+import { checkAvatarParams } from "@/shared/avatar/lib/checkAvatarParams";
 
 import { getDefaultBirthday } from "./getDefaultBirthday";
 
