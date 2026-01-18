@@ -2,7 +2,7 @@ import CloseIcon from "@icons/chat/close.svg";
 import SearchIcon from "@icons/chat/search.svg";
 import { useRef } from "react";
 
-import { CreateGroupBtn } from "@/features/createGroupOrChannel/ui/createGroupBtn";
+import { CreateGroupBtn } from "@/features/createChat/ui/createChatBtn";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 import { Input } from "@/shared/shadcn/ui/input";

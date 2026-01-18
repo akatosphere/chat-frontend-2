@@ -1,7 +1,7 @@
 import { sendWSRequest } from "@/shared/api/wsClient";
 import { ChatObject, WSBaseResponse } from "@/shared/types/wsTypes";
 
-export type CreateGroupArgs = {
+export type CreateChatArgs = {
   name: string;
   description?: string;
   chat_type: "private-group" | "public-group";
@@ -12,6 +12,6 @@ export type CreateGroupArgs = {
   } | null;
 };
 
-export const createGroup = (args: CreateGroupArgs): Promise<WSBaseResponse<ChatObject>> => {
+export const createChat = (args: CreateChatArgs): Promise<WSBaseResponse<ChatObject>> => {
   return sendWSRequest<WSBaseResponse<ChatObject>>("create_chat", args);
 };

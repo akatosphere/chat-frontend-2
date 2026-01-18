@@ -10,19 +10,19 @@ import { fileToBase64 } from "@/shared/lib/files/fileToBase64";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
-import { createGroup } from "../api/ws";
-import { mapGroupType } from "../model/mapping";
+import { createChat } from "../api/ws";
+import { mapChatType } from "../model/mapping";
 import { formSchema } from "../model/schema";
-import { CreateGroupFormValues } from "../model/types";
+import { CreateChatFormValues } from "../model/types";
 import { Field } from "./field";
-import { GroupTypeSelect } from "./groupTypeSelect";
+import { ChatTypeSelect } from "./сhatTypeSelect";
 
-type CreateGroupFormProps = {
+type CreateChatFormProps = {
   className?: string;
 };
 
-export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) => {
-  const [groupType, setGroupType] = useState<"open" | "closed">("closed");
+export const CreateChatForm: React.FC<CreateChatFormProps> = ({ className }) => {
+  const [chatType, setChatType] = useState<"open" | "closed">("closed");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const router = useRouter();
@@ -49,18 +49,16 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
     };
     reader.readAsDataURL(file);
 
-    // Закрываем модалку (если логика компонента это предполагает)
     setIsModalOpen(false);
   };
 
-  // Обработчик удаления файла
   const handleAvatarDelete = () => {
     form.setValue("avatar", null);
     setPreviewUrl("");
     setIsModalOpen(false);
   };
 
-  const onSubmit = async (data: CreateGroupFormValues) => {
+  const onSubmit = async (data: CreateChatFormValues) => {
     try {
       let avatarBase64 = null;
       // Если файл выбран, конвертируем его в формат для WS
@@ -72,10 +70,10 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
         };
       }
 
-      const response = await createGroup({
+      const response = await createChat({
         name: data.title,
         description: data.description,
-        chat_type: mapGroupType(groupType),
+        chat_type: mapChatType(chatType),
         uid_users_list: [], // пока только создатель
         avatar: avatarBase64,
       });
@@ -112,7 +110,7 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
                 <Field name="title" title="Название*" maxLength={100} position="upper" />
                 <Field name="description" title="Описание" maxLength={250} position="lower" />
               </div>
-              <GroupTypeSelect value={groupType} onChange={setGroupType} />
+              <ChatTypeSelect value={chatType} onChange={setChatType} />
             </div>
             <div className="w-full">
               <Button

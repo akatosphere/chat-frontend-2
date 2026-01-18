@@ -1,12 +1,12 @@
 import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
 
-import createChannel from "@/shared/ui/icons/createGroupOrChannel/createChannel.svg";
-import createGroup from "@/shared/ui/icons/createGroupOrChannel/createGroup.svg";
+import createChannel from "@/shared/ui/icons/createChat/createChannel.svg";
+import createGroup from "@/shared/ui/icons/createChat/createGroup.svg";
 
 import { useContextMenu } from "../ui/contextMenuProvider";
 
-export const useCreateGrOrChContextMenu = () => {
+export const useCreateChatContextMenu = () => {
   const { openMenu, activeMenuId } = useContextMenu();
   const router = useRouter();
   const menuId = "createGrOrCh";

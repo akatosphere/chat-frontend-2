@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
-type GroupType = "closed" | "open";
+type ChatType = "closed" | "open";
 
 type Option = {
-  value: GroupType;
+  value: ChatType;
   title: string;
   description: string;
 };
@@ -25,12 +25,12 @@ const options: Option[] = [
 ];
 
 type Props = {
-  value: GroupType;
-  onChange: (value: GroupType) => void;
+  value: ChatType;
+  onChange: (value: ChatType) => void;
   label?: string;
 };
 
-export const GroupTypeSelect = ({ value, onChange, label = "Тип группы" }: Props) => {
+export const ChatTypeSelect = ({ value, onChange, label = "Тип группы" }: Props) => {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
