@@ -7,7 +7,10 @@ export const getMessageStatus = (
 ): MessageStatus | null => {
   if (!fromUser) return null;
   if (fromUser !== userId) return null;
-  if (isMessageNew === false) return "delivered";
-  if (isMessageNew === true) return "sent";
+
+  if (isMessageNew === true) return "delivered";
+
+  if (isMessageNew === false) return "sent";
+
   return "pending";
 };

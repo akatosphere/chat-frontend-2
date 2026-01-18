@@ -1,5 +1,6 @@
 import { StatusIcon } from "@/entities/chat/ui/statusIcon";
 import { cn } from "@/shared/shadcn/lib/utils";
+import { useMessageContextMenu } from "@/widgets/contextMenu/lib/useMessageContextMenu";
 
 import { Message } from "../model/types";
 
@@ -14,8 +15,18 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ className, chatMes
     minute: "2-digit",
   });
 
+  const { onContextMenu, isOpen } = useMessageContextMenu(`${chatMessage.id}`);
+
   return (
-    <div className={cn("flex", chatMessage.isMine ? "justify-end" : "justify-start", className)}>
+    <div
+      className={cn(
+        "flex px-4",
+        chatMessage.isMine ? "justify-end" : "justify-start",
+        isOpen && "bg-primary-hover",
+        className,
+      )}
+      onContextMenu={onContextMenu}
+    >
       <div
         className={cn(
           "desktop:max-w-[500px] relative flex w-fit max-w-[83%] min-w-0 items-stretch rounded-2xl px-3 py-2.5",
