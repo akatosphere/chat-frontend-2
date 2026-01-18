@@ -10,7 +10,7 @@ export interface MappedChatDetails {
   chatKey: string;
   type: "private-group" | "public-group" | "channel";
   description: string;
-  avatar?: string;
+  avatar: string | null;
   unreadCount: number;
   totalMessages: number;
   lastMessage: {

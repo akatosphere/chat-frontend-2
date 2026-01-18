@@ -3,7 +3,7 @@ import { z } from "zod";
 const FileSchema = z.object({
   id: z.number(),
   uid: z.uuid(),
-  file_url: z.string().url().nullable(),
+  file_url: z.url().nullable(),
   file_type: z.string(),
   new: z.boolean(),
   created_at: z.number(),
@@ -34,7 +34,7 @@ export const ChatDetailsSchema = z.object({
     uid: z.uuid(),
     username: z.string().nullable(),
     nickname: z.string().nullable(),
-    avatar_url: z.string().url().nullable(),
+    avatar_url: z.url().nullable(),
   }),
   is_active: z.boolean(),
   is_favorite: z.boolean(),

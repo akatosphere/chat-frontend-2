@@ -9,7 +9,7 @@ import { UserStatus } from "../model/types";
 type Props = {
   name: string;
   status: UserStatus | string;
-  photo?: string;
+  photo: string | null;
   onPhotoClick: () => void;
   onInfoClick: () => void;
 };

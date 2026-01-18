@@ -9,7 +9,7 @@ import { ChatHeaderUser } from "./chatHeaderUser";
 type Props = {
   name: string;
   status: UserStatus | string;
-  photo?: string;
+  photo: string | null;
   backHref: string;
   onCallClick: () => void;
   onSearchClick: () => void;
