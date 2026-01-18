@@ -9,8 +9,6 @@ import { pluralize } from "@/shared/lib/pluralize";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ChatHeader } from "@/widgets/activeChatHeader/ui/chatHeader";
 
-import { mockChats } from "../../../chatList/lib/data";
-
 type ChatWidgetProps = {
   className?: string;
   chatKey: string;
@@ -75,7 +73,6 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({
     nickname: "",
   };
 
-  const receiver = mockChats.results.find((chat) => chat.id === +chatKey)?.chat;
   const testMessages = mockMessagesPage.results;
   const messages: Message[] =
     chatKey === "3" ? testMessages.map((apiMessage) => mapApiMessage(apiMessage, sender.uid)) : [];
@@ -91,7 +88,7 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({
         name={initialData.title}
         status={getStatusText()}
         backHref="/chats"
-        photo={receiver?.avatar_url || ""}
+        photo={initialData.avatar}
         onCallClick={() => {}}
         onSearchClick={() => {}}
         onPhotoClick={() => {}}
