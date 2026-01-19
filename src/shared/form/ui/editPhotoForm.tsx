@@ -8,7 +8,7 @@ export const EditPhotoForm = () => {
         size="settingsAvatar"
         className="flex w-full justify-center"
         avatarUrl={""}
-        variant="group"
+        variant="chat"
       />
       <Button variant="text" size="inline" className="text">
         Выбрать фотографию
