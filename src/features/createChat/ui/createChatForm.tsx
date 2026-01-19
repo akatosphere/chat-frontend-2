@@ -11,18 +11,19 @@ import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
 import { createChat } from "../api/ws";
-import { mapChatType } from "../model/mapping";
 import { formSchema } from "../model/schema";
-import { CreateChatFormValues } from "../model/types";
+import { ChatType, CreateChatFormValues } from "../model/types";
+import { ChatTypeSelect } from "./chatTypeSelect";
 import { Field } from "./field";
-import { ChatTypeSelect } from "./сhatTypeSelect";
 
 type CreateChatFormProps = {
   className?: string;
+  groupOrChannel: "group" | "channel";
 };
 
-export const CreateChatForm: React.FC<CreateChatFormProps> = ({ className }) => {
-  const [chatType, setChatType] = useState<"open" | "closed">("closed");
+export const CreateChatForm: React.FC<CreateChatFormProps> = ({ className, groupOrChannel }) => {
+  const initialChatType = groupOrChannel == "group" ? "private-group" : "public-channel";
+  const [chatType, setChatType] = useState<ChatType>(initialChatType);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const router = useRouter();
@@ -73,7 +74,7 @@ export const CreateChatForm: React.FC<CreateChatFormProps> = ({ className }) => 
       const response = await createChat({
         name: data.title,
         description: data.description,
-        chat_type: mapChatType(chatType),
+        chat_type: chatType,
         uid_users_list: [], // пока только создатель
         avatar: avatarBase64,
       });
@@ -104,13 +105,17 @@ export const CreateChatForm: React.FC<CreateChatFormProps> = ({ className }) => 
                 isAvatarChangeModalOpen={isModalOpen}
                 setIsAvatarChangeModalOpen={setIsModalOpen}
                 error={errors.avatar?.message as string}
-                avatarVariant="group"
+                avatarVariant="chat"
               />
               <div>
                 <Field name="title" title="Название*" maxLength={100} position="upper" />
                 <Field name="description" title="Описание" maxLength={250} position="lower" />
               </div>
-              <ChatTypeSelect value={chatType} onChange={setChatType} />
+              <ChatTypeSelect
+                value={chatType}
+                onChange={setChatType}
+                groupOrChannel={groupOrChannel}
+              />
             </div>
             <div className="w-full">
               <Button

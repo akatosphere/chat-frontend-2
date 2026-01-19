@@ -7,7 +7,7 @@ export default function CreateGroupPage() {
     <>
       <SidebarHeader title="Создать группу" backButton />
       <SidebarContainer className="">
-        <CreateChatForm className="" />
+        <CreateChatForm groupOrChannel="group" />
       </SidebarContainer>
     </>
   );

@@ -16,7 +16,7 @@ type AvatarSectionProps = {
   setIsAvatarChangeModalOpen: (value: boolean) => void;
   onAvatarDelete: () => void;
   onAvatarChange: (file: File) => void;
-  avatarVariant?: "user" | "group";
+  avatarVariant?: "user" | "chat";
 };
 
 export const AvatarSection: React.FC<AvatarSectionProps> = ({

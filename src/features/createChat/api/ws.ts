@@ -1,10 +1,12 @@
 import { sendWSRequest } from "@/shared/api/wsClient";
 import { ChatObject, WSBaseResponse } from "@/shared/types/wsTypes";
 
+import { ChatType } from "../model/types";
+
 export type CreateChatArgs = {
   name: string;
   description?: string;
-  chat_type: "private-group" | "public-group";
+  chat_type: ChatType;
   uid_users_list: string[];
   avatar: {
     filename: string;

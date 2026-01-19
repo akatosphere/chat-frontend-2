@@ -48,7 +48,7 @@ export const ChatDetailsSchema = z.object({
   first_new_message: z.object({ id: z.number(), uid: z.uuid() }).nullable(),
 
   name: z.string(),
-  chat_type: z.enum(["private-group", "public-group", "channel"]),
+  chat_type: z.enum(["private-group", "public-group", "private-channel", "public-channel"]),
   chat_key: z.string(),
   description: z.string().nullable(),
   participants: z.array(ParticipantSchema),

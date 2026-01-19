@@ -1,4 +1,8 @@
-export type ChatType = "chat" | "group" | "channel";
+import z from "zod";
+
+import { ChatDetailsSchema } from "./schema";
+
+export type ChatType = z.infer<typeof ChatDetailsSchema>["chat_type"];
 
 export interface LastMessage {
   id: number;

@@ -52,14 +52,11 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({
   // Определяем текст статуса
   const getStatusText = () => {
     // Если это группа или канал — показываем кол-во участников
-    if (
-      initialData.type === "private-group" ||
-      initialData.type === "public-group" ||
-      initialData.type === "channel"
-    ) {
+    if (initialData.type === "private-group" || initialData.type === "public-group") {
       return `${initialData.membersCount + 1} ${pluralize(initialData.membersCount + 1, "участник", "участника", "участников")}`;
+    } else if (initialData.type === "private-channel" || initialData.type === "public-channel") {
+      return `${initialData.membersCount + 1} ${pluralize(initialData.membersCount + 1, "подписчик", "подписчика", "подписчиков")}`;
     }
-
     // Если это личный чат — пока оставляем "online" (в будущем будет приходить из WS)
     return "online";
   };

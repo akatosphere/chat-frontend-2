@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-type ChatType = "closed" | "open";
+import { ChatType } from "../model/types";
 
 type Option = {
   value: ChatType;
@@ -10,29 +10,44 @@ type Option = {
   description: string;
 };
 
-const options: Option[] = [
+const groupOptions: Option[] = [
   {
-    value: "closed",
+    value: "private-group",
     title: "Закрытая",
     description: "В закрытую группу можно попасть только по приглашению или пригласительной ссылке",
   },
   {
-    value: "open",
+    value: "public-group",
     title: "Открытая",
     description:
       "Открытую группу можно найти через поиск. Присоединиться к ней может любой пользователь",
   },
 ];
 
+const channelOptions: Option[] = [
+  {
+    value: "public-channel",
+    title: "Публичный",
+    description:
+      "Публичный канал можно найти через поиск. Подписаться на него может любой пользователь",
+  },
+  {
+    value: "private-channel",
+    title: "Частный",
+    description: "В частный канал можно попасть только по приглашению или пригласительной ссылке",
+  },
+];
+
 type Props = {
   value: ChatType;
   onChange: (value: ChatType) => void;
-  label?: string;
+  groupOrChannel: "group" | "channel";
 };
 
-export const ChatTypeSelect = ({ value, onChange, label = "Тип группы" }: Props) => {
+export const ChatTypeSelect = ({ value, onChange, groupOrChannel }: Props) => {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const options = groupOrChannel == "group" ? groupOptions : channelOptions;
 
   useEffect(() => {
     const onOutside = (e: MouseEvent) => {
@@ -42,11 +57,13 @@ export const ChatTypeSelect = ({ value, onChange, label = "Тип группы" 
     return () => document.removeEventListener("mousedown", onOutside);
   }, [open]);
 
-  const selected = useMemo(() => options.find((o) => o.value === value)!, [value]);
+  const selected = options.find((o) => o.value === value) || options[0];
 
   return (
     <div ref={rootRef} className="relative">
-      <div className="text-gray mb-2 text-sm">{label}</div>
+      <div className="text-gray mb-2 text-sm">
+        {groupOrChannel == "group" ? "Тип группы" : "Тип канала"}
+      </div>
 
       <button
         type="button"

@@ -7,7 +7,7 @@ type AvatarProps = {
   isOnline?: boolean;
   avatarUrl: string;
   size?: "sm" | "md" | "lg" | "xl" | "settingsAvatar" | "createGroupAvatar";
-  variant?: "user" | "group";
+  variant?: "user" | "chat";
 };
 
 const AVATAR_SIZES = {

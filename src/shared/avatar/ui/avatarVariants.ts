@@ -4,7 +4,7 @@ export const containerVariants = cva("relative mb-4 flex flex-col items-center t
   variants: {
     variant: {
       user: "gap-2",
-      group: "desktop:mb-2 desktop:mt-0 mt-4 mb-0 gap-2",
+      chat: "desktop:mb-2 desktop:mt-0 mt-4 mb-0 gap-2",
     },
   },
   defaultVariants: {
@@ -22,7 +22,7 @@ export const triggerButtonVariants = cva(
 
           "desktop:bg-transparent desktop:p-0 desktop:text-primary desktop:static desktop:rounded-none desktop:text-[17px]",
         ],
-        group: ["text-primary text static rounded-none bg-transparent p-0"],
+        chat: ["text-primary text static rounded-none bg-transparent p-0"],
       },
     },
     defaultVariants: {
@@ -35,7 +35,7 @@ export const plusIconVariants = cva("transition-transform", {
   variants: {
     variant: {
       user: ["mr-2 h-3.5 w-3.5", "desktop:hidden desktop:mr-0"],
-      group: "hidden",
+      chat: "hidden",
     },
   },
   defaultVariants: {

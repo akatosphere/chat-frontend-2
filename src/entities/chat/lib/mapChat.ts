@@ -1,4 +1,5 @@
 import { ChatDetails } from "../model/schema";
+import { ChatType } from "../model/types";
 
 /**
  * Интерфейс, который будет использовать фронтенд (UI)
@@ -8,7 +9,7 @@ export interface MappedChatDetails {
   uid: string;
   title: string;
   chatKey: string;
-  type: "private-group" | "public-group" | "channel";
+  type: ChatType;
   description: string;
   avatar: string | null;
   unreadCount: number;
@@ -51,7 +52,7 @@ export const mapChatDetails = (raw: ChatDetails): MappedChatDetails => {
     uid: raw.chat.uid,
     title: raw.name,
     chatKey: raw.chat_key,
-    type: raw.chat_type,
+    type: raw.chat_type as ChatType,
     description: raw.description || "",
     avatar: raw.chat.avatar_url,
 
