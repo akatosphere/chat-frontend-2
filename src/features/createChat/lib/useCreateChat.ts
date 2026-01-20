@@ -5,10 +5,10 @@ import { useForm } from "react-hook-form";
 import { formSchema } from "../model/schema";
 import { useCreateChatStore } from "../model/store";
 import { CreateChatFormValues } from "../model/types";
+import { mapChatTypeToValue, mapValueToChatType } from "./mapChatType";
 
 export const useCreateChat = () => {
   const { formData, updateData, setStep, groupOrChannel } = useCreateChatStore();
-  const defaultType = groupOrChannel === "group" ? "private-group" : "public-channel";
   // Состояния для аватара
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>(formData.avatar || "");
@@ -17,10 +17,10 @@ export const useCreateChat = () => {
     mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: formData.title || "",
-      description: formData.description || "",
+      title: formData.title,
+      description: formData.description,
       avatar: formData.avatar,
-      chat_type: formData.chat_type || defaultType,
+      chat_type: mapChatTypeToValue(formData.chat_type, groupOrChannel),
     },
   });
 
@@ -42,12 +42,13 @@ export const useCreateChat = () => {
   };
 
   const onNextStep = (data: CreateChatFormValues) => {
+    const finalChatType = mapValueToChatType(data.chat_type as 1 | 2, groupOrChannel);
     // Сохраняем данные первого шага в стор
     updateData({
       title: data.title,
       description: data.description,
       avatar: previewUrl || null,
-      chat_type: data.chat_type,
+      chat_type: finalChatType,
     });
     // Переключаем на второй шаг (выбор участников)
     setStep(2);

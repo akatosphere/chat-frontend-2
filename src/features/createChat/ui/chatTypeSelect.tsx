@@ -6,39 +6,29 @@ import { useFormContext } from "react-hook-form";
 import { cn } from "@/shared/shadcn/lib/utils"; // используем вашу утилиту для чистоты
 
 import { useCreateChatStore } from "../model/store";
-import { ChatType } from "../model/types";
 
 type Option = {
-  value: ChatType;
+  value: 1 | 2;
   title: string;
   description: string;
 };
 
-const groupOptions: Option[] = [
+const getOptions = (mode: "group" | "channel"): Option[] => [
   {
-    value: "private-group",
-    title: "Закрытая",
-    description: "В закрытую группу можно попасть только по приглашению или пригласительной ссылке",
-  },
-  {
-    value: "public-group",
-    title: "Открытая",
+    value: 1,
+    title: mode === "group" ? "Закрытая" : "Публичный",
     description:
-      "Открытую группу можно найти через поиск. Присоединиться к ней может любой пользователь",
+      mode === "group"
+        ? "В закрытую группу можно попасть только по приглашению или пригласительной ссылке"
+        : "Публичный канал можно найти через поиск. Подписаться на него может любой пользователь",
   },
-];
-
-const channelOptions: Option[] = [
   {
-    value: "public-channel",
-    title: "Публичный",
+    value: 2,
+    title: mode === "group" ? "Открытая" : "Частный",
     description:
-      "Публичный канал можно найти через поиск. Подписаться на него может любой пользователь",
-  },
-  {
-    value: "private-channel",
-    title: "Частный",
-    description: "В частный канал можно попасть только по приглашению или пригласительной ссылке",
+      mode === "group"
+        ? "Открытую группу можно найти через поиск. Присоединиться к ней может любой пользователь"
+        : "В частный канал можно попасть только по приглашению или пригласительной ссылке",
   },
 ];
 
@@ -50,7 +40,7 @@ export const ChatTypeSelect = () => {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const options = groupOrChannel === "group" ? groupOptions : channelOptions;
+  const options = getOptions(groupOrChannel);
 
   useEffect(() => {
     const onOutside = (e: MouseEvent) => {
