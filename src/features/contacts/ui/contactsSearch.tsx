@@ -2,7 +2,9 @@
 import { useEffect, useState } from "react";
 
 import { ChatUser } from "@/entities/chat/model/types";
+import { useCreateChatStore } from "@/features/createChat/model/store"; // ФУНКЦИОНАЛ ДЛЯ ТЕСТА
 import { cn } from "@/shared/shadcn/lib/utils";
+import { Button } from "@/shared/shadcn/ui/button";
 import { Searchbar } from "@/shared/ui/searchbar";
 
 import { getContacts } from "../api/getContacts";
@@ -43,10 +45,28 @@ export const ContactsSearch: React.FC<ContactsSearchProps> = ({ className }) => 
     fetchContacts();
   }, [debouncedSearch]);
 
+  // ФУНКЦИОНАЛ ДЛЯ ТЕСТА
+  const contactsUids = contacts.map((el) => el.uid);
+  const { updateData, formData } = useCreateChatStore();
+  const handleAddToStore = () => {
+    const currentUids = formData.uid_users_list || [];
+
+    const updatedUids = Array.from(new Set([...currentUids, ...contactsUids]));
+
+    updateData({ uid_users_list: updatedUids });
+  };
+  // ФУНКЦИОНАЛ ДЛЯ ТЕСТА
+
   return (
     <div className={cn("", className)}>
       <Searchbar value={search} onChange={setSearch} />
       <ContactsList contacts={contacts || []} />
+      {/* ФУНКЦИОНАЛ ДЛЯ ТЕСТА */}
+      <Button className="m-4" onClick={handleAddToStore}>
+        Добавить в массив
+      </Button>{" "}
+      <p>Длина массива: {formData.uid_users_list.length}</p>
+      {/* ФУНКЦИОНАЛ ДЛЯ ТЕСТА */}
     </div>
   );
 };
