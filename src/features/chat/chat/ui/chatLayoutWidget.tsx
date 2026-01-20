@@ -7,7 +7,7 @@ import { Message } from "@/features/chat/chat/model/types";
 import { ChatWidget } from "@/features/chat/chat/ui/chatWidget";
 import { pluralize } from "@/shared/lib/pluralize";
 import { cn } from "@/shared/shadcn/lib/utils";
-import { ChatHeader } from "@/widgets/activeChatHeader/ui/chatHeader";
+import { ChatHeader } from "@/widgets/chat/chatHeader/ui/chatHeader";
 
 type ChatWidgetProps = {
   className?: string;
