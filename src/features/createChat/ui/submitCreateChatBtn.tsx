@@ -9,18 +9,16 @@ import { Button } from "@/shared/shadcn/ui/button";
 import { createChat } from "../api/ws";
 import { useCreateChatStore } from "../model/store";
 
-type SubmitBtnProps = {
+type SubmitCreateChatBtnProps = {
   className?: string;
 };
 
-export const SubmitBtn: React.FC<SubmitBtnProps> = ({ className }) => {
+export const SubmitCreateChatBtn: React.FC<SubmitCreateChatBtnProps> = ({ className }) => {
   const router = useRouter();
-  // 2. Создаем состояние загрузки
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { formData, reset } = useCreateChatStore();
 
   const handleCreateChat = async () => {
-    // 3. Включаем режим загрузки
     setIsSubmitting(true);
 
     try {
