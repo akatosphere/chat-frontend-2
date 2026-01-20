@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { CreateChatBtn } from "@/features/createChat/ui/createChatBtn";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Searchbar } from "@/shared/ui/searchbar";
 
@@ -123,7 +124,10 @@ export const ChatsListPanel: React.FC<ChatsListPanelProps> = ({ className }) => 
 
   return (
     <div className={cn("flex h-full flex-col overflow-y-auto", className)}>
-      <Searchbar onChange={onSearch} value={search} className="p-4" />
+      <div className="flex flex-row gap-4 p-4 pr-6">
+        <Searchbar onChange={onSearch} value={search} className="flex-1" />
+        <CreateChatBtn />
+      </div>
       <ChatList chats={filteredChats} isSearch={search.length > 0} actions={actions} />
     </div>
   );

@@ -1,13 +1,13 @@
 import { useCreateChatStore } from "@/features/createChat/model/store";
-import { cn } from "@/shared/shadcn/lib/utils";
+import { Searchbar } from "@/shared/ui/searchbar";
 
 type Step2WidgetProps = {
   className?: string;
 };
 
-export const Step2Widget: React.FC<Step2WidgetProps> = ({ className }) => {
+export const Step2Widget: React.FC<Step2WidgetProps> = () => {
   const { formData } = useCreateChatStore();
   console.log(formData);
 
-  return <div className={cn("", className)}>второй шаг</div>;
+  return <Searchbar />;
 };
