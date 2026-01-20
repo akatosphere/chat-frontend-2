@@ -37,6 +37,7 @@ export const AvatarSection: React.FC<AvatarSectionProps> = ({
         variant={avatarVariant}
       />
       <Button
+        type="button"
         variant="text"
         size="inline"
         className={cn(triggerButtonVariants({ variant: avatarVariant }))}

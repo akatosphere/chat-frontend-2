@@ -6,7 +6,7 @@ interface CreateChatState {
   step: 1 | 2;
   groupOrChannel: "group" | "channel";
   formData: {
-    name: string;
+    title: string;
     description: string;
     chat_type: ChatType;
     avatar: string | null;
@@ -22,7 +22,7 @@ export const useCreateChatStore = create<CreateChatState>((set) => ({
   step: 1,
   groupOrChannel: "group",
   formData: {
-    name: "",
+    title: "",
     description: "",
     chat_type: "private-group",
     avatar: null,
@@ -35,7 +35,7 @@ export const useCreateChatStore = create<CreateChatState>((set) => ({
     set({
       step: 1,
       formData: {
-        name: "",
+        title: "",
         description: "",
         chat_type: "private-group",
         avatar: null,
