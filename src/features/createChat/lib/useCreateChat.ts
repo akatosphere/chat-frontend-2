@@ -2,16 +2,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { fileToBase64 } from "@/shared/lib/files/fileToBase64";
+
 import { formSchema } from "../model/schema";
 import { useCreateChatStore } from "../model/store";
 import { CreateChatFormValues } from "../model/types";
+import { getInitialPreview } from "./getInitialPreview";
 import { mapChatTypeToValue, mapValueToChatType } from "./mapChatType";
 
 export const useCreateChat = () => {
   const { formData, updateData, setStep, groupOrChannel } = useCreateChatStore();
   // Состояния для аватара
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string>(formData.avatar || "");
+  const [previewUrl, setPreviewUrl] = useState<string>(getInitialPreview(formData.avatar));
 
   const form = useForm<CreateChatFormValues>({
     mode: "onChange",
@@ -41,13 +44,22 @@ export const useCreateChat = () => {
     setIsModalOpen(false);
   };
 
-  const onNextStep = (data: CreateChatFormValues) => {
+  const onNextStep = async (data: CreateChatFormValues) => {
     const finalChatType = mapValueToChatType(data.chat_type as 1 | 2, groupOrChannel);
+    let avatarPayload = null;
+    // Конвертируем здесь
+    if (data.avatar instanceof File) {
+      const base64String = await fileToBase64(data.avatar);
+      avatarPayload = {
+        filename: data.avatar.name,
+        data: base64String.split(",")[1], // забираем только данные
+      };
+    }
     // Сохраняем данные первого шага в стор
     updateData({
       title: data.title,
       description: data.description,
-      avatar: previewUrl || null,
+      avatar: avatarPayload,
       chat_type: finalChatType,
     });
     // Переключаем на второй шаг (выбор участников)

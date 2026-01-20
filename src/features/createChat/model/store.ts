@@ -9,7 +9,10 @@ interface CreateChatState {
     title: string;
     description: string;
     chat_type: ChatType;
-    avatar: string | null;
+    avatar: {
+      filename: string;
+      data: string; // чистый base64
+    } | null;
     uid_users_list: string[];
   };
   setStep: (step: 1 | 2) => void;
