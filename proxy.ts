@@ -11,6 +11,7 @@ const authRoutes = [
   "/auth/user",
 ];
 
+// Минимальный парсер JWT для проверки срока жизни (exp)
 function isTokenExpired(token: string): boolean {
   try {
     const base64Url = token.split(".")[1];
@@ -31,11 +32,14 @@ function isTokenExpired(token: string): boolean {
 
 async function refreshTokens(refreshToken: string) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/refresh/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refresh: refreshToken }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login/refresh/token/`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh: refreshToken }),
+      },
+    );
 
     if (!response.ok) return null;
     return await response.json();
@@ -78,7 +82,6 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // --- ЛОГИКА ЗАЩИТЫ РОУТОВ ---
   const isProtectedRoute = protectedRoutes.some((route) => path.startsWith(route));
   const isAuthRoute = authRoutes.includes(path);
 
@@ -100,7 +103,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL(redirectTo, request.url));
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

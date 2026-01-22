@@ -1,8 +1,17 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 import { useAuthStore } from "../api/store";
+
+const PUBLIC_ROUTES = [
+  "/auth",
+  "/auth/phone",
+  "/auth/code",
+  "/auth/support",
+  "/auth/support/success",
+];
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -10,6 +19,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
+  const pathname = usePathname();
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
   const finishInitialization = useAuthStore((s) => s.finishInitialization);
   const isInitialized = useAuthStore((s) => s.isInitialized);
@@ -24,19 +34,22 @@ export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
         // Устанавливаем токен из SSR
         setAccessToken(initialToken);
       } else {
+        const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname?.startsWith(route));
         // Если Middleware почему-то не смог обновить токен (или его вообще нет),
         // можно попробовать последний шанс на клиенте
-        try {
-          const res = await fetch("/api/refresh-token", {
-            method: "POST",
-            credentials: "include",
-          });
-          if (res.ok) {
-            const data = await res.json();
-            setAccessToken(data.access);
+        if (!isPublicRoute) {
+          try {
+            const res = await fetch("/api/refresh-token", {
+              method: "POST",
+              credentials: "include",
+            });
+            if (res.ok) {
+              const data = await res.json();
+              setAccessToken(data.access);
+            }
+          } catch (e) {
+            console.error("Client-side hydration refresh failed", e);
           }
-        } catch (e) {
-          console.error("Client-side hydration refresh failed", e);
         }
       }
 
