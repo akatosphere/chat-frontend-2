@@ -1,18 +1,8 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { useAuthStore } from "../api/store";
-
-// Список публичных путей (ваша исходная логика)
-const PUBLIC_ROUTES = [
-  "/auth",
-  "/auth/phone",
-  "/auth/code",
-  "/auth/support",
-  "/auth/support/success",
-];
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -20,28 +10,22 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
-  const pathname = usePathname();
-  // Берем только нужные функции (не берем всё состояние, чтобы не было лишних ререндеров)
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
   const finishInitialization = useAuthStore((s) => s.finishInitialization);
   const isInitialized = useAuthStore((s) => s.isInitialized);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    // 1. Синхронизируем токен, полученный от SSR
-    if (initialToken) {
-      setAccessToken(initialToken);
-    }
+    if (initialized.current) return;
+    initialized.current = true;
 
-    const isPublicRoute = pathname ? PUBLIC_ROUTES.includes(pathname) : false;
-
-    if (isPublicRoute) {
-      finishInitialization();
-      return;
-    }
-
-    // 2. Если токена нет, пробуем рефреш
     const initAuth = async () => {
-      if (!initialToken) {
+      if (initialToken) {
+        // Устанавливаем токен из SSR
+        setAccessToken(initialToken);
+      } else {
+        // Если Middleware почему-то не смог обновить токен (или его вообще нет),
+        // можно попробовать последний шанс на клиенте
         try {
           const res = await fetch("/api/refresh-token", {
             method: "POST",
@@ -52,21 +36,17 @@ export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
             setAccessToken(data.access);
           }
         } catch (e) {
-          console.error(e);
+          console.error("Client-side hydration refresh failed", e);
         }
       }
+
       finishInitialization();
     };
 
     initAuth();
-  }, [initialToken, pathname, setAccessToken, finishInitialization]);
-
-  const isPublicRoute = pathname ? PUBLIC_ROUTES.includes(pathname) : false;
-
-  // Если мы еще не готовы, показываем ничего или лоадер
-  // НО: если у нас есть initialToken, мы можем разрешить рендер сразу!
-  if (!isInitialized && !initialToken && !isPublicRoute) {
-    return null;
+  }, [initialToken, setAccessToken, finishInitialization]);
+  if (!isInitialized) {
+    if (!initialToken) return null;
   }
 
   return <>{children}</>;
