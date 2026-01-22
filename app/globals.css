@@ -55,6 +55,7 @@
   --gray-tone: #eeeeee;
   --light-green: #d8f5f0;
   --accent: #d6d2f6;
+  --gray-transparent: #0000004d;
 
   /* добавлены цвета для цвета иконок меню навигации */
   --nav-border: #eeeeee;
@@ -145,6 +146,7 @@
   --color-gray-tone: var(--gray-tone);
   --color-light-green: var(--light-green);
   --color-primary-accent-light: var(--primary-accent-light);
+  --color-gray-transparent: var(--gray-transparent);
 
   /* добавлены переменные для цвета иконок меню навигации */
   --color-nav-border: var(--nav-border);

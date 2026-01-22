@@ -1,3 +1,5 @@
+import { MappedChatMessage } from "../../chat/chat/model/types/mappedTypes";
+
 export type MessageStatus = "sent" | "delivered" | "read";
 export type User = {
   uid: string;
@@ -32,5 +34,5 @@ export type MessageGroupType = {
   id: string;
   date: string;
   label: string;
-  messages: Message[];
+  messages: MappedChatMessage[];
 };

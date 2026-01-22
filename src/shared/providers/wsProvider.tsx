@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
+import { useUserStore } from "@/entities/chat/model/userStore";
 import { useAuthStore } from "@/shared/api/store";
 import { connectWS, disconnectWS, subscribeToWS } from "@/shared/api/wsClient";
 
@@ -10,24 +11,36 @@ import { useWSRequestStore } from "../model/wsRequest.store";
 export const WSProvider = ({ children }: { children: React.ReactNode }) => {
   const accessToken = useAuthStore((s) => s.accessToken);
   const isInitialized = useAuthStore((s) => s.isInitialized);
+  const setUserId = useUserStore((s) => s.setUserId);
 
   const prevTokenRef = useRef<string | null>(null);
+  const userIdExtractedRef = useRef<boolean>(false);
 
   useEffect(() => {
     const unsubscribe = subscribeToWS((data) => {
-      // 1. Сначала проверяем, не является ли это ответом на конкретный запрос (по UID)
       if (data.request_uid) {
         useWSRequestStore.getState().fulfillRequest(data.request_uid, data);
       }
 
-      // 2. Затем пробрасываем в роутеры
+      if (data.action === "new_status_user" && !userIdExtractedRef.current) {
+        const statusData = data as { object: { user: { uid: string } } };
+        if (statusData.object?.user?.uid) {
+          setUserId(statusData.object.user.uid);
+          userIdExtractedRef.current = true;
+        }
+      }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [setUserId]);
 
   useEffect(() => {
     if (!isInitialized) return;
+
+    // Сбрасываем флаг при смене токена
+    if (accessToken && prevTokenRef.current !== accessToken) {
+      userIdExtractedRef.current = false;
+    }
 
     // LOGIN или REFRESH TOKEN
     if (accessToken) {
@@ -42,6 +55,7 @@ export const WSProvider = ({ children }: { children: React.ReactNode }) => {
     if (!accessToken && prevTokenRef.current) {
       disconnectWS();
       prevTokenRef.current = null;
+      userIdExtractedRef.current = false;
     }
   }, [accessToken, isInitialized]);
 

@@ -1,3 +1,5 @@
+import { useUserStore } from "@/entities/chat/model/userStore";
+
 import { getApiClient } from "./getApiClient";
 import { useAuthStore } from "./store";
 
@@ -10,6 +12,7 @@ export const logout = async () => {
 
   // чистим access token
   store.clearAccessToken();
+  useUserStore.getState().reset();
   delete getApiClient.defaults.headers.common["Authorization"];
 
   // чистим client-side куки
