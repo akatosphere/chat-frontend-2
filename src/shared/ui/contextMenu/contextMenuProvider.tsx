@@ -9,7 +9,7 @@ export type MenuItem = {
   label: string;
   icon?: ComponentType<SVGProps<SVGSVGElement>>;
   onClick: () => void;
-  destructive?: boolean; // для красных пунктов
+  destructive?: boolean;
 };
 
 export type ContextMenuState = {

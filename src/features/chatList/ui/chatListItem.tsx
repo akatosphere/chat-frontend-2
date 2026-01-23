@@ -1,10 +1,10 @@
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { cn } from "@/shared/shadcn/lib/utils";
-import { useChatListItemContextMenu } from "@/widgets/contextMenu/lib/useChatListItemContextMenu";
 
 import { ChatItemData } from "../../../entities/chat/model/types";
 import { Avatar } from "../../../entities/chat/ui/avatar";
+import { useChatListItemContextMenu } from "../lib/useChatListItemContextMenu";
 import { ChatActions } from "../model/types";
 import { ChatListItemFooter } from "./chatListItemFooter";
 import { ChatListItemHeader } from "./chatListItemHeader";
@@ -26,17 +26,18 @@ export const ChatListItem = ({
   actions,
   onClick,
 }: ChatListItemProps) => {
+  const router = useRouter();
   const totalUnread = chat.new_message_count + chat.new_file_count;
   const user = chat.chat;
   const { onContextMenu, isOpen } = useChatListItemContextMenu(chat, actions);
 
+  const handleClick = () => {
+    onClick();
+    router.push(`/chats/${chat.id}`);
+  };
+
   return (
-    <Link
-      href={`/chats/${chat.id}`}
-      className={cn("py-1", className)}
-      onClick={onClick}
-      onContextMenu={onContextMenu}
-    >
+    <div className={cn("py-1", className)} onClick={handleClick} onContextMenu={onContextMenu}>
       <div
         className={cn(
           "flex cursor-pointer items-stretch gap-2 rounded-md px-2.5 py-1.5 transition-colors duration-200",
@@ -65,6 +66,6 @@ export const ChatListItem = ({
           />
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
