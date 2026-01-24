@@ -1,14 +1,14 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+"use client";
+
 import { useState } from "react";
 
-import { MessengerProfileResponse } from "@/entities/user/api/updateProfile";
 import { uploadAvatar } from "@/entities/user/api/uploadAvatar";
+import { User } from "@/entities/user/model/types";
 
-import { getDefaultBirthday } from "./getDefaultBirthday";
+import { getDefaultBirthday } from "./getDefaultBirthday"; // импортируем вашу функцию
 
-export type UseUserProfileFormProps = {
-  profile: MessengerProfileResponse;
+type UseUserProfileFormProps = {
+  profile: User;
   avatarUrl: string;
   name: string;
   lastName: string;
@@ -17,64 +17,45 @@ export type UseUserProfileFormProps = {
   birthday: number;
 };
 
-export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormProps) => {
-  const queryClient = useQueryClient();
+export const useUserProfileForm = ({
+  avatarUrl,
+  birthday: initialBirthday,
+}: UseUserProfileFormProps) => {
   const [currentAvatarUrl, setCurrentAvatarUrl] = useState(avatarUrl);
-  const [avatarError, setAvatarError] = useState("");
+  const [avatarError, setAvatarError] = useState<string | undefined>();
   const [isAvatarChangeModalOpen, setIsAvatarChangeModalOpen] = useState(false);
 
+  // Формируем объект значений по умолчанию строго по схеме changeProfileSchema
   const getDefaultValues = (
     name: string,
     lastName: string,
     nickname: string,
     description: string,
   ) => ({
-    name,
-    lastName,
-    description,
-    nickname,
-    birthday: getDefaultBirthday(birthday),
+    name: name || "",
+    lastName: lastName || "",
+    nickname: nickname || "",
+    description: description || "",
+    birthday: getDefaultBirthday(initialBirthday), // Используем вашу функцию
   });
 
-  const avatarMutation = useMutation({
-    mutationFn: (file: File) => uploadAvatar(file),
-    onSuccess: (res) => {
-      if (res.data.file_url) {
-        setCurrentAvatarUrl(res.data.file_url);
-        setIsAvatarChangeModalOpen(false);
-        queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
-      }
-    },
-    onError: (error: unknown) => {
-      const axiosError = error as AxiosError<{ file: string[] }>;
-      setAvatarError(axiosError.response?.data?.file?.[0] || "Ошибка загрузки аватара");
-    },
-  });
-
-  const onAvatarChangeHandler = (file: File) => {
-    const allowedTypes = ["image/png", "image/jpeg", "image/x-ms-bmp"];
-
-    if (file.size === 0) {
-      setAvatarError("Файл не выбран.");
-      return;
+  const onAvatarChangeHandler = async (file: File) => {
+    const res = await uploadAvatar(file);
+    if (res.success) {
+      setCurrentAvatarUrl(res.data.avatar_url);
+      setAvatarError(undefined);
+    } else {
+      setAvatarError("Ошибка загрузки");
     }
-    if (!allowedTypes.includes(file.type)) {
-      setAvatarError("Недопустимый формат файла. Допустимые форматы: PNG, JPG, JPEG, BMP.");
-      return;
-    }
-
-    avatarMutation.mutate(file);
+    setIsAvatarChangeModalOpen(false);
   };
 
   return {
     currentAvatarUrl,
     avatarError,
     isAvatarChangeModalOpen,
-    defaultBirthday: getDefaultBirthday(birthday),
-    defaultValues: getDefaultValues,
-    setCurrentAvatarUrl,
-    setAvatarError,
     setIsAvatarChangeModalOpen,
     onAvatarChangeHandler,
+    getDefaultValues,
   };
 };
