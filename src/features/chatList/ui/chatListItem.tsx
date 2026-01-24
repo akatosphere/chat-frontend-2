@@ -1,9 +1,9 @@
 import Link from "next/link";
 
+import { ChatItemData } from "@/entities/chat/model/types";
+import { Avatar } from "@/entities/chat/ui/avatar";
 import { cn } from "@/shared/shadcn/lib/utils";
 
-import { ChatItemData } from "../../../entities/chat/model/types";
-import { Avatar } from "../../../entities/chat/ui/avatar";
 import { ChatListItemFooter } from "./chatListItemFooter";
 import { ChatListItemHeader } from "./chatListItemHeader";
 
