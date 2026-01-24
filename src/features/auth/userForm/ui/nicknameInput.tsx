@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { checkNickname } from "@/entities/user/api/checkNickname";
+import { checkNickname } from "@/entities/user/api/checkNicknameUnique";
 import { FormInput } from "@/shared/form/ui/formInput";
 import { cn } from "@/shared/shadcn/lib/utils";
 

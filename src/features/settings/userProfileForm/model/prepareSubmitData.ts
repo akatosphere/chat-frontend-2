@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { MessengerProfileResponse } from "@/entities/user/api/updateUserProfile";
+import { MessengerProfileResponse } from "@/entities/user/api/updateProfile";
 
 import { normalizeBirthday } from "../lib/normalizeBirthday";
 import { changeProfileSchema } from "./schema";

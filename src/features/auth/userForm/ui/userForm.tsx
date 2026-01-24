@@ -9,7 +9,7 @@ import { FormInput } from "@/shared/form/ui/formInput";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
-import { updateMessengerProfile } from "../../../../entities/user/api/updateUserProfile";
+import { updateMessengerProfile } from "../../../../entities/user/api/updateProfile";
 import { useUserFormStore } from "../model/store";
 import { UserFormData, userFormSchema } from "../model/validation";
 import { NicknameInput } from "./nicknameInput";

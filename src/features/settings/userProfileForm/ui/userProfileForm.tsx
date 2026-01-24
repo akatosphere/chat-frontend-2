@@ -7,7 +7,7 @@ import z from "zod";
 import {
   MessengerProfileResponse,
   MessengerProfileSchema,
-} from "@/entities/user/api/updateUserProfile";
+} from "@/entities/user/api/updateProfile";
 import { NicknameInput } from "@/features/auth/userForm/ui/nicknameInput";
 import { FormInput } from "@/shared/form/ui/formInput";
 import { cn } from "@/shared/shadcn/lib/utils";
