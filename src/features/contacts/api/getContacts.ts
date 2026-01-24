@@ -1,4 +1,4 @@
-import { ChatUser } from "@/entities/chat/model/types";
+import { ChatMemberDto } from "@/entities/user/model/types";
 import { errorHandler } from "@/shared/api/errorHandler";
 import getApiClient from "@/shared/api/getApiClient";
 import { Result } from "@/shared/api/types";
@@ -7,9 +7,9 @@ export interface GetContactsData {
   1: { phone_or_nickname: string };
 }
 
-export const getContacts = async (data: GetContactsData): Promise<Result<ChatUser[]>> => {
+export const getContacts = async (data: GetContactsData): Promise<Result<ChatMemberDto[]>> => {
   try {
-    const { data: response } = await getApiClient.post<ChatUser[]>(
+    const { data: response } = await getApiClient.post<ChatMemberDto[]>(
       "/api/v1/contact/check/list/",
       data,
     );
