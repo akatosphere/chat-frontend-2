@@ -1,5 +1,6 @@
-import { sendWSRequest } from "@/shared/api/wsClient";
-import { ChatObject, WSBaseResponse } from "@/shared/types/wsTypes";
+import { WSBaseResponse } from "@/shared/api/ws/model/types";
+import { sendWSRequest } from "@/shared/api/ws/wsClient";
+import { ChatObject } from "@/shared/types/wsTypes";
 
 export type CreateGroupArgs = {
   name: string;
