@@ -16,4 +16,5 @@ export interface ContactItem {
   user: ContactUser;
   is_favorite: boolean;
   last_seen_at: number;
+  status_text?: string;
 }

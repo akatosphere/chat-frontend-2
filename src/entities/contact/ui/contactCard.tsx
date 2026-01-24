@@ -16,6 +16,7 @@ export const ContactCard = (props: ContactCardProps) => {
 
   return (
     <SimpleCard href={href} isLast={isLast}>
+      {/* Аватар с буквой */}
       <div className="shrink-0">
         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
           {user.avatar_webp_url || user.avatar_url ? (
@@ -30,11 +31,19 @@ export const ContactCard = (props: ContactCardProps) => {
         </div>
       </div>
 
+      {/* Текстовая информация */}
       <div className="flex min-w-0 flex-1 flex-col justify-center">
-        <h3 className="truncate text-base font-medium text-gray-900">
+        {/* Имя */}
+        <h3 className="subtext desktop:text min-w-0 truncate font-semibold text-gray-900">
           {user.first_name} {user.last_name}
         </h3>
-        {user.username && <p className="truncate text-sm text-gray-500">@{user.username}</p>}
+
+        {/* Подпись - текст статуса (или какой-то другой) */}
+        {contact.status_text && (
+          <div className="mt-1 flex items-center gap-1">
+            <p className="minitext text-gray line-clamp-2 truncate">{contact.status_text}</p>
+          </div>
+        )}
       </div>
     </SimpleCard>
   );
