@@ -3,9 +3,10 @@
 import { useEffect, useRef } from "react";
 
 import { useAuthStore } from "@/shared/api/store";
-import { connectWS, disconnectWS, subscribeToWS } from "@/shared/api/wsClient";
+import { connectWS, disconnectWS, subscribeToWS } from "@/shared/api/ws/wsClient";
 
 import { useWSRequestStore } from "../api/ws/model/wsRequest.store";
+import { dispatchWSEvent } from "../api/ws/wsHandlers";
 
 export const WSProvider = ({ children }: { children: React.ReactNode }) => {
   const accessToken = useAuthStore((s) => s.accessToken);
@@ -16,11 +17,13 @@ export const WSProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const unsubscribe = subscribeToWS((data) => {
       // 1. Сначала проверяем, не является ли это ответом на конкретный запрос (по UID)
+      // Это позволяет резолвить промисы, которые мы ждем в коде
       if (data.request_uid) {
         useWSRequestStore.getState().fulfillRequest(data.request_uid, data);
       }
 
-      // 2. Затем пробрасываем в роутеры
+      // 2. Пробрасываем событие во все зарегистрированные доменные роутеры
+      dispatchWSEvent(data);
     });
 
     return () => unsubscribe();

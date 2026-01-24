@@ -7,3 +7,5 @@ export type WSBaseResponse<T = unknown> = {
   error?: string;
   object: T;
 };
+
+export type DomainHandler<T = unknown> = (data: WSBaseResponse<T>) => void;
