@@ -2,12 +2,17 @@ import { errorHandler } from "@/shared/api/errorHandler";
 import getApiClient from "@/shared/api/getApiClient";
 import { Result } from "@/shared/api/types";
 
-export const uploadAvatar = async (file: File | null): Promise<Result<{ avatar_url: string }>> => {
+type UploadAvatarResponse = {
+  file: string;
+  file_url: string;
+};
+
+export const uploadAvatar = async (file: File | null): Promise<Result<UploadAvatarResponse>> => {
   try {
     const formData = new FormData();
     formData.append("file", file || "");
 
-    const { data } = await getApiClient.post<{ avatar_url: string }>(
+    const { data } = await getApiClient.post<UploadAvatarResponse>(
       "/api/v1/auth/messenger/profile/avatar/download/",
       formData,
       {

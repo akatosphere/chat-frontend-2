@@ -52,8 +52,9 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
       return res.data;
     },
     onSuccess: (data) => {
-      if (data?.avatar_url) {
-        setCurrentAvatarUrl(data.avatar_url);
+      console.log(data);
+      if (data?.file_url) {
+        setCurrentAvatarUrl(data.file_url);
       }
       setIsAvatarChangeModalOpen(false);
       setAvatarError(undefined);
