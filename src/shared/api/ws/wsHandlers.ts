@@ -1,19 +1,19 @@
-import { DomainHandler, WSBaseResponse } from "./model/types";
+import { WSBaseResponse, WSHandler } from "./model/types";
 
-const domainHandlers: Record<string, DomainHandler[]> = {};
+const wsHandlers: Record<string, WSHandler[]> = {};
 
-export const registerWSHandler = (action: string, handler: DomainHandler) => {
-  if (!domainHandlers[action]) domainHandlers[action] = [];
-  domainHandlers[action].push(handler);
+export const registerWSHandler = (action: string, handler: WSHandler) => {
+  if (!wsHandlers[action]) wsHandlers[action] = [];
+  wsHandlers[action].push(handler);
 
   // Возвращаем функцию отписки
   return () => {
-    domainHandlers[action] = domainHandlers[action].filter((h) => h !== handler);
+    wsHandlers[action] = wsHandlers[action].filter((h) => h !== handler);
   };
 };
 
 export const dispatchWSEvent = (data: WSBaseResponse<unknown>) => {
-  const handlers = domainHandlers[data.action];
+  const handlers = wsHandlers[data.action];
   if (handlers) {
     handlers.forEach((handler) => handler(data));
   }

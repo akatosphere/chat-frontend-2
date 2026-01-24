@@ -1,11 +1,8 @@
 // wsClient.ts
 import { v4 as uuidv4 } from "uuid";
 
-import { WSBaseResponse } from "./model/types";
+import { WSBaseResponse, WSHandler, WSStatus } from "./model/types";
 import { useWSRequestStore } from "./model/wsRequest.store";
-
-type WSStatus = "idle" | "connecting" | "connected" | "reconnecting" | "closed";
-type WSHandler = (data: WSBaseResponse<unknown>) => void;
 
 let socket: WebSocket | null = null;
 let currentToken: string | null = null;
