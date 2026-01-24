@@ -72,7 +72,7 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
     mutationFn: async () => {
       // Здесь предполагается, что API умеет обрабатывать удаление.
       // Если нужен другой эндпоинт, замените вызов.
-      const res = await uploadAvatar(null as unknown as File);
+      const res = await uploadAvatar(null);
       if (!res.success) throw new Error(res.error);
       return res.data;
     },
