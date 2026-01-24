@@ -13,7 +13,6 @@ type QueryBtnProps = {
 export const QueryBtn: React.FC<QueryBtnProps> = ({ className }) => {
   const getChatList = async () => {
     const { data } = await getApiClient.get("/api/v1/chat/list/");
-    console.log(data);
     return data;
   };
 
