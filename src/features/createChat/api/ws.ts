@@ -1,5 +1,6 @@
-import { sendWSRequest } from "@/shared/api/wsClient";
-import { ChatObject, WSBaseResponse } from "@/shared/types/wsTypes";
+import { ChatObject } from "@/entities/chat/model/types";
+import { WSBaseResponse } from "@/shared/api/ws/model/types";
+import { sendWSRequest } from "@/shared/api/ws/wsClient";
 
 import { ChatType } from "../model/types";
 
