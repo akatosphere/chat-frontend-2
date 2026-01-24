@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { useAuthStore } from "@/shared/api/store";
 import { connectWS, disconnectWS, subscribeToWS } from "@/shared/api/wsClient";
 
-import { useWSRequestStore } from "../model/wsRequest.store";
+import { useWSRequestStore } from "../api/ws/model/wsRequest.store";
 
 export const WSProvider = ({ children }: { children: React.ReactNode }) => {
   const accessToken = useAuthStore((s) => s.accessToken);
