@@ -1,13 +1,15 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { uploadAvatar } from "@/entities/user/api/uploadAvatar";
-import { User } from "@/entities/user/model/types";
+import { uploadAvatar } from "@/entities/user/api/uploadAvatar"; // Наше новое API
+import { User } from "@/entities/user/model/types"; // Наша новая типизация
+import { checkAvatarParams } from "@/shared/avatar/lib/checkAvatarParams";
 
-import { getDefaultBirthday } from "./getDefaultBirthday"; // импортируем вашу функцию
+import { getDefaultBirthday } from "./getDefaultBirthday";
 
-type UseUserProfileFormProps = {
+export type UseUserProfileFormProps = {
   profile: User;
   avatarUrl: string;
   name: string;
@@ -17,15 +19,16 @@ type UseUserProfileFormProps = {
   birthday: number;
 };
 
-export const useUserProfileForm = ({
-  avatarUrl,
-  birthday: initialBirthday,
-}: UseUserProfileFormProps) => {
+export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormProps) => {
+  const queryClient = useQueryClient();
+
   const [currentAvatarUrl, setCurrentAvatarUrl] = useState(avatarUrl);
   const [avatarError, setAvatarError] = useState<string | undefined>();
   const [isAvatarChangeModalOpen, setIsAvatarChangeModalOpen] = useState(false);
 
-  // Формируем объект значений по умолчанию строго по схеме changeProfileSchema
+  /**
+   * Возвращает дефолтные значения для UI-формы (birthday как объект)
+   */
   const getDefaultValues = (
     name: string,
     lastName: string,
@@ -36,26 +39,71 @@ export const useUserProfileForm = ({
     lastName: lastName || "",
     nickname: nickname || "",
     description: description || "",
-    birthday: getDefaultBirthday(initialBirthday), // Используем вашу функцию
+    birthday: getDefaultBirthday(birthday),
   });
 
-  const onAvatarChangeHandler = async (file: File) => {
-    const res = await uploadAvatar(file);
-    if (res.success) {
-      setCurrentAvatarUrl(res.data.avatar_url);
+  /**
+   * Мутация загрузки аватара (использует наш новый Result тип)
+   */
+  const avatarMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const res = await uploadAvatar(file);
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    },
+    onSuccess: (data) => {
+      if (data?.avatar_url) {
+        setCurrentAvatarUrl(data.avatar_url);
+      }
+      setIsAvatarChangeModalOpen(false);
       setAvatarError(undefined);
-    } else {
-      setAvatarError("Ошибка загрузки");
+      queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
+    },
+    onError: (error: Error) => {
+      setAvatarError(error.message || "Ошибка загрузки аватара");
+    },
+  });
+
+  /**
+   * Мутация удаления аватара
+   * Если API поддерживает отправку null для удаления, используем ту же функцию
+   */
+  const deleteAvatarMutation = useMutation({
+    mutationFn: async () => {
+      // Здесь предполагается, что API умеет обрабатывать удаление.
+      // Если нужен другой эндпоинт, замените вызов.
+      const res = await uploadAvatar(null as unknown as File);
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    },
+    onSuccess: () => {
+      setCurrentAvatarUrl("");
+      setIsAvatarChangeModalOpen(false);
+      setAvatarError(undefined);
+      queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
+    },
+  });
+
+  const onAvatarDelete = () => {
+    deleteAvatarMutation.mutate();
+  };
+
+  const onAvatarChangeHandler = async (file: File) => {
+    const { isValid, error } = await checkAvatarParams(file);
+    if (!isValid) {
+      setAvatarError(error);
+      return;
     }
-    setIsAvatarChangeModalOpen(false);
+    avatarMutation.mutate(file);
   };
 
   return {
     currentAvatarUrl,
     avatarError,
     isAvatarChangeModalOpen,
+    getDefaultValues,
+    onAvatarDelete,
     setIsAvatarChangeModalOpen,
     onAvatarChangeHandler,
-    getDefaultValues,
   };
 };

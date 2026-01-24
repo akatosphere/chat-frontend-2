@@ -1,8 +1,8 @@
+import Delete from "@icons/menu/delete.svg";
 import Email from "@icons/menu/email.svg";
 import Exit from "@icons/menu/exit.svg";
 import None from "@icons/menu/none.svg";
 import Pen from "@icons/menu/pen.svg";
-import TrashCan from "@icons/trashCan.svg";
 
 import { MenuIcon, MenuItem } from "@/shared/ui/menuList/model/types";
 
@@ -35,5 +35,5 @@ export const ICONS: MenuIcon = {
   exit: Exit,
   email: Email,
   none: None,
-  delete: TrashCan,
+  delete: Delete,
 };

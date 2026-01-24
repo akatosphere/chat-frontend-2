@@ -7,9 +7,7 @@ import { Message } from "@/features/chat/chat/model/types";
 import { ChatWidget } from "@/features/chat/chat/ui/chatWidget";
 import { pluralize } from "@/shared/lib/pluralize";
 import { cn } from "@/shared/shadcn/lib/utils";
-import { ChatHeader } from "@/widgets/activeChatHeader/ui/chatHeader";
-
-import { mockChats } from "../../../chatList/lib/data";
+import { ChatHeader } from "@/widgets/chat/chatHeader/ui/chatHeader";
 
 type ChatWidgetProps = {
   className?: string;
@@ -54,14 +52,11 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({
   // Определяем текст статуса
   const getStatusText = () => {
     // Если это группа или канал — показываем кол-во участников
-    if (
-      initialData.type === "private-group" ||
-      initialData.type === "public-group" ||
-      initialData.type === "channel"
-    ) {
+    if (initialData.type === "private-group" || initialData.type === "public-group") {
       return `${initialData.membersCount + 1} ${pluralize(initialData.membersCount + 1, "участник", "участника", "участников")}`;
+    } else if (initialData.type === "private-channel" || initialData.type === "public-channel") {
+      return `${initialData.membersCount + 1} ${pluralize(initialData.membersCount + 1, "подписчик", "подписчика", "подписчиков")}`;
     }
-
     // Если это личный чат — пока оставляем "online" (в будущем будет приходить из WS)
     return "online";
   };
@@ -75,7 +70,6 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({
     nickname: "",
   };
 
-  const receiver = mockChats.results.find((chat) => chat.id === +chatKey)?.chat;
   const testMessages = mockMessagesPage.results;
   const messages: Message[] =
     chatKey === "3" ? testMessages.map((apiMessage) => mapApiMessage(apiMessage, sender.uid)) : [];
@@ -91,7 +85,7 @@ export const ChatLayoutWidget: React.FC<ChatWidgetProps> = ({
         name={initialData.title}
         status={getStatusText()}
         backHref="/chats"
-        photo={receiver?.avatar_url || ""}
+        photo={initialData.avatar}
         onCallClick={() => {}}
         onSearchClick={() => {}}
         onPhotoClick={() => {}}

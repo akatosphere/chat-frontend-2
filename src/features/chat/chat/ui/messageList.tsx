@@ -16,7 +16,7 @@ export const MessageList: React.FC<MessageListProps> = ({ className, messages })
   return (
     <div
       className={cn(
-        "desktop:gap-5 desktop:py-2 bg-accent desktop:bg-[#fafbfd] flex h-full flex-col gap-3 overflow-y-auto px-4 py-4",
+        "desktop:gap-5 desktop:py-2 bg-accent desktop:bg-[#fafbfd] flex h-full flex-col gap-3 overflow-y-auto py-4",
         className,
       )}
     >

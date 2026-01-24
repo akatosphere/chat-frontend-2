@@ -268,3 +268,52 @@ body {
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.zoom-slider {
+  width: 100%;
+  appearance: none;
+  background: transparent;
+}
+
+.zoom-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-primary) 0%,
+    var(--color-primary) var(--progress),
+    var(--color-muted) var(--progress),
+    var(--color-muted) 100%
+  );
+}
+
+.zoom-slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  margin-top: -6px;
+  cursor: pointer;
+}
+
+.zoom-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-primary) 0%,
+    var(--color-primary) var(--progress),
+    var(--color-muted) var(--progress),
+    var(--color-muted) 100%
+  );
+}
+
+.zoom-slider::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: none;
+  cursor: pointer;
+}

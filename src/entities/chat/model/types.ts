@@ -1,4 +1,8 @@
-export type ChatType = "chat" | "group" | "channel";
+import z from "zod";
+
+import { ChatDetailsSchema } from "./schema";
+
+export type ChatType = z.infer<typeof ChatDetailsSchema>["chat_type"];
 
 export interface LastMessage {
   id: number;
@@ -48,6 +52,10 @@ export interface ChatUser {
   is_online: boolean;
   was_online_at: number;
   is_in_contacts: boolean;
+  chat_id?: number | null;
+  birthday?: number | null;
+  phone?: string | null;
+  additional_information?: string | null;
 }
 
 export interface ChatItemData {
