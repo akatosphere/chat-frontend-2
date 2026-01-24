@@ -11,3 +11,9 @@ export type WSBaseResponse<T = unknown> = {
 };
 
 export type WSHandler<T = unknown> = (data: WSBaseResponse<T>) => void;
+
+export type QueuedRequest = {
+  action: string;
+  object: unknown;
+  request_uid: string;
+};

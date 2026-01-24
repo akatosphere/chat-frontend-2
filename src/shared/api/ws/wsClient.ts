@@ -1,12 +1,13 @@
 // wsClient.ts
 import { v4 as uuidv4 } from "uuid";
 
-import { WSBaseResponse, WSHandler, WSStatus } from "./model/types";
+import { QueuedRequest, WSBaseResponse, WSHandler, WSStatus } from "./model/types";
 import { useWSRequestStore } from "./model/wsRequest.store";
 
 let socket: WebSocket | null = null;
 let currentToken: string | null = null;
 let status: WSStatus = "idle";
+let requestQueue: QueuedRequest[] = [];
 
 let reconnectAttempts = 0;
 let reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -32,12 +33,26 @@ export const subscribeToWS = (handler: WSHandler) => {
   };
 };
 
+const drainQueue = () => {
+  if (!socket || socket.readyState !== WebSocket.OPEN) return;
+
+  console.log(`📡 WS: Draining queue (${requestQueue.length} messages)`);
+
+  while (requestQueue.length > 0) {
+    const request = requestQueue.shift(); // Берем первый элемент (FIFO)
+    if (request) {
+      socket.send(JSON.stringify(request));
+    }
+  }
+};
+
 const attachHandlers = (ws: WebSocket) => {
   ws.onopen = () => {
     console.log("WS connected ✅");
     status = "connected";
     reconnectAttempts = 0;
     clearReconnectTimeout();
+    drainQueue();
   };
 
   ws.onmessage = (event) => {
@@ -76,8 +91,6 @@ const attachHandlers = (ws: WebSocket) => {
 };
 
 export const sendWSRequest = <TResponse>(action: string, payload: unknown): Promise<TResponse> => {
-  const socket = getSocket();
-
   if (!socket || socket.readyState !== WebSocket.OPEN) {
     // Вместо простого throw можно сделать более умную логику (например, очередь)
     // Но для начала — просто ошибка, как и было
@@ -95,8 +108,14 @@ export const sendWSRequest = <TResponse>(action: string, payload: unknown): Prom
   // Регистрируем ожидание ответа в сторе
   const promise = useWSRequestStore.getState().trackRequest<TResponse>(request_uid);
 
-  // Отправляем
-  socket.send(JSON.stringify(message));
+  // 2. Проверяем состояние
+  if (!socket || socket.readyState !== WebSocket.OPEN) {
+    console.log(`⏳ WS: Socket not ready. Queuing action: ${action}`);
+    requestQueue.push(message);
+  } else {
+    // Если всё ок — отправляем сразу
+    socket.send(JSON.stringify(message));
+  }
 
   return promise;
 };
@@ -145,6 +164,7 @@ export const connectWS = (accessToken: string) => {
 export const disconnectWS = () => {
   manualClose = true;
   clearReconnectTimeout();
+  requestQueue = [];
 
   if (socket) {
     socket.close();
