@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 
+import { getUsers } from "@/entities/user/api/getUsers";
 import { ChatMemberDto } from "@/entities/user/model/types";
 import { useCreateChatStore } from "@/features/createChat/model/store"; // ФУНКЦИОНАЛ ДЛЯ ТЕСТА
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 import { Searchbar } from "@/shared/ui/searchbar";
 
-import { getContacts } from "../api/getContacts";
 import { ContactsList } from "./contactsList";
 
 type ContactsSearchProps = {
@@ -38,7 +38,7 @@ export const ContactsSearch: React.FC<ContactsSearchProps> = ({ className }) => 
         { phone_or_nickname: `+7${debouncedSearch}` },
       ] as const;
 
-      const res = await getContacts(requestData);
+      const res = await getUsers(requestData);
       if (res.success) setContacts(res.data);
     };
 

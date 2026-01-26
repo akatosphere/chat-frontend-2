@@ -1,7 +1,5 @@
-export default function ContactsPage() {
-  return (
-    <>
-      <span>Контакты</span>
-    </>
-  );
+import ContactsPageClient from "./contactsPageClient";
+
+export default async function ContactsPage() {
+  return <ContactsPageClient />;
 }
