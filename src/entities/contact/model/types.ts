@@ -43,3 +43,9 @@ export type ContactListResponse = {
   next: string | null;
   results: Contact[];
 };
+
+export type AddByPhonePayload = {
+  phone: string;
+  first_name: string;
+  last_name: string;
+};

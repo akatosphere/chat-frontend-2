@@ -1,6 +1,12 @@
 import { ChatMemberDto } from "@/entities/user/model/types";
 
-import { Contact, ContactDto, ContactListResponse, ContactListResponseDto } from "./types";
+import {
+  AddByPhonePayload,
+  Contact,
+  ContactDto,
+  ContactListResponse,
+  ContactListResponseDto,
+} from "./types";
 
 export const mapContactDtoToContact = (dto: ContactDto): Contact => {
   const { system_contact } = dto;
@@ -61,4 +67,22 @@ export const mapChatMemberToContact = (dto: ChatMemberDto): Contact => {
  */
 export const mapChatMembersToContacts = (dtos: ChatMemberDto[]): Contact[] => {
   return dtos.map(mapChatMemberToContact);
+};
+
+type MinimalUserForMapping = {
+  firstName: string;
+  lastName: string;
+  phone?: string; // Опционально, если берем из Contact
+};
+
+export const mapToAddByPhonePayload = (
+  user: MinimalUserForMapping,
+  phoneOverride?: string,
+): AddByPhonePayload => {
+  return {
+    // Приоритет: override -> телефон из объекта -> пустая строка
+    phone: phoneOverride || user.phone || "",
+    first_name: user.firstName,
+    last_name: user.lastName,
+  };
 };

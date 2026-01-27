@@ -4,19 +4,19 @@ import { SimpleCard } from "@/shared/ui/list/simpleCard";
 import { Contact } from "../model/types";
 
 export type ContactCardProps = {
-  key: number;
   contact: Contact;
   href?: string;
   isLast?: boolean;
+  onClick?: () => void;
 };
 
 export const ContactCard = (props: ContactCardProps) => {
-  const { contact, href, isLast = false } = props;
+  const { contact, href, isLast = false, onClick } = props;
 
   const avatarLetter = contact.firstName?.charAt(0).toUpperCase() || "?";
 
   return (
-    <SimpleCard href={href} isLast={isLast}>
+    <SimpleCard href={href} isLast={isLast} onClick={onClick}>
       {/* Аватар с буквой */}
       <div className="shrink-0">
         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
