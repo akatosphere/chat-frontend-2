@@ -60,7 +60,11 @@ export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialDa
       <Searchbar value={search} onChange={setSearch} />
       {showLocalContacts && <ContactsList contacts={filteredLocalContacts} />}
       {showGlobalSearchResults && <GlobalUsersList globalUsers={filteredGlobalUsers} />}
-      {showNoResults && <NoSearchResults />}
+      {showNoResults && (
+        <div className="flex flex-1 items-center justify-center">
+          <NoSearchResults />
+        </div>
+      )}
     </div>
   );
 };
