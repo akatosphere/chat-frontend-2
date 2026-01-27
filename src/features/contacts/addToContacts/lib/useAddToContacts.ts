@@ -18,7 +18,6 @@ export const useAddToContacts = () => {
         addContactsToStore([res.data]);
         // ИНВАЛИДИРУЕМ КЭШ (чтобы TanStack Query забыл старые данные)
         queryClient.invalidateQueries({ queryKey: ["contacts"] });
-        console.log("Контакт успешно добавлен");
       } else {
         console.error(res.error);
       }

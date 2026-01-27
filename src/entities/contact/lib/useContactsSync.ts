@@ -9,7 +9,6 @@ import { useContactsQuery } from "./useContactsQuery";
 export const useContactsSync = (initialData?: ContactListResponse | null) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useContactsQuery(initialData);
-  console.log("useContactsSync initialData: ", initialData);
 
   const setContacts = useContactStore((s) => s.setContacts);
 
@@ -21,8 +20,6 @@ export const useContactsSync = (initialData?: ContactListResponse | null) => {
     const totalCount = data.pages[0]?.count ?? 0;
 
     // Обновляем стор.
-    console.log(allFetchedContacts, totalCount);
-
     setContacts(allFetchedContacts, totalCount);
   }, [data, setContacts]);
 

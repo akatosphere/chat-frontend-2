@@ -15,9 +15,6 @@ export const addToContacts = async (payload: AddByPhonePayload): Promise<Result<
     // Вторым аргументом в .post передается body (payload)
     const { data } = await getApiClient.post<ContactDto>(ENDPOINT, payload);
 
-    // Возвращаем успех и прогоняем через маппер
-    console.log("Вроде добавился: ", data);
-
     return {
       success: true,
       data: mapContactDtoToContact(data),

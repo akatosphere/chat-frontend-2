@@ -76,6 +76,5 @@ export const useGlobalContactsSearch = () => {
     globalUsers,
     isLoading,
     error,
-    hasResults: globalUsers.length > 0,
   };
 };
