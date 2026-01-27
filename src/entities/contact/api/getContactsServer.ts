@@ -7,8 +7,10 @@ const ENDPOINT = "/api/v1/contact/messenger-list/";
 
 /** Для серверных компонентов (SSR) */
 export const getContactsServer = async (): Promise<ContactListResponse | null> => {
+  console.log("getContactsServer");
+
   try {
-    const api = await getApiServer(); // Использует cookies() под капотом
+    const api = await getApiServer();
     const { data } = await api.get<ContactListResponseDto>(ENDPOINT);
     return mapContactListResponse(data);
   } catch (error) {

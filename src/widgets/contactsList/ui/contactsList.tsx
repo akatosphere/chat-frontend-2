@@ -1,33 +1,20 @@
-"use client";
-
-// import { useContactsQuery } from "@/entities/contact/lib/useContactsQuery";
-import { ContactListResponse } from "@/entities/contact/model/types";
+import { Contact } from "@/entities/contact/model/types";
+import { ContactCard } from "@/entities/contact/ui/contactCard";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ListSeparator } from "@/shared/ui/listSeparator";
-import { Searchbar } from "@/shared/ui/searchbar";
-
-import { useGlobalContactsSearch } from "../lib/useGlobalContactsSearch";
-import { GlobalUsersList } from "./globalUsersList";
 
 type ContactsListProps = {
   className?: string;
-  initialData: ContactListResponse | null;
+  contacts: Contact[];
 };
 
-export const ContactsList: React.FC<ContactsListProps> = ({ className }) => {
-  const { search, setSearch, globalUsers, hasResults } = useGlobalContactsSearch();
-  // const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useContactsQuery(
-  //   initialData ?? undefined,
-  // );
-  // const allContacts = data?.pages.flatMap((page) => page.results) ?? [];
-
+export const ContactsList: React.FC<ContactsListProps> = ({ className, contacts }) => {
   return (
-    <div className={cn("flex h-full min-h-0 flex-col gap-4 p-4", className)}>
-      <Searchbar value={search} onChange={setSearch} />
-      <div>
-        <ListSeparator text="Мои контакты" />
-      </div>
-      {hasResults && <GlobalUsersList globalUsers={globalUsers} />}
+    <div className={cn("flex flex-col gap-2", className)}>
+      <ListSeparator text="Мои контакты" />
+      {contacts.map((c, index) => {
+        return <ContactCard contact={c} key={index} />;
+      })}
     </div>
   );
 };

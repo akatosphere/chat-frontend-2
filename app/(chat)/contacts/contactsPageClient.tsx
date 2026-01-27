@@ -1,7 +1,7 @@
 import { getContactsServer } from "@/entities/contact/api/getContactsServer";
-import { ContactsList } from "@/widgets/contactsList/ui/contactsList";
+import { ContactsPage } from "@/widgets/contactsList/ui/contactsPage";
 
 export default async function ContactsPageClient() {
   const initialContacts = await getContactsServer();
-  return <ContactsList initialData={initialContacts} className="" />;
+  return <ContactsPage initialData={initialContacts} className="" />;
 }

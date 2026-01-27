@@ -3,7 +3,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { getContacts } from "../api/getContacts";
 import { ContactListResponse } from "../model/types";
 
-export const useContactsQuery = (initialData?: ContactListResponse) => {
+export const useContactsQuery = (initialData?: ContactListResponse | null) => {
   return useInfiniteQuery({
     queryKey: ["contacts"],
     queryFn: ({ pageParam }) => getContacts(pageParam),

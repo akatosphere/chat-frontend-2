@@ -3,18 +3,9 @@ import { getApiClient } from "@/shared/api/getApiClient";
 import { Result } from "@/shared/api/types";
 
 import { mapContactDtoToContact } from "../model/mappers";
-import { Contact, ContactDto } from "../model/types";
+import { AddByPhonePayload, Contact, ContactDto } from "../model/types";
 
 const ENDPOINT = "/api/v1/contact/messenger-add-by-phone/";
-
-/**
- * Тип данных для тела запроса (Payload)
- */
-export type AddByPhonePayload = {
-  phone: string;
-  first_name: string;
-  last_name: string;
-};
 
 /**
  * Добавление пользователя в контакты по номеру телефона

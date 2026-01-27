@@ -1,40 +1,28 @@
-import { useMutation } from "@tanstack/react-query";
+"use client";
 
-import { addToContacts } from "@/entities/contact/api/addToContacts";
 import { mapToAddByPhonePayload } from "@/entities/contact/model/mappers";
-import { useContactStore } from "@/entities/contact/model/store";
 import { Contact } from "@/entities/contact/model/types";
 import { ContactCard } from "@/entities/contact/ui/contactCard";
+
+import { useAddToContacts } from "../lib/useAddToContacts";
 
 type ContactCardFeatureProps = {
   contact: Contact;
 };
 
 export const ContactCardFeature: React.FC<ContactCardFeatureProps> = ({ contact }) => {
-  const addContactToStore = useContactStore((s) => s.addContacts);
-  const { mutate, isPending } = useMutation({
-    mutationFn: async () => {
-      const payload = mapToAddByPhonePayload(contact);
-      const res = await addToContacts(payload);
-
-      if (!res.success) {
-        throw new Error(res.error);
-      }
-      return res.data;
-    },
-    onSuccess: (newContact) => {
-      addContactToStore([newContact]);
-    },
-    onError: (error: Error) => {
-      console.error(error.message);
-    },
-  });
+  // 2. Инициализируем мутацию через хук
+  const { mutate, isPending } = useAddToContacts();
 
   const handleClick = () => {
-    // Вызываем мутацию только если запрос еще не идет
-    if (!isPending) {
-      mutate();
-    }
+    if (isPending) return;
+
+    // 3. Маппим данные контакта в формат, который ждет API (payload)
+    const payload = mapToAddByPhonePayload(contact);
+
+    // 4. Запускаем выполнение
+    mutate(payload);
   };
+
   return <ContactCard contact={contact} onClick={handleClick} />;
 };
