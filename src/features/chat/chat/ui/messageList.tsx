@@ -6,6 +6,7 @@ import { InfoMessage } from "@/shared/ui/infoMessage";
 import { useAutoRead } from "../hooks";
 import { useMessageScroll } from "../hooks/useMessageScroll";
 import { groupMessagesByDate } from "../lib/getMessageByDate";
+import { useMessageNavigation } from "../model/store/useChatNavigationStore";
 import { useChatStore } from "../model/store/useChatStore";
 import { MessageGroup } from "./messageGroup";
 import { ScrollDownBtn } from "./scrollDownBtn";
@@ -24,15 +25,16 @@ export const MessageList: React.FC<MessageListProps> = ({ className, currentUser
 
   const groups = useMemo(() => groupMessagesByDate(messages), [messages]);
 
-  const { isAtBottom, handleScroll, scrollToBottom, performInitialScroll } = useMessageScroll({
-    messages,
-    groups,
-    currentUserId,
-    scrollToUnread: true,
-    scrollBehavior: "auto",
-    topOffset: 16,
-    scrollContainerRef,
-  });
+  const { isAtBottom, handleScroll, scrollToBottom, performInitialScroll, scrollToMessage } =
+    useMessageScroll({
+      messages,
+      groups,
+      currentUserId,
+      scrollToUnread: true,
+      scrollBehavior: "auto",
+      topOffset: 16,
+      scrollContainerRef,
+    });
 
   useAutoRead({
     messages,
@@ -50,6 +52,22 @@ export const MessageList: React.FC<MessageListProps> = ({ className, currentUser
       return () => clearTimeout(timer);
     }
   }, [isReady, performInitialScroll]);
+
+  const targetMessageId = useMessageNavigation((s) => s.targetMessageId);
+  const requestId = useMessageNavigation((s) => s.requestId);
+  const clearHighlight = useMessageNavigation((s) => s.clearHighlight);
+
+  useEffect(() => {
+    if (!targetMessageId) return;
+
+    scrollToMessage(targetMessageId);
+
+    const timer = setTimeout(() => {
+      clearHighlight();
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, [requestId]);
 
   const showEmptyState = groups.length === 0 && !isInitialLoading;
   const showLoadingState = isInitialLoading || !isReady;
@@ -69,7 +87,7 @@ export const MessageList: React.FC<MessageListProps> = ({ className, currentUser
         ref={scrollContainerRef}
         onScroll={handleScroll}
         className={cn(
-          "desktop:gap-5 desktop:py-2 bg-accent desktop:bg-[#fafbfd] relative flex h-full flex-col gap-3 overflow-y-auto px-4 py-4 transition-opacity duration-300",
+          "desktop:gap-5 desktop:py-2 bg-accent desktop:bg-[#fafbfd] relative flex h-full flex-col gap-3 overflow-y-auto py-4 transition-opacity duration-300",
           showLoadingState ? "pointer-events-none opacity-0" : "opacity-100",
           className,
         )}

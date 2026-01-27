@@ -28,6 +28,8 @@ export interface RepliedMessage {
   id: number;
   uid: string;
   from_user: string;
+  first_name: string;
+  last_name: string;
   content: string;
   files_list: MessageFile[];
 }

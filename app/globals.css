@@ -42,6 +42,7 @@
   --primary-light: #cec8ff;
   --primary-dark: #615aa3;
   --primary-accent: #615aa399;
+  --primary-secondary: #9587f5;
   --primary-accent-light: #f5f4ff;
   --primary-hover: #efeef7;
   --primary-gray: #efeef7;
@@ -134,6 +135,7 @@
   --color-primary-light: var(--primary-light);
   --color-primary-dark: var(--primary-dark);
   --color-primary-accent: var(--primary-accent);
+  --color-primary-secondary: var(--primary-secondary);
   --color-primary-hover: var(--primary-hover);
   --color-primary-gray: var(--primary-gray);
   --color-muted: var(--muted);

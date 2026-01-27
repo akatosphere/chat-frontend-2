@@ -1,3 +1,4 @@
+import { MessageBlock } from "../messageBlock/types";
 import { CallInfo, ChatType, SendingStatus } from "./serverTypes";
 
 export interface MappedChatMessage {
@@ -11,6 +12,7 @@ export interface MappedChatMessage {
   filesList: MappedMessageFile[];
   isNew: boolean;
   createdAt: number;
+  blocks: MessageBlock[];
   updatedAt: number;
   chatId: string | null;
   chatKey: string;
@@ -48,8 +50,10 @@ export interface MappedMessageFile {
 }
 
 export interface MappedRepliedMessage {
-  id: number;
+  id: number | null;
   uid: string;
+  firstName: string;
+  lastName: string;
   fromUserId: string;
   content: string;
   filesList: MappedMessageFile[];

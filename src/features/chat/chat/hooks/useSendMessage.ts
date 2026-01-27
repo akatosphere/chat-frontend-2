@@ -5,11 +5,13 @@ import { sendTextMessage } from "@/entities/chat/api/sendMessage";
 import { MESSAGE_STATUS } from "@/shared/constants/constants";
 
 import { mapChatMessage } from "../model/mapper";
+import { buildMessageBlocks } from "../model/messageBlock/buildMessageBlocks";
 import { useChatStore } from "../model/store/useChatStore";
 import { MappedChatMessage } from "../model/types/mappedTypes";
 
 export const useSendMessage = () => {
-  const { currentUserId, chatKey, addMessage, setFailedStatus } = useChatStore();
+  const { currentUserId, chatKey, addMessage, setFailedStatus, replyTarget, setReplyTarget } =
+    useChatStore();
 
   return useCallback(
     async (text: string) => {
@@ -36,7 +38,19 @@ export const useSendMessage = () => {
         },
         toUser: null,
         content: text,
-        repliedMessages: [],
+        repliedMessages: replyTarget
+          ? [
+              {
+                id: replyTarget.id,
+                uid: replyTarget.uid,
+                firstName: replyTarget.fromUser.firstName,
+                lastName: replyTarget.fromUser.lastName,
+                fromUserId: replyTarget.fromUser.uid,
+                content: replyTarget.content,
+                filesList: replyTarget.filesList,
+              },
+            ]
+          : [],
         forwardedMessages: [],
         filesList: [],
         isNew: true,
@@ -44,11 +58,13 @@ export const useSendMessage = () => {
         updatedAt: now,
         chatId: null,
         chatKey,
+        blocks: [],
         chatType: "public-group",
         messageRtc: null,
         status: MESSAGE_STATUS.PENDING,
       };
-
+      setReplyTarget(null);
+      tempMessage.blocks = buildMessageBlocks(tempMessage);
       addMessage(tempMessage);
 
       try {
@@ -56,6 +72,7 @@ export const useSendMessage = () => {
           chat_key: chatKey,
           content: text,
           status: "publish",
+          replied_messages: replyTarget ? [`${replyTarget.uid}`] : [],
           request_uid: requestUid,
         });
 
@@ -68,7 +85,7 @@ export const useSendMessage = () => {
         setFailedStatus(requestUid);
       }
     },
-    [currentUserId, chatKey, addMessage, setFailedStatus],
+    [currentUserId, chatKey, addMessage, setFailedStatus, replyTarget, setReplyTarget],
   );
 };
 

@@ -6,7 +6,7 @@ import { useUserStore } from "@/entities/chat/model/userStore";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ChatFooter } from "@/widgets/chat/chatFooter/ui/chatFooter";
 
-import { useSendMessage } from "../hooks";
+import { useChatWebSocket, useSendMessage } from "../hooks";
 import { useChatStore } from "../model/store/useChatStore";
 import { MappedChatMessage } from "../model/types/mappedTypes";
 import { ChatType } from "../model/types/serverTypes";
@@ -22,28 +22,16 @@ type ChatProps = {
 export const Chat = ({ className, initialMessages, chatKey }: ChatProps) => {
   const currentUserId = useUserStore((s) => s.userId);
   const setInitialData = useChatStore((s) => s.setInitialData);
-  const initializeWebSocket = useChatStore((s) => s.initializeWebSocket);
-  const disconnectWebSocket = useChatStore((s) => s.disconnectWebSocket);
 
   const handleSendMessage = useSendMessage();
+
+  useChatWebSocket(chatKey);
 
   useEffect(() => {
     if (currentUserId) {
       setInitialData(initialMessages, currentUserId, chatKey);
-      initializeWebSocket(chatKey);
     }
-
-    return () => {
-      disconnectWebSocket();
-    };
-  }, [
-    currentUserId,
-    chatKey,
-    initialMessages,
-    setInitialData,
-    initializeWebSocket,
-    disconnectWebSocket,
-  ]);
+  }, [currentUserId, chatKey, initialMessages, setInitialData]);
 
   return (
     <div className={cn("flex h-full flex-col", className)}>

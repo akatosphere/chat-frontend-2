@@ -2,16 +2,16 @@ import {
   ChatMessage,
   ForwardedMessage,
   MessageFile,
-  RepliedMessage,
 } from "@/features/chat/chat/model/types/serverTypes";
-import { sendWSRequest } from "@/shared/api/wsClient";
+import { sendWSRequest } from "@/shared/api/ws/wsClient";
+import { WS_ACTIONS } from "@/shared/constants/constants";
 
 export interface SendTextMessagePayload {
   chat_key?: string;
   to_user_uid?: string;
   content: string;
   files?: MessageFile[];
-  replied_messages?: RepliedMessage[];
+  replied_messages?: string[] | null;
   forwarded_messages?: ForwardedMessage[];
   status?: "publish" | "draft";
 }
@@ -22,7 +22,7 @@ export const sendTextMessage = async (
   const object: {
     content: string;
     files: MessageFile[];
-    replied_messages: RepliedMessage[];
+    replied_messages: string[] | null;
     forwarded_messages: ForwardedMessage[];
     chat_key?: string;
     to_user_uid?: string;
@@ -48,7 +48,7 @@ export const sendTextMessage = async (
       status: "OK" | "error";
       error?: string;
       object: ChatMessage;
-    }>("create_text_message", object, params.request_uid);
+    }>(WS_ACTIONS.CREATE_TEXT_MESSAGE, object, params.request_uid);
 
     if (response.status !== "OK") {
       console.error(`Ошибка сервера:`, response.error);

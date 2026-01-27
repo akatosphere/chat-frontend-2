@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { sendWSRequest } from "@/shared/api/wsClient";
+import { sendWSRequest } from "@/shared/api/ws/wsClient";
 import { WS_ACTIONS } from "@/shared/constants/constants";
 
 export interface AddMembersToChatPayload {

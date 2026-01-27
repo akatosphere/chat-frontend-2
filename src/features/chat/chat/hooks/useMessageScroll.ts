@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
-import { MessageGroupType } from "../../../chatList/model/types";
 import { MappedChatMessage } from "../model/types/mappedTypes";
+import { MessageGroupType } from "../model/types/types";
 
 interface UseMessageScrollProps {
   messages: MappedChatMessage[];
@@ -19,6 +19,7 @@ interface UseMessageScrollReturn {
   scrollToBottom: () => void;
   isReady: boolean;
   performInitialScroll: () => void;
+  scrollToMessage: (uid: string) => void;
 }
 
 export const useMessageScroll = ({
@@ -133,6 +134,30 @@ export const useMessageScroll = ({
     tryScroll();
   }, [findFirstUnreadMessage, topOffset, scrollBehavior, scrollContainerRef]);
 
+  const scrollToMessage = useCallback(
+    (messageUid: string) => {
+      if (!scrollContainerRef.current) return;
+
+      const container = scrollContainerRef.current;
+      const el = container.querySelector(
+        `[data-message-uid="${messageUid}"]`,
+      ) as HTMLElement | null;
+
+      if (!el) return;
+
+      const elTop = el.getBoundingClientRect().top;
+      const containerTop = container.getBoundingClientRect().top;
+
+      const target = container.scrollTop + (elTop - containerTop) - topOffset;
+
+      container.scrollTo({
+        top: Math.max(0, target),
+        behavior: "smooth",
+      });
+    },
+    [scrollContainerRef, topOffset],
+  );
+
   // Скролл вниз
   const scrollToBottom = useCallback(() => {
     if (!scrollContainerRef.current) return;
@@ -208,5 +233,6 @@ export const useMessageScroll = ({
     scrollToBottom,
     isReady,
     performInitialScroll,
+    scrollToMessage,
   };
 };

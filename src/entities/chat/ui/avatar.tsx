@@ -6,10 +6,11 @@ type AvatarProps = {
   className?: string;
   isOnline?: boolean;
   avatarUrl: string;
-  size?: "sm" | "md" | "lg" | "xl" | "settingsAvatar";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "settingsAvatar";
 };
 
 const AVATAR_SIZES = {
+  xs: "w-4.5 h-4.5",
   sm: "w-10 h-10",
   md: "w-15 h-15",
   lg: "w-20.5 h-20.5",
