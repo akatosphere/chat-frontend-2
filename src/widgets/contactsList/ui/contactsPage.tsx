@@ -6,6 +6,7 @@ import { useContactsSync } from "@/entities/contact/lib/useContactsSync";
 import { useContactStore } from "@/entities/contact/model/store";
 import { ContactListResponse } from "@/entities/contact/model/types";
 import { cn } from "@/shared/shadcn/lib/utils";
+import { ContactsListEmpty } from "@/shared/ui/contactsListEmpty";
 import { NoSearchResults } from "@/shared/ui/noSearchResults";
 import { Searchbar } from "@/shared/ui/searchbar";
 
@@ -21,6 +22,7 @@ type ContactsPageProps = {
 export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialData }) => {
   useContactsSync(initialData);
   const contacts = useContactStore((s) => s.contacts);
+  const isInitialized = useContactStore((s) => s.isInitialized);
   const { search, setSearch, globalUsers, isLoading } = useGlobalContactsSearch();
   const isSearching = search.trim().length > 0;
 
@@ -47,12 +49,14 @@ export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialDa
 
   const showNoResults =
     isSearching &&
-    !isLoading &&
     filteredLocalContacts.length === 0 &&
-    filteredGlobalUsers.length === 0;
+    filteredGlobalUsers.length === 0 &&
+    !isLoading;
 
-  const showLocalContacts = filteredLocalContacts.length > 0 || !isSearching;
+  const showLocalContacts =
+    filteredLocalContacts.length > 0 || (!isSearching && contacts.length > 0);
   const showGlobalSearchResults = isSearching && filteredGlobalUsers.length > 0;
+  const isInitialEmpty = !isSearching && contacts.length === 0 && isInitialized;
   console.log(filteredLocalContacts);
 
   return (
@@ -63,6 +67,16 @@ export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialDa
       {showNoResults && (
         <div className="flex flex-1 items-center justify-center">
           <NoSearchResults />
+        </div>
+      )}
+      {isInitialEmpty && (
+        <div className="flex flex-1 items-center justify-center">
+          <ContactsListEmpty />
+        </div>
+      )}
+      {(!isInitialized || isLoading) && (
+        <div className="flex flex-1 items-center justify-center">
+          <p>Загрузка</p>
         </div>
       )}
     </div>
