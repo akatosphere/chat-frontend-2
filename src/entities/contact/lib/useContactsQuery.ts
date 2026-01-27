@@ -11,5 +11,7 @@ export const useContactsQuery = (initialData?: ContactListResponse | null) => {
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
     // Если данные пришли с сервера, используем их для мгновенной отрисовки
     initialData: initialData ? { pages: [initialData], pageParams: [undefined] } : undefined,
+    retry: 1,
+    staleTime: 1000 * 60,
   });
 };

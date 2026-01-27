@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import { useContactsSync } from "@/entities/contact/lib/useContactsSync";
 import { useContactStore } from "@/entities/contact/model/store";
@@ -20,12 +20,33 @@ type ContactsPageProps = {
 };
 
 export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialData }) => {
-  useContactsSync(initialData);
+  const { fetchNextPage, hasNextPage, isFetchingNextPage } = useContactsSync(initialData);
   const contacts = useContactStore((s) => s.contacts);
   const isInitialized = useContactStore((s) => s.isInitialized);
   const { search, setSearch, globalUsers, isLoading } = useGlobalContactsSearch();
   const isSearching = search.trim().length > 0;
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (!hasNextPage || isFetchingNextPage || isSearching) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 },
+    );
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, isSearching, fetchNextPage]);
+
+  // ФИЛЬТРАЦИЯ РЕЗУЛЬТАТОВ
   const filteredLocalContacts = useMemo(() => {
     if (!isSearching) return contacts;
     const query = search.toLowerCase();
@@ -47,6 +68,7 @@ export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialDa
     );
   }, [globalUsers, contacts]);
 
+  // ЛОГИКА ПОКАЗА СТРАНИЦ
   const showNoResults =
     isSearching &&
     filteredLocalContacts.length === 0 &&
@@ -62,23 +84,30 @@ export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialDa
   return (
     <div className={cn("flex h-full min-h-0 flex-col gap-4 p-4", className)}>
       <Searchbar value={search} onChange={setSearch} />
-      {showLocalContacts && <ContactsList contacts={filteredLocalContacts} />}
-      {showGlobalSearchResults && <GlobalUsersList globalUsers={filteredGlobalUsers} />}
-      {showNoResults && (
-        <div className="flex flex-1 items-center justify-center">
-          <NoSearchResults />
-        </div>
-      )}
-      {isInitialEmpty && (
-        <div className="flex flex-1 items-center justify-center">
-          <ContactsListEmpty />
-        </div>
-      )}
-      {(!isInitialized || isLoading) && (
-        <div className="flex flex-1 items-center justify-center">
-          <p>Загрузка</p>
-        </div>
-      )}
+      <div className="flex flex-col overflow-y-auto">
+        {showLocalContacts && <ContactsList contacts={filteredLocalContacts} />}
+        {showGlobalSearchResults && <GlobalUsersList globalUsers={filteredGlobalUsers} />}
+        {!isSearching && hasNextPage && (
+          <div ref={loadMoreRef} className="flex justify-center py-4">
+            {isFetchingNextPage ? <p className="text-sm text-gray-400">Загрузка...</p> : null}
+          </div>
+        )}
+        {showNoResults && (
+          <div className="flex flex-1 items-center justify-center">
+            <NoSearchResults />
+          </div>
+        )}
+        {isInitialEmpty && (
+          <div className="flex flex-1 items-center justify-center">
+            <ContactsListEmpty />
+          </div>
+        )}
+        {(!isInitialized || isLoading) && (
+          <div className="flex flex-1 items-center justify-center">
+            <p>Загрузка</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
