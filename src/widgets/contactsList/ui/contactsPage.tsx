@@ -84,7 +84,7 @@ export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialDa
   return (
     <div className={cn("flex h-full min-h-0 flex-col gap-4 p-4", className)}>
       <Searchbar value={search} onChange={setSearch} />
-      <div className="flex flex-col overflow-y-auto">
+      <div className="scrollbar-hover flex flex-col overflow-y-auto">
         {showLocalContacts && <ContactsList contacts={filteredLocalContacts} />}
         {showGlobalSearchResults && <GlobalUsersList globalUsers={filteredGlobalUsers} />}
         {!isSearching && hasNextPage && (

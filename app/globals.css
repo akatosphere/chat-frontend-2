@@ -263,6 +263,40 @@ body {
   scrollbar-width: none;
 }
 
+/* globals.css */
+@layer utilities {
+  .scrollbar-hover {
+    /* Скрываем скроллбар для Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 0.3s ease;
+  }
+
+  .scrollbar-hover:hover {
+    /* Цвет ползунка и трека при наведении для Firefox */
+    scrollbar-color: var(--light-gray) transparent;
+  }
+
+  /* Для Chrome, Safari и Edge */
+  .scrollbar-hover::-webkit-scrollbar {
+    width: 6px; /* Ширина скроллбара */
+  }
+
+  .scrollbar-hover::-webkit-scrollbar-track {
+    background: transparent; /* Фон дорожки */
+  }
+
+  .scrollbar-hover::-webkit-scrollbar-thumb {
+    background: transparent; /* Ползунок прозрачный по умолчанию */
+    border-radius: 10px;
+    transition: background 0.3s ease;
+  }
+
+  .scrollbar-hover:hover::-webkit-scrollbar-thumb {
+    background: var(--light-gray); /* Цвет ползунка при наведении */
+  }
+}
+
 @utility smooth {
   transition-property: all;
   transition-duration: 200ms;
