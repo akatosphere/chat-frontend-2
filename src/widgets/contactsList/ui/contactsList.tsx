@@ -1,5 +1,5 @@
 import { Contact } from "@/entities/contact/model/types";
-import { ContactCardFeature } from "@/features/contacts/addToContacts/ui/ContactCardFeature";
+import { ContactCardFeature } from "@/features/contacts/ui/ContactCardFeature";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ListSeparator } from "@/shared/ui/listSeparator";
 
