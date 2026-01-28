@@ -1,9 +1,11 @@
 import Link from "next/link";
 
 import { cn } from "@/shared/shadcn/lib/utils";
+import { useChatListItemContextMenu } from "@/widgets/contextMenu/lib/useChatListItemContextMenu";
 
 import { ChatItemData } from "../../../entities/chat/model/types";
 import { Avatar } from "../../../entities/chat/ui/avatar";
+import { ChatActions } from "../model/types";
 import { ChatListItemFooter } from "./chatListItemFooter";
 import { ChatListItemHeader } from "./chatListItemHeader";
 
@@ -12,6 +14,7 @@ type ChatListItemProps = {
   chat: ChatItemData;
   isActive?: boolean;
   isLast?: boolean;
+  actions: ChatActions;
   onClick: () => void;
 };
 
@@ -20,18 +23,26 @@ export const ChatListItem = ({
   chat,
   isActive,
   isLast = false,
+  actions,
   onClick,
 }: ChatListItemProps) => {
   const totalUnread = chat.new_message_count + chat.new_file_count;
   const user = chat.chat;
+  const { onContextMenu, isOpen } = useChatListItemContextMenu(chat, actions);
 
   return (
-    <Link href={`/chats/${chat.id}`} className={cn("py-1", className)} onClick={onClick}>
+    <Link
+      href={`/chats/${chat.id}`}
+      className={cn("py-1", className)}
+      onClick={onClick}
+      onContextMenu={onContextMenu}
+    >
       <div
         className={cn(
           "flex cursor-pointer items-stretch gap-2 rounded-md px-2.5 py-1.5 transition-colors duration-200",
           "hover:bg-primary-hover",
           chat.is_favorite && "bg-white",
+          isOpen && "bg-primary-hover",
           isActive && "bg-primary-accent hover:bg-primary-accent",
         )}
       >

@@ -1,8 +1,8 @@
 import { getApiClient } from "@/shared/api/getApiClient";
 
-export const uploadAvatar = async (file: File) => {
+export const uploadAvatar = async (file: File | null) => {
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("file", file || "");
 
   const { data, status } = await getApiClient.post(
     "/api/v1/auth/messenger/profile/avatar/download/",

@@ -13,6 +13,9 @@ type ChatListActions = {
   }) => void;
   setLoading: (v: boolean) => void;
   setError: (e: string | null) => void;
+
+  updateChat: (chatId: number, updater: (chat: ChatItemData) => ChatItemData) => void;
+  removeChat: (chatId: number) => void;
 };
 
 export const useChatListStore = create<ChatListState & ChatListActions>((set) => ({
@@ -37,6 +40,17 @@ export const useChatListStore = create<ChatListState & ChatListActions>((set) =>
         count,
       };
     }),
+
+  updateChat: (chatId, updater) =>
+    set((state) => ({
+      chats: state.chats.map((chat) => (chat.id === chatId ? updater(chat) : chat)),
+    })),
+
+  // Экшен для удаления чата
+  removeChat: (chatId) =>
+    set((state) => ({
+      chats: state.chats.filter((chat) => chat.id !== chatId),
+    })),
 
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),

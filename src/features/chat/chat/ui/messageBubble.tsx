@@ -1,6 +1,7 @@
 import { memo, useCallback, useMemo, useRef } from "react";
 
 import { cn } from "@/shared/shadcn/lib/utils";
+import { useMessageContextMenu } from "@/widgets/contextMenu/lib/useMessageContextMenu";
 
 import { useMessageNavigation } from "../model/store/useChatNavigationStore";
 import { useChatStore } from "../model/store/useChatStore";
@@ -46,6 +47,8 @@ export const MessageBubble = memo(function MessageBubble({
     return attrs;
   }, [dataAttributes]);
 
+  const { onContextMenu } = useMessageContextMenu(`${chatMessage.id}`);
+
   return (
     <div
       ref={ref}
@@ -57,6 +60,7 @@ export const MessageBubble = memo(function MessageBubble({
         className,
       )}
       onDoubleClick={handleDoubleClick}
+      onContextMenu={onContextMenu}
       {...outerDataAttributes}
     >
       <MessageLayout isMine={isMine} message={chatMessage} blocks={chatMessage.blocks} />
