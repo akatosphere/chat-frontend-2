@@ -42,7 +42,13 @@ export const SimpleCard = (props: SimpleCardProps) => {
           "hover:bg-primary-hover smooth rounded-md border-b border-gray-100",
       )}
     >
-      <Button asChild variant="ghost" size="icon-auto" onClick={onClick}>
+      <Button
+        asChild
+        variant="ghost"
+        size="icon-auto"
+        onClick={onClick}
+        className="justify-between"
+      >
         {content}
       </Button>
     </div>

@@ -1,5 +1,5 @@
 import { Contact } from "@/entities/contact/model/types";
-import { ContactCard } from "@/entities/contact/ui/contactCard";
+import { ContactCardFeature } from "@/features/contacts/addToContacts/ui/ContactCardFeature";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ListSeparator } from "@/shared/ui/listSeparator";
 
@@ -13,7 +13,7 @@ export const ContactsList: React.FC<ContactsListProps> = ({ className, contacts 
     <div className={cn("flex flex-col gap-2", className)}>
       <ListSeparator text="Мои контакты" />
       {contacts.map((c, index) => {
-        return <ContactCard contact={c} key={index} />;
+        return <ContactCardFeature contact={c} key={index} />;
       })}
     </div>
   );

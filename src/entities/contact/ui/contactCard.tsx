@@ -13,11 +13,10 @@ export type ContactCardProps = {
 
 export const ContactCard = (props: ContactCardProps) => {
   const { contact, href, isLast = false, onClick, after } = props;
-
   const avatarLetter = contact.firstName?.charAt(0).toUpperCase() || "?";
 
   return (
-    <SimpleCard href={href} isLast={isLast} onClick={onClick} className="justify-between">
+    <SimpleCard href={href} isLast={isLast} onClick={onClick} className="w-full justify-between">
       <div className="flex gap-3">
         {/* Аватар с буквой */}
         <div className="shrink-0">
@@ -37,7 +36,7 @@ export const ContactCard = (props: ContactCardProps) => {
         {/* Текстовая информация */}
         <div className="flex min-w-0 flex-1 flex-col justify-center">
           {/* Имя */}
-          <h3 className="subtext desktop:text min-w-0 truncate font-semibold text-gray-900">
+          <h3 className="subtext desktop:text max-w-50 min-w-0 truncate font-semibold text-gray-900">
             {contact.fullName}
           </h3>
 
@@ -51,7 +50,7 @@ export const ContactCard = (props: ContactCardProps) => {
           </div>
         </div>
       </div>
-      <div className="h-5 w-5">{after}</div>
+      {after && <div className="flex shrink-0 items-center justify-center">{after}</div>}
     </SimpleCard>
   );
 };
