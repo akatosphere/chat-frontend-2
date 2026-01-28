@@ -5,18 +5,17 @@ import { Contact } from "../model/types";
 
 export type ContactCardProps = {
   contact: Contact;
-  href?: string;
   isLast?: boolean;
   onClick?: () => void;
   after?: React.ReactNode;
 };
 
 export const ContactCard = (props: ContactCardProps) => {
-  const { contact, href, isLast = false, onClick, after } = props;
+  const { contact, isLast = false, onClick, after } = props;
   const avatarLetter = contact.firstName?.charAt(0).toUpperCase() || "?";
 
   return (
-    <SimpleCard href={href} isLast={isLast} onClick={onClick} className="w-full justify-between">
+    <SimpleCard isLast={isLast} onClick={onClick} className="w-full justify-between">
       <div className="flex gap-3">
         {/* Аватар с буквой */}
         <div className="shrink-0">

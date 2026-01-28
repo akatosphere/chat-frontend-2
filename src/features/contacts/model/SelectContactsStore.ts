@@ -29,8 +29,7 @@ export const useSelectContactsStore = create<SelectContactsStoreState>((set) => 
   toggleIsSelecting: () =>
     set((state) => ({
       isSelecting: !state.isSelecting,
-      // При выходе из режима выбора обычно логично очистить массив
-      selected: !state.isSelecting ? state.selected : [],
+      selected: [],
     })),
 
   addContact: (contact) =>

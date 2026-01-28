@@ -1,39 +1,37 @@
 "use client";
 
-import { useState } from "react";
-
-// import { mapToAddByPhonePayload } from "@/entities/contact/model/mappers";
 import { Contact } from "@/entities/contact/model/types";
 import { ContactCard } from "@/entities/contact/ui/contactCard";
 import { Checkbox } from "@/shared/ui/checkBox";
 
-// import { useAddToContacts } from "../lib/useAddToContacts";
+import { useSelectContactsStore } from "../model/SelectContactsStore";
 
 type ContactCardFeatureProps = {
   contact: Contact;
 };
 
 export const ContactCardFeature: React.FC<ContactCardFeatureProps> = ({ contact }) => {
-  // 2. Инициализируем мутацию через хук
-  // const { mutate, isPending } = useAddToContacts();
-  const [selected, setSelected] = useState(false);
+  const isSelecting = useSelectContactsStore((s) => s.isSelecting);
+  const toggleContact = useSelectContactsStore((s) => s.toggleContact);
 
-  // Тестовая функция добавления в контакты
-  // const handleClick = () => {
-  //   if (isPending) return;
+  const isChecked = useSelectContactsStore((s) =>
+    s.selected.some((item) => item.uid === contact.uid),
+  );
 
-  //   // 3. Маппим данные контакта в формат, который ждет API (payload)
-  //   const payload = mapToAddByPhonePayload(contact);
-
-  //   // 4. Запускаем выполнение
-  //   mutate(payload);
-  // };
-
-  const toggleSelect = () => {
-    setSelected((prev) => !prev);
+  const handleAction = () => {
+    if (isSelecting) {
+      toggleContact(contact);
+    } else {
+      // Здесь будет логика перехода в чат, когда режим выбора выключен
+      console.log("Переход в чат с", contact.fullName);
+    }
   };
 
   return (
-    <ContactCard contact={contact} onClick={toggleSelect} after={<Checkbox checked={selected} />} />
+    <ContactCard
+      contact={contact}
+      onClick={handleAction}
+      after={isSelecting && <Checkbox checked={isChecked} />}
+    />
   );
 };
