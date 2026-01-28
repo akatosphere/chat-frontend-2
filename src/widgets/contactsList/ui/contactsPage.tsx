@@ -1,12 +1,9 @@
 "use client";
 
-import { useState } from "react";
-
 import { useContactsSync } from "@/entities/contact/lib/useContactsSync";
 import { useContactStore } from "@/entities/contact/model/store";
 import { ContactListResponse } from "@/entities/contact/model/types";
 import { cn } from "@/shared/shadcn/lib/utils";
-import { Checkbox } from "@/shared/ui/checkBox";
 import { ContactsListEmpty } from "@/shared/ui/contactsListEmpty";
 import { NoSearchResults } from "@/shared/ui/noSearchResults";
 import { Searchbar } from "@/shared/ui/searchbar";
@@ -43,7 +40,6 @@ export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialDa
     isSearching: logic.isSearching,
     fetchNextPage,
   });
-  const [isSelected, setIsSelected] = useState(false);
   return (
     <div className={cn("flex h-full min-h-0 flex-col gap-4 p-4", className)}>
       <Searchbar value={search} onChange={setSearch} />
@@ -78,7 +74,6 @@ export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialDa
             <p>Загрузка</p>
           </div>
         )}
-        <Checkbox checked={isSelected} onChange={setIsSelected} />
       </div>
     </div>
   );
