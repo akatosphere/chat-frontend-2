@@ -34,7 +34,7 @@ export interface ChatUser {
 
 export interface ChatItemData {
   id: number;
-  chat: ChatUser;
+  chat?: ChatUser;
   is_favorite: boolean;
   notifications: boolean;
   new_message_count: number;
@@ -44,6 +44,8 @@ export interface ChatItemData {
   chat_key: string;
   last_activity_at: number;
   last_message: LastMessage | null;
+  avatar_url?: string | null;
+  avatar_webp_url?: string | null;
 }
 
 export interface ChatListResponse {

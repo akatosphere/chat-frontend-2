@@ -18,7 +18,10 @@ export const ChatListItemHeader = ({ chat, isActive }: ChatListItemHeaderProps) 
   const lastMsg = chat.last_message;
   const displayName = getChatDisplayName(chat);
   const time = lastMsg ? formatLastSeen(lastMsg.created_at) : "";
-  const status = getMessageStatus(lastMsg?.from_user || null, user.uid, lastMsg?.new);
+  // const status = getMessageStatus(lastMsg?.from_user || null, user?.uid, lastMsg?.new);
+  const status = lastMsg
+    ? getMessageStatus(lastMsg.from_user, user?.uid ?? null, lastMsg.new)
+    : null;
 
   return (
     <div className="flex min-w-0 items-center justify-between">

@@ -36,8 +36,8 @@ export const ChatListItem = ({
         )}
       >
         <Avatar
-          isOnline={user.is_online}
-          avatarUrl={user.avatar_webp_url || user.avatar_url || ""}
+          isOnline={user?.is_online ?? false}
+          avatarUrl={user?.avatar_webp_url || user?.avatar_url || ""}
         />
         <div
           className={cn(

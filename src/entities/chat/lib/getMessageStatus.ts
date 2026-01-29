@@ -2,7 +2,7 @@ import { MessageStatus } from "../model/types";
 
 export const getMessageStatus = (
   fromUser: string | null,
-  userId: string,
+  userId: string | null,
   isMessageNew?: boolean,
 ): MessageStatus | null => {
   if (!fromUser) return null;

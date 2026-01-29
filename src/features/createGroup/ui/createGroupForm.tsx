@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { EditPhotoForm } from "@/shared/form/ui/editPhotoForm";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
 import { createGroup } from "../api/ws";
-import { mapGroupType } from "../model/mapping";
+import { mapChatObjectToChatItem, mapGroupType } from "../model/mapping";
 import { formSchema } from "../model/schema";
 import { CreateGroupFormValues } from "../model/types";
 import { Field } from "./field";
@@ -22,6 +23,8 @@ type CreateGroupFormProps = {
 
 export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) => {
   const [groupType, setGroupType] = useState<"open" | "closed">("closed");
+  const upsertChat = useChatListStore((s) => s.upsertChat);
+
   const form = useForm({
     mode: "onChange",
     resolver: zodResolver(formSchema),
@@ -42,7 +45,11 @@ export const CreateGroupForm: React.FC<CreateGroupFormProps> = ({ className }) =
         uid_users_list: [], // пока только создатель
       });
       if (response.status === "OK") {
+        const chatItem = mapChatObjectToChatItem(response.object);
+
+        upsertChat(chatItem);
         const chatId = response.object.chat_id; // Используем chat_id из вашего JSON
+
         router.push(`/chats/${chatId}`);
       } else {
         // Обработка ошибки, если статус не "OK"
