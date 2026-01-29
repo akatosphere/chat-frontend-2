@@ -4,7 +4,7 @@ import Select from "@icons/chat/context-menu/select.svg";
 import Forwarded from "@icons/chat/forwardedd.svg";
 import { MouseEvent } from "react";
 
-import { useDeleteMessage } from "@/features/chat/chat/hooks/useDeleteMessage";
+import { useDeleteMessage } from "@/features/chat/chat/hooks";
 import { useChatStore } from "@/features/chat/chat/model/store/useChatStore";
 import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
 
