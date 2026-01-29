@@ -4,29 +4,43 @@ import { useState } from "react";
 
 import { addMembersToChat } from "@/entities/chat/api/addMemberToChat";
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
+import { UserPreview } from "@/entities/user/model/types";
+import { normalizeChatInfo } from "@/features/chat/chat/lib/normalizeChatInfo";
+import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
 import { pluralize } from "@/shared/lib/pluralize";
 import { cn } from "@/shared/shadcn/lib/utils";
-import { ChatHeader } from "@/widgets/activeChatHeader/ui/chatHeader";
 
 import { MappedChatMessage } from "../../../features/chat/chat/model/types/mappedTypes";
 import { Chat } from "../../../features/chat/chat/ui/chat";
+import { ChatHeader } from "../chatHeader/ui/chatHeader";
 
 type ChatWidgetProps = {
   className?: string;
   chatKey: string;
-  initialChatInfo: MappedChatDetails;
+  chatType: ChatType;
+  initialChatInfo: MappedChatDetails | UserPreview;
   initialMessages: MappedChatMessage[];
 };
 
 export const ChatWidget: React.FC<ChatWidgetProps> = ({
   className,
   initialChatInfo,
+  chatType,
   initialMessages,
   chatKey,
 }) => {
+  // Тестовое добавление участников. Потом удалить
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [uidInputValue, setUidInputValue] = useState("");
 
+  // Приводит пришедшие данные к единому интерфейсу
+  const chatInfo = normalizeChatInfo(initialChatInfo);
+
+  // Единственное название чата в зависимости от типа
+  const chatName = chatInfo.title || chatInfo.firstName || "Unknown";
+  const chatAvatar = chatInfo.avatar || chatInfo.avatarUrl || "";
+
+  // Тестовое добавление участников. Потом удалить
   const handleUidSubmit = async () => {
     try {
       const added = await addMembersToChat({
@@ -39,17 +53,23 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       console.error("Ошибка добавления участников:", e);
     }
   };
+
+  // Функция для получения текста статуса.
   const getStatusText = () => {
     // Если это группа или канал — показываем кол-во участников
     if (
-      initialChatInfo.type === "private-group" ||
-      initialChatInfo.type === "public-group" ||
-      initialChatInfo.type === "channel"
+      (chatType === "public-group" || chatType === "private-group") &&
+      chatInfo.membersCount !== undefined
     ) {
-      return `${initialChatInfo.membersCount + 1} ${pluralize(initialChatInfo.membersCount + 1, "участник", "участника", "участников")}`;
+      return `${chatInfo.membersCount + 1} ${pluralize(chatInfo.membersCount + 1, "участник", "участника", "участников")}`;
     }
 
-    // Если это личный чат — пока оставляем "online" (в будущем будет приходить из WS)
+    if (
+      (chatType === "public-channel" || chatType === "private-channel") &&
+      chatInfo.membersCount !== undefined
+    ) {
+      return `${chatInfo.membersCount + 1} ${pluralize(chatInfo.membersCount + 1, "подписчик", "подписчика", "подписчиков")}`;
+    }
     return "online";
   };
 
@@ -79,17 +99,22 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       </div>
 
       <ChatHeader
-        name={initialChatInfo.title}
+        name={chatName}
         status={getStatusText()}
         backHref="/chats"
-        photo={initialChatInfo.avatar || ""}
+        photo={chatAvatar}
         onCallClick={() => {}}
         onSearchClick={() => {}}
         onPhotoClick={() => {}}
         onInfoClick={() => {}}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
-        <Chat initialMessages={initialMessages} chatKey={chatKey} chatType={initialChatInfo.type} />
+        <Chat
+          initialMessages={initialMessages}
+          chatKey={chatKey}
+          chatType={chatType}
+          createdBy={chatInfo.createdBy}
+        />
       </div>
     </div>
   );

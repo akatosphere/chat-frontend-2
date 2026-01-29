@@ -89,7 +89,7 @@ export type ChatType =
   | "private-group"
   | "public-channel"
   | "private-channel"
-  | "channel";
+  | "chat";
 
 export interface Participant {
   uid: string;

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { checkNickname } from "@/entities/user/api/checkNickname";
+import { checkNicknameUnique } from "@/entities/user/api/checkNicknameUnique";
 import { FormInput } from "@/shared/form/ui/formInput";
 import { cn } from "@/shared/shadcn/lib/utils";
 
@@ -33,8 +33,8 @@ export const NicknameInput: React.FC<NicknameInputProps> = ({
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (!nicknameSchema.safeParse(nickname).success) {
-      clearErrors(name);
+    const trimmedNickname = nickname?.trim();
+    if (!nicknameSchema.safeParse(trimmedNickname).success) {
       return;
     }
 
@@ -43,7 +43,7 @@ export const NicknameInput: React.FC<NicknameInputProps> = ({
     }
 
     debounceRef.current = setTimeout(async () => {
-      const result = await checkNickname(nickname.trim());
+      const result = await checkNicknameUnique(trimmedNickname);
 
       if (!result.success) {
         setError(name, {

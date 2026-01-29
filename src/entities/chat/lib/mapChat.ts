@@ -26,6 +26,7 @@ export interface MappedChatDetails {
     name: string;
   }>;
   isFavorite: boolean;
+  createdBy: string;
   isNotificationsEnabled: boolean;
 }
 
@@ -66,6 +67,8 @@ export const mapChatDetails = (raw: ChatDetails): MappedChatDetails => {
       uid: p.uid,
       name: p.full_name,
     })),
+
+    createdBy: raw.created_by,
 
     isFavorite: raw.is_favorite,
     isNotificationsEnabled: raw.notifications,

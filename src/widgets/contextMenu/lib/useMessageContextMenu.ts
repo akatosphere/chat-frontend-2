@@ -4,36 +4,43 @@ import Select from "@icons/chat/context-menu/select.svg";
 import Forwarded from "@icons/chat/forwardedd.svg";
 import { MouseEvent } from "react";
 
+import { useDeleteMessage } from "@/features/chat/chat/hooks/useDeleteMessage";
+import { useChatStore } from "@/features/chat/chat/model/store/useChatStore";
+import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
+
 import { useContextMenu } from "../ui/contextMenuProvider";
 
-export const useMessageContextMenu = (messageId: string) => {
+export const useMessageContextMenu = (message: MappedChatMessage) => {
   const { openMenu, activeMenuId } = useContextMenu();
 
-  const menuId = `message-${messageId}`;
-
+  const { setReplyTarget } = useChatStore();
+  const deleteMessage = useDeleteMessage();
+  const menuId = `message-${message.id}`;
   return {
     onContextMenu: (e: MouseEvent) => {
       e.preventDefault();
       openMenu(
         menuId,
         [
-          { label: "Ответить", icon: Forwarded, onClick: () => console.log("Ответить", messageId) },
+          { label: "Ответить", icon: Forwarded, onClick: () => setReplyTarget(message) },
           {
             label: "Переслать",
             icon: Forwarded,
-            onClick: () => console.log("Переслать", messageId),
+            onClick: () => console.log("Переслать", message.id),
           },
           {
             label: "Скопировать",
             icon: Copy,
-            onClick: () => console.log("Скопировать", messageId),
+            onClick: () => console.log("Скопировать", message.id),
           },
-          { label: "Выбрать", icon: Select, onClick: () => console.log("Выбрать", messageId) },
+          { label: "Выбрать", icon: Select, onClick: () => console.log("Выбрать", message.id) },
           {
             label: "Удалить",
             icon: Delete,
             destructive: true,
-            onClick: () => console.log("Удалить", messageId),
+            onClick: () => {
+              deleteMessage(message.uid, true);
+            },
           },
         ],
         e.clientX,

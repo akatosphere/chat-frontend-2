@@ -8,10 +8,18 @@ import { mapChatMessage } from "../model/mapper";
 import { buildMessageBlocks } from "../model/messageBlock/buildMessageBlocks";
 import { useChatStore } from "../model/store/useChatStore";
 import { MappedChatMessage } from "../model/types/mappedTypes";
+import { ChatType } from "../model/types/serverTypes";
 
 export const useSendMessage = () => {
-  const { currentUserId, chatKey, addMessage, setFailedStatus, replyTarget, setReplyTarget } =
-    useChatStore();
+  const {
+    currentUserId,
+    chatKey,
+    addMessage,
+    setFailedStatus,
+    replyTarget,
+    setReplyTarget,
+    chatType,
+  } = useChatStore();
 
   return useCallback(
     async (text: string) => {
@@ -59,7 +67,7 @@ export const useSendMessage = () => {
         chatId: null,
         chatKey,
         blocks: [],
-        chatType: "public-group",
+        chatType: chatType as ChatType,
         messageRtc: null,
         status: MESSAGE_STATUS.PENDING,
       };
@@ -69,7 +77,8 @@ export const useSendMessage = () => {
 
       try {
         const serverMessage = await sendTextMessage({
-          chat_key: chatKey,
+          chat_key: chatType !== "chat" ? chatKey : null,
+          to_user_uid: chatType === "chat" ? chatKey : null,
           content: text,
           status: "publish",
           replied_messages: replyTarget ? [`${replyTarget.uid}`] : [],
@@ -78,14 +87,14 @@ export const useSendMessage = () => {
 
         const mapped = mapChatMessage(serverMessage);
         mapped.status = MESSAGE_STATUS.DELIVERED;
-
+        mapped.requestUid = requestUid;
         addMessage(mapped);
       } catch (error) {
         console.error(error);
         setFailedStatus(requestUid);
       }
     },
-    [currentUserId, chatKey, addMessage, setFailedStatus, replyTarget, setReplyTarget],
+    [currentUserId, chatKey, addMessage, setFailedStatus, replyTarget, setReplyTarget, chatType],
   );
 };
 

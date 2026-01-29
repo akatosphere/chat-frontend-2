@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-import { ChatUser } from "@/entities/chat/model/types";
+import { ChatMemberDto } from "@/entities/user/model/types";
 import { useCreateChatStore } from "@/features/createChat/model/store"; // ФУНКЦИОНАЛ ДЛЯ ТЕСТА
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
@@ -16,7 +16,7 @@ type ContactsSearchProps = {
 
 export const ContactsSearch: React.FC<ContactsSearchProps> = ({ className }) => {
   const [search, setSearch] = useState("");
-  const [contacts, setContacts] = useState<ChatUser[]>([]);
+  const [contacts, setContacts] = useState<ChatMemberDto[]>([]);
   const [debouncedSearch, setDebouncedSearch] = useState(search);
 
   useEffect(() => {

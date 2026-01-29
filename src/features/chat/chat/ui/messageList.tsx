@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { cn } from "@/shared/shadcn/lib/utils";
-import { InfoMessage } from "@/shared/ui/infoMessage";
 
 import { useAutoRead } from "../hooks";
 import { useMessageScroll } from "../hooks/useMessageScroll";
@@ -9,6 +8,7 @@ import { groupMessagesByDate } from "../lib/getMessageByDate";
 import { useMessageNavigation } from "../model/store/useChatNavigationStore";
 import { useChatStore } from "../model/store/useChatStore";
 import { MessageGroup } from "./messageGroup";
+import { MessageListEmptyInfo } from "./messageListEpmtyInfo";
 import { ScrollDownBtn } from "./scrollDownBtn";
 
 interface MessageListProps {
@@ -19,6 +19,8 @@ interface MessageListProps {
 export const MessageList: React.FC<MessageListProps> = ({ className, currentUserId }) => {
   const messages = useChatStore((s) => s.messages);
   const isReady = useChatStore((s) => s.isReady);
+  const chatType = useChatStore((s) => s.chatType);
+  const isOwner = useChatStore((s) => s.createdBy === currentUserId);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -92,14 +94,7 @@ export const MessageList: React.FC<MessageListProps> = ({ className, currentUser
           className,
         )}
       >
-        {showEmptyState && (
-          <InfoMessage
-            imgSrc="/info/messagesNotFound.svg"
-            title="Сообщений пока нет"
-            description="Напишите первым :)"
-            className="flex-1 justify-center"
-          />
-        )}
+        {showEmptyState && <MessageListEmptyInfo type={chatType} isOwner={isOwner} />}
 
         <div className="mt-auto flex flex-col gap-3">
           {groups.map((group) => (

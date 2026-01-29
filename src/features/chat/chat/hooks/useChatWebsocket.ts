@@ -9,21 +9,33 @@ import { ChatMessage, ChatMessageUI } from "../model/types/serverTypes";
 
 export const useChatWebSocket = (chatKey: string) => {
   const currentUserId = useChatStore((s) => s.currentUserId);
+  const chatType = useChatStore((s) => s.chatType);
   const addMessage = useChatStore((s) => s.addMessage);
 
   useEffect(() => {
     if (!currentUserId || !chatKey) return;
 
     const unsubscribe = subscribeToWS((data) => {
-      // Проверяем, что событие относится к текущему чату
       const currentChatKey = chatKey;
       if (!currentChatKey || currentChatKey !== chatKey) return;
 
       if (data.action === WS_ACTIONS.CREATE_TEXT_MESSAGE) {
         const newMessage = mapChatMessage(data.object as ChatMessageUI);
 
+        console.log(
+          "newMessage chatKey",
+          newMessage.fromUser.uid === chatKey,
+          "isUser",
+          chatType === "chat",
+          "chatType",
+          chatType,
+          "newMessage.chatType",
+          newMessage.chatType,
+        );
+
         // Проверяем, что сообщение относится к текущему чату
-        if (newMessage.chatKey !== chatKey) return;
+        if (newMessage.chatType === "chat" && newMessage.fromUser.uid !== chatKey) return;
+        if (newMessage.chatType !== "chat" && newMessage.chatKey !== chatKey) return;
 
         // Пытаемся найти временное сообщение по requestUid
         const tempIndex = useChatStore
@@ -63,5 +75,5 @@ export const useChatWebSocket = (chatKey: string) => {
     });
 
     return () => unsubscribe();
-  }, [chatKey, currentUserId, addMessage]);
+  }, [chatKey, currentUserId, addMessage, chatType]);
 };

@@ -4,7 +4,7 @@ import { getApiServer } from "@/shared/api/getApiServer";
 import { Result } from "@/shared/api/types";
 
 export interface GetMessagesParams {
-  user_uid: string;
+  uid: string;
   from_me?: boolean;
   new?: boolean;
   ordering?: string;
@@ -20,10 +20,9 @@ export interface GetMessagesParams {
 export const getMessages = async (params: GetMessagesParams): Promise<Result<ChatMessageList>> => {
   const api = await getApiServer();
   try {
-    const { data } = await api.get<ChatMessageList>(
-      `/api/v1/chat/message/text/${params.user_uid.slice(6)}/`,
-      { params },
-    );
+    const { data } = await api.get<ChatMessageList>(`/api/v1/chat/message/text/${params.uid}/`, {
+      params,
+    });
     return { success: true, data };
   } catch (error) {
     return { success: false, error: errorHandler(error) };

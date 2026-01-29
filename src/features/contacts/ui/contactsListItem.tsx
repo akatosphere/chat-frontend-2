@@ -1,10 +1,10 @@
-import { ChatUser } from "@/entities/chat/model/types";
 import { Avatar } from "@/entities/chat/ui/avatar";
+import { ChatMemberDto } from "@/entities/user/model/types";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 type ContactsListItemProps = {
   className?: string;
-  user: ChatUser;
+  user: ChatMemberDto;
 };
 
 export const ContactsListItem: React.FC<ContactsListItemProps> = ({ className, user }) => {

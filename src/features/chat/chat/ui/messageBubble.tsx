@@ -47,7 +47,7 @@ export const MessageBubble = memo(function MessageBubble({
     return attrs;
   }, [dataAttributes]);
 
-  const { onContextMenu } = useMessageContextMenu(`${chatMessage.id}`);
+  const { onContextMenu, isOpen } = useMessageContextMenu(chatMessage);
 
   return (
     <div
@@ -56,7 +56,7 @@ export const MessageBubble = memo(function MessageBubble({
       className={cn(
         "flex px-4 transition-colors duration-300 ease-out select-none",
         isMine ? "justify-end" : "justify-start",
-        isHighlighted && "bg-muted",
+        (isHighlighted || isOpen) && "bg-muted",
         className,
       )}
       onDoubleClick={handleDoubleClick}

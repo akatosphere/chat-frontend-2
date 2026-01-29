@@ -1,5 +1,7 @@
 import z from "zod";
 
+import { ChatMemberDto } from "@/entities/user/model/types";
+
 import { ChatDetailsSchema } from "./schema";
 
 export type ChatType = z.infer<typeof ChatDetailsSchema>["chat_type"];
@@ -20,29 +22,27 @@ export interface LastMessage {
   updated_at: number;
 }
 
-export interface ChatUser {
-  uid: string;
-  username: string;
-  nickname: string | null;
-  first_name: string;
-  last_name: string;
-  avatar?: string | null;
-  avatar_url?: string | null;
-  avatar_webp?: string | null;
-  avatar_webp_url?: string | null;
-  is_blocked: boolean;
-  is_online: boolean;
-  was_online_at: number;
-  is_in_contacts: boolean;
-  chat_id?: number | null;
-  birthday?: number | null;
-  phone?: string | null;
-  additional_information?: string | null;
-}
+export type ChatObject = {
+  chat_id: string;
+  chat_key: string;
+  name: string;
+  description: string;
+  chat_type: string;
+  created_by: string;
+  owner_full_name: string;
+  avatar: {
+    filename: string;
+    url: string;
+  } | null;
+  added_users: Array<{
+    uid: string;
+    full_name: string;
+  }>;
+};
 
 export interface ChatItemData {
   id: number;
-  chat: ChatUser;
+  chat: ChatMemberDto;
   is_favorite: boolean;
   notifications: boolean;
   new_message_count: number;

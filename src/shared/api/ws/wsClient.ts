@@ -36,8 +36,6 @@ export const subscribeToWS = (handler: WSHandler) => {
 const drainQueue = () => {
   if (!socket || socket.readyState !== WebSocket.OPEN) return;
 
-  console.log(`📡 WS: Draining queue (${requestQueue.length} messages)`);
-
   while (requestQueue.length > 0) {
     const request = requestQueue.shift(); // Берем первый элемент (FIFO)
     if (request) {

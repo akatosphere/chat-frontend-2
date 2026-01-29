@@ -28,6 +28,16 @@ const ParticipantSchema = z.object({
   full_name: z.string(),
 });
 
+export const UserSchema = z.object({
+  uid: z.uuid(),
+  username: z.string(),
+  nickname: z.string(),
+  first_name: z.string(),
+  last_name: z.string().nullable(),
+  avatar_url: z.url().nullable(),
+  avatar_webp_url: z.url().nullable(),
+});
+
 export const ChatDetailsSchema = z.object({
   id: z.number(),
   chat: z.object({
@@ -48,8 +58,9 @@ export const ChatDetailsSchema = z.object({
   first_new_message: z.object({ id: z.number(), uid: z.uuid() }).nullable(),
 
   name: z.string(),
-  chat_type: z.enum(["private-group", "public-group", "private-channel", "public-channel"]),
+  chat_type: z.enum(["private-group", "public-group", "private-channel", "public-channel", "chat"]),
   chat_key: z.string(),
+  created_by: z.uuid(),
   description: z.string().nullable(),
   participants: z.array(ParticipantSchema),
   created_at: z.string(),

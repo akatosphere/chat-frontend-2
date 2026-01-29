@@ -16,10 +16,11 @@ type ChatProps = {
   className?: string;
   initialMessages: MappedChatMessage[];
   chatType: ChatType;
+  createdBy?: string;
   chatKey: string;
 };
 
-export const Chat = ({ className, initialMessages, chatKey }: ChatProps) => {
+export const Chat = ({ className, initialMessages, chatKey, chatType, createdBy }: ChatProps) => {
   const currentUserId = useUserStore((s) => s.userId);
   const setInitialData = useChatStore((s) => s.setInitialData);
 
@@ -29,9 +30,9 @@ export const Chat = ({ className, initialMessages, chatKey }: ChatProps) => {
 
   useEffect(() => {
     if (currentUserId) {
-      setInitialData(initialMessages, currentUserId, chatKey);
+      setInitialData(initialMessages, currentUserId, chatKey, chatType, createdBy);
     }
-  }, [currentUserId, chatKey, initialMessages, setInitialData]);
+  }, [currentUserId, chatKey, initialMessages, setInitialData, chatType, createdBy]);
 
   return (
     <div className={cn("flex h-full flex-col", className)}>

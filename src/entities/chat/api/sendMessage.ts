@@ -7,8 +7,8 @@ import { sendWSRequest } from "@/shared/api/ws/wsClient";
 import { WS_ACTIONS } from "@/shared/constants/constants";
 
 export interface SendTextMessagePayload {
-  chat_key?: string;
-  to_user_uid?: string;
+  chat_key?: string | null;
+  to_user_uid?: string | null;
   content: string;
   files?: MessageFile[];
   replied_messages?: string[] | null;
