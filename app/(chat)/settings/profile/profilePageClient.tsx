@@ -60,7 +60,7 @@ export const ProfilePageClient: React.FC = () => {
       onSubmit={onSubmit}
       profile={data}
       avatarUrl={data.avatarUrl}
-      lastName={data.lastName}
+      lastName={data.lastName || ""}
       name={data.firstName}
       phone={data.phone}
       nickname={data.nickname}
