@@ -22,7 +22,15 @@ export const DeleteContactsBtn: React.FC<DeleteContactsBtnProps> = ({ className 
     pluralize(selected.length, " контакт", " контакта", " контактов");
 
   return (
-    <div className={cn("flex items-center justify-center p-4", className)}>
+    <div
+      className={cn(
+        // Базовые стили, которые всегда применяются
+        "flex w-full items-center justify-center p-4",
+        // Стили для мобильных устройств
+        "max-desktop:w-full max-desktop:border-gray max-desktop:absolute max-desktop:bottom-0 max-desktop:left-1/2 max-desktop:-translate-x-1/2 max-desktop:transform max-desktop:border-t max-desktop:bg-white max-desktop:pt-3",
+        className,
+      )}
+    >
       <Button
         className="text-error text desktop:hover:text-error desktop:hover:bg-primary-gray w-full"
         variant="text"
