@@ -32,17 +32,18 @@ export const useDeleteSelectedContacts = () => {
     },
     onSuccess: (deletedUids) => {
       setIsModalOpen(false);
-      // 1. Удаляем из основного стора
-      removeContactsFromStore(deletedUids);
 
-      // 2. Сбрасываем режим выбора
-      resetSelection();
-
-      // 3. Инвалидируем кэш TanStack (чтобы синхронизировать с сервером)
+      // Инвалидируем кэш TanStack (чтобы синхронизировать с сервером)
       queryClient.invalidateQueries({ queryKey: ["contacts"] });
 
-      // 4. Обновляем серверные пропсы
+      // Обновляем серверные пропсы
       router.refresh();
+
+      // Удаляем из основного стора
+      removeContactsFromStore(deletedUids);
+
+      // Сбрасываем режим выбора
+      resetSelection();
     },
     onError: (err: Error) => {
       console.error(err.message || "Ошибка при удалении");

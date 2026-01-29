@@ -1,4 +1,5 @@
 import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
+import { useState } from "react";
 
 import { useDeleteSelectedContacts } from "@/features/contacts/deleteContacts/ui/lib/useDeleteSelectedContacts";
 import { pluralize } from "@/shared/lib/pluralize";
@@ -24,12 +25,26 @@ export const DeleteContactsModal: React.FC<DeleteContactsModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { mutate, isPending } = useDeleteSelectedContacts();
+  const { mutate } = useDeleteSelectedContacts();
   const selected = useSelectContactsStore((s) => s.selected);
+  // 1. Храним текущую длину и предыдущую для сравнения
+  const [prevLength, setPrevLength] = useState(selected.length);
+  const [frozenCount, setFrozenCount] = useState(selected.length);
+
+  // 2. Логика синхронизации прямо в теле компонента
+  if (selected.length !== prevLength) {
+    setPrevLength(selected.length); // Обновляем "предыдущую" длину
+
+    // Замораживаем число, только если оно больше нуля
+    // Если стор сбросился в 0, frozenCount сохранит старое значение
+    if (selected.length > 0) {
+      setFrozenCount(selected.length);
+    }
+  }
+
+  // Используем замороженное число
   const text =
-    "удалить " +
-    selected.length +
-    pluralize(selected.length, " контакт", " контакта", " контактов");
+    "удалить " + frozenCount + pluralize(frozenCount, " контакт", " контакта", " контактов");
   return (
     <ModalDialog className={cn(className)} open={isOpen} onOpenChange={onClose}>
       <AlertDialogHeader>
@@ -57,7 +72,7 @@ export const DeleteContactsModal: React.FC<DeleteContactsModalProps> = ({
           onClick={() => mutate()}
           className="desktop:flex-0 flex-1"
         >
-          <span>{isPending ? "Удаление..." : "Удалить"}</span>
+          <span>Удалить</span>
         </Button>
       </AlertDialogFooter>
     </ModalDialog>
