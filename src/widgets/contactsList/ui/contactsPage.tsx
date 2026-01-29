@@ -4,6 +4,7 @@ import { useContactsSync } from "@/entities/contact/lib/useContactsSync";
 import { useContactStore } from "@/entities/contact/model/store";
 import { ContactListResponse } from "@/entities/contact/model/types";
 import { DeleteContactsBtn } from "@/features/contacts/deleteContacts/ui/deleteContactsBtn";
+import { DeleteContactsModal } from "@/features/contacts/deleteContacts/ui/deleteContactsModal";
 import { useSelectContactsStore } from "@/features/contacts/model/SelectContactsStore";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ContactsListEmpty } from "@/shared/ui/contactsListEmpty";
@@ -27,7 +28,8 @@ export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialDa
   const { contacts, isInitialized } = useContactStore();
   const { search, setSearch, globalUsers, isLoading } = useGlobalContactsSearch();
   const isSelecting = useSelectContactsStore((s) => s.isSelecting);
-
+  const isModalOpen = useSelectContactsStore((s) => s.isModalOpen);
+  const setIsModalOpen = useSelectContactsStore((s) => s.setIsModalOpen);
   // Использование выделенной логики
   const logic = useContactsLogic({
     contacts,
@@ -79,6 +81,7 @@ export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialDa
         )}
       </div>
       {isSelecting && <DeleteContactsBtn />}
+      <DeleteContactsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 };

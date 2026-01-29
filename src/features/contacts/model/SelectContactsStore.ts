@@ -5,6 +5,7 @@ import { Contact } from "@/entities/contact/model/types";
 type SelectContactsStoreState = {
   isSelecting: boolean;
   selected: Contact[]; // Используем camelCase для свойств (selected вместо Selected)
+  isModalOpen: boolean;
 
   // Методы управления режимом
   setIsSelecting: (value: boolean) => void;
@@ -16,6 +17,8 @@ type SelectContactsStoreState = {
   toggleContact: (contact: Contact) => void;
   clearSelected: () => void;
 
+  setIsModalOpen: (value: boolean) => void;
+
   // Полный сброс (и режима, и выбора)
   reset: () => void;
 };
@@ -23,6 +26,7 @@ type SelectContactsStoreState = {
 export const useSelectContactsStore = create<SelectContactsStoreState>((set) => ({
   isSelecting: false,
   selected: [],
+  isModalOpen: false,
 
   setIsSelecting: (value) => set({ isSelecting: value }),
 
@@ -55,6 +59,8 @@ export const useSelectContactsStore = create<SelectContactsStoreState>((set) => 
     }),
 
   clearSelected: () => set({ selected: [] }),
+
+  setIsModalOpen: (value) => set({ isModalOpen: value }),
 
   reset: () => set({ isSelecting: false, selected: [] }),
 }));

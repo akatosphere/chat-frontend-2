@@ -1,6 +1,5 @@
 "use client";
 
-import { useDeleteSelectedContacts } from "@/entities/contact/lib/useDeleteSelectedContacts";
 import { pluralize } from "@/shared/lib/pluralize";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
@@ -13,7 +12,7 @@ type DeleteContactsBtnProps = {
 
 export const DeleteContactsBtn: React.FC<DeleteContactsBtnProps> = ({ className }) => {
   const selected = useSelectContactsStore((s) => s.selected);
-  const { mutate, isPending } = useDeleteSelectedContacts();
+  const setIsModalOpen = useSelectContactsStore((s) => s.setIsModalOpen);
 
   if (selected.length === 0) return null;
 
@@ -28,10 +27,9 @@ export const DeleteContactsBtn: React.FC<DeleteContactsBtnProps> = ({ className 
         className="text-error text desktop:hover:text-error desktop:hover:bg-primary-gray w-full"
         variant="text"
         size="md"
-        disabled={isPending}
-        onClick={() => mutate()}
+        onClick={() => setIsModalOpen(true)}
       >
-        {isPending ? "Удаление..." : text}
+        {text}
       </Button>
     </div>
   );

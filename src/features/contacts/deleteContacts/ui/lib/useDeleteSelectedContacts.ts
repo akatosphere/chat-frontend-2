@@ -12,6 +12,7 @@ export const useDeleteSelectedContacts = () => {
 
   const selectedContacts = useSelectContactsStore((s) => s.selected);
   const resetSelection = useSelectContactsStore((s) => s.reset);
+  const setIsModalOpen = useSelectContactsStore((s) => s.setIsModalOpen);
   const removeContactsFromStore = useContactStore((s) => s.removeContacts);
 
   return useMutation({
@@ -30,6 +31,7 @@ export const useDeleteSelectedContacts = () => {
       return uids;
     },
     onSuccess: (deletedUids) => {
+      setIsModalOpen(false);
       // 1. Удаляем из основного стора
       removeContactsFromStore(deletedUids);
 
@@ -44,6 +46,7 @@ export const useDeleteSelectedContacts = () => {
     },
     onError: (err: Error) => {
       console.error(err.message || "Ошибка при удалении");
+      setIsModalOpen(false);
     },
   });
 };
