@@ -1,7 +1,7 @@
 import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
 import { useState } from "react";
 
-import { useDeleteSelectedContacts } from "@/features/contacts/deleteContacts/ui/lib/useDeleteSelectedContacts";
+import { useDeleteSelectedContacts } from "@/features/contacts/deleteContacts/lib/useDeleteSelectedContacts";
 import { pluralize } from "@/shared/lib/pluralize";
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 import { cn } from "@/shared/shadcn/lib/utils";
