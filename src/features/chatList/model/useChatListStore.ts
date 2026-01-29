@@ -1,8 +1,11 @@
 import { create } from "zustand";
 
-import { ChatItemData, ChatListResponse } from "@/entities/chat/model/types";
+import { ChatItemData } from "@/entities/chat/model/types";
 
 type ChatsById = Record<number, ChatItemData>;
+type ChatPage = {
+  results: ChatItemData[];
+};
 
 type ChatListState = {
   chatsById: ChatsById;
@@ -10,7 +13,8 @@ type ChatListState = {
   count: number;
 
   // ===== server sync =====
-  mergeFromPages: (pages: ChatListResponse[]) => void;
+  // mergeFromPages: (pages: ChatListResponse[]) => void;
+  mergeFromPages: (pages: ChatPage[]) => void;
   setCount: (count: number) => void;
 
   // ===== realtime / optimistic =====
@@ -46,12 +50,33 @@ export const useChatListStore = create<ChatListState>((set, get) => ({
   //   set({ chatsById: next, order });
   // },
 
+  // mergeFromPages: (pages) =>
+  //   set((state) => {
+  //     if (pages.length === state.count) {
+  //       return state;
+  //     }
+
+  //     const next = { ...state.chatsById };
+
+  //     for (const page of pages) {
+  //       for (const chat of page.results) {
+  //         next[chat.id] = chat;
+  //       }
+  //     }
+
+  //     const order = Object.values(next)
+  //       .sort((a, b) => (b.last_message?.created_at ?? 0) - (a.last_message?.created_at ?? 0))
+  //       .map((c) => c.id);
+
+  //     return {
+  //       chatsById: next,
+  //       order,
+  //       mergedPagesCount: pages.length,
+  //     };
+  //   }),
+
   mergeFromPages: (pages) =>
     set((state) => {
-      if (pages.length === state.count) {
-        return state;
-      }
-
       const next = { ...state.chatsById };
 
       for (const page of pages) {
@@ -67,7 +92,6 @@ export const useChatListStore = create<ChatListState>((set, get) => ({
       return {
         chatsById: next,
         order,
-        mergedPagesCount: pages.length,
       };
     }),
 
