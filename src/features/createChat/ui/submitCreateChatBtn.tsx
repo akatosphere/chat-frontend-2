@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { useSelectContactsStore } from "@/features/contacts/model/SelectContactsStore";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
@@ -17,7 +18,8 @@ export const SubmitCreateChatBtn: React.FC<SubmitCreateChatBtnProps> = ({ classN
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { formData, reset } = useCreateChatStore();
-
+  const selected = useSelectContactsStore((s) => s.selected);
+  const uids = selected.map((c) => c.systemUid);
   const handleCreateChat = async () => {
     setIsSubmitting(true);
 
@@ -26,7 +28,7 @@ export const SubmitCreateChatBtn: React.FC<SubmitCreateChatBtnProps> = ({ classN
         name: formData.title,
         description: formData.description,
         chat_type: formData.chat_type,
-        uid_users_list: formData.uid_users_list,
+        uid_users_list: uids,
         avatar: formData.avatar,
       });
 

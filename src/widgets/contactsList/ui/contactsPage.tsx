@@ -11,9 +11,9 @@ import { ContactsListEmpty } from "@/shared/ui/contactsListEmpty";
 import { NoSearchResults } from "@/shared/ui/noSearchResults";
 import { Searchbar } from "@/shared/ui/searchbar";
 
+import { useInfiniteScroll } from "../../../shared/lib/useInfiniteScroll";
 import { useContactsLogic } from "../lib/useContactsLogic";
 import { useGlobalContactsSearch } from "../lib/useGlobalContactsSearch";
-import { useInfiniteScroll } from "../lib/useInfiniteScroll";
 import { ContactsList } from "./contactsList";
 import { GlobalUsersList } from "./globalUsersList";
 
