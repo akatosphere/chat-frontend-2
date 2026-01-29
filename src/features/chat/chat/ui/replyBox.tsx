@@ -18,8 +18,6 @@ export const ReplyBox: React.FC<ReplyBoxProps> = ({ className }) => {
     <div className={cn("bg-primary-secondary/10 w-full px-4 py-1", className)}>
       <div className="border-primary-secondary flex items-center justify-between gap-2.5 border-l-4">
         <div className="flex min-w-0 flex-1 flex-col pl-1">
-          {" "}
-          {/* Добавлено min-w-0 и flex-1 */}
           <span className="text-primary">
             В ответ на{" "}
             <span className="font-medium">
@@ -28,7 +26,7 @@ export const ReplyBox: React.FC<ReplyBoxProps> = ({ className }) => {
                 : replyTarget.fromUser.firstName}
             </span>
           </span>
-          <p className="truncate text-black">{replyTarget.content}</p> {/* Вынесен из span */}
+          <p className="emojis-apple truncate text-black">{replyTarget.content}</p>
         </div>
         <Button
           onClick={() => setReplyTarget(null)}

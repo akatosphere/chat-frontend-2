@@ -23,7 +23,7 @@ export const MessageReply: React.FC<MessageReplyProps> = ({ className, isMine, m
         )}
       >
         <span className="text-primary minitext font-medium">{message.authorName}</span>
-        <span className="minitext truncate text-black">{message.content}</span>
+        <span className="minitext emojis-apple truncate text-black">{message.content}</span>
       </div>
     </div>
   );

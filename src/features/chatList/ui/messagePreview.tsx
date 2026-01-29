@@ -33,7 +33,7 @@ export const MessagePreview = ({ lastMsg, isActive }: MessagePreviewProps) => {
         </div>
       )}
       <p
-        className={`wrap-break-words minitext-tight text-gray line-clamp-2 transition-colors duration-200 ${
+        className={`wrap-break-words minitext-tight text-gray emojis-apple line-clamp-2 transition-colors duration-200 ${
           isActive ? "text-white" : ""
         }`}
       >

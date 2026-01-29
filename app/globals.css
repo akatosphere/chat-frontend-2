@@ -229,10 +229,6 @@ body {
   }
 }
 
-.emojis-google {
-  font-family: var(--font-roboto), var(--font-noto-color-emoji), Arial, Helvetica, sans-serif;
-}
-
 .emojis-apple {
   font-family: var(--font-roboto), var(--font-apple-color-emoji), Arial, Helvetica, sans-serif;
 }
