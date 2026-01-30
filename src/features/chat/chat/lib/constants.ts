@@ -1,0 +1,7 @@
+export const AUTO_READ_CONFIG = {
+  BATCH_DELAY: 150,
+  READ_THRESHOLD: 0.1,
+  READ_ROOT_MARGIN: "50px",
+  SCROLL_BEHAVIOR: "auto" as const,
+  TOP_OFFSET: 16,
+};

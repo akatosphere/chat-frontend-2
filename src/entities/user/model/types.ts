@@ -11,10 +11,10 @@ export type UserPreviewDto = {
   username: string;
   nickname: string;
   first_name: string;
-  last_name: string;
-  patronymic: string;
-  avatar_url: string;
-  avatar_webp_url: string;
+  last_name?: string | null;
+  patronymic?: string;
+  avatar_url?: string | null;
+  avatar_webp_url?: string | null;
 };
 
 export type ChatMemberDto = UserPreviewDto & {
@@ -58,8 +58,8 @@ export type UserPreview = {
   username: string;
   nickname: string;
   firstName: string;
-  lastName: string;
-  fullName: string;
+  lastName?: string;
+  fullName?: string;
   avatarUrl: string;
 };
 

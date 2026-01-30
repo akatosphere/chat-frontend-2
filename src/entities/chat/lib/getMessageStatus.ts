@@ -1,16 +1,8 @@
-import { MessageStatus } from "../model/types";
+import { SendingStatus } from "@/features/chat/chat/model/types/serverTypes";
+import { MESSAGE_STATUS } from "@/shared/constants/constants";
 
-export const getMessageStatus = (
-  fromUser: string | null,
-  userId: string,
-  isMessageNew?: boolean,
-): MessageStatus | null => {
-  if (!fromUser) return null;
-  if (fromUser !== userId) return null;
-
-  if (isMessageNew === true) return "delivered";
-
-  if (isMessageNew === false) return "sent";
-
-  return "pending";
+export const getMessageStatus = (isNew: boolean, status?: SendingStatus | null): SendingStatus => {
+  if (status === MESSAGE_STATUS.PENDING) return MESSAGE_STATUS.PENDING;
+  if (status === MESSAGE_STATUS.FAILED) return MESSAGE_STATUS.FAILED;
+  return isNew ? MESSAGE_STATUS.DELIVERED : MESSAGE_STATUS.READ;
 };

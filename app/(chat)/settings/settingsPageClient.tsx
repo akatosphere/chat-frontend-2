@@ -15,7 +15,7 @@ export const SettingsPageClient: React.FC = async () => {
     <div className="flex h-full flex-col">
       <UserProfile
         avatarUrl={user.avatarUrl}
-        name={user.fullName}
+        name={user.fullName || `${user.firstName} ${user.lastName}`}
         phone={user.phone}
         tag={user.nickname}
         className="mb-4"

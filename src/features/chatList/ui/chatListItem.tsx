@@ -29,10 +29,9 @@ export const ChatListItem = ({
   const totalUnread = chat.new_message_count + chat.new_file_count;
   const user = chat.chat;
   const { onContextMenu, isOpen } = useChatListItemContextMenu(chat, actions);
-
   return (
     <Link
-      href={`/chats/${chat.id}`}
+      href={`/chats/${chat.chat_key.startsWith("group") || chat.chat_key.startsWith("channel") ? chat.chat_key : chat.chat.uid}`}
       className={cn("py-1", className)}
       onClick={onClick}
       onContextMenu={onContextMenu}

@@ -3,14 +3,14 @@ import { ChatMember, ChatMemberDto, User, UserDto, UserPreview, UserPreviewDto }
 /**
  * Внутренний маппер для общих полей
  */
-const mapUserPreviewDto = (dto: UserPreviewDto): UserPreview => ({
+export const mapUserPreviewDto = (dto: UserPreviewDto): UserPreview => ({
   uid: dto.uid,
   username: dto.username,
   nickname: dto.nickname,
   firstName: dto.first_name,
-  lastName: dto.last_name,
+  lastName: dto.last_name || "",
   fullName: `${dto.first_name} ${dto.last_name}`.trim() || dto.username,
-  avatarUrl: dto.avatar_url || dto.avatar_webp_url,
+  avatarUrl: dto.avatar_url || dto.avatar_webp_url || "",
 });
 
 /**

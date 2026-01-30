@@ -88,14 +88,20 @@ const attachHandlers = (ws: WebSocket) => {
   };
 };
 
-export const sendWSRequest = <TResponse>(action: string, payload: unknown): Promise<TResponse> => {
+export const sendWSRequest = <TResponse>(
+  action: string,
+  payload: unknown,
+  requestUid?: string,
+): Promise<TResponse> => {
+  const socket = getSocket();
+
   if (!socket || socket.readyState !== WebSocket.OPEN) {
     // Вместо простого throw можно сделать более умную логику (например, очередь)
     // Но для начала — просто ошибка, как и было
     return Promise.reject(new Error("WebSocket is not connected"));
   }
 
-  const request_uid = uuidv4();
+  const request_uid = requestUid || uuidv4();
 
   const message = {
     action,

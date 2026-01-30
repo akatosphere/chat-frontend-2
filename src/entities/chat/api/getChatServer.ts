@@ -1,19 +1,23 @@
+import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
+
 import { getGroupChannelServer } from "./getGroupChannelServer";
+import { getUserByUIDServer } from "./getUserByUIDServer";
 
 // Здесь будет импорт функции для личных чатов, когда вы её напишете
 // import { getPrivateChatServer } from "./getPrivateChatServer";
 
-export const getChatServer = async (chatKey: string) => {
-  // 1. Пытаемся загрузить как группу или канал
-  const groupRes = await getGroupChannelServer(chatKey);
-
-  if (groupRes.success) {
+export const getChatServer = async (chatKey: string, chatType: "group" | "channel" | "chat") => {
+  if (chatType === "group" || chatType === "channel") {
+    const groupRes = await getGroupChannelServer(chatKey);
+    if (groupRes.success) {
+      return { data: groupRes.data, success: true, type: groupRes.data.type };
+    }
     return groupRes;
   }
 
-  // 2. Если не нашли группу, пробуем загрузить как личный чат (по UID пользователя)
-  // const privateRes = await getPrivateChatServer(chatKey);
-  // return privateRes;
-
-  return groupRes; // Возвращаем исходную ошибку, если ничего не подошло
+  const privateRes = await getUserByUIDServer(chatKey);
+  if (privateRes.success) {
+    return { data: privateRes.data, success: true, type: "chat" as ChatType };
+  }
+  return privateRes;
 };

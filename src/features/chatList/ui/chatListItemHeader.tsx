@@ -1,6 +1,6 @@
 import Mute from "@icons/chat/mute.svg";
 
-import { getMessageStatus } from "@/entities/chat/lib/getMessageStatus";
+import { MESSAGE_STATUS } from "@/shared/constants/constants";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { formatLastSeen } from "../../../entities/chat/lib/formatLastSeen";
@@ -14,11 +14,10 @@ type ChatListItemHeaderProps = {
 };
 
 export const ChatListItemHeader = ({ chat, isActive }: ChatListItemHeaderProps) => {
-  const user = chat.chat;
   const lastMsg = chat.last_message;
   const displayName = getChatDisplayName(chat);
   const time = lastMsg ? formatLastSeen(lastMsg.created_at) : "";
-  const status = getMessageStatus(lastMsg?.from_user || null, user.uid, lastMsg?.new);
+  const status = lastMsg?.new ? MESSAGE_STATUS.DELIVERED : MESSAGE_STATUS.READ;
 
   return (
     <div className="flex min-w-0 items-center justify-between">

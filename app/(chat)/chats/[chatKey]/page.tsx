@@ -1,25 +1,43 @@
 import { notFound } from "next/navigation";
 
 import { getChatServer } from "@/entities/chat/api/getChatServer";
-import { ChatLayoutWidget } from "@/features/chat/chat/ui/chatLayoutWidget";
+import { getMessages } from "@/entities/chat/api/getMessages";
+import { mapChatMessages } from "@/features/chat/chat/model/mapper";
+import { ChatWidget } from "@/widgets/chat/chatWidget/chatWidget";
 
 type ChatPageProps = {
-  // В Next.js 15+ params — это Promise
   params: Promise<{ chatKey: string }>;
 };
 
 export default async function ChatPage({ params }: ChatPageProps) {
   const { chatKey } = await params;
 
-  // Выполняем запрос на сервере
-  const result = await getChatServer(chatKey);
+  const getChatType = () => {
+    if (chatKey.startsWith("group")) return "group";
+    if (chatKey.startsWith("channel")) return "channel";
+    return "chat";
+  };
 
-  if (!result.success) {
-    // Если чат не найден — показываем 404
-    console.log("getChatServer: !result.success");
+  const chatInfo = await getChatServer(chatKey, getChatType());
+  if (!chatInfo?.success) return notFound();
 
-    return notFound();
-  }
+  const messagesResult = await getMessages({
+    uid: chatInfo.data.uid,
+    page: 1,
+    page_size: 50,
+    ordering: "-created_at",
+  });
 
-  return <ChatLayoutWidget chatKey={chatKey} initialData={result.data} />;
+  const messages = messagesResult.success ? mapChatMessages(messagesResult.data.results) : [];
+
+  return (
+    <>
+      <ChatWidget
+        chatKey={chatKey}
+        chatType={chatInfo.type}
+        initialChatInfo={chatInfo.data}
+        initialMessages={messages}
+      />
+    </>
+  );
 }

@@ -4,7 +4,7 @@ import { Sidebar } from "@/shared/ui/sidebar";
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Sidebar className="desktop:block hidden">
+      <Sidebar className="desktop:block scrollbar-hide hidden">
         <ChatsListPanel />
       </Sidebar>
       <MainContent>{children}</MainContent>
