@@ -25,7 +25,7 @@ export const useContactsLogic = ({
     const query = search.toLowerCase();
     return contacts.filter(
       (c) =>
-        c.fullName.toLowerCase().includes(query) ||
+        c.fullName?.toLowerCase().includes(query) ||
         c.phone.includes(query) ||
         c.nickname?.toLowerCase().includes(query) ||
         c.username?.toLowerCase().includes(query),
