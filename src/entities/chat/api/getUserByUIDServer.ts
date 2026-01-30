@@ -1,9 +1,8 @@
 import { mapUserPreviewDto } from "@/entities/user/model/mapper";
+import { UserPreviewDtoSchema } from "@/entities/user/model/schema";
 import { UserPreview } from "@/entities/user/model/types";
 import { getApiServer } from "@/shared/api/getApiServer";
 import { Result } from "@/shared/api/types";
-
-import { UserSchema } from "../model/schema";
 
 export const getUserByUIDServer = async (chatKey: string): Promise<Result<UserPreview>> => {
   try {
@@ -11,7 +10,7 @@ export const getUserByUIDServer = async (chatKey: string): Promise<Result<UserPr
     const res = await api.get(`/api/v1/contact/${chatKey}/`);
     console.log(res.data);
 
-    const validated = UserSchema.safeParse(res.data);
+    const validated = UserPreviewDtoSchema.safeParse(res.data);
 
     if (!validated.success) {
       console.error("Zod Validation Error:", validated.error.format());

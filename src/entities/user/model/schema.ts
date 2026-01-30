@@ -23,3 +23,25 @@ export const updateProfileSchema = z.object({
     .regex(/^\+7 \d{3} \d{3} \d{2} \d{2}$/, "Формат: +7 999 000 00 00")
     .optional(),
 });
+
+export const UserSchema = z.object({
+  uid: z.uuid(),
+  username: z.string(),
+  nickname: z.string(),
+  first_name: z.string(),
+  last_name: z.string().nullable(),
+  avatar_url: z.url().nullable(),
+  avatar_webp_url: z.url().nullable(),
+});
+
+export const UserPreviewDtoSchema = z.object({
+  uid: z.uuid(),
+  username: z.string(),
+  nickname: z.string(),
+  first_name: z.string(),
+  // .nullish() позволяет полю быть null, undefined или отсутствовать
+  last_name: z.string().nullish(),
+  patronymic: z.string().nullish(),
+  avatar_url: z.string().nullish(),
+  avatar_webp_url: z.string().nullish(),
+});

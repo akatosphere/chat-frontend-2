@@ -1,21 +1,24 @@
 import { z } from "zod";
 
-import { updateProfileSchema } from "./schema";
+import { updateProfileSchema, UserPreviewDtoSchema } from "./schema";
 
 /**
  * DTO (Data Transfer Object) — сырые данные от бэкенда (snake_case)
  */
 
-export type UserPreviewDto = {
-  uid: string;
-  username: string;
-  nickname: string;
-  first_name: string;
-  last_name?: string;
-  patronymic?: string;
-  avatar_url?: string | null;
-  avatar_webp_url?: string | null;
-};
+// export type UserPreviewDto = {
+//   uid: string;
+//   username: string;
+//   nickname: string;
+//   first_name: string;
+//   last_name?: string;
+//   patronymic?: string;
+//   avatar_url?: string | null;
+//   avatar_webp_url?: string | null;
+// };
+
+// Выводим тип напрямую из схемы, чтобы гарантировать 100% совместимость с маппером
+export type UserPreviewDto = z.infer<typeof UserPreviewDtoSchema>;
 
 export type ChatMemberDto = UserPreviewDto & {
   avatar?: string | null;
