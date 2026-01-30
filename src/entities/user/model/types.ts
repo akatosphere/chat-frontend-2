@@ -61,7 +61,7 @@ export type UserPreview = {
   username: string;
   nickname: string;
   firstName: string;
-  lastName?: string;
+  lastName?: string | null;
   fullName?: string;
   avatarUrl: string;
 };
