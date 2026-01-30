@@ -18,11 +18,11 @@ export default function ChatLayout({ children, sidebar, extra }: ChatLayoutProps
         <div className="desktop:pb-1 desktop:px-3 mx-auto flex h-dvh max-h-dvh min-h-dvh max-w-300 flex-col gap-4 overflow-hidden">
           <AppHeader />
           <div className="desktop:flex-row desktop:gap-4 mx-auto flex h-full min-h-0 w-full flex-col-reverse">
-            <NavBar className="" />
+            <NavBar />
             <Sidebar className="desktop:flex desktop:bg-main-light-gray hidden bg-white">
               {sidebar}
             </Sidebar>
-            <MainContent className="">{children}</MainContent>
+            <MainContent>{children}</MainContent>
             {extra && (
               <Sidebar className="desktop:flex desktop:bg-main-light-gray hidden bg-white">
                 {extra}
