@@ -13,9 +13,9 @@ export type ContactCardProps = {
 export const ContactCard = (props: ContactCardProps) => {
   const { contact, isLast = false, onClick, after } = props;
   const avatarLetter = contact.firstName?.charAt(0).toUpperCase() || "?";
-
+  const href = `/chats/${contact.systemUid}`;
   return (
-    <SimpleCard isLast={isLast} onClick={onClick} className="w-full justify-between">
+    <SimpleCard href={href} isLast={isLast} onClick={onClick} className="w-full justify-between">
       <div className="flex gap-3">
         {/* Аватар с буквой */}
         <div className="shrink-0">

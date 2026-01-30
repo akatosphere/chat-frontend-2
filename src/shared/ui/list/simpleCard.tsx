@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ReactNode } from "react";
 
 import { cn } from "@/shared/shadcn/lib/utils";
@@ -9,29 +10,34 @@ export type SimpleCardProps = {
   isLast?: boolean;
   showDivider?: boolean;
   onClick?: () => void;
+  href?: string;
 };
 
 export const SimpleCard = (props: SimpleCardProps) => {
-  const { className, children, isLast = false, showDivider = true, onClick } = props;
+  const { className, children, isLast = false, showDivider = true, onClick, href } = props;
 
-  const content = <div className={cn("flex gap-3 px-3 py-3", className)}>{children}</div>;
+  const content = <div className={cn("flex w-full gap-3 px-3 py-3", className)}>{children}</div>;
+
+  const wrapperClasses = cn(
+    "w-full rounded-md transition-all",
+    !isLast && showDivider && "border-b border-gray-100",
+    "hover:bg-primary-hover smooth",
+  );
 
   return (
-    <div
-      className={cn(
-        !isLast &&
-          showDivider &&
-          "hover:bg-primary-hover smooth rounded-md border-b border-gray-100",
-      )}
-    >
+    <div className={wrapperClasses}>
       <Button
         asChild
         variant="ghost"
         size="icon-auto"
         onClick={onClick}
-        className="justify-between"
+        className="h-full w-full justify-between font-normal"
       >
-        {content}
+        {!onClick && href ? (
+          <Link href={href}>{content}</Link>
+        ) : (
+          <div className="cursor-pointer">{content}</div>
+        )}
       </Button>
     </div>
   );
