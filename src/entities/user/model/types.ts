@@ -11,7 +11,7 @@ export type UserPreviewDto = {
   username: string;
   nickname: string;
   first_name: string;
-  last_name?: string | null;
+  last_name?: string;
   patronymic?: string;
   avatar_url?: string | null;
   avatar_webp_url?: string | null;
