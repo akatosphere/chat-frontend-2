@@ -1,7 +1,7 @@
-import { ProfilePageClient } from "app/(chat)/settings/profile/profilePageClient";
-
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
+
+import { ProfilePageClient } from "./profilePageClient";
 
 export default async function ProfilePage() {
   return (

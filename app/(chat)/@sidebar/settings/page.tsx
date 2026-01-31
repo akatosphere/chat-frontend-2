@@ -1,7 +1,7 @@
-import { SettingsPageClient } from "app/(chat)/settings/settingsPageClient";
-
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
+
+import { SettingsPageClient } from "./settingsPageClient";
 
 export default async function SettingsPage() {
   return (
