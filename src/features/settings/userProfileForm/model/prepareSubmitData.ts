@@ -21,7 +21,5 @@ export const prepareSubmitData = (
     additional_information: data.description?.trim() || "",
     birthday: timestamp,
     gender: profile.gender,
-    // Если в UpdateProfileData есть country или другие поля, берем их из сущности User
-    country: profile.uid, // или соответствующее поле в User
   };
 };
