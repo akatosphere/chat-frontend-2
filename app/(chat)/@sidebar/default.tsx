@@ -1,3 +1,9 @@
+import { ChatsListPanel } from "@/features/chatList/ui/chatsListPanel";
+
 export default function Default() {
-  return null; // или какой-то плейсхолдер
+  return (
+    <>
+      <ChatsListPanel className="flex h-full min-h-0 flex-col" />
+    </>
+  );
 }
