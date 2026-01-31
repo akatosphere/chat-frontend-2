@@ -8,6 +8,7 @@ type UseContactsLogicProps = {
   search: string;
   isLoading: boolean;
   isInitialized: boolean;
+  isSelecting: boolean;
 };
 
 export const useContactsLogic = ({
@@ -16,6 +17,7 @@ export const useContactsLogic = ({
   search,
   isLoading,
   isInitialized,
+  isSelecting,
 }: UseContactsLogicProps) => {
   const isSearching = search.trim().length > 0;
 
@@ -34,6 +36,7 @@ export const useContactsLogic = ({
 
   // Фильтрация глобальных (исключаем тех, кто уже в контактах)
   const filteredGlobalUsers = useMemo(() => {
+    if (isSelecting) return [];
     return globalUsers.filter(
       (globalUser) =>
         !contacts.some(
