@@ -58,7 +58,7 @@ export const CreateChatForm: React.FC<CreateChatFormProps> = ({ className }) => 
               variant="default"
               size="md"
               type="submit"
-              className="mt-4 w-full"
+              className="desktop:mb-2 mt-4 w-full"
               disabled={!isValid}
             >
               Далее
