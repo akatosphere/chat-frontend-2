@@ -10,11 +10,9 @@ type Props = {
   name: string;
   status: UserStatus | string;
   photo: string | null;
-  onPhotoClick: () => void;
-  onInfoClick: () => void;
 };
 
-export const ChatHeaderUser = ({ name, status, photo, onPhotoClick, onInfoClick }: Props) => {
+export const ChatHeaderUser = ({ name, status, photo }: Props) => {
   const isSystemStatus = status in STATUS_CONFIG;
 
   const statusData = isSystemStatus
@@ -23,18 +21,15 @@ export const ChatHeaderUser = ({ name, status, photo, onPhotoClick, onInfoClick 
 
   return (
     <div className="border-light-gray desktop:border-none flex h-[60px] min-w-0 flex-1 items-center gap-3 border-b">
-      <button
-        onClick={onPhotoClick}
-        className="relative h-10 w-10 shrink-0 cursor-pointer overflow-hidden rounded-full"
-      >
+      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
         {photo ? (
           <Image src={photo} alt="profile" fill className="object-cover" />
         ) : (
           <ProfilePhoto className="text-primary h-10 w-10" />
         )}
-      </button>
+      </div>
 
-      <button onClick={onInfoClick} className="flex min-w-0 cursor-pointer flex-col text-left">
+      <div className="flex min-w-0 flex-col text-left">
         <p className="desktop:text-lg truncate text-sm font-medium">{name}</p>
         <p
           className={cn(
@@ -44,7 +39,7 @@ export const ChatHeaderUser = ({ name, status, photo, onPhotoClick, onInfoClick 
         >
           {statusData.label}
         </p>
-      </button>
+      </div>
     </div>
   );
 };

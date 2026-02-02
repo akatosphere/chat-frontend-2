@@ -55,14 +55,13 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   return (
     <div className={cn("desktop:h-full flex h-dvh w-full flex-col", className)}>
       <ChatHeader
+        profileHref={`/chats/${chatKey}/profile`}
         name={chatName}
         status={getStatusText()}
         backHref="/chats"
         photo={chatAvatar}
         onCallClick={() => console.log("onCallClick")}
         onSearchClick={() => console.log("onSearchClick")}
-        onPhotoClick={() => console.log("onPhotoClick")}
-        onInfoClick={() => console.log("onInfoClick")}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Chat
