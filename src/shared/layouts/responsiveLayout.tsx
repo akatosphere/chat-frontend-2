@@ -25,7 +25,6 @@ export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutP
   // 3. Условие для области SIDEBAR (Списки, настройки, создание групп)
   // Все остальные маршруты: /chats, /settings, /settings/profile, /contacts и т.д.
   const isSidebarActive = !isExtraActive && !isMainActive;
-  console.log(isExtraActive, isMainActive, isSidebarActive, extra);
 
   return (
     <>
