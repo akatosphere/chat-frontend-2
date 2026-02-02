@@ -12,7 +12,7 @@ export interface ChatInfo {
   createdBy?: string;
   title?: string;
   firstName?: string;
-  lastName?: string;
+  lastName?: string | null;
   avatar?: string;
   avatarUrl?: string;
   membersCount?: number;

@@ -37,6 +37,7 @@ export const ContactsPage: React.FC<ContactsPageProps> = ({ className, initialDa
     search,
     isLoading,
     isInitialized,
+    isSelecting,
   });
 
   const loadMoreRef = useInfiniteScroll({
