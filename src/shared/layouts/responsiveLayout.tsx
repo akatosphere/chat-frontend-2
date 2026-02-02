@@ -25,6 +25,8 @@ export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutP
   // 3. Условие для области SIDEBAR (Списки, настройки, создание групп)
   // Все остальные маршруты: /chats, /settings, /settings/profile, /contacts и т.д.
   const isSidebarActive = !isExtraActive && !isMainActive;
+  console.log(isExtraActive, isMainActive, isSidebarActive, extra);
+
   return (
     <>
       <Sidebar
@@ -46,12 +48,11 @@ export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutP
         {children}
       </MainContent>
       {/* EXTRA: Правая колонка (Профиль/Инфо) */}
-      {extra && (
+      {isExtraActive && (
         <Sidebar
           className={cn(
-            "desktop:flex",
-            // На мобилке: показываем только если перешли в профиль из чата
-            isExtraActive ? "flex" : "hidden",
+            "desktop:flex", // Покажется на десктопе
+            "flex", // Покажется на мобилке (так как isSidebarActive и isMainActive будут false)
           )}
         >
           {extra}
