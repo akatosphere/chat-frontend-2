@@ -13,17 +13,50 @@ type ResponsiveLayoutProps = {
 
 export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutProps) => {
   const pathname = usePathname() ?? "";
-  // Или /settings/profile (2 слеша) - детали.
   const pathParts = pathname.split("/").filter(Boolean);
-  const isDetailView = pathParts.length > 1;
-  console.log("Current Pathname:", pathname, "isDetailView:", isDetailView);
+  // 1. Условие для области EXTRA (Профиль в чате)
+  // Маршрут: /chats/{id}/profile
+  const isExtraActive = pathParts[0] === "chats" && pathParts.length === 3;
+
+  // 2. Условие для области MAIN (Сам чат)
+  // Маршрут: /chats/{id} или /chats/{uid}
+  const isMainActive = pathParts[0] === "chats" && pathParts.length === 2;
+
+  // 3. Условие для области SIDEBAR (Списки, настройки, создание групп)
+  // Все остальные маршруты: /chats, /settings, /settings/profile, /contacts и т.д.
+  const isSidebarActive = !isExtraActive && !isMainActive;
   return (
     <>
-      <Sidebar className={cn("desktop:flex", isDetailView ? "hidden" : "flex")}>{sidebar}</Sidebar>
-      <MainContent className={cn("desktop:block", isDetailView ? "block" : "hidden")}>
+      <Sidebar
+        className={cn(
+          "desktop:flex",
+          // На мобилке: показываем только если не активен чат и не активен профиль
+          isSidebarActive ? "flex" : "hidden",
+        )}
+      >
+        {sidebar}
+      </Sidebar>
+      <MainContent
+        className={cn(
+          "desktop:flex",
+          // На мобилке: показываем только если активен именно чат
+          isMainActive ? "flex" : "hidden",
+        )}
+      >
         {children}
       </MainContent>
-      {extra && <Sidebar className="desktop:block hidden">{extra}</Sidebar>}
+      {/* EXTRA: Правая колонка (Профиль/Инфо) */}
+      {extra && (
+        <Sidebar
+          className={cn(
+            "desktop:flex",
+            // На мобилке: показываем только если перешли в профиль из чата
+            isExtraActive ? "flex" : "hidden",
+          )}
+        >
+          {extra}
+        </Sidebar>
+      )}
     </>
   );
 };
