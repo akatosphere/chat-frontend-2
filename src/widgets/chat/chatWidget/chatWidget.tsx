@@ -103,10 +103,10 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
         status={getStatusText()}
         backHref="/chats"
         photo={chatAvatar}
-        onCallClick={() => {}}
-        onSearchClick={() => {}}
-        onPhotoClick={() => {}}
-        onInfoClick={() => {}}
+        onCallClick={() => console.log("onCallClick")}
+        onSearchClick={() => console.log("onSearchClick")}
+        onPhotoClick={() => console.log("onPhotoClick")}
+        onInfoClick={() => console.log("onInfoClick")}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Chat
