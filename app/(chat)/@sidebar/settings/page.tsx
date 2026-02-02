@@ -7,7 +7,7 @@ export default async function SettingsPage() {
   return (
     <>
       <SidebarHeader title="Настройки" />
-      <SidebarContainer className="">
+      <SidebarContainer>
         <SettingsPageClient />
       </SidebarContainer>
     </>

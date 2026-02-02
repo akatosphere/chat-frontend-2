@@ -19,9 +19,7 @@ export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutP
   console.log("Current Pathname:", pathname, "isDetailView:", isDetailView);
   return (
     <>
-      <Sidebar className={cn("desktop:block", isDetailView ? "hidden" : "block")}>
-        {sidebar}
-      </Sidebar>
+      <Sidebar className={cn("desktop:flex", isDetailView ? "hidden" : "flex")}>{sidebar}</Sidebar>
       <MainContent className={cn("desktop:block", isDetailView ? "block" : "hidden")}>
         {children}
       </MainContent>
