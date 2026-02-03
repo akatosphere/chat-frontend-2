@@ -33,7 +33,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     >
       <div className="flex">
         {backButton && (
-          <Button variant="ghost" size="icon-auto" className="z-10 h-6 w-6">
+          <Button variant="ghost" size="icon-auto" className="z-10 h-6 w-6" onClick={onClick}>
             <BackArrow className="text-black" />
           </Button>
         )}
@@ -55,14 +55,14 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           {title}
         </h2>
       </div>
-      <div className="flex gap-4">
+      {/* <div className="flex gap-4">
         <Button variant="ghost" size="icon-auto">
           <Close className="text-primary h-4 w-4" />
         </Button>
         <Button variant="ghost" size="icon-auto">
           <Close className="text-primary h-4 w-4" />
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };
