@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-import { useUserStore } from "@/entities/chat/model/userStore";
+import { useUserStore } from "@/entities/user/model/userStore";
 import { useAuthStore } from "@/shared/api/store";
 import { connectWS, disconnectWS, subscribeToWS } from "@/shared/api/ws/wsClient";
 

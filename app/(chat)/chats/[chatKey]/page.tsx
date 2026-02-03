@@ -19,6 +19,7 @@ export default async function ChatPage({ params }: ChatPageProps) {
   };
 
   const chatInfo = await getChatServer(chatKey, getChatType());
+
   if (!chatInfo?.success) return notFound();
 
   const messagesResult = await getMessages({

@@ -1,4 +1,4 @@
-import { useUserStore } from "@/entities/chat/model/userStore";
+import { useUserStore } from "@/entities/user/model/userStore";
 
 import { getApiClient } from "./getApiClient";
 import { useAuthStore } from "./store";

@@ -1,7 +1,7 @@
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
 
+import { getUserByUIDServer } from "../../user/api/getUserByUIDServer";
 import { getGroupChannelServer } from "./getGroupChannelServer";
-import { getUserByUIDServer } from "./getUserByUIDServer";
 
 // Здесь будет импорт функции для личных чатов, когда вы её напишете
 // import { getPrivateChatServer } from "./getPrivateChatServer";

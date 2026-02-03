@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { useUserStore } from "@/entities/chat/model/userStore";
+import { useUserStore } from "@/entities/user/model/userStore";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ChatFooter } from "@/widgets/chat/chatFooter/ui/chatFooter";
 

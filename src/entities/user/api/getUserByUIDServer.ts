@@ -8,7 +8,7 @@ export const getUserByUIDServer = async (chatKey: string): Promise<Result<UserPr
   try {
     const api = await getApiServer();
     const res = await api.get(`/api/v1/contact/${chatKey}/`);
-    console.log(res.data);
+    console.log("res.data: ", res.data);
 
     const validated = UserPreviewDtoSchema.safeParse(res.data);
 
@@ -18,6 +18,7 @@ export const getUserByUIDServer = async (chatKey: string): Promise<Result<UserPr
     }
 
     const mapped = mapUserPreviewDto(validated.data);
+    console.log("mapped: ", mapped);
 
     return { success: true, data: mapped };
   } catch {
