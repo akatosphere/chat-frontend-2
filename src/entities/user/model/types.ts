@@ -85,6 +85,8 @@ export type User = UserPreview & {
   isDoctor: boolean;
 };
 
+export type UserEntity = UserPreview | ChatMember | User;
+
 /** Тип данных для обновления профиля, выведенный из Zod-схемы */
 export type UpdateProfileData = z.infer<typeof updateProfileSchema>;
 
