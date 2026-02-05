@@ -27,7 +27,8 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   return (
     <div
       className={cn(
-        "border-muted desktop:border-b relative flex h-14 w-full items-center justify-between p-5",
+        "border-muted desktop:border-b relative flex h-14 w-full items-center p-5",
+        backButton || closeButton ? "justify-between" : "justify-center",
         className,
       )}
     >
