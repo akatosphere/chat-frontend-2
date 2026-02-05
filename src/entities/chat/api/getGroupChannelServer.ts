@@ -18,6 +18,7 @@ export const getGroupChannelServer = async (
     }
 
     const mappedData = mapChatDetails(validated.data);
+    console.log(mappedData);
 
     return { success: true, data: mappedData };
   } catch {

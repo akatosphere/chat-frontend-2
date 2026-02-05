@@ -1,10 +1,11 @@
 import { mapUserPreviewDto } from "@/entities/user/model/mapper";
 import { UserPreviewDtoSchema } from "@/entities/user/model/schema";
-import { UserPreview } from "@/entities/user/model/types";
 import { getApiServer } from "@/shared/api/getApiServer";
 import { Result } from "@/shared/api/types";
 
-export const getUserByUIDServer = async (chatKey: string): Promise<Result<UserPreview>> => {
+import { User } from "../model/types";
+
+export const getUserByUIDServer = async (chatKey: string): Promise<Result<User>> => {
   try {
     const api = await getApiServer();
     const res = await api.get(`/api/v1/contact/${chatKey}/`);
