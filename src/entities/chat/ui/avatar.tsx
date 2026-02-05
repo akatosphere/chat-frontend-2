@@ -6,7 +6,15 @@ type AvatarProps = {
   className?: string;
   isOnline?: boolean;
   avatarUrl: string;
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "settingsAvatar" | "createGroupAvatar";
+  size?:
+    | "xs"
+    | "sm"
+    | "md"
+    | "lg"
+    | "xl"
+    | "settingsAvatar"
+    | "createGroupAvatar"
+    | "anothersProfileAvatar";
   variant?: "user" | "chat";
 };
 
@@ -20,6 +28,8 @@ const AVATAR_SIZES = {
     "max-h-[390px] h-[390px] w-full desktop:w-50 desktop:max-h-50 desktop:h-50 object-cover rounded-md desktop:rounded-full",
   createGroupAvatar:
     "h-[88px] max-h-[88px] desktop:w-50 desktop:max-h-50 desktop:h-50 rounded-full",
+  anothersProfileAvatar:
+    "max-h-[360px] h-[360px] w-full object-cover rounded-none desktop:max-h-[360px]",
 };
 
 export const Avatar = ({

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getChatServer } from "@/entities/chat/api/getChatServer";
 import { getMessages } from "@/entities/chat/api/getMessages";
 import { mapChatMessages } from "@/features/chat/chat/model/mapper";
+import { getChatType } from "@/shared/lib/getChatType";
 import { ChatWidget } from "@/widgets/chat/chatWidget/chatWidget";
 
 type ChatPageProps = {
@@ -12,13 +13,7 @@ type ChatPageProps = {
 export default async function ChatPage({ params }: ChatPageProps) {
   const { chatKey } = await params;
 
-  const getChatType = () => {
-    if (chatKey.startsWith("group")) return "group";
-    if (chatKey.startsWith("channel")) return "channel";
-    return "chat";
-  };
-
-  const chatInfo = await getChatServer(chatKey, getChatType());
+  const chatInfo = await getChatServer(chatKey, getChatType(chatKey));
 
   if (!chatInfo?.success) return notFound();
 

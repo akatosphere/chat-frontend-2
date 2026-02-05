@@ -1,11 +1,10 @@
-import { SidebarContainer } from "@/shared/ui/sidebarContainer";
-import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
+import { AnothersProfile } from "@/widgets/anothersProfile/ui/anothersProfile";
 
-export default function DefaultPage() {
-  return (
-    <>
-      <SidebarHeader title="Информация" closeButton />
-      <SidebarContainer className="">страница профиля</SidebarContainer>
-    </>
-  );
+type ProfilePageProps = {
+  params: Promise<{ chatKey: string }>;
+};
+
+export default async function ProfilePage({ params }: ProfilePageProps) {
+  const { chatKey } = await params;
+  return <AnothersProfile chatKey={chatKey} />;
 }
