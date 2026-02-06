@@ -1,45 +1,69 @@
 import { ChatMember, ChatMemberDto, User, UserDto, UserPreview, UserPreviewDto } from "./types";
 
 /**
- * Внутренний маппер для общих полей
+ * Базовый маппер для UserPreview
  */
-export const mapUserPreviewDto = (dto: UserPreviewDto): UserPreview => ({
-  uid: dto.uid,
-  username: dto.username,
-  nickname: dto.nickname,
-  firstName: dto.first_name,
-  lastName: dto.last_name || "",
-  fullName: `${dto.first_name} ${dto.last_name}`.trim() || dto.username,
-  avatarUrl: dto.avatar_url || dto.avatar_webp_url || "",
-});
+export const mapUserPreviewDto = (dto: UserPreviewDto): UserPreview => {
+  const firstName = dto.first_name || "";
+  const lastName = dto.last_name || "";
 
-/**
- * Маппер для ChatMemberDto (списки участников/контакты)
- */
-export const mapChatMember = (dto: ChatMemberDto): ChatMember => {
   return {
-    ...mapUserPreviewDto(dto),
-    isBlocked: dto.is_blocked,
-    isOnline: dto.is_online,
-    lastSeenAt: dto.was_online_at,
-    isInContacts: dto.is_in_contacts,
-    chatId: dto.chat_id ?? null,
-    bio: dto.additional_information ?? "",
+    uid: dto.uid,
+    username: dto.username,
+    nickname: dto.nickname,
+    firstName,
+    lastName,
+    patronymic: dto.patronymic || "",
+    fullName: `${firstName} ${lastName}`.trim() || dto.username,
+    avatarUrl: dto.avatar_url || "",
+    avatarWebpUrl: dto.avatar_webp_url || "",
   };
 };
 
 /**
- * Маппер для UserDto (полный профиль)
+ * Маппер для ChatMember (участник чата/контакт)
  */
-export const mapUser = (dto: UserDto): User => {
+export const mapChatMemberDto = (dto: ChatMemberDto): ChatMember => {
+  const base = mapUserPreviewDto(dto);
+
   return {
-    ...mapUserPreviewDto(dto),
-    bio: dto.additional_information,
-    birthday: dto.birthday,
+    ...base,
+    avatarExtra: dto.avatar || null,
+    avatarWebpExtra: dto.avatar_webp || null,
+    isBlocked: dto.is_blocked,
+    isOnline: dto.is_online,
+    lastSeenAt: dto.was_online_at,
+    isInContacts: dto.is_in_contacts,
+    chatId: dto.chat_id || null,
+    birthday: dto.birthday || null,
+    phone: dto.phone || "",
+    bio: dto.additional_information || "",
+  };
+};
+
+/**
+ * Маппер для полного профиля User
+ */
+export const mapUserDto = (dto: UserDto): User => {
+  const base = mapUserPreviewDto(dto);
+
+  return {
+    ...base,
+    avatar: dto.avatar,
+    avatarWebp: dto.avatar_webp,
+    bio: dto.additional_information || "",
+    birthday: dto.birthday ?? null,
     email: dto.email,
     gender: dto.gender,
+    genderLabel: dto.gender_label,
+    country: dto.country,
+    countryLabel: dto.country_label,
+    cityId: dto.city_id,
+    city: dto.city,
     phone: dto.phone,
-    isFilled: dto.is_filled,
     isDoctor: dto.is_doctor,
+    isConfirmedDoctor: dto.is_confirmed_doctor,
+    isFilled: dto.is_filled,
+    isStaff: dto.is_staff,
   };
 };

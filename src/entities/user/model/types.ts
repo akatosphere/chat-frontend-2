@@ -1,6 +1,11 @@
 import { z } from "zod";
 
-import { updateProfileSchema, UserPreviewDtoSchema } from "./schema";
+import {
+  ChatMemberDtoSchema,
+  updateProfileSchema,
+  UserDtoSchema,
+  UserPreviewDtoSchema,
+} from "./schema";
 
 /**
  * DTO (Data Transfer Object) — сырые данные от бэкенда (snake_case)
@@ -19,38 +24,8 @@ import { updateProfileSchema, UserPreviewDtoSchema } from "./schema";
 
 // Выводим тип напрямую из схемы, чтобы гарантировать 100% совместимость с маппером
 export type UserPreviewDto = z.infer<typeof UserPreviewDtoSchema>;
-
-export type ChatMemberDto = UserPreviewDto & {
-  avatar?: string | null;
-  avatar_webp?: string | null;
-  is_blocked: boolean;
-  is_online: boolean;
-  was_online_at: number;
-  is_in_contacts: boolean;
-  chat_id?: number | null;
-  birthday?: number | null;
-  phone?: string | null;
-  additional_information?: string | null;
-};
-
-export type UserDto = UserPreviewDto & {
-  avatar: string;
-  avatar_webp: string;
-  additional_information: string;
-  birthday: number;
-  email: string;
-  gender: "male" | "female";
-  gender_label: string;
-  country: string;
-  country_label: string;
-  city_id: number;
-  city: string;
-  phone: string;
-  is_doctor: boolean;
-  is_confirmed_doctor: boolean;
-  is_filled: boolean;
-  is_staff: boolean;
-};
+export type ChatMemberDto = z.infer<typeof ChatMemberDtoSchema>;
+export type UserDto = z.infer<typeof UserDtoSchema>;
 
 /**
  * Domain Model — очищенные данные для использования в UI (camelCase)
@@ -61,28 +36,44 @@ export type UserPreview = {
   username: string;
   nickname: string;
   firstName: string;
-  lastName?: string | null;
-  fullName?: string;
+  lastName: string; // В Entity лучше хранить строку, пустую по умолчанию
+  patronymic: string;
+  fullName: string;
   avatarUrl: string;
+  avatarWebpUrl: string;
 };
 
 export type ChatMember = UserPreview & {
+  // Дополнительные поля аватаров, которые приходят в ChatMemberDto
+  avatarExtra: string | null;
+  avatarWebpExtra: string | null;
   isBlocked: boolean;
   isOnline: boolean;
   lastSeenAt: number;
   isInContacts: boolean;
   chatId: number | null;
-  bio?: string;
+  birthday: number | null;
+  phone: string;
+  bio: string; // Из additional_information
 };
 
 export type User = UserPreview & {
-  bio: string;
-  birthday: number;
+  avatar: string;
+  avatarWebp: string;
+  bio: string; // Из additional_information
+  birthday: number | null;
   email: string;
   gender: "male" | "female";
+  genderLabel: string;
+  country: string;
+  countryLabel: string;
+  cityId: number;
+  city: string;
   phone: string;
-  isFilled: boolean;
   isDoctor: boolean;
+  isConfirmedDoctor: boolean;
+  isFilled: boolean;
+  isStaff: boolean;
 };
 
 export type UserEntity = UserPreview | ChatMember | User;

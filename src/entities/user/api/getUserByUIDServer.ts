@@ -1,5 +1,5 @@
-import { mapUserPreviewDto } from "@/entities/user/model/mapper";
-import { UserPreviewDtoSchema } from "@/entities/user/model/schema";
+import { mapUserDto } from "@/entities/user/model/mapper";
+import { UserDtoSchema } from "@/entities/user/model/schema";
 import { getApiServer } from "@/shared/api/getApiServer";
 import { Result } from "@/shared/api/types";
 
@@ -11,14 +11,14 @@ export const getUserByUIDServer = async (chatKey: string): Promise<Result<User>>
     const res = await api.get(`/api/v1/contact/${chatKey}/`);
     console.log("res.data: ", res.data);
 
-    const validated = UserPreviewDtoSchema.safeParse(res.data);
+    const validated = UserDtoSchema.safeParse(res.data);
 
     if (!validated.success) {
       console.error("Zod Validation Error:", validated.error.format());
       return { success: false, error: "Данные чата некорректны" };
     }
 
-    const mapped = mapUserPreviewDto(validated.data);
+    const mapped = mapUserDto(validated.data);
     console.log("mapped: ", mapped);
 
     return { success: true, data: mapped };

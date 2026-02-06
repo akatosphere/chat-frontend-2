@@ -24,24 +24,56 @@ export const updateProfileSchema = z.object({
     .optional(),
 });
 
-export const UserSchema = z.object({
-  uid: z.uuid(),
-  username: z.string(),
-  nickname: z.string(),
-  first_name: z.string(),
-  last_name: z.string().nullable(),
-  avatar_url: z.url().nullable(),
-  avatar_webp_url: z.url().nullable(),
-});
-
+/**
+ * Базовая схема (уже создана тобой)
+ */
 export const UserPreviewDtoSchema = z.object({
-  uid: z.uuid(),
+  uid: z.string().uuid(),
   username: z.string(),
   nickname: z.string(),
   first_name: z.string(),
-  // .nullish() позволяет полю быть null, undefined или отсутствовать
   last_name: z.string().nullish(),
   patronymic: z.string().nullish(),
   avatar_url: z.string().nullish(),
   avatar_webp_url: z.string().nullish(),
+});
+
+/**
+ * Схема для ChatMemberDto
+ * Расширяет базовую схему полями участника чата / контакта
+ */
+export const ChatMemberDtoSchema = UserPreviewDtoSchema.extend({
+  avatar: z.string().nullish(),
+  avatar_webp: z.string().nullish(),
+  is_blocked: z.boolean(),
+  is_online: z.boolean(),
+  was_online_at: z.number(),
+  is_in_contacts: z.boolean(),
+  chat_id: z.number().nullish(),
+  birthday: z.number().nullish(),
+  phone: z.string().nullish(),
+  additional_information: z.string().nullish(),
+});
+
+/**
+ * Схема для UserDto
+ * Расширяет базовую схему полями полного профиля пользователя
+ */
+export const UserDtoSchema = UserPreviewDtoSchema.extend({
+  avatar: z.string(),
+  avatar_webp: z.string(),
+  additional_information: z.string().nullish(), // В DTO string, но часто может быть пуст
+  birthday: z.number().nullish().or(z.number()), // На случай если 0 или null
+  email: z.string().email().or(z.string()), // .email() может упасть на пустой строке
+  gender: z.enum(["male", "female"]),
+  gender_label: z.string(),
+  country: z.string(),
+  country_label: z.string(),
+  city_id: z.number(),
+  city: z.string(),
+  phone: z.string(),
+  is_doctor: z.boolean(),
+  is_confirmed_doctor: z.boolean(),
+  is_filled: z.boolean(),
+  is_staff: z.boolean(),
 });
