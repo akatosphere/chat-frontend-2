@@ -67,13 +67,16 @@ export type User = UserPreview & {
   genderLabel: string;
   country: string;
   countryLabel: string;
-  cityId: number;
+  cityId: number | null;
   city: string;
   phone: string;
   isDoctor: boolean;
   isConfirmedDoctor: boolean;
-  isFilled: boolean;
-  isStaff: boolean;
+  isBlocked: boolean | null;
+  isOnline: boolean | null;
+  isFilled: boolean | null;
+  isStaff: boolean | null;
+  lastSeenAt: number | null;
 };
 
 export type UserEntity = UserPreview | ChatMember | User;

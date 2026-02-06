@@ -60,20 +60,25 @@ export const ChatMemberDtoSchema = UserPreviewDtoSchema.extend({
  * Расширяет базовую схему полями полного профиля пользователя
  */
 export const UserDtoSchema = UserPreviewDtoSchema.extend({
-  avatar: z.string(),
-  avatar_webp: z.string(),
-  additional_information: z.string().nullish(), // В DTO string, но часто может быть пуст
-  birthday: z.number().nullish().or(z.number()), // На случай если 0 или null
-  email: z.string().email().or(z.string()), // .email() может упасть на пустой строке
-  gender: z.enum(["male", "female"]),
-  gender_label: z.string(),
-  country: z.string(),
-  country_label: z.string(),
-  city_id: z.number(),
-  city: z.string(),
-  phone: z.string(),
-  is_doctor: z.boolean(),
-  is_confirmed_doctor: z.boolean(),
-  is_filled: z.boolean(),
-  is_staff: z.boolean(),
+  avatar: z.string().nullish(),
+  avatar_webp: z.string().nullish(),
+  additional_information: z.string().nullish(),
+  birthday: z.number().nullish(),
+  email: z.string().nullish(),
+  // gender делаем nullish, так как в логе он undefined
+  gender: z.enum(["male", "female"]).nullish(),
+  gender_label: z.string().nullish(),
+  country: z.string().nullish(),
+  country_label: z.string().nullish(),
+  city_id: z.number().nullish(),
+  city: z.string().nullish(),
+  phone: z.string().nullish(),
+  is_doctor: z.boolean().nullish(),
+  is_confirmed_doctor: z.boolean().nullish(),
+  is_filled: z.boolean().nullish(),
+  is_staff: z.boolean().nullish(),
+  // Добавляем поля, которые пришли в логе, но их не было в схеме
+  is_blocked: z.boolean().nullish(),
+  is_online: z.boolean().nullish(),
+  was_online_at: z.number().nullish(),
 });

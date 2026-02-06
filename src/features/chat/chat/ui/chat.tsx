@@ -6,8 +6,8 @@ import { useUserStore } from "@/entities/user/model/userStore";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ChatFooter } from "@/widgets/chat/chatFooter/ui/chatFooter";
 
+import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 import { useChatWebSocket, useSendMessage } from "../hooks";
-import { useChatStore } from "../model/store/useChatStore";
 import { MappedChatMessage } from "../model/types/mappedTypes";
 import { ChatType } from "../model/types/serverTypes";
 import { MessageList } from "./messageList";

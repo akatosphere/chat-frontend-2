@@ -4,8 +4,8 @@ import Select from "@icons/chat/context-menu/select.svg";
 import Forwarded from "@icons/chat/forwardedd.svg";
 import { MouseEvent } from "react";
 
+import { useChatStore } from "@/entities/chat/model/useChatStore";
 import { useDeleteMessage } from "@/features/chat/chat/hooks";
-import { useChatStore } from "@/features/chat/chat/model/store/useChatStore";
 import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
 
 import { useContextMenu } from "../ui/contextMenuProvider";

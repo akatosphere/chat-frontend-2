@@ -3,7 +3,7 @@ import Close from "@icons/chat/close.svg";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
-import { useChatStore } from "../model/store/useChatStore";
+import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 
 type ReplyBoxProps = {
   className?: string;

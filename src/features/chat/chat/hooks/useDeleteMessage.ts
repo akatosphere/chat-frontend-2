@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { deleteTextMessage } from "@/entities/chat/api/deleteMessage";
 
-import { useChatStore } from "../model/store/useChatStore";
+import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 
 export const useDeleteMessage = () => {
   const { chatKey, deleteMessage } = useChatStore();

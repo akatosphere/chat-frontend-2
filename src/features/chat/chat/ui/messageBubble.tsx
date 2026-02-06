@@ -3,8 +3,8 @@ import { memo, useCallback, useMemo, useRef } from "react";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { useMessageContextMenu } from "@/widgets/contextMenu/lib/useMessageContextMenu";
 
+import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 import { useMessageNavigation } from "../model/store/useChatNavigationStore";
-import { useChatStore } from "../model/store/useChatStore";
 import { MappedChatMessage } from "../model/types/mappedTypes";
 import { MessageLayout } from "./messageLayout";
 

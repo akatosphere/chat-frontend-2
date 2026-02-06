@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { subscribeToWS } from "@/shared/api/ws/wsClient";
 import { WS_ACTIONS } from "@/shared/constants/constants";
 
+import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 import { mapChatMessage } from "../model/mapper";
-import { useChatStore } from "../model/store/useChatStore";
 import { ChatMessage, ChatMessageUI } from "../model/types/serverTypes";
 
 export const useChatWebSocket = (chatKey: string) => {

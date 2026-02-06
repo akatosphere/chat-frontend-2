@@ -2,11 +2,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { cn } from "@/shared/shadcn/lib/utils";
 
+import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 import { useAutoRead } from "../hooks";
 import { useMessageScroll } from "../hooks/useMessageScroll";
 import { groupMessagesByDate } from "../lib/getMessageByDate";
 import { useMessageNavigation } from "../model/store/useChatNavigationStore";
-import { useChatStore } from "../model/store/useChatStore";
 import { MessageGroup } from "./messageGroup";
 import { MessageListEmptyInfo } from "./messageListEpmtyInfo";
 import { ScrollDownBtn } from "./scrollDownBtn";

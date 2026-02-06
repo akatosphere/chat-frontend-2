@@ -2,8 +2,8 @@ import { create } from "zustand";
 
 import { MESSAGE_STATUS } from "@/shared/constants/constants";
 
-import { MappedChatMessage } from "../types/mappedTypes";
-import { ChatType } from "../types/serverTypes";
+import { MappedChatMessage } from "../../../features/chat/chat/model/types/mappedTypes";
+import { ChatType } from "../../../features/chat/chat/model/types/serverTypes";
 
 interface ChatState {
   messages: MappedChatMessage[];
