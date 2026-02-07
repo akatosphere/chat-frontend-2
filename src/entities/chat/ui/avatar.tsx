@@ -5,7 +5,7 @@ import { cn } from "@/shared/shadcn/lib/utils";
 type AvatarProps = {
   className?: string;
   isOnline?: boolean;
-  avatarUrl: string;
+  avatarUrl?: string;
   size?:
     | "xs"
     | "sm"
@@ -28,7 +28,7 @@ const AVATAR_SIZES = {
     "max-h-[390px] h-[390px] w-full desktop:w-50 desktop:max-h-50 desktop:h-50 object-cover rounded-md desktop:rounded-full",
   createGroupAvatar:
     "h-[88px] max-h-[88px] desktop:w-50 desktop:max-h-50 desktop:h-50 rounded-full",
-  anothersProfileAvatar: "max-h-[360px] w-full object-cover rounded-none",
+  anothersProfileAvatar: "max-h-[360px] w-full object-cover rounded-md desktop:rounded-none",
 };
 
 export const Avatar = ({

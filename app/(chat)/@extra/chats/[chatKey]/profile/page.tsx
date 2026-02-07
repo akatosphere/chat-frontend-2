@@ -1,4 +1,4 @@
-import { AnothersProfile } from "@/widgets/anothersProfile/ui/anothersProfile";
+import { AnothersProfileClient } from "@/widgets/anothersProfile/ui/anothersProfileClient";
 
 type ProfilePageProps = {
   params: Promise<{ chatKey: string }>;
@@ -6,5 +6,5 @@ type ProfilePageProps = {
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const { chatKey } = await params;
-  return <AnothersProfile chatKey={chatKey} />;
+  return <AnothersProfileClient chatKey={chatKey} />;
 }

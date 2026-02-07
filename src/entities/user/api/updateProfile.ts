@@ -2,7 +2,7 @@ import { errorHandler } from "@/shared/api/errorHandler";
 import { getApiClient } from "@/shared/api/getApiClient";
 import { Result } from "@/shared/api/types";
 
-import { mapUser } from "../model/mapper";
+import { mapUserDto } from "../model/mapper";
 import { UpdateProfileData, User, UserDto } from "../model/types";
 
 export const updateProfile = async (data: UpdateProfileData): Promise<Result<User>> => {
@@ -11,7 +11,7 @@ export const updateProfile = async (data: UpdateProfileData): Promise<Result<Use
       "/api/v1/auth/messenger/profile/",
       data,
     );
-    return { success: true, data: mapUser(response) };
+    return { success: true, data: mapUserDto(response) };
   } catch (error) {
     return { success: false, error: errorHandler(error) };
   }
