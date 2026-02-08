@@ -13,7 +13,7 @@ type AnothersProfileProps = {
   isInContact: boolean;
 };
 
-export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData}) => {
+export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData }) => {
   const isMobile = useIsMobileStore((state) => state.isMobile);
   return (
     <>
@@ -31,9 +31,15 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData}) 
             <p className="text">{initialData?.isOnline ? "В сети" : "Не в сети"}</p>
           </div>
         </div>
-        <div className="px-4 pt-2 flex flex-col gap-6 items-start">
+        <div className="flex flex-col items-start gap-6 px-4 pt-2">
           <UserInfoList initialData={initialData} />
-          <AddToContactsProfileBtn />
+          {initialData && (
+            <AddToContactsProfileBtn
+              phone={initialData.username}
+              firstName={initialData.firstName}
+              lastName={initialData.lastName}
+            />
+          )}
         </div>
       </SidebarContainer>
     </>
