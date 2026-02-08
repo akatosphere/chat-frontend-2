@@ -19,8 +19,10 @@ export const mapContactDtoToContact = (dto: ContactDto): Contact => {
     nickname: "",
     firstName: dto.first_name,
     lastName: dto.last_name,
+    patronymic: "",
     fullName: `${dto.first_name} ${dto.last_name}`.trim(),
     avatarUrl: system_contact.avatar_url || system_contact.avatar_webp_url,
+    avatarWebpUrl: system_contact.avatar_webp_url || "",
 
     // Специфичные поля контакта
     phone: dto.phone,
@@ -46,11 +48,13 @@ export const mapChatMemberToContact = (dto: ChatMemberDto): Contact => {
     username: dto.username,
     nickname: dto.nickname || "",
     firstName: dto.first_name,
-    lastName: dto.last_name,
-    fullName: `${dto.first_name} ${dto.last_name}`.trim() || dto.username || "Без имени",
+    lastName: dto.last_name || "",
+    patronymic: "",
+    fullName: `${dto.first_name} ${dto.last_name || ""}`.trim() || dto.username || "Без имени",
 
     // Приоритет выбора аватара (webp -> url -> сырой путь)
     avatarUrl: dto.avatar_webp_url || dto.avatar_url || dto.avatar || "",
+    avatarWebpUrl: dto.avatar_webp_url || "",
 
     // Поля расширения Contact
     phone: dto.phone || "", // В участниках чата телефон может быть скрыт

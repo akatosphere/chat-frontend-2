@@ -16,7 +16,7 @@ export type UseUserProfileFormProps = {
   lastName: string;
   nickname: string;
   description: string;
-  birthday: number;
+  birthday: number | null;
 };
 
 export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormProps) => {

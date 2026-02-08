@@ -27,7 +27,7 @@ type UserProfileFormProps = {
   lastName: string;
   nickname: string;
   description: string;
-  birthday: number;
+  birthday: number | null;
   onSubmit: (data: UpdateProfileData) => Promise<void>;
 };
 

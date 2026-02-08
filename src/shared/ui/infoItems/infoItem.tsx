@@ -1,18 +1,35 @@
+"use client";
+
 import { cn } from "@/shared/shadcn/lib/utils";
+
+import { CopyBtn } from "../../copy/ui/copyBtn";
 
 type InfoItemProps = {
   className?: string;
   title?: string;
   text?: string;
+  textToCopy?: string;
+  copy?: boolean;
 };
 
-export const InfoItem: React.FC<InfoItemProps> = ({ className, text, title }) => {
+export const InfoItem: React.FC<InfoItemProps> = ({
+  className,
+  text,
+  title,
+  textToCopy = text,
+  copy = false,
+}) => {
   return (
-    <div className="border-muted w-full cursor-default overflow-hidden border-b last:border-0">
-      <div className="flex flex-col gap-1 px-3 py-2">
+    <div className="border-muted flex w-full cursor-default justify-between overflow-hidden border-b px-3 py-2 last:border-0">
+      <div className="flex flex-col gap-1">
         {title && <p className="text-gray caption">{title}</p>}
-        {text && <p className={cn("subtext", className)}>{text}</p>}
+        {text && (
+          <div className="flex items-center justify-between gap-2">
+            <p className={cn("subtext", className)}>{text}</p>
+          </div>
+        )}
       </div>
+      {copy && <CopyBtn text={textToCopy} className="shrink-0" />}
     </div>
   );
 };

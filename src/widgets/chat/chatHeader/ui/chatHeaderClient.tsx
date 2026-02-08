@@ -11,13 +11,12 @@ export default function ChatHeaderClient() {
   return (
     <ChatHeader
       backHref="/chats"
+      profileHref="/settings/profile"
       name="Ксения Ярыгина"
       status={"online"}
       photo="/icons/test.jpg"
       onCallClick={handleCallClick}
       onSearchClick={handleCallClick}
-      onPhotoClick={handleCallClick}
-      onInfoClick={handleCallClick}
     />
   );
 }

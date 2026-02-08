@@ -9,9 +9,9 @@ import { changeProfileSchema } from "./schema";
 export const prepareSubmitData = (
   data: z.infer<typeof changeProfileSchema>,
   profile: User,
-  originalBirthday: number,
+  originalBirthday: number | null,
 ): UpdateProfileData => {
-  const timestamp = normalizeBirthday(data.birthday) || originalBirthday;
+  const timestamp = normalizeBirthday(data.birthday) || originalBirthday || 0;
 
   return {
     nickname: data.nickname.trim(),
