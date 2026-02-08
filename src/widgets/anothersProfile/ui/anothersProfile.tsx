@@ -1,5 +1,7 @@
 "use client";
 
+import { useCallback, useState } from "react";
+
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { useContactsSync } from "@/entities/contact/lib/useContactsSync";
 import { useIsInContact } from "@/entities/contact/lib/useIsInContact";
@@ -8,6 +10,7 @@ import { User } from "@/entities/user/model/types";
 import { UserInfoList } from "@/entities/user/ui/UserInfoList";
 import { AddToContactsProfileBtn } from "@/features/contacts/addToContacts/ui/addToContactsProfileBtn";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
+import { Toast } from "@/shared/toast/ui/toast";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
@@ -21,8 +24,17 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
   contactsInitialData,
 }) => {
   const isMobile = useIsMobileStore((state) => state.isMobile);
+  const [showToast, setShowToast] = useState(false);
   useContactsSync(contactsInitialData);
   const isInContact = useIsInContact(initialData?.uid ?? "");
+
+  const handleToastClose = useCallback(() => {
+    setShowToast(false);
+  }, []);
+
+  const handleAddToContactsSuccess = useCallback(() => {
+    setShowToast(true);
+  }, []);
 
   return (
     <>
@@ -47,10 +59,21 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
               phone={initialData.username}
               firstName={initialData.firstName}
               lastName={initialData.lastName}
+              onSuccess={handleAddToContactsSuccess}
             />
           )}
         </div>
       </SidebarContainer>
+      {showToast && (
+        <Toast
+          message="Пользователь успешно добавлен в контакты"
+          onClose={handleToastClose}
+          icon={{
+            mobile: "/icons/toast/checkMobile.svg",
+            desktop: "/icons/toast/checkDesktop.svg",
+          }}
+        />
+      )}
     </>
   );
 };
