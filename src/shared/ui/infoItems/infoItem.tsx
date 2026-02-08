@@ -20,12 +20,12 @@ export const InfoItem: React.FC<InfoItemProps> = ({
   copy = false,
 }) => {
   return (
-    <div className="border-muted flex w-full cursor-default justify-between overflow-hidden border-b px-3 py-2 last:border-0">
-      <div className="flex flex-col gap-1">
+    <div className="border-muted flex w-full cursor-default flex-wrap justify-between gap-2 overflow-hidden border-b px-3 py-2 last:border-0">
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
         {title && <p className="text-gray caption">{title}</p>}
         {text && (
-          <div className="flex items-center justify-between gap-2">
-            <p className={cn("subtext", className)}>{text}</p>
+          <div className="flex min-w-0 items-center gap-2">
+            <p className={cn("subtext wrap-break-word", className)}>{text}</p>
           </div>
         )}
       </div>
