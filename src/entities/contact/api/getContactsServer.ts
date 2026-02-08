@@ -9,7 +9,13 @@ const ENDPOINT = "/api/v1/contact/messenger-list/";
 export const getContactsServer = async (): Promise<ContactListResponse | null> => {
   try {
     const api = await getApiServer();
-    const { data } = await api.get<ContactListResponseDto>(ENDPOINT);
+    const { data } = await api.get<ContactListResponseDto>(ENDPOINT, {
+      params: {
+        page_size: 30,
+      },
+    });
+    console.log(data);
+
     return mapContactListResponse(data);
   } catch (error) {
     console.error("Failed to fetch contacts on server", error);
