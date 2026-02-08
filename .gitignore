@@ -43,3 +43,5 @@ next-env.d.ts
 .idea/
 node_modules/
 *.log
+
+CLAUDE.md
