@@ -2,8 +2,8 @@
 
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { User } from "@/entities/user/model/types";
+import { UserInfoList } from "@/entities/user/ui/UserInfoList";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
-import { InfoItemsList } from "@/shared/ui/infoItems/infoItemsList";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
@@ -34,7 +34,7 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({ chatKey, initi
           </div>
         </div>
         <div className="px-4 pt-2">
-          <InfoItemsList />
+          <UserInfoList initialData={initialData} />
         </div>
       </SidebarContainer>
     </>
