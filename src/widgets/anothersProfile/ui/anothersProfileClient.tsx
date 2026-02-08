@@ -1,4 +1,5 @@
-import { getUserByUIDServer } from "@/entities/user/api/getUserByUIDServer";
+import { getChatServer } from "@/entities/chat/api/getChatServer";
+import { getChatType } from "@/shared/lib/getChatType";
 
 import { AnothersProfile } from "./anothersProfile";
 
@@ -8,7 +9,8 @@ type AnothersProfileClientProps = {
 
 export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = async ({ chatKey }) => {
   let data = null;
-  const response = await getUserByUIDServer(chatKey);
+  const chatType = getChatType(chatKey);
+  const response = await getChatServer(chatKey, chatType);
   if (response.success) {
     data = response.data;
   }
