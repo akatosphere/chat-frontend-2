@@ -3,6 +3,7 @@
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { User } from "@/entities/user/model/types";
 import { UserInfoList } from "@/entities/user/ui/UserInfoList";
+import { AddToContactsProfileBtn } from "@/features/contacts/addToContacts/ui/addToContactsProfileBtn";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
@@ -12,7 +13,7 @@ type AnothersProfileProps = {
   isInContact: boolean;
 };
 
-export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData, isInContact }) => {
+export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData}) => {
   const isMobile = useIsMobileStore((state) => state.isMobile);
   return (
     <>
@@ -30,9 +31,9 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData, i
             <p className="text">{initialData?.isOnline ? "В сети" : "Не в сети"}</p>
           </div>
         </div>
-        <div className="px-4 pt-2">
-          <p className="text pb-2">{isInContact ? "Есть в контактах" : "Нет в контактах"}</p>
+        <div className="px-4 pt-2 flex flex-col gap-6 items-start">
           <UserInfoList initialData={initialData} />
+          <AddToContactsProfileBtn />
         </div>
       </SidebarContainer>
     </>

@@ -42,10 +42,11 @@ export const CopyBtn: React.FC<CopyBtnProps> = ({
     >
       <CopyIcon
         className={cn(
-          "h-5 w-5 transition-colors duration-200",
+          "h-5 w-5",
           state === "success" && "text-primary",
           state === "error" && "text-error",
           state === "idle" && "text-primary",
+          "hover:text-primary-secondary smooth",
         )}
       />
     </Button>
