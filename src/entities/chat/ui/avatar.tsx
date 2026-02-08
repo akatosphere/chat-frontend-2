@@ -5,7 +5,7 @@ import { cn } from "@/shared/shadcn/lib/utils";
 type AvatarProps = {
   className?: string;
   isOnline?: boolean;
-  avatarUrl?: string;
+  avatarUrl?: string | null;
   size?:
     | "xs"
     | "sm"

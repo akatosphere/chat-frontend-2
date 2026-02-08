@@ -7,19 +7,15 @@ import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
-import { useAnothersProfileLogic } from "../lib/useAnothersProfileLogic";
-
 type AnothersProfileProps = {
-  chatKey: string;
   initialData: User | null;
 };
 
-export const AnothersProfile: React.FC<AnothersProfileProps> = ({ chatKey, initialData }) => {
+export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData }) => {
   const isMobile = useIsMobileStore((state) => state.isMobile);
-  const { title } = useAnothersProfileLogic(chatKey);
   return (
     <>
-      <SidebarHeader title={title} closeButton={!isMobile} backButton={isMobile} />
+      <SidebarHeader title="Информация" closeButton={!isMobile} backButton={isMobile} />
       <SidebarContainer className="" scrollbar={isMobile}>
         <div className="relative">
           <Avatar
