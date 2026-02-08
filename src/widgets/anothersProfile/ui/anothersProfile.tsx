@@ -1,6 +1,9 @@
 "use client";
 
 import { Avatar } from "@/entities/chat/ui/avatar";
+import { useContactsSync } from "@/entities/contact/lib/useContactsSync";
+import { useIsInContact } from "@/entities/contact/lib/useIsInContact";
+import { ContactListResponse } from "@/entities/contact/model/types";
 import { User } from "@/entities/user/model/types";
 import { UserInfoList } from "@/entities/user/ui/UserInfoList";
 import { AddToContactsProfileBtn } from "@/features/contacts/addToContacts/ui/addToContactsProfileBtn";
@@ -10,11 +13,17 @@ import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
 type AnothersProfileProps = {
   initialData: User | null;
-  isInContact: boolean;
+  contactsInitialData?: ContactListResponse | null;
 };
 
-export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData }) => {
+export const AnothersProfile: React.FC<AnothersProfileProps> = ({
+  initialData,
+  contactsInitialData,
+}) => {
   const isMobile = useIsMobileStore((state) => state.isMobile);
+  useContactsSync(contactsInitialData);
+  const isInContact = useIsInContact(initialData?.uid ?? "");
+
   return (
     <>
       <SidebarHeader title="Информация" closeButton={!isMobile} backButton={isMobile} />
@@ -33,7 +42,7 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData })
         </div>
         <div className="flex flex-col items-start gap-6 px-4 pt-2">
           <UserInfoList initialData={initialData} />
-          {initialData && (
+          {initialData && !isInContact && (
             <AddToContactsProfileBtn
               phone={initialData.username}
               firstName={initialData.firstName}
