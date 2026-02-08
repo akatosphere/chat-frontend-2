@@ -1,5 +1,6 @@
 import { getChatServer } from "@/entities/chat/api/getChatServer";
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
+import { isInContactServer } from "@/entities/contact/lib/isInContactServer";
 import { User } from "@/entities/user/model/types";
 import { getChatType } from "@/shared/lib/getChatType";
 
@@ -16,14 +17,15 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = async
 
   if (!response.success) {
     return chatType === "chat" ? (
-      <AnothersProfile initialData={null} />
+      <AnothersProfile initialData={null} isInContact={false} />
     ) : (
       <ChatProfile initialData={null} />
     );
   }
 
   if (chatType === "chat") {
-    return <AnothersProfile initialData={response.data as User | null} />;
+    const isInContact = await isInContactServer(chatKey);
+    return <AnothersProfile initialData={response.data as User | null} isInContact={isInContact} />;
   }
 
   return <ChatProfile initialData={response.data as MappedChatDetails | null} />;

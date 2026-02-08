@@ -9,9 +9,10 @@ import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
 type AnothersProfileProps = {
   initialData: User | null;
+  isInContact: boolean;
 };
 
-export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData }) => {
+export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData, isInContact }) => {
   const isMobile = useIsMobileStore((state) => state.isMobile);
   return (
     <>
@@ -30,6 +31,7 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({ initialData })
           </div>
         </div>
         <div className="px-4 pt-2">
+          <p className="text pb-2">{isInContact ? "Есть в контактах" : "Нет в контактах"}</p>
           <UserInfoList initialData={initialData} />
         </div>
       </SidebarContainer>
