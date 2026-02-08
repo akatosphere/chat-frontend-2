@@ -50,6 +50,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-easy-crop": "^1.16.0",
+    "baseline-browser-mapping": "^2.9.19",
     "emoji-regex": "^10.6.0",
     "eslint": "^9.39.1",
     "eslint-config-next": "^16.0.5",
