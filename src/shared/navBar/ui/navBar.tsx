@@ -1,9 +1,12 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
+import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { cn } from "@/shared/shadcn/lib/utils";
 
+import { useSidebarStore } from "../model/sidebarStore";
 import { navItems } from "../models/navItems";
 import { NavItem } from "./navItem";
 
@@ -13,8 +16,42 @@ type NavBarProps = {
 
 export const NavBar: React.FC<NavBarProps> = ({ className }) => {
   const pathname = usePathname();
+  const isMobile = useIsMobileStore((s) => s.isMobile);
+  const activeSidebarSection = useSidebarStore((s) => s.activeSidebarSection);
+  const setActiveSidebarSection = useSidebarStore((s) => s.setActiveSidebarSection);
 
   const isChatPage = pathname?.startsWith("/chats/");
+
+  // Обновляем активный раздел sidebar при изменении pathname (только для основных разделов)
+  useEffect(() => {
+    if (!pathname) return;
+
+    // Определяем, на каком основном разделе мы находимся
+    if (pathname === "/chats" || pathname.startsWith("/chats/")) {
+      // Если путь точно /chats (без id), это список чатов
+      if (pathname === "/chats") {
+        setActiveSidebarSection("/chats");
+      }
+      // Если /chats/{id}, не меняем активный раздел (сохраняем предыдущий)
+    } else if (pathname.startsWith("/contacts")) {
+      setActiveSidebarSection("/contacts");
+    } else if (pathname.startsWith("/services")) {
+      setActiveSidebarSection("/services");
+    } else if (pathname.startsWith("/settings")) {
+      setActiveSidebarSection("/settings");
+    }
+  }, [pathname, setActiveSidebarSection]);
+
+  // Функция для определения активности элемента
+  const isItemActive = (itemHref: string) => {
+    // На мобилке используем pathname (текущая логика)
+    if (isMobile) {
+      return pathname?.startsWith(itemHref);
+    }
+
+    // На desktop используем activeSidebarSection
+    return activeSidebarSection === itemHref;
+  };
 
   return (
     <nav
@@ -36,7 +73,7 @@ export const NavBar: React.FC<NavBarProps> = ({ className }) => {
               iconDesktop={item.IconDesktop}
               iconMobile={item.IconMobile}
               order={item.order}
-              isActive={pathname?.startsWith(item.href)}
+              isActive={isItemActive(item.href)}
             />
           ))}
       </div>
@@ -53,7 +90,7 @@ export const NavBar: React.FC<NavBarProps> = ({ className }) => {
               iconDesktop={item.IconDesktop}
               iconMobile={item.IconMobile}
               order={item.order}
-              isActive={pathname?.startsWith(item.href)}
+              isActive={isItemActive(item.href)}
             />
           ))}
       </div>
