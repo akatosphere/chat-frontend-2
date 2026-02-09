@@ -1,13 +1,13 @@
-import block from "@icons/block.svg";
-import forwardedd from "@icons/chat/forwardedd.svg";
 import erase from "@icons/erase.svg";
+import exit from "@icons/menu/exit.svg";
+import trashCan from "@icons/trashCan.svg";
 import { MouseEvent } from "react";
 
 import { useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
-export const useAnothersProfileContextMenu = () => {
+export const useChatProfileContextMenu = () => {
   const { openMenu, activeMenuId } = useContextMenu();
-  const menuId = "anothersProfile";
+  const menuId = "chatProfile";
 
   return {
     onContextMenu: (e: MouseEvent) => {
@@ -16,13 +16,6 @@ export const useAnothersProfileContextMenu = () => {
         menuId,
         [
           {
-            label: "Поделиться профилем",
-            icon: forwardedd,
-            onClick: () => {
-              console.warn("Заблокировать пользователя - заглушка");
-            },
-          },
-          {
             label: "Очистить чат",
             icon: erase,
             onClick: () => {
@@ -30,11 +23,18 @@ export const useAnothersProfileContextMenu = () => {
             },
           },
           {
-            label: "Заблокировать",
-            icon: block,
+            label: "Покинуть группу",
+            icon: exit,
+            onClick: () => {
+              console.warn("Заблокировать пользователя - заглушка");
+            },
+          },
+          {
+            label: "Удалить группу",
+            icon: trashCan,
             destructive: true,
             onClick: () => {
-              console.warn("Пожаловаться - заглушка");
+              console.warn("Заблокировать пользователя - заглушка");
             },
           },
         ],

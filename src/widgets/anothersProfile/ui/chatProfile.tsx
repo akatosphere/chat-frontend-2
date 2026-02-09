@@ -3,16 +3,21 @@
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { ChatInfoList } from "@/entities/chat/ui/chatInfoList";
+import { useUserStore } from "@/entities/user/model/userStore";
 import { pluralize } from "@/shared/lib/pluralize";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
+
+import { useChatProfileContextMenu } from "../lib/useChatProfileContextMenu";
 
 type ChatProfileProps = {
   initialData: MappedChatDetails | null;
 };
 
 export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
+  const currentUserUid = useUserStore((s) => s.userId);
+  const isOwner = currentUserUid === initialData?.createdBy;
   const isMobile = useIsMobileStore((state) => state.isMobile);
   const chatType =
     initialData?.type === "private-group" || initialData?.type === "public-group"
@@ -31,7 +36,12 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
 
   return (
     <>
-      <SidebarHeader title={title} closeButton={!isMobile} backButton={isMobile} />
+      <SidebarHeader
+        title={title}
+        closeButton={!isMobile}
+        backButton={isMobile}
+        contextMenuHook={useChatProfileContextMenu}
+      />
       <SidebarContainer className="" scrollbar={isMobile}>
         <div className="relative">
           <Avatar
@@ -47,6 +57,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
         </div>
         <div className="px-4 pt-2">
           <ChatInfoList initialData={initialData} />
+          {isOwner && <>владелец</>}
         </div>
       </SidebarContainer>
     </>
