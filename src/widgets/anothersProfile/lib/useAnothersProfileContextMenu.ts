@@ -15,14 +15,21 @@ export const useAnothersProfileContextMenu = () => {
         menuId,
         [
           {
-            label: "Заблокировать пользователя",
+            label: "Поделиться профилем",
             icon: createGroup,
             onClick: () => {
               console.warn("Заблокировать пользователя - заглушка");
             },
           },
           {
-            label: "Пожаловаться",
+            label: "Очистить чат",
+            icon: createChannel,
+            onClick: () => {
+              console.warn("Пожаловаться - заглушка");
+            },
+          },
+          {
+            label: "Заблокировать",
             icon: createChannel,
             onClick: () => {
               console.warn("Пожаловаться - заглушка");
