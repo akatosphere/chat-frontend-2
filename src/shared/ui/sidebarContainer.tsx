@@ -14,7 +14,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
   return (
     <div
       className={cn(
-        scrollbar ? "scrollbar-content p-4" : "scrollbar-hide p-o",
+        scrollbar ? "scrollbar-content p-4" : "scrollbar-hide p-0",
         "flex w-full flex-1 flex-col overflow-y-auto",
         className,
       )}
