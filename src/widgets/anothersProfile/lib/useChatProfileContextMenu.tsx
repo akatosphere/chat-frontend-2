@@ -3,19 +3,36 @@ import exit from "@icons/menu/exit.svg";
 import trashCan from "@icons/trashCan.svg";
 import { MouseEvent } from "react";
 
+import { ChatType } from "@/entities/chat/model/types";
+import { useLeaveChat } from "@/features/leaveChat/lib/useLeaveChat";
 import { MenuItem, useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
 type UseChatProfileContextMenuParams = {
   isOwner: boolean;
   chatType: "group" | "channel";
+  chatKey: string;
+  chatId: number;
+  chatName: string;
+  fullChatType: ChatType;
 };
 
 export const useChatProfileContextMenu = ({
   isOwner,
   chatType,
+  chatKey,
+  chatId,
+  chatName,
+  fullChatType,
 }: UseChatProfileContextMenuParams) => {
   const { openMenu, activeMenuId } = useContextMenu();
   const menuId = "chatProfile";
+
+  const { isModalOpen, modalVariant, openModal, closeModal, confirmLeave } = useLeaveChat({
+    chatKey,
+    chatId,
+    chatName,
+    chatType: fullChatType,
+  });
 
   const clearLabel = chatType === "channel" ? "Очистить канал" : "Очистить чат";
   const leaveLabel = chatType === "channel" ? "Покинуть канал" : "Покинуть группу";
@@ -32,9 +49,7 @@ export const useChatProfileContextMenu = ({
     {
       label: leaveLabel,
       icon: exit,
-      onClick: () => {
-        console.warn("Покинуть - заглушка");
-      },
+      onClick: openModal,
     },
   ];
 
@@ -55,5 +70,12 @@ export const useChatProfileContextMenu = ({
       openMenu(menuId, menuItems, e.clientX, e.clientY);
     },
     isOpen: activeMenuId === menuId,
+    modalProps: {
+      isModalOpen,
+      closeModal,
+      confirmLeave,
+      modalVariant,
+      chatName,
+    },
   };
 };

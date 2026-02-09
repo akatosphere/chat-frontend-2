@@ -10,4 +10,5 @@ export const WS_ACTIONS = {
   CHANGE_STATUS_READ_MESSAGE: "change_status_read_message",
   ADD_MEMBERS_TO_CHAT: "add_members_to_chat",
   DELETE_MESSAGE: "delete_message",
+  LEAVE_CHAT: "leave_chat",
 } as const;

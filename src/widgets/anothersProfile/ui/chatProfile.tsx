@@ -4,6 +4,7 @@ import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { ChatInfoList } from "@/entities/chat/ui/chatInfoList";
 import { useUserStore } from "@/entities/user/model/userStore";
+import { LeaveChatModal } from "@/features/leaveChat/ui/leaveChatModal";
 import { pluralize } from "@/shared/lib/pluralize";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
@@ -24,7 +25,14 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
       ? "group"
       : "channel";
   const title = chatType === "channel" ? "Информация о канале" : "Информация о группе";
-  const contextMenu = useChatProfileContextMenu({ isOwner, chatType });
+  const contextMenu = useChatProfileContextMenu({
+    isOwner,
+    chatType,
+    chatKey: initialData?.chatKey || "",
+    chatId: initialData?.id || 0,
+    chatName: initialData?.title || "",
+    fullChatType: initialData?.type || "chat",
+  });
 
   const getMembersLabel = () => {
     if (!initialData) return "";
@@ -60,6 +68,15 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
           <ChatInfoList initialData={initialData} />
         </div>
       </SidebarContainer>
+
+      {/* Модальное окно подтверждения выхода */}
+      <LeaveChatModal
+        isOpen={contextMenu.modalProps.isModalOpen}
+        onClose={contextMenu.modalProps.closeModal}
+        onConfirm={contextMenu.modalProps.confirmLeave}
+        chatName={contextMenu.modalProps.chatName}
+        modalVariant={contextMenu.modalProps.modalVariant}
+      />
     </>
   );
 };
