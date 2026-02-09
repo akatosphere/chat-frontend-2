@@ -102,6 +102,11 @@ export const ContextMenuContent = ({ items, position, onClose }: Props) => {
           }
           onClose();
         }}
+        // 🔴 Только это добавляем для тача
+        onTouchStart={(e) => {
+          e.preventDefault();
+          onClose();
+        }}
       />
 
       {/* меню */}
@@ -112,7 +117,9 @@ export const ContextMenuContent = ({ items, position, onClose }: Props) => {
           !ready && "pointer-events-none opacity-0",
         )}
         style={{ left: coords.x, top: coords.y }}
-        onContextMenu={(e) => e.preventDefault()} // блокируем стандартное меню внутри нашего
+        onContextMenu={(e) => e.preventDefault()}
+        // 🔴 И это для тача внутри меню
+        onTouchStart={(e) => e.stopPropagation()}
       >
         <ContextMenu items={items} onClose={onClose} />
       </div>

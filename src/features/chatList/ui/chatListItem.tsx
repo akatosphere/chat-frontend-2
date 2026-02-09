@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 import { cn } from "@/shared/shadcn/lib/utils";
-import { useChatListItemContextMenu } from "@/widgets/contextMenu/lib/useChatListItemContextMenu";
 
 import { ChatItemData } from "../../../entities/chat/model/types";
 import { Avatar } from "../../../entities/chat/ui/avatar";
+import { useChatListItemContextMenu } from "../lib/useChatListItemContextMenu";
 import { ChatActions } from "../model/types";
 import { ChatListItemFooter } from "./chatListItemFooter";
 import { ChatListItemHeader } from "./chatListItemHeader";

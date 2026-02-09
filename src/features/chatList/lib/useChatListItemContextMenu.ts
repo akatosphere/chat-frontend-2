@@ -9,8 +9,7 @@ import { MouseEvent } from "react";
 
 import { ChatItemData } from "@/entities/chat/model/types";
 import { ChatActions } from "@/features/chatList/model/types";
-
-import { useContextMenu } from "../ui/contextMenuProvider";
+import { useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
 export const useChatListItemContextMenu = (chat: ChatItemData, actions: ChatActions) => {
   const { openMenu, activeMenuId } = useContextMenu();

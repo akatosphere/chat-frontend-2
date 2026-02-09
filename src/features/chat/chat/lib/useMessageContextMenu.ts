@@ -7,8 +7,7 @@ import { MouseEvent } from "react";
 import { useChatStore } from "@/entities/chat/model/useChatStore";
 import { useDeleteMessage } from "@/features/chat/chat/hooks";
 import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
-
-import { useContextMenu } from "../ui/contextMenuProvider";
+import { useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
 export const useMessageContextMenu = (message: MappedChatMessage) => {
   const { openMenu, activeMenuId } = useContextMenu();

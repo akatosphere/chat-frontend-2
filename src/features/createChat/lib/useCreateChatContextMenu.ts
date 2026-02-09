@@ -1,10 +1,9 @@
 import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
 
+import { useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 import createChannel from "@/shared/ui/icons/createChat/createChannel.svg";
 import createGroup from "@/shared/ui/icons/createChat/createGroup.svg";
-
-import { useContextMenu } from "../ui/contextMenuProvider";
 
 export const useCreateChatContextMenu = () => {
   const { openMenu, activeMenuId } = useContextMenu();

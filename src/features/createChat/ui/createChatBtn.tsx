@@ -1,7 +1,7 @@
+import { useCreateChatContextMenu } from "@/features/createChat/lib/useCreateChatContextMenu";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 import CreateBtn from "@/shared/ui/icons/createChat/createBtn.svg";
-import { useCreateChatContextMenu } from "@/widgets/contextMenu/lib/useCreateChatContextMenu";
 
 type CreateChatBtnProps = {
   className?: string;
