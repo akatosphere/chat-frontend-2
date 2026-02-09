@@ -35,6 +35,7 @@ export const SubmitCreateChatBtn: React.FC<SubmitCreateChatBtnProps> = ({ classN
       if (response.status === "OK") {
         const chatKey = response.object.chat_key;
         reset();
+        router.push(`/chats/`);
         router.push(`/chats/${chatKey}`);
       } else {
         console.error("Ошибка сервера:", response.error);
