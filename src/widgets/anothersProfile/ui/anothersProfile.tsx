@@ -14,6 +14,8 @@ import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
+import { useAnothersProfileContextMenu } from "../lib/useAnothersProfileContextMenu";
+
 type AnothersProfileProps = {
   initialData: User | null;
   contactsInitialData?: ContactListResponse | null;
@@ -38,7 +40,12 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
 
   return (
     <>
-      <SidebarHeader title="Информация" closeButton={!isMobile} backButton={isMobile} />
+      <SidebarHeader
+        title="Информация"
+        closeButton={!isMobile}
+        backButton={isMobile}
+        contextMenuHook={useAnothersProfileContextMenu}
+      />
       <SidebarContainer className="" scrollbar={isMobile}>
         <div className="relative">
           <Avatar

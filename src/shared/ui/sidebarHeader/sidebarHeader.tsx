@@ -3,6 +3,7 @@ import Close from "@icons/close.svg";
 import BackArrow from "@icons/menu/back-arrow.svg";
 import More from "@icons/more.svg";
 import { useRouter } from "next/navigation";
+import { MouseEvent } from "react";
 
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
@@ -13,6 +14,7 @@ type SidebarHeaderProps = {
   backButton?: boolean;
   closeButton?: boolean;
   backButtonFn?: () => void;
+  contextMenuHook?: () => { onContextMenu: (e: MouseEvent) => void; isOpen: boolean };
 };
 
 export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
@@ -21,9 +23,11 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   backButton,
   backButtonFn,
   closeButton,
+  contextMenuHook,
 }) => {
   const router = useRouter();
   const onClick = backButtonFn || (() => router.back());
+  const contextMenu = contextMenuHook?.();
 
   return (
     <div
@@ -57,11 +61,13 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           {title}
         </h2>
       </div>
-      <div className="flex gap-4">
-        <Button variant="ghost" size="icon-auto">
-          <More className="text-primary h-6 w-6" />
-        </Button>
-      </div>
+      {contextMenu && (
+        <div className="flex gap-4">
+          <Button variant="ghost" size="icon-auto" onClick={contextMenu.onContextMenu}>
+            <More className="text-primary h-6 w-6" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
