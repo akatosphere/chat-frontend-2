@@ -1,6 +1,7 @@
 "use client";
 import Close from "@icons/close.svg";
 import BackArrow from "@icons/menu/back-arrow.svg";
+import More from "@icons/more.svg";
 import { useRouter } from "next/navigation";
 
 import { cn } from "@/shared/shadcn/lib/utils";
@@ -56,14 +57,11 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           {title}
         </h2>
       </div>
-      {/* <div className="flex gap-4">
+      <div className="flex gap-4">
         <Button variant="ghost" size="icon-auto">
-          <Close className="text-primary h-4 w-4" />
+          <More className="text-primary h-6 w-6" />
         </Button>
-        <Button variant="ghost" size="icon-auto">
-          <Close className="text-primary h-4 w-4" />
-        </Button>
-      </div> */}
+      </div>
     </div>
   );
 };
