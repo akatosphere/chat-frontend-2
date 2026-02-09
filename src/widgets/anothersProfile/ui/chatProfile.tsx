@@ -24,6 +24,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
       ? "group"
       : "channel";
   const title = chatType === "channel" ? "Информация о канале" : "Информация о группе";
+  const contextMenu = useChatProfileContextMenu({ isOwner, chatType });
 
   const getMembersLabel = () => {
     if (!initialData) return "";
@@ -40,7 +41,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
         title={title}
         closeButton={!isMobile}
         backButton={isMobile}
-        contextMenuHook={useChatProfileContextMenu}
+        contextMenuHook={() => contextMenu}
       />
       <SidebarContainer className="" scrollbar={isMobile}>
         <div className="relative">
@@ -57,7 +58,6 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
         </div>
         <div className="px-4 pt-2">
           <ChatInfoList initialData={initialData} />
-          {isOwner && <>владелец</>}
         </div>
       </SidebarContainer>
     </>
