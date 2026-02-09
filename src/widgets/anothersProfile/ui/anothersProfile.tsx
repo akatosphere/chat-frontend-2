@@ -8,9 +8,9 @@ import { useIsInContact } from "@/entities/contact/lib/useIsInContact";
 import { ContactListResponse } from "@/entities/contact/model/types";
 import { User } from "@/entities/user/model/types";
 import { UserInfoList } from "@/entities/user/ui/UserInfoList";
+import { AddedToContactsModal } from "@/features/contacts/addToContacts/ui/AddedToContactsModal";
 import { AddToContactsProfileBtn } from "@/features/contacts/addToContacts/ui/addToContactsProfileBtn";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
-import { Toast } from "@/shared/toast/ui/toast";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
@@ -24,16 +24,16 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
   contactsInitialData,
 }) => {
   const isMobile = useIsMobileStore((state) => state.isMobile);
-  const [showToast, setShowToast] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   useContactsSync(contactsInitialData);
   const isInContact = useIsInContact(initialData?.uid ?? "");
 
-  const handleToastClose = useCallback(() => {
-    setShowToast(false);
+  const handleModalClose = useCallback(() => {
+    setShowModal(false);
   }, []);
 
   const handleAddToContactsSuccess = useCallback(() => {
-    setShowToast(true);
+    setShowModal(true);
   }, []);
 
   return (
@@ -64,14 +64,12 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
           )}
         </div>
       </SidebarContainer>
-      {showToast && (
-        <Toast
-          message="Пользователь успешно добавлен в контакты"
-          onClose={handleToastClose}
-          icon={{
-            mobile: "/icons/toast/checkMobile.svg",
-            desktop: "/icons/toast/checkDesktop.svg",
-          }}
+      {initialData && (
+        <AddedToContactsModal
+          isOpen={showModal}
+          onClose={handleModalClose}
+          firstName={initialData.firstName}
+          lastName={initialData.lastName}
         />
       )}
     </>
