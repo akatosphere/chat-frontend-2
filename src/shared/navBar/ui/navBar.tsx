@@ -24,7 +24,7 @@ export const NavBar: React.FC<NavBarProps> = ({ className }) => {
         className,
       )}
     >
-      <div className="desktop:hidden desktop:h-[228px] desktop:w-12 desktop:flex-col desktop:items-center desktop:gap-2 mx-4 flex h-[83px] justify-between py-2 text-sm">
+      <div className="desktop:hidden desktop:h-57 desktop:w-12 desktop:flex-col desktop:items-center desktop:gap-2 mx-4 flex h-20.75 justify-between py-2 text-sm">
         {navItems
           .slice()
           .sort((a, b) => a.order.mobile - b.order.mobile)
@@ -41,7 +41,7 @@ export const NavBar: React.FC<NavBarProps> = ({ className }) => {
           ))}
       </div>
 
-      <div className="desktop:flex desktop:h-[228px] desktop:w-12 desktop:flex-col desktop:items-center desktop:gap-2 hidden h-[83px] justify-between text-sm">
+      <div className="desktop:flex desktop:h-57 desktop:w-12 desktop:flex-col desktop:items-center desktop:gap-2 hidden h-20.75 justify-between text-sm">
         {navItems
           .slice()
           .sort((a, b) => a.order.desktop - b.order.desktop)
