@@ -1,5 +1,6 @@
 "use client";
 
+import CheckBox from "@icons/checkBox.svg";
 import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
 import { useEffect } from "react";
 
@@ -33,17 +34,18 @@ export const AddedToContactsModal: React.FC<AddedToContactsModalProps> = ({
   }, [isOpen, onClose]);
 
   return (
-    <ModalDialog className={cn(className)} open={isOpen} onOpenChange={onClose}>
+    <ModalDialog className={cn("desktop:w-80", className)} open={isOpen} onOpenChange={onClose}>
       <AlertDialogHeader className="items-center text-center">
+        <CheckBox className="h-12 w-12" />
+      </AlertDialogHeader>
+      <AlertDialogDescription className="items-center text-center">
         <AlertDialogTitle>
-          <span className="font-medium">
+          <span className="text font-medium">
             {firstName} {lastName}
           </span>
         </AlertDialogTitle>
-        <AlertDialogDescription>
-          <span className="subtext text-gray">теперь в списке ваших контактов</span>
-        </AlertDialogDescription>
-      </AlertDialogHeader>
+        <span className="subtext">теперь в списке ваших контактов</span>
+      </AlertDialogDescription>
     </ModalDialog>
   );
 };
