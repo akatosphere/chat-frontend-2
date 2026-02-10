@@ -1,6 +1,7 @@
 "use client";
 
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
+import { ChatActionsBar } from "@/entities/chat/ui/chatActionsBar";
 import { UserPreview } from "@/entities/user/model/types";
 import { normalizeChatInfo } from "@/features/chat/chat/lib/normalizeChatInfo";
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
@@ -64,6 +65,9 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
         onPhotoClick={() => {}}
         onInfoClick={() => {}}
       />
+      <div className="">
+        <ChatActionsBar chat={chatType} />
+      </div>
       <div className="flex flex-1 flex-col overflow-hidden">
         <Chat
           initialMessages={initialMessages}
