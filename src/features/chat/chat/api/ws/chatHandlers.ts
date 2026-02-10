@@ -122,13 +122,13 @@ export type WSDeleteMessageData = {
   to_user?: { uid: string };
 };
 
-export const handleDeleteMessage: WSHandler<WSDeleteMessageData> = (data) => {
-  if (!data.object || !data.object.from_user || !data.object.uid) return;
+// eslint-disable-next-line
+export const handleDeleteMessage: WSHandler<any> = (data) => {
+  const payload = data.object as WSDeleteMessageData;
 
-  useChatStore.getState().deleteMessage(data.object.uid);
-  optimisticDeleteMessage(
-    data.object.from_user.uid,
-    data.object.to_user?.uid || "",
-    data.object.uid,
-  );
+  if (!payload || !payload.from_user || !payload.uid) return;
+
+  useChatStore.getState().deleteMessage(payload.uid);
+
+  optimisticDeleteMessage(payload.from_user.uid || "", payload.to_user?.uid || "", payload.uid);
 };

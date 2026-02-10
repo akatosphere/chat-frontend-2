@@ -1,5 +1,6 @@
+import { ChatType } from "@/features/createChat/model/types";
+
 import { ChatDetails } from "../model/schema";
-import { ChatType } from "../model/types";
 
 /**
  * Интерфейс, который будет использовать фронтенд (UI)
