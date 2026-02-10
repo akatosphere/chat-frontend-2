@@ -19,10 +19,15 @@ export const ImageCropper = ({ src, onConfirm }: Props) => {
   const [area, setArea] = useState<Area | null>(null);
 
   const onCropComplete = useCallback((_: Area, croppedAreaPixels: Area) => {
+    console.log("onCropComplete");
+
     setArea(croppedAreaPixels);
   }, []);
 
   const handleConfirm = async () => {
+    console.log("handleConfirm");
+    console.log("area:", area);
+
     if (!area) return;
     const img = await getCroppedImg(src, area);
     onConfirm(img);

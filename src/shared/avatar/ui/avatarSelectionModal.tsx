@@ -38,11 +38,14 @@ export const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({
   const [localError, setLocalError] = useState<string | null>(error || null);
 
   const handleCropComplete = async (croppedUrl: string) => {
+    console.log("handleCropComplete");
     const res = await fetch(croppedUrl);
     const blob = await res.blob();
     const file = new File([blob], selectedFile?.name || "avatar.png", {
       type: blob.type,
     });
+    console.log("file: ", file);
+
     setSelectedFile(null);
     onAvatarChange(file);
   };
