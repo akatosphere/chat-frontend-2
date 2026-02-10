@@ -2,13 +2,10 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import z from "zod";
 
-import {
-  getMessengerProfile,
-  MessengerProfileSchema,
-  updateMessengerProfile,
-} from "@/features/auth/userForm/api/updateUserProfile";
+import { getProfile } from "@/entities/user/api/getProfile";
+import { updateProfile } from "@/entities/user/api/updateProfile";
+import { UpdateProfileData } from "@/entities/user/model/types";
 import { UserProfileForm } from "@/features/settings/userProfileForm/ui/userProfileForm";
 
 import { ProfilePageClientSkeleton } from "./profilePageClientSkeleton";
@@ -16,26 +13,30 @@ import { ProfilePageClientSkeleton } from "./profilePageClientSkeleton";
 export const ProfilePageClient: React.FC = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["messenger-profile"],
     queryFn: async () => {
-      const res = await getMessengerProfile();
+      const res = await getProfile();
       if (!res.success) throw new Error(res.error);
       return res.data;
     },
   });
 
   const mutation = useMutation({
-    mutationFn: updateMessengerProfile,
+    mutationFn: async (formData: UpdateProfileData) => {
+      const res = await updateProfile(formData);
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    },
     onSuccess: () => {
-      // После успешного обновления — обновляем кэш
       queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof MessengerProfileSchema>) => {
+  const onSubmit = async (formData: UpdateProfileData) => {
     try {
-      await mutation.mutateAsync(data);
+      await mutation.mutateAsync(formData);
       router.push("/settings");
     } catch (error) {
       console.error(error);
@@ -47,23 +48,23 @@ export const ProfilePageClient: React.FC = () => {
   }
 
   if (isError) {
-    return <div>Ошибка</div>;
+    return <div className="p-4 text-red-500">Ошибка загрузки профиля</div>;
   }
 
   if (!data) {
-    return <div>Профиль не найден</div>;
+    return <div className="p-4">Профиль не найден</div>;
   }
 
   return (
     <UserProfileForm
       onSubmit={onSubmit}
       profile={data}
-      avatarUrl={data.avatar_url}
-      lastName={data.last_name}
-      name={data.first_name}
+      avatarUrl={data.avatarUrl}
+      lastName={data.lastName || ""}
+      name={data.firstName}
       phone={data.phone}
       nickname={data.nickname}
-      description={data.additional_information}
+      description={data.bio}
       birthday={data.birthday}
     />
   );

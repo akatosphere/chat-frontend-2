@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import api from "@/shared/api/apiClient";
+import { getApiClient } from "@/shared/api/getApiClient";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
@@ -12,8 +12,7 @@ type QueryBtnProps = {
 
 export const QueryBtn: React.FC<QueryBtnProps> = ({ className }) => {
   const getChatList = async () => {
-    const { data } = await api.get("/api/v1/chat/list/");
-    console.log(data);
+    const { data } = await getApiClient.get("/api/v1/chat/list/");
     return data;
   };
 

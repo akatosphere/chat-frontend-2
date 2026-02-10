@@ -1,129 +1,110 @@
 import { create } from "zustand";
 
-import { ChatItemData } from "@/entities/chat/model/types";
+import { getGroupChannel } from "@/entities/chat/api/getGroupChannel";
+import { mapChatListItem } from "@/entities/chat/model/mapper";
+import { ChatListItem } from "@/entities/chat/model/types";
 
-type ChatsById = Record<number, ChatItemData>;
-type ChatPage = {
-  results: ChatItemData[];
-};
+import { applyChatOrder } from "../lib/applyChatOrder";
+
+type ChatsByKey = Record<string, ChatListItem>;
 
 type ChatListState = {
-  chatsById: ChatsById;
-  order: number[];
+  chatsByKey: ChatsByKey;
+  order: string[];
   count: number;
 
-  // ===== server sync =====
-  // mergeFromPages: (pages: ChatListResponse[]) => void;
-  mergeFromPages: (pages: ChatPage[]) => void;
+  // base
+  mergeChats: (chats: ChatListItem[]) => void;
+  upsertChat: (chat: ChatListItem) => void;
+  patchChat: (chatKey: string, patch: Partial<ChatListItem>) => void;
+  removeChat: (chatKey: string) => void;
+
+  // sync
   setCount: (count: number) => void;
 
-  // ===== realtime / optimistic =====
-  upsertChat: (chat: ChatItemData) => void;
-  removeChat: (id: number) => void;
+  // async
+  addNewChat: (chatKey: string) => Promise<void>;
 
-  // ===== UI =====
-  typingByChat: Record<number, string[]>;
-  setTyping: (chatId: number, users: string[]) => void;
-
-  // ===== selectors =====
-  getOrderedChats: () => ChatItemData[];
+  reset: () => void;
 };
 
-export const useChatListStore = create<ChatListState>((set, get) => ({
-  chatsById: {},
+export const useChatListStore = create<ChatListState>((set) => ({
+  chatsByKey: {},
   order: [],
   count: 0,
-  typingByChat: {},
 
-  // mergeFromPages: (pages) => {
-  //   const next: ChatsById = { ...get().chatsById };
-  //   for (const page of pages) {
-  //     for (const chat of page.results) {
-  //       next[chat.id] = chat;
-  //     }
-  //   }
-
-  //   const order = Object.values(next)
-  //     .sort((a, b) => (b.last_message?.created_at ?? 0) - (a.last_message?.created_at ?? 0))
-  //     .map((c) => c.id);
-
-  //   set({ chatsById: next, order });
-  // },
-
-  // mergeFromPages: (pages) =>
-  //   set((state) => {
-  //     if (pages.length === state.count) {
-  //       return state;
-  //     }
-
-  //     const next = { ...state.chatsById };
-
-  //     for (const page of pages) {
-  //       for (const chat of page.results) {
-  //         next[chat.id] = chat;
-  //       }
-  //     }
-
-  //     const order = Object.values(next)
-  //       .sort((a, b) => (b.last_message?.created_at ?? 0) - (a.last_message?.created_at ?? 0))
-  //       .map((c) => c.id);
-
-  //     return {
-  //       chatsById: next,
-  //       order,
-  //       mergedPagesCount: pages.length,
-  //     };
-  //   }),
-
-  mergeFromPages: (pages) =>
+  setCount: (count) => set({ count }),
+  mergeChats: (chats) =>
     set((state) => {
-      const next = { ...state.chatsById };
+      const chatsByKey = { ...state.chatsByKey };
+      let order = [...state.order];
 
-      for (const page of pages) {
-        for (const chat of page.results) {
-          next[chat.id] = chat;
-        }
+      for (const chat of chats) {
+        const exists = chatsByKey[chat.key];
+        chatsByKey[chat.key] = exists ? { ...exists, ...chat } : chat;
+
+        if (!exists) order.push(chat.key);
       }
 
-      const order = Object.values(next)
-        .sort((a, b) => (b.last_message?.created_at ?? 0) - (a.last_message?.created_at ?? 0))
-        .map((c) => c.id);
+      order = applyChatOrder(order, chatsByKey);
+      return { chatsByKey, order };
+    }),
+
+  upsertChat: (chat) =>
+    set((state) => {
+      const chatsByKey = {
+        ...state.chatsByKey,
+        [chat.key]: {
+          ...state.chatsByKey[chat.key],
+          ...chat,
+        },
+      };
+
+      const order = applyChatOrder(
+        state.order.includes(chat.key) ? state.order : [...state.order, chat.key],
+        chatsByKey,
+        chat.key,
+      );
+
+      return { chatsByKey, order };
+    }),
+
+  patchChat: (chatKey, patch) =>
+    set((state) => {
+      const chat = state.chatsByKey[chatKey];
+      if (!chat) return state;
+
+      const chatsByKey = {
+        ...state.chatsByKey,
+        [chatKey]: { ...chat, ...patch },
+      };
 
       return {
-        chatsById: next,
-        order,
+        chatsByKey,
+        order: applyChatOrder(state.order, chatsByKey, chatKey),
       };
     }),
 
-  setCount: (count) => set({ count }),
-
-  upsertChat: (chat) => {
-    const next = { ...get().chatsById, [chat.id]: chat };
-
-    const order = Object.values(next)
-      .sort((a, b) => (b.last_message?.created_at ?? 0) - (a.last_message?.created_at ?? 0))
-      .map((c) => c.id);
-
-    set({ chatsById: next, order });
-  },
-
-  removeChat: (id) => {
-    const next = { ...get().chatsById };
-    delete next[id];
-
-    set({
-      chatsById: next,
-      order: get().order.filter((x) => x !== id),
-    });
-  },
-
-  setTyping: (chatId, users) =>
+  removeChat: (chatKey) =>
     set((state) => ({
-      typingByChat: { ...state.typingByChat, [chatId]: users },
+      chatsByKey: Object.fromEntries(
+        Object.entries(state.chatsByKey).filter(([k]) => k !== chatKey),
+      ),
+      order: state.order.filter((k) => k !== chatKey),
     })),
 
-  getOrderedChats: () => {
-    const { chatsById, order } = get();
-    return order.map((id) => chatsById[id]).filter(Boolean);
+  addNewChat: async (chatKey) => {
+    const res = await getGroupChannel(chatKey);
+    if (!res.success) return;
+    const chat = mapChatListItem(res.data);
+    set((state) => ({
+      chatsByKey: { ...state.chatsByKey, [chat.key]: chat },
+      order: applyChatOrder([...state.order, chat.key], {
+        ...state.chatsByKey,
+        [chat.key]: chat,
+      }),
+    }));
   },
+
+  reset: () => set({ chatsByKey: {}, order: [], count: 0 }),
 }));

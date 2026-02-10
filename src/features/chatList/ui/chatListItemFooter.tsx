@@ -1,15 +1,15 @@
 import Pin from "@icons/chat/pin.svg";
 
+import { ChatListItem } from "@/entities/chat/model/types";
 import { cn } from "@/shared/shadcn/lib/utils";
 
-import { ChatItemData } from "../../../entities/chat/model/types";
 import { MessagePreview } from "./messagePreview";
 
 type ChatListItemFooterProps = {
   isActive?: boolean;
   totalUnread: number;
   isFavorite: boolean;
-  lastMsg: ChatItemData["last_message"];
+  lastMsg: ChatListItem["lastMessage"];
 };
 
 export const ChatListItemFooter = ({

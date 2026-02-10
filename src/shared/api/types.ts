@@ -1,17 +1,9 @@
+import { UserPreviewDto } from "@/entities/user/model/types";
+
 export type Result<T = void> = { success: true; data: T } | { success: false; error: string };
 
 export type ValidationError = Record<string, string[]>;
 export type MessageError = { message?: string; detail?: string };
-
-export type ApiUser = {
-  uid: string;
-  username: string;
-  nickname: string;
-  first_name: string;
-  last_name: string;
-  avatar_url: string;
-  avatar_webp_url: string;
-};
 
 export type ApiFile = {
   id: number;
@@ -25,8 +17,8 @@ export type ApiFile = {
 export type ApiMessage = {
   id: number;
   uid: string;
-  from_user: ApiUser;
-  to_user: ApiUser;
+  from_user: UserPreviewDto;
+  to_user: UserPreviewDto;
   content: string;
   files_list: ApiFile[];
   replied_messages: ApiMessage[];

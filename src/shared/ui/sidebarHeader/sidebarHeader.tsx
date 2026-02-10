@@ -8,10 +8,17 @@ type SidebarHeaderProps = {
   className?: string;
   title: string;
   backButton?: boolean;
+  backButtonFn?: () => void;
 };
 
-export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ className, title, backButton }) => {
+export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
+  className,
+  title,
+  backButton,
+  backButtonFn,
+}) => {
   const router = useRouter();
+  const onClick = backButtonFn || (() => router.back());
 
   return (
     <div
@@ -22,7 +29,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ className, title, 
     >
       {backButton && (
         <button
-          onClick={() => router.back()}
+          onClick={onClick}
           className="group-hover:text-primary group relative z-10 flex h-6 w-6 cursor-pointer items-center"
         >
           <BackArrow className="text-black" />

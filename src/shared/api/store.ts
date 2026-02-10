@@ -1,6 +1,8 @@
 // src/store/authStore.ts
 import { create } from "zustand";
 
+import { saveTokenToCookie } from "./actions/saveTokenToCookie";
+
 interface AuthState {
   accessToken: string | null;
   isInitialized: boolean;
@@ -12,7 +14,17 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: null,
   isInitialized: false,
-  setAccessToken: (token: string) => set({ accessToken: token }),
-  clearAccessToken: () => set({ accessToken: null }),
+  setAccessToken: (token) => {
+    set({ accessToken: token });
+    saveTokenToCookie(token).catch((err) => {
+      console.error("Failed to sync token with cookies", err);
+    });
+  },
+  clearAccessToken: () => {
+    set({ accessToken: null });
+    saveTokenToCookie(null).catch((err) => {
+      console.error("Failed to delete token from cookies", err);
+    });
+  },
   finishInitialization: () => set({ isInitialized: true }),
 }));

@@ -2,48 +2,77 @@
 
 import { useEffect, useRef } from "react";
 
-import { chatWSHandler } from "@/entities/chat/model/wsHandler";
+import { useUserStore } from "@/entities/chat/model/userStore";
+import { getProfile } from "@/entities/user/api/getProfile";
 import { useAuthStore } from "@/shared/api/store";
-import { connectWS, disconnectWS, subscribeToWS } from "@/shared/api/wsClient";
+import { connectWS, disconnectWS, subscribeToWS } from "@/shared/api/ws/wsClient";
 
-import { useWSRequestStore } from "../model/wsRequest.store";
+import { useWSRequestStore } from "../api/ws/model/wsRequest.store";
+import { bootstrapWSHandlers } from "../api/ws/wsBootstrap";
+import { dispatchWSEvent } from "../api/ws/wsHandlers";
 
 export const WSProvider = ({ children }: { children: React.ReactNode }) => {
   const accessToken = useAuthStore((s) => s.accessToken);
   const isInitialized = useAuthStore((s) => s.isInitialized);
+  const setUserId = useUserStore((s) => s.setUserId);
 
   const prevTokenRef = useRef<string | null>(null);
+  const userIdExtractedRef = useRef<boolean>(false);
+
+  const fetchUserProfile = async () => {
+    if (!accessToken) return;
+
+    try {
+      const userData = await getProfile();
+      if (userData.success && userData.data.uid) {
+        setUserId(userData.data.uid);
+        userIdExtractedRef.current = true;
+      }
+    } catch (error) {
+      console.error("Failed to fetch user profile:", error);
+    }
+  };
 
   useEffect(() => {
+    if (accessToken) {
+      fetchUserProfile();
+    }
+
     const unsubscribe = subscribeToWS((data) => {
-      // 1. Сначала проверяем, не является ли это ответом на конкретный запрос (по UID)
       if (data.request_uid) {
         useWSRequestStore.getState().fulfillRequest(data.request_uid, data);
       }
-
-      // 2. Затем пробрасываем в роутеры
-      chatWSHandler(data);
+      dispatchWSEvent(data);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [setUserId, accessToken]);
+
+  useEffect(() => {
+    if (!isInitialized || !accessToken) return;
+    bootstrapWSHandlers();
+  }, [isInitialized, accessToken]);
 
   useEffect(() => {
     if (!isInitialized) return;
 
-    // LOGIN или REFRESH TOKEN
+    if (accessToken && prevTokenRef.current !== accessToken) {
+      userIdExtractedRef.current = false;
+    }
+
     if (accessToken) {
       if (prevTokenRef.current !== accessToken) {
         connectWS(accessToken);
         prevTokenRef.current = accessToken;
+        fetchUserProfile();
       }
       return;
     }
 
-    // LOGOUT
     if (!accessToken && prevTokenRef.current) {
       disconnectWS();
       prevTokenRef.current = null;
+      userIdExtractedRef.current = false;
     }
   }, [accessToken, isInitialized]);
 

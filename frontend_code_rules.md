@@ -16,6 +16,7 @@
 | `npm run fix`           | Полная автофиксация (ESLint + Prettier) |
 | `npm run build`         | Сборка проекта                          |
 | `npm run prepare`       | Установка Husky                         |
+| `npm run clean`         | очистка кэша Next                       |
 
 ---
 

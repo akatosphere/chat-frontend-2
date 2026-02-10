@@ -1,14 +1,16 @@
+"use client";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 import { useState } from "react";
 
-import { uploadAvatar } from "@/features/auth/userForm/api/changeAvatar";
-import { MessengerProfileResponse } from "@/features/auth/userForm/api/updateUserProfile";
+import { uploadAvatar } from "@/entities/user/api/uploadAvatar"; // Наше новое API
+import { User } from "@/entities/user/model/types"; // Наша новая типизация
+import { checkAvatarParams } from "@/shared/avatar/lib/checkAvatarParams";
 
 import { getDefaultBirthday } from "./getDefaultBirthday";
 
 export type UseUserProfileFormProps = {
-  profile: MessengerProfileResponse;
+  profile: User;
   avatarUrl: string;
   name: string;
   lastName: string;
@@ -19,50 +21,80 @@ export type UseUserProfileFormProps = {
 
 export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormProps) => {
   const queryClient = useQueryClient();
+
   const [currentAvatarUrl, setCurrentAvatarUrl] = useState(avatarUrl);
-  const [avatarError, setAvatarError] = useState("");
+  const [avatarError, setAvatarError] = useState<string | undefined>();
   const [isAvatarChangeModalOpen, setIsAvatarChangeModalOpen] = useState(false);
 
+  /**
+   * Возвращает дефолтные значения для UI-формы (birthday как объект)
+   */
   const getDefaultValues = (
     name: string,
     lastName: string,
     nickname: string,
     description: string,
   ) => ({
-    name,
-    lastName,
-    description,
-    nickname,
+    name: name || "",
+    lastName: lastName || "",
+    nickname: nickname || "",
+    description: description || "",
     birthday: getDefaultBirthday(birthday),
   });
 
+  /**
+   * Мутация загрузки аватара (использует наш новый Result тип)
+   */
   const avatarMutation = useMutation({
-    mutationFn: (file: File) => uploadAvatar(file),
-    onSuccess: (res) => {
-      if (res.data.file_url) {
-        setCurrentAvatarUrl(res.data.file_url);
-        setIsAvatarChangeModalOpen(false);
-        queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
-      }
+    mutationFn: async (file: File) => {
+      const res = await uploadAvatar(file);
+      if (!res.success) throw new Error(res.error);
+      return res.data;
     },
-    onError: (error: unknown) => {
-      const axiosError = error as AxiosError<{ file: string[] }>;
-      setAvatarError(axiosError.response?.data?.file?.[0] || "Ошибка загрузки аватара");
+    onSuccess: (data) => {
+      console.log(data);
+      if (data?.file_url) {
+        setCurrentAvatarUrl(data.file_url);
+      }
+      setIsAvatarChangeModalOpen(false);
+      setAvatarError(undefined);
+      queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
+    },
+    onError: (error: Error) => {
+      setAvatarError(error.message || "Ошибка загрузки аватара");
     },
   });
 
-  const onAvatarChangeHandler = (file: File) => {
-    const allowedTypes = ["image/png", "image/jpeg", "image/x-ms-bmp"];
+  /**
+   * Мутация удаления аватара
+   * Если API поддерживает отправку null для удаления, используем ту же функцию
+   */
+  const deleteAvatarMutation = useMutation({
+    mutationFn: async () => {
+      // Здесь предполагается, что API умеет обрабатывать удаление.
+      // Если нужен другой эндпоинт, замените вызов.
+      const res = await uploadAvatar(null);
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    },
+    onSuccess: () => {
+      setCurrentAvatarUrl("");
+      setIsAvatarChangeModalOpen(false);
+      setAvatarError(undefined);
+      queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
+    },
+  });
 
-    if (file.size === 0) {
-      setAvatarError("Файл не выбран.");
+  const onAvatarDelete = () => {
+    deleteAvatarMutation.mutate();
+  };
+
+  const onAvatarChangeHandler = async (file: File) => {
+    const { isValid, error } = await checkAvatarParams(file);
+    if (!isValid) {
+      setAvatarError(error);
       return;
     }
-    if (!allowedTypes.includes(file.type)) {
-      setAvatarError("Недопустимый формат файла. Допустимые форматы: PNG, JPG, JPEG, BMP.");
-      return;
-    }
-
     avatarMutation.mutate(file);
   };
 
@@ -70,10 +102,8 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
     currentAvatarUrl,
     avatarError,
     isAvatarChangeModalOpen,
-    defaultBirthday: getDefaultBirthday(birthday),
-    defaultValues: getDefaultValues,
-    setCurrentAvatarUrl,
-    setAvatarError,
+    getDefaultValues,
+    onAvatarDelete,
     setIsAvatarChangeModalOpen,
     onAvatarChangeHandler,
   };

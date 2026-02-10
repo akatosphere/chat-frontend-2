@@ -19,7 +19,7 @@ export const EmojiGroup: React.FC<EmojiGroupProps> = ({
       <h4 className="text mb-4 font-semibold text-[#0000004D]">{title}</h4>
 
       {emojis.length > 0 && (
-        // emojis-apple - apple эмодзи, emojis-google - google эмодзи
+        // emojis-apple - apple эмодзи
         <div className={cn("emojis-apple flex flex-wrap gap-2")}>
           {emojis.map((emoji) => {
             return (

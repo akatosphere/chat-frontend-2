@@ -1,17 +1,11 @@
-import { ChatItemData } from "../model/types";
+import { ChatListItem } from "../model/types";
 
-// export const getChatDisplayName = (chat: ChatItemData) => {
-//   const user = chat.chat;
-
-//   return chat.name || `${user?.first_name} ${user?.last_name}`.trim() || user?.username;
-// };
-
-export const getChatDisplayName = (chat: ChatItemData): string => {
-  if (chat.name) {
-    return chat.name;
+export const getChatDisplayName = (chat: ChatListItem): string => {
+  if (chat.title) {
+    return chat.title;
   }
 
-  const user = chat.chat;
+  const user = chat.member;
   if (!user) {
     return "Чат";
   }

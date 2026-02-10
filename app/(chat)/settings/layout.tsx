@@ -1,4 +1,4 @@
-"use client";
+import { LogoutBtn } from "@/features/auth/logoutBtn";
 import { QueryBtn } from "@/shared/test/queryBtn";
 import { WsDisconnectBtn } from "@/shared/test/wsDisconnectBtn";
 import { MainContent } from "@/shared/ui/mainContent";
@@ -12,6 +12,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <MainContent className="desktop:flex hidden">
         <WsDisconnectBtn className="m-3 w-40" />
         <QueryBtn className="m-3 w-50" />
+        <LogoutBtn />
       </MainContent>
     </>
   );

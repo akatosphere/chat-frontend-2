@@ -2,18 +2,20 @@ import Check from "@icons/chat/check.svg";
 import CheckCheck from "@icons/chat/checkcheck.svg";
 import Clock from "@icons/chat/clock.svg";
 
+import { SendingStatus } from "@/features/chat/chat/model/types/serverTypes";
+import { MESSAGE_STATUS } from "@/shared/constants/constants";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 type StatusIconProps = {
   className?: string;
-  status: string | null;
+  status: SendingStatus | null;
   isActive?: boolean;
 };
 
 export const StatusIcon = ({ className, status, isActive }: StatusIconProps) => {
   if (!status) return null;
   switch (status) {
-    case "delivered": {
+    case MESSAGE_STATUS.DELIVERED: {
       return (
         <Check
           className={cn(
@@ -24,7 +26,7 @@ export const StatusIcon = ({ className, status, isActive }: StatusIconProps) => 
         />
       );
     }
-    case "sent": {
+    case MESSAGE_STATUS.READ: {
       return (
         <CheckCheck
           className={cn(
@@ -35,7 +37,7 @@ export const StatusIcon = ({ className, status, isActive }: StatusIconProps) => 
         />
       );
     }
-    case "pending": {
+    case MESSAGE_STATUS.PENDING: {
       return (
         <Clock
           className={cn(
@@ -45,6 +47,9 @@ export const StatusIcon = ({ className, status, isActive }: StatusIconProps) => 
           )}
         />
       );
+    }
+    case MESSAGE_STATUS.FAILED: {
+      return <span className="text-red text-[15px]">!</span>;
     }
   }
 };

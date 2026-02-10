@@ -16,7 +16,7 @@ type SettingsMenuProps = {
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({ uid }) => {
   const [modal, setModal] = useState<MenuAction | null>(null);
   return (
-    <>
+    <div className="flex h-full flex-col justify-between">
       <MenuList
         items={SETTINGS_MENU}
         icons={ICONS}
@@ -36,6 +36,6 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({ uid }) => {
         onClose={() => setModal(null)}
         uid={uid}
       />
-    </>
+    </div>
   );
 };

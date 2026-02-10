@@ -1,36 +1,41 @@
 "use client";
 import { useState } from "react";
 
-import { ChatItemData } from "@/entities/chat/model/types";
-import { cn } from "@/shared/shadcn/lib/utils";
+import { ChatListItem } from "@/entities/chat/model/types";
+import { useChatStore } from "@/features/chat/chat/model/store/useChatStore";
 import { Button } from "@/shared/shadcn/ui/button";
 import { InfoMessage } from "@/shared/ui/infoMessage";
 
-import { ChatListItem } from "./chatListItem";
+import { useChatListActions } from "../hooks/useChatListActions";
+import { ChatListItemComponent } from "./chatListItem";
 
 interface ChatListProps {
   className?: string;
-  chats: ChatItemData[];
+  chats: ChatListItem[];
   isSearch?: boolean;
 }
 
-export const ChatList: React.FC<ChatListProps> = ({ chats, className, isSearch }) => {
+export const ChatList: React.FC<ChatListProps> = ({ chats, isSearch }) => {
   const [activeId, setActiveId] = useState<number>();
+  const { chatKey } = useChatStore((s) => s);
+
+  const actions = useChatListActions();
 
   return (
-    <div
-      className={cn(
-        "list-scrollbar desktop:px-2 flex flex-1 flex-col overflow-y-auto px-4",
-        className,
-      )}
-    >
+    <>
       {chats.length > 0 ? (
         chats.map((chat) => (
-          <ChatListItem
+          <ChatListItemComponent
+            actions={{
+              toggleFavorite: () => actions.toggleFavoriteAction(chat.key),
+              toggleMuteStatus: () => actions.toggleMuteStatusAction(chat.key),
+              deleteChat: () => actions.deleteChatAction(chat.key),
+              toggleReadStatus: () => actions.toggleReadStatusAction(chat.key),
+            }}
             className="last:after:hidden"
             key={chat.id}
             chat={chat}
-            isActive={activeId === chat.id}
+            isActive={activeId === chat.id || chat.key === chatKey || chat.member.uid === chatKey}
             onClick={() => setActiveId(chat.id)}
             isLast={chat.id === chats[chats.length - 1].id}
           />
@@ -58,6 +63,6 @@ export const ChatList: React.FC<ChatListProps> = ({ chats, className, isSearch }
           )}
         </div>
       )}
-    </div>
+    </>
   );
 };

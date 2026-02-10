@@ -1,12 +1,10 @@
-// components/providers/auth-provider.tsx
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { useAuthStore } from "../api/store";
 
-// Список публичных путей, где рефреш не нужен
 const PUBLIC_ROUTES = [
   "/auth",
   "/auth/phone",
@@ -15,40 +13,54 @@ const PUBLIC_ROUTES = [
   "/auth/support/success",
 ];
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+interface AuthProviderProps {
+  children: React.ReactNode;
+  initialToken: string | null;
+}
+
+export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
   const pathname = usePathname();
-  const { isInitialized, finishInitialization, setAccessToken } = useAuthStore();
+  const setAccessToken = useAuthStore((s) => s.setAccessToken);
+  const finishInitialization = useAuthStore((s) => s.finishInitialization);
+  const isInitialized = useAuthStore((s) => s.isInitialized);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    // Проверяем, является ли текущий путь публичным
-    const isPublicRoute = pathname ? PUBLIC_ROUTES.includes(pathname) : false;
-
-    if (isPublicRoute) {
-      finishInitialization(); // Просто помечаем готовым без запроса
-      return;
-    }
+    if (initialized.current) return;
+    initialized.current = true;
 
     const initAuth = async () => {
-      try {
-        const res = await fetch("/api/refresh-token", {
-          method: "POST",
-          credentials: "include",
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setAccessToken(data.access);
-        }
-      } finally {
+      if (initialToken) {
+        setAccessToken(initialToken);
         finishInitialization();
+      } else {
+        const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname?.startsWith(route));
+        if (!isPublicRoute) {
+          try {
+            const res = await fetch("/api/refresh-token", {
+              method: "POST",
+              credentials: "include",
+            });
+            if (res.ok) {
+              const data = await res.json();
+              setAccessToken(data.access);
+            }
+          } catch (e) {
+            console.error("Client-side hydration refresh failed", e);
+          }
+          // Вызываем finishInitialization только после попытки refresh
+          finishInitialization();
+        } else {
+          finishInitialization();
+        }
       }
     };
 
     initAuth();
-  }, []);
-
-  // Для публичных маршрутов мы можем рендерить детей сразу,
-  // либо всё равно ждать флага, но он выставится мгновенно.
-  if (!isInitialized) return null;
+  }, [initialToken, setAccessToken, finishInitialization, pathname]);
+  if (!isInitialized) {
+    if (!initialToken) return null;
+  }
 
   return <>{children}</>;
 };
