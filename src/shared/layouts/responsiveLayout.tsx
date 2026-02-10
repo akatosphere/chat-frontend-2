@@ -1,5 +1,8 @@
 "use client";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+
+import { useMainContentStore } from "@/shared/model/mainContent.store";
 
 import { cn } from "../shadcn/lib/utils";
 import { MainContent } from "../ui/mainContent";
@@ -14,6 +17,10 @@ type ResponsiveLayoutProps = {
 export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutProps) => {
   const pathname = usePathname() ?? "";
   const pathParts = pathname.split("/").filter(Boolean);
+
+  const shouldShowDefault = useMainContentStore((state) => state.shouldShowDefault);
+  const setShouldShowDefault = useMainContentStore((state) => state.setShouldShowDefault);
+
   // 1. Условие для области EXTRA (Профиль в чате)
   // Маршрут: /chats/{id}/profile
   const isExtraActive = pathParts[0] === "chats" && pathParts.length === 3;
@@ -25,6 +32,17 @@ export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutP
   // 3. Условие для области SIDEBAR (Списки, настройки, создание групп)
   // Все остальные маршруты: /chats, /settings, /settings/profile, /contacts и т.д.
   const isSidebarActive = !isExtraActive && !isMainActive;
+
+  // Сбросить флаг при переходе на страницу чата
+  useEffect(() => {
+    if (isMainActive && shouldShowDefault) {
+      setShouldShowDefault(false);
+    }
+  }, [isMainActive, shouldShowDefault, setShouldShowDefault]);
+
+  // Определить, что показывать в main
+  const shouldShowDefaultContent =
+    pathParts[0] === "chats" && pathParts.length === 1 && shouldShowDefault;
 
   return (
     <>
@@ -44,7 +62,13 @@ export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutP
           isMainActive ? "flex" : "hidden",
         )}
       >
-        {children}
+        {shouldShowDefaultContent ? (
+          <div className="desktop:flex text-gray hidden h-full w-full items-center justify-center">
+            Выберите контакт для общения
+          </div>
+        ) : (
+          children
+        )}
       </MainContent>
       {/* EXTRA: Правая колонка (Профиль/Инфо) */}
       {isExtraActive && (
