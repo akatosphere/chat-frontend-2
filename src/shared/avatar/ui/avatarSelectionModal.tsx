@@ -79,55 +79,57 @@ export const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({
           onCropComplete={handleCropComplete}
         />
       )}
-      <ModalDialog className={cn(className)} open={isOpen} onOpenChange={onClose}>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            <span className="font-medium">Смена аватара</span>
-          </AlertDialogTitle>
-        </AlertDialogHeader>
-        <AlertDialogFooter className="">
-          {!selectedFile && (
-            <input
-              className="border-muted hover:bg-accent w-full cursor-pointer border p-2"
-              type="file"
-              hidden
-              ref={inputRef}
-              accept="image/png, image/jpeg, image/webp, image/svg+xml"
-              onChange={(e) => handleSelectFile(e.target.files?.[0] || null)}
-            />
-          )}
+      {!selectedFile && (
+        <ModalDialog className={cn(className)} open={isOpen} onOpenChange={onClose}>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              <span className="font-medium">Смена аватара</span>
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="">
+            {!selectedFile && (
+              <input
+                className="border-muted hover:bg-accent w-full cursor-pointer border p-2"
+                type="file"
+                hidden
+                ref={inputRef}
+                accept="image/png, image/jpeg, image/webp, image/svg+xml"
+                onChange={(e) => handleSelectFile(e.target.files?.[0] || null)}
+              />
+            )}
 
-          <div className="flex w-full flex-col gap-2">
-            {localError && <span className="text-error mb-2">{localError}</span>}
-            <Button
-              variant="default"
-              size="inline"
-              className="text-primary subtext flex-1 justify-start rounded-md border-0 bg-transparent p-2"
-              onClick={handleUpload}
-            >
-              Загрузить новое фото
-            </Button>
-            <Button
-              variant="default"
-              size="inline"
-              className="text-primary subtext flex-1 justify-start rounded-md border-0 bg-transparent p-2"
-              onClick={onClose}
-            >
-              Отмена
-            </Button>
-            {avatarUrl && (
+            <div className="flex w-full flex-col gap-2">
+              {localError && <span className="text-error mb-2">{localError}</span>}
               <Button
                 variant="default"
                 size="inline"
-                className="text-error subtext justify-start rounded-md border-0 bg-transparent p-2"
-                onClick={handleDelete}
+                className="text-primary subtext flex-1 justify-start rounded-md border-0 bg-transparent p-2"
+                onClick={handleUpload}
               >
-                Удалить фото
+                Загрузить новое фото
               </Button>
-            )}
-          </div>
-        </AlertDialogFooter>
-      </ModalDialog>
+              <Button
+                variant="default"
+                size="inline"
+                className="text-primary subtext flex-1 justify-start rounded-md border-0 bg-transparent p-2"
+                onClick={onClose}
+              >
+                Отмена
+              </Button>
+              {avatarUrl && (
+                <Button
+                  variant="default"
+                  size="inline"
+                  className="text-error subtext justify-start rounded-md border-0 bg-transparent p-2"
+                  onClick={handleDelete}
+                >
+                  Удалить фото
+                </Button>
+              )}
+            </div>
+          </AlertDialogFooter>
+        </ModalDialog>
+      )}
     </>
   );
 };
