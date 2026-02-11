@@ -1,6 +1,6 @@
 import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
 
-import { deleteChat } from "@/features/chatList/api/deleteChat";
+import { clearChat } from "@/features/chatList/api/clearChat";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 import { cn } from "@/shared/shadcn/lib/utils";
@@ -11,14 +11,14 @@ import {
 } from "@/shared/shadcn/ui/alert-dialog";
 import { Button } from "@/shared/shadcn/ui/button";
 
-export type DeleteChatModalProps = {
+export type ClearChatModalProps = {
   className?: string;
   isOpen: boolean;
   chatKey: string;
   onClose: () => void;
 };
 
-export const DeleteChatModal: React.FC<DeleteChatModalProps> = ({
+export const ClearChatModal: React.FC<ClearChatModalProps> = ({
   className,
   isOpen,
   chatKey,
@@ -38,7 +38,7 @@ export const DeleteChatModal: React.FC<DeleteChatModalProps> = ({
     onClose();
 
     try {
-      await deleteChat({ index: prev.id });
+      await clearChat({ index: prev.id });
     } catch (e) {
       console.log(e);
       // rollback

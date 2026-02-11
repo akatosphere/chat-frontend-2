@@ -2,13 +2,13 @@
 
 import React from "react";
 
-import { DeleteChatModal } from "@/entities/modals/ui/deleteChatModal/deleteChatModal";
+import { ClearChatModal } from "@/entities/modals/ui/clearChatModal/clearChatModal";
 import { DeleteMessageModal } from "@/entities/modals/ui/deleteMessageModal/deleteMessageModal";
 
 import { useModalStore } from "../model/useGlobalModalStore";
 // eslint-disable-next-line
 const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
-  deleteChat: DeleteChatModal,
+  clearChat: ClearChatModal,
   deleteMessage: DeleteMessageModal,
   // новые модалки сюда
 };

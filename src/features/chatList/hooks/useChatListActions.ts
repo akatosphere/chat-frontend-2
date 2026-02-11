@@ -50,14 +50,14 @@ export const useChatListActions = () => {
     }
   };
 
-  const deleteChatAction = async (chatKey: string) => {
-    openModal("deleteChat", { chatKey });
+  const clearChatAction = async (chatKey: string) => {
+    openModal("clearChat", { chatKey });
   };
 
   return {
     toggleFavoriteAction,
     toggleReadStatusAction,
     toggleMuteStatusAction,
-    deleteChatAction,
+    clearChatAction,
   };
 };

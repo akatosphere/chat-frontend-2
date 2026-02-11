@@ -1,5 +1,5 @@
 export type ModalPayloads = {
-  deleteChat: { chatKey: string };
+  clearChat: { chatKey: string };
   deleteMessage: { messageId: string; chatKey: string; chatKeyUser?: string };
   //новые модалки здесь
 };
