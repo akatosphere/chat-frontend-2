@@ -5,7 +5,6 @@ import { useState } from "react";
 
 import { uploadAvatar } from "@/entities/user/api/uploadAvatar"; // Наше новое API
 import { User } from "@/entities/user/model/types"; // Наша новая типизация
-import { checkAvatarParams } from "@/shared/avatar/lib/checkAvatarParams";
 
 import { getDefaultBirthday } from "./getDefaultBirthday";
 
@@ -23,16 +22,7 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
   const queryClient = useQueryClient();
 
   const [currentAvatarUrl, setCurrentAvatarUrl] = useState(avatarUrl);
-  const [avatarError, setAvatarError] = useState<string | undefined>();
   const [isAvatarChangeModalOpen, setIsAvatarChangeModalOpen] = useState(false);
-
-  const onAvatarChangeModalOpen = () => {
-    setAvatarError("");
-    setIsAvatarChangeModalOpen(true);
-  };
-  const onAvatarChangeModalClose = () => {
-    setIsAvatarChangeModalOpen(false);
-  };
   /**
    * Возвращает дефолтные значения для UI-формы (birthday как объект)
    */
@@ -59,16 +49,13 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
       return res.data;
     },
     onSuccess: (data) => {
-      console.log(data);
       if (data?.file_url) {
         setCurrentAvatarUrl(data.file_url);
       }
-      setIsAvatarChangeModalOpen(false);
-      setAvatarError(undefined);
       queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
     },
     onError: (error: Error) => {
-      setAvatarError(error.message || "Ошибка загрузки аватара");
+      console.error("Ошибка загрузки аватара:", error.message);
     },
   });
 
@@ -86,8 +73,6 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
     },
     onSuccess: () => {
       setCurrentAvatarUrl("");
-      setIsAvatarChangeModalOpen(false);
-      setAvatarError(undefined);
       queryClient.invalidateQueries({ queryKey: ["messenger-profile"] });
     },
   });
@@ -96,23 +81,16 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
     deleteAvatarMutation.mutate();
   };
 
-  const onAvatarChangeHandler = async (file: File) => {
-    const { isValid, error } = await checkAvatarParams(file);
-    if (!isValid) {
-      setAvatarError(error);
-      return;
-    }
+  const onAvatarChangeHandler = (file: File) => {
     avatarMutation.mutate(file);
   };
 
   return {
     currentAvatarUrl,
-    avatarError,
     isAvatarChangeModalOpen,
     getDefaultValues,
     onAvatarDelete,
-    onAvatarChangeModalOpen,
-    onAvatarChangeModalClose,
+    setIsAvatarChangeModalOpen,
     onAvatarChangeHandler,
   };
 };

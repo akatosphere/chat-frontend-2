@@ -44,13 +44,11 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
 }) => {
   const {
     currentAvatarUrl,
-    avatarError,
     isAvatarChangeModalOpen,
     getDefaultValues,
-    onAvatarChangeModalClose,
-    onAvatarChangeModalOpen,
     onAvatarDelete,
     onAvatarChangeHandler,
+    setIsAvatarChangeModalOpen,
   } = useUserProfileForm({
     profile,
     avatarUrl,
@@ -84,9 +82,7 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
         onAvatarDelete={onAvatarDelete}
         onAvatarChange={onAvatarChangeHandler}
         isAvatarChangeModalOpen={isAvatarChangeModalOpen}
-        onAvatarChangeModalClose={onAvatarChangeModalClose}
-        onAvatarChangeModalOpen={onAvatarChangeModalOpen}
-        error={avatarError}
+        setIsModalOpen={setIsAvatarChangeModalOpen}
       />
 
       <FormProvider {...form}>

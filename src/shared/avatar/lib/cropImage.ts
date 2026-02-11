@@ -25,11 +25,15 @@ export const getCroppedImg = (imageSrc: string, crop: Crop): Promise<string> => 
 
       ctx.drawImage(image, crop.x, crop.y, crop.width, crop.height, 0, 0, width, height);
 
-      canvas.toBlob((blob) => {
-        if (!blob) return reject("Canvas is empty");
-        const url = URL.createObjectURL(blob);
-        resolve(url);
-      }, "image/png");
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return reject("Canvas is empty");
+          const url = URL.createObjectURL(blob);
+          resolve(url);
+        },
+        "image/jpeg",
+        0.9,
+      );
     };
     image.onerror = () => reject("Failed to load image");
   });

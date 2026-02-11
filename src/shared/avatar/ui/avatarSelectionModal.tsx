@@ -17,7 +17,6 @@ import { ImageCropperModal } from "./imageCropper/imageCropperModal";
 type AvatarSelectionModalProps = {
   className?: string;
   isOpen: boolean;
-  error?: string;
   avatarUrl: string;
   onAvatarChange: (file: File) => void;
   onAvatarDelete: () => void;
@@ -27,7 +26,6 @@ type AvatarSelectionModalProps = {
 export const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({
   className,
   isOpen,
-  error,
   avatarUrl,
   onClose,
   onAvatarDelete,
@@ -35,21 +33,18 @@ export const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [localError, setLocalError] = useState<string | null>(error || null);
-  console.log("error:", error);
-  console.log("localError:", localError);
+  const [localError, setLocalError] = useState<string | null>(null);
 
   const handleCropComplete = async (croppedUrl: string) => {
-    console.log("handleCropComplete");
     const res = await fetch(croppedUrl);
     const blob = await res.blob();
-    const file = new File([blob], selectedFile?.name || "avatar.png", {
-      type: blob.type,
+    const file = new File([blob], "avatar.jpg", {
+      type: "image/jpeg",
     });
-    console.log("file: ", file);
 
     setSelectedFile(null);
     onAvatarChange(file);
+    onClose();
   };
 
   const handleDelete = () => {
@@ -97,7 +92,7 @@ export const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({
               type="file"
               hidden
               ref={inputRef}
-              accept="image/png, image/jpeg, image/bmp"
+              accept="image/png, image/jpeg, image/webp, image/svg+xml"
               onChange={(e) => handleSelectFile(e.target.files?.[0] || null)}
             />
           )}

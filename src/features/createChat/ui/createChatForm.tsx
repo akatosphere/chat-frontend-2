@@ -17,14 +17,13 @@ type CreateChatFormProps = {
 export const CreateChatForm: React.FC<CreateChatFormProps> = ({ className }) => {
   const {
     form,
-    isModalOpen,
-    setIsModalOpen,
+    isAvatarModalOpen,
+    setIsAvatarModalOpen,
     previewUrl,
     handleAvatarChange,
     handleAvatarDelete,
     onNextStep,
     isValid,
-    errors,
   } = useCreateChat();
 
   return (
@@ -39,9 +38,8 @@ export const CreateChatForm: React.FC<CreateChatFormProps> = ({ className }) => 
               avatarUrl={previewUrl}
               onAvatarDelete={handleAvatarDelete}
               onAvatarChange={handleAvatarChange}
-              isAvatarChangeModalOpen={isModalOpen}
-              setIsAvatarChangeModalOpen={setIsModalOpen}
-              error={errors.avatar?.message as string}
+              isAvatarChangeModalOpen={isAvatarModalOpen}
+              setIsModalOpen={setIsAvatarModalOpen}
               avatarVariant="chat"
             />
 

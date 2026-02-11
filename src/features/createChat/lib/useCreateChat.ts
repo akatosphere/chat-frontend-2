@@ -13,7 +13,7 @@ import { mapChatTypeToValue, mapValueToChatType } from "./mapChatType";
 export const useCreateChat = () => {
   const { formData, updateData, setStep, groupOrChannel } = useCreateChatStore();
   // Состояния для аватара
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>(getInitialPreview(formData.avatar));
 
   const form = useForm<CreateChatFormValues>({
@@ -35,13 +35,13 @@ export const useCreateChat = () => {
       setPreviewUrl(reader.result as string);
     };
     reader.readAsDataURL(file);
-    setIsModalOpen(false);
+    setIsAvatarModalOpen(false);
   };
 
   const handleAvatarDelete = () => {
     form.setValue("avatar", null);
     setPreviewUrl("");
-    setIsModalOpen(false);
+    setIsAvatarModalOpen(false);
   };
 
   const onNextStep = async (data: CreateChatFormValues) => {
@@ -68,8 +68,8 @@ export const useCreateChat = () => {
 
   return {
     form,
-    isModalOpen,
-    setIsModalOpen,
+    isAvatarModalOpen,
+    setIsAvatarModalOpen,
     previewUrl,
     handleAvatarChange,
     handleAvatarDelete,
