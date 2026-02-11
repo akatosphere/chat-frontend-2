@@ -3,20 +3,20 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
-import { leaveChat } from "@/entities/chat/api/leaveChat";
+import { deleteChat } from "@/entities/chat/api/deleteChat";
 import { ChatType } from "@/entities/chat/model/types";
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { useMainContentStore } from "@/shared/model/mainContent.store";
 import { useToast } from "@/shared/toast/ui/toastProvider";
 
-type UseLeaveChatParams = {
+type UseDeleteChatParams = {
   chatKey: string;
   chatName: string;
   chatType: ChatType;
 };
 
-export const useLeaveChat = ({ chatKey, chatName, chatType }: UseLeaveChatParams) => {
+export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatParams) => {
   const router = useRouter();
   const removeChat = useChatListStore((state) => state.removeChat);
   const setShouldShowDefault = useMainContentStore((state) => state.setShouldShowDefault);
@@ -26,23 +26,21 @@ export const useLeaveChat = ({ chatKey, chatName, chatType }: UseLeaveChatParams
   const [isLoading, setIsLoading] = useState(false);
 
   // Определение варианта модалки
-  const leaveModalVariant =
-    chatType === "public-group"
-      ? ("public-group" as const)
-      : chatType === "private-group"
-        ? ("private-group" as const)
-        : ("channel" as const);
+  const deleteModalVariant =
+    chatType === "public-channel" || chatType === "private-channel"
+      ? ("channel" as const)
+      : ("group" as const);
 
   // Определение текста Toast
   const toastMessage =
     chatType === "public-channel" || chatType === "private-channel"
-      ? "Вы отписались от канала"
-      : "Вы покинули группу";
+      ? "Канал удалён"
+      : "Группа удалена";
 
-  const confirmLeave = useCallback(async () => {
+  const confirmDelete = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await leaveChat(chatKey);
+      const response = await deleteChat(chatKey);
 
       if (response.status === "OK") {
         // Закрыть модалку
@@ -75,8 +73,8 @@ export const useLeaveChat = ({ chatKey, chatName, chatType }: UseLeaveChatParams
 
   return {
     isLoading,
-    leaveModalVariant,
+    deleteModalVariant,
     chatName,
-    confirmLeave,
+    confirmDelete,
   };
 };

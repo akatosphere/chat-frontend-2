@@ -4,6 +4,8 @@ import trashCan from "@icons/trashCan.svg";
 import { MouseEvent } from "react";
 
 import { ChatType } from "@/entities/chat/model/types";
+import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
+import { useDeleteChat } from "@/features/deleteChat/lib/useDeleteChat";
 import { useLeaveChat } from "@/features/leaveChat/lib/useLeaveChat";
 import { MenuItem, useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
@@ -23,9 +25,15 @@ export const useChatProfileContextMenu = ({
   fullChatType,
 }: UseChatProfileContextMenuParams) => {
   const { openMenu, activeMenuId } = useContextMenu();
-  const menuId = "chatProfile";
+  const openModal = useModalStore((s) => s.openModal);
 
-  const { isModalOpen, modalVariant, openModal, closeModal, confirmLeave } = useLeaveChat({
+  const { leaveModalVariant, confirmLeave } = useLeaveChat({
+    chatKey,
+    chatName,
+    chatType: fullChatType,
+  });
+
+  const { deleteModalVariant, confirmDelete } = useDeleteChat({
     chatKey,
     chatName,
     chatType: fullChatType,
@@ -46,7 +54,13 @@ export const useChatProfileContextMenu = ({
     {
       label: leaveLabel,
       icon: exit,
-      onClick: openModal,
+      onClick: () => {
+        openModal("leaveChat", {
+          chatName,
+          modalVariant: leaveModalVariant,
+          onConfirm: confirmLeave,
+        });
+      },
     },
   ];
 
@@ -56,7 +70,11 @@ export const useChatProfileContextMenu = ({
       icon: trashCan,
       destructive: true,
       onClick: () => {
-        console.warn("Удалить - заглушка");
+        openModal("deleteChat", {
+          chatName,
+          modalVariant: deleteModalVariant,
+          onConfirm: confirmDelete,
+        });
       },
     });
   }
@@ -67,12 +85,7 @@ export const useChatProfileContextMenu = ({
       openMenu(menuId, menuItems, e.clientX, e.clientY);
     },
     isOpen: activeMenuId === menuId,
-    modalProps: {
-      isModalOpen,
-      closeModal,
-      confirmLeave,
-      modalVariant,
-      chatName,
-    },
   };
 };
+
+const menuId = "chatProfile";
