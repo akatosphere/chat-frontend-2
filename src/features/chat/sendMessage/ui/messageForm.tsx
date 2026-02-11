@@ -24,6 +24,10 @@ type MessageFormProps = {
   onAttachBtnClick?: () => void;
   onSubmitMessage: (message: string) => void;
   isKeyboardOpen: boolean;
+  isAttachBtnDisabled?: boolean;
+  isVoiceBtnDisabled?: boolean;
+  placeholder?: string;
+  variant?: "main" | "modal";
 };
 
 export const MessageForm: React.FC<MessageFormProps> = ({
@@ -31,6 +35,10 @@ export const MessageForm: React.FC<MessageFormProps> = ({
   onAttachBtnClick,
   onSubmitMessage,
   isKeyboardOpen,
+  isAttachBtnDisabled = false,
+  isVoiceBtnDisabled = false,
+  placeholder = "Сообщение",
+  variant = "main",
 }) => {
   const {
     textMessage,
@@ -54,35 +62,47 @@ export const MessageForm: React.FC<MessageFormProps> = ({
   return (
     <div className="relative w-full">
       <form className={cn("relative flex items-end px-4 py-3", className)} onSubmit={handleSubmit}>
-        <div className="flex h-11 flex-row-reverse pr-3">
-          <Button
-            variant="ghost"
-            size="icon-auto"
-            onClick={(e) => {
-              onAttachBtnClick?.();
-              onContextMenu(e);
-            }}
-            type="button"
-            className={cn(
-              isOpen && "bg-primary-hover",
-              "hover:bg-primary-hover rounded-full transition-colors duration-200",
-            )}
-          >
-            <AttachBtn className="h-11 w-11" />
-          </Button>
-        </div>
+        {!isAttachBtnDisabled && (
+          <div className="flex h-11 flex-row-reverse pr-3">
+            <Button
+              variant="ghost"
+              size="icon-auto"
+              onClick={(e) => {
+                onAttachBtnClick?.();
+                onContextMenu(e);
+              }}
+              type="button"
+              className={cn(
+                isOpen && "bg-primary-hover",
+                "hover:bg-primary-hover rounded-full transition-colors duration-200",
+              )}
+            >
+              <AttachBtn className="h-11 w-11" />
+            </Button>
+          </div>
+        )}
 
         <InputGroup className="relative flex h-min w-full rounded-3xl bg-white">
-          <div className="reletive desktop:max-h-[448px] flex max-h-[172px] flex-1 overflow-hidden rounded-3xl">
+          <div
+            className={cn(
+              "reletive desktop:max-h-[448px] flex max-h-[172px] flex-1 overflow-hidden rounded-3xl",
+              variant === "main"
+                ? "desktop:max-h-[448px] max-h-[172px]"
+                : "desktop:max-h-[172px] max-h-[172px]",
+            )}
+          >
             <div className="desktop:[&::-webkit-scrollbar]:inline flex flex-1 overflow-y-auto pr-10 [&::-webkit-scrollbar]:hidden">
               <InputGroupTextarea
                 ref={textareaRef}
                 onKeyDown={onKeyDown}
                 rows={1}
-                placeholder="Сообщение"
+                placeholder={placeholder}
                 value={textMessage}
                 onChange={(e) => setTextMessage(e.target.value)}
-                className="subtext emojis-apple h-12 min-h-12 resize-none overflow-hidden pt-3.5"
+                className={cn(
+                  "subtext emojis-apple resize-none overflow-hidden pt-3.5",
+                  variant === "main" ? "h-12 min-h-12" : "h-8 min-h-9 p-2 pl-3",
+                )}
               />
             </div>
             {emojiPickerOpen && (
@@ -98,7 +118,10 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           <InputGroupAddon
             ref={emojiBtnRef}
             align="inline-end"
-            className="absolute right-0 bottom-3 pr-2 pb-0.5"
+            className={cn(
+              "absolute right-0 bottom-3 pr-2 pb-0.5",
+              variant === "modal" && "bottom-1.5",
+            )}
           >
             <InputGroupButton
               onClick={(e) => {
@@ -115,15 +138,15 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           </InputGroupAddon>
         </InputGroup>
 
-        <div className="h-11 pl-3">
-          {textMessage.trim() ? (
+        <div className={cn(variant === "main" ? "h-11 pl-3" : "align-end flex pb-0.5 pl-3")}>
+          {textMessage.trim() || isVoiceBtnDisabled ? (
             <Button
               variant="ghost"
               size="icon-auto"
               type="submit"
               onMouseDown={(e) => e.preventDefault()}
             >
-              <MessageSendBtn className="h-11 w-11" />
+              <MessageSendBtn className={cn(variant === "main" ? "h-11 w-11" : "h-8 w-8")} />
             </Button>
           ) : (
             <Button variant="ghost" size="icon-auto" type="button">

@@ -34,7 +34,6 @@ export const useSendMessageStore = create<SendMessageState>((set) => ({
         previewUrl: URL.createObjectURL(file),
       }));
 
-      console.log("mapped", mapped);
       return { images: [...state.images, ...mapped] };
     }),
 

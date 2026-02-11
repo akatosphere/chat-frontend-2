@@ -6,10 +6,12 @@ import { DeleteChatModal } from "@/entities/modals/ui/deleteChatModal/deleteChat
 import { DeleteMessageModal } from "@/entities/modals/ui/deleteMessageModal/deleteMessageModal";
 
 import { useModalStore } from "../model/useGlobalModalStore";
+import { SendImageModal } from "./sendImageModal/sendImageModal";
 // eslint-disable-next-line
 const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
   deleteChat: DeleteChatModal,
   deleteMessage: DeleteMessageModal,
+  sendImage: SendImageModal,
   // новые модалки сюда
 };
 
