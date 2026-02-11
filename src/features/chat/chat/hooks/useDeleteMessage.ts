@@ -1,27 +1,20 @@
 import { useCallback } from "react";
-import { v4 as uuidv4 } from "uuid";
 
-import { deleteTextMessage } from "@/entities/chat/api/deleteMessage";
+import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
 
 import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 
 export const useDeleteMessage = () => {
-  const { chatKey, deleteMessage } = useChatStore();
+  const { chatKey, chatType, chatKeyUser } = useChatStore();
+  const openModal = useModalStore((s) => s.openModal);
   return useCallback(
-    async (uid: string, forAll: boolean) => {
-      try {
-        const deleteMessageWS = await deleteTextMessage({
-          uid,
-          chat_key: chatKey,
-          for_all: forAll,
-          request_uid: uuidv4(),
-        });
-
-        if (deleteMessageWS.uid) deleteMessage(uid);
-      } catch (error) {
-        console.error(`Ошибка в useDeleteMessage:`, error);
-      }
+    async (uid: string) => {
+      if (!chatKey) return;
+      openModal("deleteMessage", {
+        messageId: uid,
+        chatKey,
+      });
     },
-    [chatKey, deleteMessage],
+    [chatKey, openModal, chatType, chatKeyUser],
   );
 };

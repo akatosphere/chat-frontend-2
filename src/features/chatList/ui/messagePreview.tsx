@@ -1,13 +1,13 @@
 import Forwarded from "@icons/chat/forwardedd.svg";
 
+import { ChatListItem } from "@/entities/chat/model/types";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { getLastMessagePreview } from "../../../entities/chat/lib/getLastMessagePreview";
-import { ChatItemData } from "../../../entities/chat/model/types";
 import { ChatListItemMediaIcons } from "./chatListItemMediaIcons";
 
 type MessagePreviewProps = {
-  lastMsg: ChatItemData["last_message"];
+  lastMsg: ChatListItem["lastMessage"];
   isActive?: boolean;
 };
 

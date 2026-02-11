@@ -31,12 +31,10 @@ export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
 
     const initAuth = async () => {
       if (initialToken) {
-        // Устанавливаем токен из SSR
         setAccessToken(initialToken);
+        finishInitialization();
       } else {
         const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname?.startsWith(route));
-        // Если Middleware почему-то не смог обновить токен (или его вообще нет),
-        // можно попробовать последний шанс на клиенте
         if (!isPublicRoute) {
           try {
             const res = await fetch("/api/refresh-token", {
@@ -50,14 +48,16 @@ export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
           } catch (e) {
             console.error("Client-side hydration refresh failed", e);
           }
+          // Вызываем finishInitialization только после попытки refresh
+          finishInitialization();
+        } else {
+          finishInitialization();
         }
       }
-
-      finishInitialization();
     };
 
     initAuth();
-  }, [initialToken, setAccessToken, finishInitialization]);
+  }, [initialToken, setAccessToken, finishInitialization, pathname]);
   if (!isInitialized) {
     if (!initialToken) return null;
   }

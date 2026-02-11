@@ -11,7 +11,6 @@ type UseChatProfileContextMenuParams = {
   isOwner: boolean;
   chatType: "group" | "channel";
   chatKey: string;
-  chatId: number;
   chatName: string;
   fullChatType: ChatType;
 };
@@ -20,7 +19,6 @@ export const useChatProfileContextMenu = ({
   isOwner,
   chatType,
   chatKey,
-  chatId,
   chatName,
   fullChatType,
 }: UseChatProfileContextMenuParams) => {
@@ -29,7 +27,6 @@ export const useChatProfileContextMenu = ({
 
   const { isModalOpen, modalVariant, openModal, closeModal, confirmLeave } = useLeaveChat({
     chatKey,
-    chatId,
     chatName,
     chatType: fullChatType,
   });

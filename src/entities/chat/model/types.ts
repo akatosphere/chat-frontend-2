@@ -1,10 +1,11 @@
-import z from "zod";
-
 import { ChatMemberDto } from "@/entities/user/model/types";
 
-import { ChatDetailsSchema } from "./schema";
-
-export type ChatType = z.infer<typeof ChatDetailsSchema>["chat_type"];
+export type ChatType =
+  | "public-group"
+  | "private-group"
+  | "public-channel"
+  | "private-channel"
+  | "chat";
 
 export interface LastMessage {
   id: number;
@@ -27,7 +28,7 @@ export type ChatObject = {
   chat_key: string;
   name: string;
   description: string;
-  chat_type: string;
+  chat_type: ChatType;
   created_by: string;
   owner_full_name: string;
   avatar: {
@@ -40,7 +41,7 @@ export type ChatObject = {
   }>;
 };
 
-export interface ChatItemData {
+export interface ChatListItemDto {
   id: number;
   chat: ChatMemberDto;
   is_favorite: boolean;
@@ -52,13 +53,38 @@ export interface ChatItemData {
   chat_key: string;
   last_activity_at: number;
   last_message: LastMessage | null;
+  avatar_url?: string | null;
+  avatar_webp_url?: string | null;
 }
 
-export interface ChatListResponse {
+export interface ChatListResponseDto {
   count: number;
   next: string | null;
   previous: string | null;
-  results: ChatItemData[];
+  results: ChatListItemDto[];
+}
+
+export interface ChatListItem {
+  id: number;
+  key: string;
+  title: string;
+  type: ChatType;
+
+  isFavorite: boolean;
+  notificationsEnabled: boolean;
+
+  unreadMessages: number;
+  unreadFiles: number;
+
+  lastActivityAt: number;
+  lastMessage: LastMessage | null;
+
+  avatar: {
+    jpg?: string | null;
+    webp?: string | null;
+  };
+
+  member: ChatMemberDto;
 }
 
 export type MessageStatus = "sent" | "delivered" | "pending";

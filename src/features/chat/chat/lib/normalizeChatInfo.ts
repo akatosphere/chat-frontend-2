@@ -37,6 +37,7 @@ export const normalizeChatInfo = (info: MappedChatDetails | UserPreview): ChatIn
 
   // Если это личный чат
   return {
+    id: info.id,
     uid: info.uid,
     type: "chat" as ChatType,
     firstName: info.firstName,

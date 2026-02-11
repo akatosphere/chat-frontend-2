@@ -176,6 +176,7 @@ export const disconnectWS = () => {
   }
 
   currentToken = null;
+
   status = "closed";
 };
 

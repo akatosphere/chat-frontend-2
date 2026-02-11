@@ -2,12 +2,12 @@
 
 import { useEffect } from "react";
 
+import { useChatStore } from "@/entities/chat/model/useChatStore";
 import { useUserStore } from "@/entities/user/model/userStore";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { ChatFooter } from "@/widgets/chat/chatFooter/ui/chatFooter";
 
-import { useChatStore } from "../../../../entities/chat/model/useChatStore";
-import { useChatWebSocket, useSendMessage } from "../hooks";
+import { useSendMessage } from "../hooks";
 import { MappedChatMessage } from "../model/types/mappedTypes";
 import { ChatType } from "../model/types/serverTypes";
 import { MessageList } from "./messageList";
@@ -18,21 +18,27 @@ type ChatProps = {
   chatType: ChatType;
   createdBy?: string;
   chatKey: string;
+  chatKeyUser: string | null;
 };
 
-export const Chat = ({ className, initialMessages, chatKey, chatType, createdBy }: ChatProps) => {
+export const Chat = ({
+  className,
+  initialMessages,
+  chatKey,
+  chatType,
+  createdBy,
+  chatKeyUser,
+}: ChatProps) => {
   const currentUserId = useUserStore((s) => s.userId);
   const setInitialData = useChatStore((s) => s.setInitialData);
 
   const handleSendMessage = useSendMessage();
 
-  useChatWebSocket(chatKey);
-
   useEffect(() => {
     if (currentUserId) {
-      setInitialData(initialMessages, currentUserId, chatKey, chatType, createdBy);
+      setInitialData(initialMessages, currentUserId, chatKey, chatType, createdBy, chatKeyUser);
     }
-  }, [currentUserId, chatKey, initialMessages, setInitialData, chatType, createdBy]);
+  }, [currentUserId, chatKey, initialMessages, setInitialData, chatType, createdBy, chatKeyUser]);
 
   return (
     <div className={cn("flex h-full flex-col", className)}>

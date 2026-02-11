@@ -12,6 +12,8 @@ interface ChatState {
   chatType: ChatType | null;
   createdBy: string | null;
   isReady: boolean;
+  isHide: boolean;
+  chatKeyUser: string | null;
   replyTarget: MappedChatMessage | null;
   setReplyTarget: (message: MappedChatMessage | null) => void;
   deleteMessage: (uid: string) => void;
@@ -21,11 +23,13 @@ interface ChatState {
     chatKey: string,
     chatType: ChatType,
     createdBy?: string,
+    chatKeyUser?: string | null,
   ) => void;
   addMessage: (message: MappedChatMessage) => void;
   updateMessageStatus: (uid: string, status: MappedChatMessage["status"]) => void;
   markAsRead: (uid: string) => void;
   setFailedStatus: (requestUid: string) => void;
+  reset: () => void;
 }
 
 export const useChatStore = create<ChatState>((set) => ({
@@ -33,12 +37,14 @@ export const useChatStore = create<ChatState>((set) => ({
   currentUserId: null,
   chatKey: null,
   isReady: false,
+  isHide: false,
   replyTarget: null,
   chatType: null,
   createdBy: null,
+  chatKeyUser: null,
 
-  setInitialData: (messages, currentUserId, chatKey, chatType, createdBy) => {
-    set({ messages, currentUserId, chatKey, isReady: true, chatType, createdBy });
+  setInitialData: (messages, currentUserId, chatKey, chatType, createdBy, chatKeyUser) => {
+    set({ messages, currentUserId, chatKey, isReady: true, chatType, createdBy, chatKeyUser });
   },
 
   setReplyTarget: (message) => set({ replyTarget: message }),
@@ -91,4 +97,6 @@ export const useChatStore = create<ChatState>((set) => ({
       ),
     }));
   },
+
+  reset: () => set({ messages: [], currentUserId: null, chatKey: null, isReady: false }),
 }));

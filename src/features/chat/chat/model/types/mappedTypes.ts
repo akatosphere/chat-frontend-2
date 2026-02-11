@@ -2,7 +2,7 @@ import { MessageBlock } from "../messageBlock/types";
 import { CallInfo, ChatType, SendingStatus } from "./serverTypes";
 
 export interface MappedChatMessage {
-  id: number | null;
+  id: number;
   uid: string;
   fromUser: MappedMessageUser;
   toUser: MappedMessageUser | null;

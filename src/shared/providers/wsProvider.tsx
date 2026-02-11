@@ -2,11 +2,13 @@
 
 import { useEffect, useRef } from "react";
 
+import { getProfile } from "@/entities/user/api/getProfile";
 import { useUserStore } from "@/entities/user/model/userStore";
 import { useAuthStore } from "@/shared/api/store";
 import { connectWS, disconnectWS, subscribeToWS } from "@/shared/api/ws/wsClient";
 
 import { useWSRequestStore } from "../api/ws/model/wsRequest.store";
+import { bootstrapWSHandlers } from "../api/ws/wsBootstrap";
 import { dispatchWSEvent } from "../api/ws/wsHandlers";
 
 export const WSProvider = ({ children }: { children: React.ReactNode }) => {
@@ -17,46 +19,56 @@ export const WSProvider = ({ children }: { children: React.ReactNode }) => {
   const prevTokenRef = useRef<string | null>(null);
   const userIdExtractedRef = useRef<boolean>(false);
 
+  const fetchUserProfile = async () => {
+    if (!accessToken) return;
+
+    try {
+      const userData = await getProfile();
+      if (userData.success && userData.data.uid) {
+        setUserId(userData.data.uid);
+        userIdExtractedRef.current = true;
+      }
+    } catch (error) {
+      console.error("Failed to fetch user profile:", error);
+    }
+  };
+
   useEffect(() => {
+    if (accessToken) {
+      fetchUserProfile();
+    }
+
     const unsubscribe = subscribeToWS((data) => {
-      // 1. Сначала проверяем, не является ли это ответом на конкретный запрос (по UID)
-      // Это позволяет резолвить промисы, которые мы ждем в коде
       if (data.request_uid) {
         useWSRequestStore.getState().fulfillRequest(data.request_uid, data);
       }
-
-      if (data.action === "new_status_user" && !userIdExtractedRef.current) {
-        const statusData = data as { object: { user: { uid: string } } };
-        if (statusData.object?.user?.uid) {
-          setUserId(statusData.object.user.uid);
-          userIdExtractedRef.current = true;
-        }
-      }
-      // 2. Пробрасываем событие во все зарегистрированные доменные роутеры
       dispatchWSEvent(data);
     });
 
     return () => unsubscribe();
-  }, [setUserId]);
+  }, [setUserId, accessToken]);
+
+  useEffect(() => {
+    if (!isInitialized || !accessToken) return;
+    bootstrapWSHandlers();
+  }, [isInitialized, accessToken]);
 
   useEffect(() => {
     if (!isInitialized) return;
 
-    // Сбрасываем флаг при смене токена
     if (accessToken && prevTokenRef.current !== accessToken) {
       userIdExtractedRef.current = false;
     }
 
-    // LOGIN или REFRESH TOKEN
     if (accessToken) {
       if (prevTokenRef.current !== accessToken) {
         connectWS(accessToken);
         prevTokenRef.current = accessToken;
+        fetchUserProfile();
       }
       return;
     }
 
-    // LOGOUT
     if (!accessToken && prevTokenRef.current) {
       disconnectWS();
       prevTokenRef.current = null;

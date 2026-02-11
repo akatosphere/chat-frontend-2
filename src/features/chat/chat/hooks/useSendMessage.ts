@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { sendTextMessage } from "@/entities/chat/api/sendMessage";
+import { optimisticSendMessage } from "@/features/chatList/lib/optimisticSendMessage";
 import { MESSAGE_STATUS } from "@/shared/constants/constants";
 
 import { useChatStore } from "../../../../entities/chat/model/useChatStore";
@@ -14,11 +15,12 @@ export const useSendMessage = () => {
   const {
     currentUserId,
     chatKey,
+    chatKeyUser,
+    chatType,
     addMessage,
     setFailedStatus,
     replyTarget,
     setReplyTarget,
-    chatType,
   } = useChatStore();
 
   return useCallback(
@@ -29,7 +31,7 @@ export const useSendMessage = () => {
       const now = Date.now() / 1000;
 
       const tempMessage: MappedChatMessage = {
-        id: null,
+        id: Math.random(),
         uid: uuidv4(),
         requestUid,
         fromUser: {
@@ -65,15 +67,30 @@ export const useSendMessage = () => {
         createdAt: now,
         updatedAt: now,
         chatId: null,
-        chatKey,
+        chatKey: chatType === "chat" ? chatKeyUser || chatKey : chatKey,
         blocks: [],
         chatType: chatType as ChatType,
         messageRtc: null,
         status: MESSAGE_STATUS.PENDING,
       };
-      setReplyTarget(null);
+
       tempMessage.blocks = buildMessageBlocks(tempMessage);
+
       addMessage(tempMessage);
+
+      console.log("tempMessage", tempMessage);
+      optimisticSendMessage({
+        chatKey: tempMessage.chatKey,
+        message: {
+          id: tempMessage.id,
+          uid: tempMessage.uid,
+          content: tempMessage.content,
+          created_at: now,
+          from_user_id: currentUserId,
+        },
+      });
+
+      setReplyTarget(null);
 
       try {
         const serverMessage = await sendTextMessage({
@@ -88,14 +105,41 @@ export const useSendMessage = () => {
         const mapped = mapChatMessage(serverMessage);
         mapped.status = MESSAGE_STATUS.DELIVERED;
         mapped.requestUid = requestUid;
-        addMessage(mapped);
+
+        const chatState = useChatStore.getState();
+        const tempIndex = chatState.messages.findIndex((m) => m.requestUid === requestUid);
+        if (tempIndex !== -1) {
+          const updated = [...chatState.messages];
+          updated[tempIndex] = mapped;
+          useChatStore.setState({ messages: updated });
+        } else {
+          addMessage(mapped);
+        }
+
+        optimisticSendMessage({
+          chatKey: mapped.chatKey,
+          message: {
+            id: mapped.id,
+            uid: mapped.uid,
+            content: mapped.content,
+            created_at: mapped.createdAt,
+            from_user_id: mapped.fromUser.uid,
+          },
+        });
       } catch (error) {
         console.error(error);
         setFailedStatus(requestUid);
       }
     },
-    [currentUserId, chatKey, addMessage, setFailedStatus, replyTarget, setReplyTarget, chatType],
+    [
+      currentUserId,
+      chatKey,
+      chatType,
+      addMessage,
+      setFailedStatus,
+      replyTarget,
+      setReplyTarget,
+      chatKeyUser,
+    ],
   );
 };
-
-export default useSendMessage;

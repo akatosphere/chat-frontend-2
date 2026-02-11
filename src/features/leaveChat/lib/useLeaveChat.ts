@@ -5,18 +5,17 @@ import { useCallback, useState } from "react";
 
 import { leaveChat } from "@/entities/chat/api/leaveChat";
 import { ChatType } from "@/entities/chat/model/types";
-import { useChatListStore } from "@/features/chatList/model/store";
+import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { useMainContentStore } from "@/shared/model/mainContent.store";
 import { useToast } from "@/shared/toast/ui/toastProvider";
 
 type UseLeaveChatParams = {
   chatKey: string;
-  chatId: number;
   chatName: string;
   chatType: ChatType;
 };
 
-export const useLeaveChat = ({ chatKey, chatId, chatName, chatType }: UseLeaveChatParams) => {
+export const useLeaveChat = ({ chatKey, chatName, chatType }: UseLeaveChatParams) => {
   const router = useRouter();
   const removeChat = useChatListStore((state) => state.removeChat);
   const setShouldShowDefault = useMainContentStore((state) => state.setShouldShowDefault);
@@ -58,7 +57,7 @@ export const useLeaveChat = ({ chatKey, chatId, chatName, chatType }: UseLeaveCh
         });
 
         // Удалить из store
-        removeChat(chatId);
+        removeChat(chatKey);
 
         // Установить флаг для показа default контента
         setShouldShowDefault(true);
@@ -74,16 +73,7 @@ export const useLeaveChat = ({ chatKey, chatId, chatName, chatType }: UseLeaveCh
     } finally {
       setIsLoading(false);
     }
-  }, [
-    chatKey,
-    chatId,
-    closeModal,
-    removeChat,
-    router,
-    showToast,
-    toastMessage,
-    setShouldShowDefault,
-  ]);
+  }, [chatKey, closeModal, removeChat, router, showToast, toastMessage, setShouldShowDefault]);
 
   return {
     isModalOpen,

@@ -14,6 +14,7 @@ import { ChatHeader } from "../chatHeader/ui/chatHeader";
 type ChatWidgetProps = {
   className?: string;
   chatKey: string;
+  chatKeyUser: string | null;
   chatType: ChatType;
   initialChatInfo: MappedChatDetails | UserPreview;
   initialMessages: MappedChatMessage[];
@@ -25,6 +26,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   chatType,
   initialMessages,
   chatKey,
+  chatKeyUser,
 }) => {
   // Приводит пришедшие данные к единому интерфейсу
   const chatInfo = normalizeChatInfo(initialChatInfo);
@@ -68,6 +70,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
           initialMessages={initialMessages}
           chatKey={chatKey}
           chatType={chatType}
+          chatKeyUser={chatKeyUser}
           createdBy={chatInfo.createdBy}
         />
       </div>

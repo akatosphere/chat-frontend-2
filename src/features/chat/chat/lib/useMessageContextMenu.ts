@@ -12,8 +12,16 @@ import { useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 export const useMessageContextMenu = (message: MappedChatMessage) => {
   const { openMenu, activeMenuId } = useContextMenu();
 
-  const { setReplyTarget } = useChatStore();
+  const { setReplyTarget, chatType } = useChatStore();
+  const isOwner = useChatStore((s) => s.createdBy === s.currentUserId);
+  const isAviableToDelete =
+    chatType === "chat" || chatType === "public-group" || chatType === "private-group"
+      ? true
+      : (chatType === "public-channel" || chatType === "private-channel") && isOwner
+        ? true
+        : false;
   const deleteMessage = useDeleteMessage();
+
   const menuId = `message-${message.id}`;
   return {
     onContextMenu: (e: MouseEvent) => {
@@ -33,14 +41,18 @@ export const useMessageContextMenu = (message: MappedChatMessage) => {
             onClick: () => console.log("Скопировать", message.id),
           },
           { label: "Выбрать", icon: Select, onClick: () => console.log("Выбрать", message.id) },
-          {
-            label: "Удалить",
-            icon: Delete,
-            destructive: true,
-            onClick: () => {
-              deleteMessage(message.uid, true);
-            },
-          },
+          ...(isAviableToDelete
+            ? [
+                {
+                  label: "Удалить",
+                  icon: Delete,
+                  destructive: true,
+                  onClick: () => {
+                    deleteMessage(message.uid);
+                  },
+                },
+              ]
+            : []),
         ],
         e.clientX,
         e.clientY,

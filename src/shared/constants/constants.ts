@@ -6,9 +6,24 @@ export const MESSAGE_STATUS = {
 } as const;
 
 export const WS_ACTIONS = {
-  CREATE_TEXT_MESSAGE: "create_text_message",
-  CHANGE_STATUS_READ_MESSAGE: "change_status_read_message",
+  CONNECT: "_connect",
+
+  CREATE_CHAT: "create_chat",
+  EDIT_CHAT: "edit_chat",
+  DELETE_CHAT: "delete_chat",
+
   ADD_MEMBERS_TO_CHAT: "add_members_to_chat",
-  DELETE_MESSAGE: "delete_message",
+  REMOVE_MEMBERS_FROM_CHAT: "remove_members_from_chat",
+  TRANSFER_OWNER: "transfer_owner",
+
+  JOIN_BY_INVITE_LINK: "join_by_invite_link",
+  SELF_JOIN_CHAT: "self_join_chat",
   LEAVE_CHAT: "leave_chat",
+
+  GET_STATUS_LIST_CHAT: "get_status_list_chat",
+
+  CREATE_TEXT_MESSAGE: "create_text_message",
+  UPDATE_MESSAGE: "update_message",
+  DELETE_MESSAGE: "delete_message",
+  CHANGE_STATUS_READ_MESSAGE: "change_status_read_message",
 } as const;

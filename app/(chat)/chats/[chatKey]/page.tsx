@@ -25,12 +25,12 @@ export default async function ChatPage({ params }: ChatPageProps) {
   });
 
   const messages = messagesResult.success ? mapChatMessages(messagesResult.data.results) : [];
-
   return (
     <>
       <ChatWidget
         chatKey={chatKey}
         chatType={chatInfo.type}
+        chatKeyUser={messages[0]?.chatKey || null}
         initialChatInfo={chatInfo.data}
         initialMessages={messages}
       />

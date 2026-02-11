@@ -29,7 +29,6 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
     isOwner,
     chatType,
     chatKey: initialData?.chatKey || "",
-    chatId: initialData?.id || 0,
     chatName: initialData?.title || "",
     fullChatType: initialData?.type || "chat",
   });

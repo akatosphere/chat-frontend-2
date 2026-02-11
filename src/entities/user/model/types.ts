@@ -32,6 +32,7 @@ export type UserDto = z.infer<typeof UserDtoSchema>;
  */
 
 export type UserPreview = {
+  id?: number;
   uid: string;
   username: string;
   nickname: string;

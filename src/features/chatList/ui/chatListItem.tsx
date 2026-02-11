@@ -1,8 +1,8 @@
 import Link from "next/link";
 
+import { ChatListItem } from "@/entities/chat/model/types";
 import { cn } from "@/shared/shadcn/lib/utils";
 
-import { ChatItemData } from "../../../entities/chat/model/types";
 import { Avatar } from "../../../entities/chat/ui/avatar";
 import { useChatListItemContextMenu } from "../lib/useChatListItemContextMenu";
 import { ChatActions } from "../model/types";
@@ -11,14 +11,14 @@ import { ChatListItemHeader } from "./chatListItemHeader";
 
 type ChatListItemProps = {
   className?: string;
-  chat: ChatItemData;
+  chat: ChatListItem;
   isActive?: boolean;
   isLast?: boolean;
   actions: ChatActions;
   onClick: () => void;
 };
 
-export const ChatListItem = ({
+export const ChatListItemComponent = ({
   className,
   chat,
   isActive,
@@ -26,12 +26,12 @@ export const ChatListItem = ({
   actions,
   onClick,
 }: ChatListItemProps) => {
-  const totalUnread = chat.new_message_count + chat.new_file_count;
-  const user = chat.chat;
+  const totalUnread = chat.unreadMessages;
+  const user = chat.member;
   const { onContextMenu, isOpen } = useChatListItemContextMenu(chat, actions);
   return (
     <Link
-      href={`/chats/${chat.chat_key.startsWith("group") || chat.chat_key.startsWith("channel") ? chat.chat_key : chat.chat.uid}`}
+      href={`/chats/${chat.key.startsWith("group") || chat.key.startsWith("channel") ? chat.key : chat.member.uid}`}
       className={cn("py-1", className)}
       onClick={onClick}
       onContextMenu={onContextMenu}
@@ -40,14 +40,14 @@ export const ChatListItem = ({
         className={cn(
           "flex cursor-pointer items-stretch gap-2 rounded-md px-2.5 py-1.5 transition-colors duration-200",
           "hover:bg-primary-hover",
-          chat.is_favorite && "bg-white",
+          chat.isFavorite && "bg-white",
           isOpen && "bg-primary-hover",
           isActive && "bg-primary-accent hover:bg-primary-accent",
         )}
       >
         <Avatar
-          isOnline={user.is_online}
-          avatarUrl={user.avatar_webp_url || user.avatar_url || ""}
+          isOnline={user?.is_online ?? false}
+          avatarUrl={user?.avatar_webp_url || user?.avatar_url || ""}
         />
         <div
           className={cn(
@@ -57,8 +57,8 @@ export const ChatListItem = ({
         >
           <ChatListItemHeader chat={chat} isActive={isActive} />
           <ChatListItemFooter
-            isFavorite={chat.is_favorite}
-            lastMsg={chat.last_message}
+            isFavorite={chat.isFavorite}
+            lastMsg={chat.lastMessage}
             isActive={isActive}
             totalUnread={totalUnread}
           />

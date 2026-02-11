@@ -69,8 +69,6 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
   const { isValid, isDirty, isSubmitting } = formState;
 
   const handleSubmitForm = async (data: FormData) => {
-    // Теперь prepareSubmitData возвращает UpdateProfileData,
-    // а принимает User, поэтому any больше не нужны
     const submitData = prepareSubmitData(data, profile, birthday);
     await onSubmit(submitData);
   };
