@@ -12,6 +12,7 @@ import {
   InputGroupButton,
   InputGroupTextarea,
 } from "@/shared/shadcn/ui/input-group";
+import { useSendFilesContextMenu } from "@/widgets/contextMenu/lib/useSendFilesContextMenu";
 import { EmojiPicker } from "@/widgets/emoji-picker/ui/emojiPicker";
 
 import { useMessageForm } from "../lib/useMessageForm";
@@ -48,11 +49,25 @@ export const MessageForm: React.FC<MessageFormProps> = ({
     isKeyboardOpen,
   });
 
+  const { onContextMenu, isOpen } = useSendFilesContextMenu();
+
   return (
     <div className="relative w-full">
       <form className={cn("relative flex items-end px-4 py-3", className)} onSubmit={handleSubmit}>
         <div className="flex h-11 flex-row-reverse pr-3">
-          <Button variant="ghost" size="icon-auto" onClick={onAttachBtnClick} type="button">
+          <Button
+            variant="ghost"
+            size="icon-auto"
+            onClick={(e) => {
+              onAttachBtnClick?.();
+              onContextMenu(e);
+            }}
+            type="button"
+            className={cn(
+              isOpen && "bg-primary-hover",
+              "hover:bg-primary-hover rounded-full transition-colors duration-200",
+            )}
+          >
             <AttachBtn className="h-11 w-11" />
           </Button>
         </div>
