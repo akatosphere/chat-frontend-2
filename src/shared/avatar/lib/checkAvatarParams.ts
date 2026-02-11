@@ -5,21 +5,26 @@ export const checkAvatarParams = async (
   file: File,
 ): Promise<{ isValid: boolean; error?: string }> => {
   if (file.size === 0) {
-    return { isValid: false, error: "Файл не выбран." };
+    return { isValid: false, error: "Файл не выбран." };
   }
   if (!AVATAR_PARAMS.types.includes(file.type)) {
     return {
       isValid: false,
-      error: "Недопустимый формат файла. Допустимые форматы: PNG, JPG, JPEG, BMP.",
+      error: "Недопустимый формат файла. Допустимые форматы: PNG, JPG, JPEG, BMP.",
+    };
+  }
+  // Проверяем размер файла ПЕРЕД декодированием
+  if (file.size > AVATAR_PARAMS.maxSize) {
+    const maxSizeMB = (AVATAR_PARAMS.maxSize / (1024 * 1024)).toFixed(1);
+    return {
+      isValid: false,
+      error: `Размер файла слишком большой. Максимальный размер: ${maxSizeMB} МБ.`,
     };
   }
   try {
     const { width, height } = await getImageSize(file);
     if (width < AVATAR_PARAMS.minWidth || height < AVATAR_PARAMS.minHeight) {
-      return { isValid: false, error: "Минимальный размер изображения 320x320px" };
-    }
-    if (file.size > AVATAR_PARAMS.maxSize) {
-      return { isValid: false, error: "Размер изображения слишком большой." };
+      return { isValid: false, error: "Минимальный размер изображения 320x320px" };
     }
   } catch (error) {
     console.log(error);

@@ -26,6 +26,13 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
   const [avatarError, setAvatarError] = useState<string | undefined>();
   const [isAvatarChangeModalOpen, setIsAvatarChangeModalOpen] = useState(false);
 
+  const onAvatarChangeModalOpen = () => {
+    setAvatarError("");
+    setIsAvatarChangeModalOpen(true);
+  };
+  const onAvatarChangeModalClose = () => {
+    setIsAvatarChangeModalOpen(false);
+  };
   /**
    * Возвращает дефолтные значения для UI-формы (birthday как объект)
    */
@@ -104,7 +111,8 @@ export const useUserProfileForm = ({ avatarUrl, birthday }: UseUserProfileFormPr
     isAvatarChangeModalOpen,
     getDefaultValues,
     onAvatarDelete,
-    setIsAvatarChangeModalOpen,
+    onAvatarChangeModalOpen,
+    onAvatarChangeModalClose,
     onAvatarChangeHandler,
   };
 };

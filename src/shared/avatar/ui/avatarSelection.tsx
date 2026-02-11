@@ -13,7 +13,8 @@ type AvatarSectionProps = {
   avatarUrl: string;
   error?: string;
   isAvatarChangeModalOpen: boolean;
-  setIsAvatarChangeModalOpen: (value: boolean) => void;
+  onAvatarChangeModalClose: () => void;
+  onAvatarChangeModalOpen: () => void;
   onAvatarDelete: () => void;
   onAvatarChange: (file: File) => void;
   avatarVariant?: "user" | "chat";
@@ -23,7 +24,8 @@ export const AvatarSection: React.FC<AvatarSectionProps> = ({
   avatarUrl,
   error,
   isAvatarChangeModalOpen,
-  setIsAvatarChangeModalOpen,
+  onAvatarChangeModalClose,
+  onAvatarChangeModalOpen,
   onAvatarChange,
   onAvatarDelete,
   avatarVariant = "user",
@@ -41,7 +43,7 @@ export const AvatarSection: React.FC<AvatarSectionProps> = ({
         variant="text"
         size="inline"
         className={cn(triggerButtonVariants({ variant: avatarVariant }))}
-        onClick={() => setIsAvatarChangeModalOpen(true)}
+        onClick={() => onAvatarChangeModalOpen}
       >
         <div className="flex items-center">
           <Plus className={cn(plusIconVariants({ variant: avatarVariant }))} />
@@ -54,7 +56,7 @@ export const AvatarSection: React.FC<AvatarSectionProps> = ({
           isOpen={isAvatarChangeModalOpen}
           onAvatarDelete={onAvatarDelete}
           avatarUrl={avatarUrl}
-          onClose={() => setIsAvatarChangeModalOpen(false)}
+          onClose={() => onAvatarChangeModalClose}
           onAvatarChange={onAvatarChange}
           error={error}
         />

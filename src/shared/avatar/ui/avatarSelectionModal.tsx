@@ -36,6 +36,8 @@ export const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [localError, setLocalError] = useState<string | null>(error || null);
+  console.log("error:", error);
+  console.log("localError:", localError);
 
   const handleCropComplete = async (croppedUrl: string) => {
     console.log("handleCropComplete");

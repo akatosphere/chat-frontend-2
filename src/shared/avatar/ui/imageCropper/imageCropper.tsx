@@ -19,8 +19,6 @@ export const ImageCropper = ({ src, onConfirm }: Props) => {
   const [area, setArea] = useState<Area | null>(null);
 
   const onCropComplete = useCallback((_: Area, croppedAreaPixels: Area) => {
-    console.log("onCropComplete");
-
     setArea(croppedAreaPixels);
   }, []);
 
