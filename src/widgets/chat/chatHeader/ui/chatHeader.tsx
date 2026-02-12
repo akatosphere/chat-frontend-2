@@ -1,15 +1,20 @@
 "use client";
 
+import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
 import { BackButton } from "@/shared/ui/backButton";
 
-import { UserStatus } from "../model/types";
 import { ChatHeaderActions } from "./chatHeaderActions";
 import { ChatHeaderUser } from "./chatHeaderUser";
 
 type Props = {
-  name: string;
-  status: UserStatus | string;
-  photo: string | null;
+  chat: {
+    name: string;
+    wasOnlineAt?: number;
+    isOnline?: boolean;
+    membersCount?: number;
+    chatType: ChatType;
+    photo: string | null;
+  };
   backHref: string;
   onCallClick: () => void;
   onSearchClick: () => void;
@@ -18,9 +23,7 @@ type Props = {
 };
 
 export const ChatHeader = ({
-  name,
-  status,
-  photo,
+  chat,
   backHref,
   onCallClick,
   onSearchClick,
@@ -31,13 +34,7 @@ export const ChatHeader = ({
     <header className="desktop:bg-main-light-gray desktop:border-muted desktop:rounded-t-lg desktop:border-b flex h-[60px] items-center justify-between px-4">
       <BackButton href={backHref} className="desktop:hidden mr-6 shrink-0" width={12} height={20} />
 
-      <ChatHeaderUser
-        name={name}
-        status={status}
-        photo={photo}
-        onPhotoClick={onPhotoClick}
-        onInfoClick={onInfoClick}
-      />
+      <ChatHeaderUser onPhotoClick={onPhotoClick} onInfoClick={onInfoClick} chat={chat} />
 
       <ChatHeaderActions onCallClick={onCallClick} onSearchClick={onSearchClick} />
     </header>

@@ -11,6 +11,8 @@ export const mapUserPreviewDto = (dto: UserPreviewDto): UserPreview => ({
   lastName: dto.last_name || "",
   fullName: `${dto.first_name} ${dto.last_name}`.trim() || dto.username,
   avatarUrl: dto.avatar_url || dto.avatar_webp_url || "",
+  wasOnlineAt: dto.was_online_at || null,
+  isOnline: dto.is_online || null,
 });
 
 /**

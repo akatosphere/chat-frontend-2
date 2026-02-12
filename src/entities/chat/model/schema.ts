@@ -36,6 +36,8 @@ export const UserSchema = z.object({
   last_name: z.string().nullable(),
   avatar_url: z.url().nullable(),
   avatar_webp_url: z.url().nullable(),
+  is_online: z.boolean().nullable(),
+  was_online_at: z.number().nullable(),
 });
 
 export const ChatDetailsSchema = z.object({

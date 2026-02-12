@@ -16,8 +16,10 @@ export interface ChatInfo {
   avatar?: string;
   avatarUrl?: string;
   membersCount?: number;
+  isOnline?: boolean;
   description?: string;
   created_at?: string;
+  wasOnlineAt?: number;
 }
 
 export const normalizeChatInfo = (info: MappedChatDetails | UserPreview): ChatInfo => {
@@ -43,5 +45,7 @@ export const normalizeChatInfo = (info: MappedChatDetails | UserPreview): ChatIn
     firstName: info.firstName,
     lastName: info.lastName,
     avatarUrl: info.avatarUrl,
+    wasOnlineAt: info.wasOnlineAt,
+    isOnline: info.isOnline,
   };
 };

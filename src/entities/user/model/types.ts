@@ -14,7 +14,9 @@ export type UserPreviewDto = {
   last_name?: string | null;
   patronymic?: string;
   avatar_url?: string | null;
+  is_online?: boolean | null;
   avatar_webp_url?: string | null;
+  was_online_at?: number | null;
 };
 
 export type ChatMemberDto = UserPreviewDto & {
@@ -62,6 +64,8 @@ export type UserPreview = {
   lastName?: string;
   fullName?: string;
   avatarUrl: string;
+  wasOnlineAt?: number | null;
+  isOnline?: boolean | null;
 };
 
 export type ChatMember = UserPreview & {
