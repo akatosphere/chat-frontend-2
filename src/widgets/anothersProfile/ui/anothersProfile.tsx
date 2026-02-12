@@ -46,7 +46,7 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
         backButton={isMobile}
         contextMenuHook={useAnothersProfileContextMenu}
       />
-      <SidebarContainer className="" scrollbar={isMobile}>
+      <SidebarContainer className="desktop:p-0 p-4" scrollbar={isMobile}>
         <div className="relative">
           <Avatar
             size="anothersProfileAvatar"

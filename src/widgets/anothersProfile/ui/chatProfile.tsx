@@ -49,7 +49,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
         backButton={isMobile}
         contextMenuHook={() => contextMenu}
       />
-      <SidebarContainer className="" scrollbar={isMobile}>
+      <SidebarContainer className="desktop:p-0 p-4" scrollbar={isMobile}>
         <div className="relative">
           <Avatar
             size="anothersProfileAvatar"
