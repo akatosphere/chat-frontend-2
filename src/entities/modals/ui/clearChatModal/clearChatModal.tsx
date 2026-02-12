@@ -1,8 +1,10 @@
 import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
+import { useRouter } from "next/navigation";
 
 import { clearChat } from "@/features/chatList/api/clearChat";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
+import { useMainContentStore } from "@/shared/model/mainContent.store";
 import { cn } from "@/shared/shadcn/lib/utils";
 import {
   AlertDialogFooter,
@@ -25,6 +27,8 @@ export const ClearChatModal: React.FC<ClearChatModalProps> = ({
   onClose,
 }) => {
   const { chatsByKey, removeChat, upsertChat } = useChatListStore.getState();
+  const router = useRouter();
+  const setShouldShowDefault = useMainContentStore((state) => state.setShouldShowDefault);
   const name =
     chatsByKey[chatKey]?.type === "chat"
       ? chatsByKey[chatKey]?.member.first_name + " " + chatsByKey[chatKey]?.member.last_name
@@ -36,7 +40,11 @@ export const ClearChatModal: React.FC<ClearChatModalProps> = ({
 
     removeChat(chatKey);
     onClose();
+    setShouldShowDefault(true);
+    console.log("Флаг true");
 
+    router.push("/chats");
+    console.log("redirect");
     try {
       await clearChat({ index: prev.id });
     } catch (e) {

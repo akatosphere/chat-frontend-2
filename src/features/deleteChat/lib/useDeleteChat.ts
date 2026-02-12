@@ -57,9 +57,11 @@ export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatPara
 
         // Установить флаг для показа default контента
         setShouldShowDefault(true);
+        console.log("Флаг true");
 
         setTimeout(() => {
           router.push("/chats");
+          console.log("redirect");
         }, 300);
       } else {
         console.error("Ошибка при выходе из чата:", response.error);

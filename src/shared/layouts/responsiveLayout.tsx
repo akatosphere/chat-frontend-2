@@ -33,12 +33,12 @@ export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutP
   // Все остальные маршруты: /chats, /settings, /settings/profile, /contacts и т.д.
   const isSidebarActive = !isExtraActive && !isMainActive;
 
-  // Сбросить флаг при переходе на страницу чата
+  // Сбросить флаг только при переходе на страницу конкретного чата
   useEffect(() => {
-    if (isMainActive && shouldShowDefault) {
+    if (pathParts[0] === "chats" && pathParts.length === 2) {
       setShouldShowDefault(false);
     }
-  }, [isMainActive, shouldShowDefault, setShouldShowDefault]);
+  }, [pathname, setShouldShowDefault]);
 
   // Определить, что показывать в main
   const shouldShowDefaultContent =
