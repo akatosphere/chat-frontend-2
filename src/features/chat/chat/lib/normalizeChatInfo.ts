@@ -16,10 +16,10 @@ export interface ChatInfo {
   avatar?: string;
   avatarUrl?: string;
   membersCount?: number;
-  isOnline?: boolean;
+  isOnline?: boolean | null;
   description?: string;
   created_at?: string;
-  wasOnlineAt?: number;
+  wasOnlineAt?: number | null;
 }
 
 export const normalizeChatInfo = (info: MappedChatDetails | UserPreview): ChatInfo => {
