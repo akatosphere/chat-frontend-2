@@ -7,8 +7,8 @@ import { Statusbar } from "@/shared/ui/statusbar/ui/statusbar";
 type Props = {
   chat: {
     name: string;
-    wasOnlineAt?: number;
-    isOnline?: boolean;
+    wasOnlineAt?: number | null;
+    isOnline?: boolean | null;
     membersCount?: number;
     chatType: ChatType;
     photo: string | null;
@@ -34,8 +34,8 @@ export const ChatHeaderUser = ({ chat, onPhotoClick, onInfoClick }: Props) => {
       <button onClick={onInfoClick} className="flex min-w-0 cursor-pointer flex-col text-left">
         <p className="desktop:text-lg truncate text-sm font-medium">{chat.name}</p>
         <Statusbar
-          time={chat.wasOnlineAt}
-          isOnline={chat.isOnline}
+          time={chat.wasOnlineAt || null}
+          isOnline={chat.isOnline || null}
           membersCount={chat.membersCount}
           chatType={chat.chatType}
         />

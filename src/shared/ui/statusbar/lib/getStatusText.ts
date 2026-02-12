@@ -6,8 +6,8 @@ import { formatOnlineTime } from "./formatOnlineTime";
 export const getStatusText = (
   chatType: ChatType,
   membersCount?: number,
-  time?: number,
-  isOnline?: boolean,
+  time?: number | null,
+  isOnline?: boolean | null,
 ) => {
   if ((chatType === "public-group" || chatType === "private-group") && membersCount !== undefined) {
     return `${membersCount + 1} ${pluralize(membersCount + 1, "участник", "участника", "участников")}`;

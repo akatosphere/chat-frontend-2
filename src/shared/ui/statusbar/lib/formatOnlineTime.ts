@@ -1,6 +1,6 @@
 import { pluralize } from "@/shared/lib/pluralize";
 
-export const formatOnlineTime = (wasOnlineAt: number, isOnline?: boolean): string => {
+export const formatOnlineTime = (wasOnlineAt: number, isOnline?: boolean | null): string => {
   const now = Date.now();
   const last = wasOnlineAt * 1000;
   const diff = now - last;

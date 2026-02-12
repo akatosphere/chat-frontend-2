@@ -9,8 +9,8 @@ import { ChatHeaderUser } from "./chatHeaderUser";
 type Props = {
   chat: {
     name: string;
-    wasOnlineAt?: number;
-    isOnline?: boolean;
+    wasOnlineAt?: number | null;
+    isOnline?: boolean | null;
     membersCount?: number;
     chatType: ChatType;
     photo: string | null;

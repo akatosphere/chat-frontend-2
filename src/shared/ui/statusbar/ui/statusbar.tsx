@@ -5,8 +5,8 @@ import { getStatusText } from "../lib/getStatusText";
 
 type StatusbarProps = {
   className?: string;
-  time?: number;
-  isOnline?: boolean;
+  time?: number | null;
+  isOnline?: boolean | null;
   chatType: ChatType;
   membersCount?: number;
 };
