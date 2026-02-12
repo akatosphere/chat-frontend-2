@@ -77,7 +77,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
                 "hover:bg-primary-hover rounded-full transition-colors duration-200",
               )}
             >
-              <AttachBtn className="h-11 w-11" />
+              <AttachBtn className="text-primary h-11 w-11" />
             </Button>
           </div>
         )}
@@ -108,9 +108,15 @@ export const MessageForm: React.FC<MessageFormProps> = ({
             {emojiPickerOpen && (
               <div
                 ref={pickerRef}
-                className="desktop:right-0 desktop:left-auto desktop:translate-x-0 absolute bottom-18 left-1/2 -translate-x-1/2 transform"
+                className={cn(
+                  "desktop:right-0 desktop:left-auto desktop:translate-x-0 absolute bottom-18 left-1/2 -translate-x-1/2 transform",
+                  variant === "modal" && "right-0 bottom-12 left-auto translate-x-0",
+                )}
               >
-                <EmojiPicker onEmojiSelect={onEmojiSelect} />
+                <EmojiPicker
+                  onEmojiSelect={onEmojiSelect}
+                  size={variant === "modal" ? "mini" : "standart"}
+                />
               </div>
             )}
           </div>

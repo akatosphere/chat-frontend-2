@@ -7,6 +7,7 @@ type EmojiListProps = {
   className?: string;
   categoryId: string;
   categories: EmojiCategory[];
+  size?: "mini" | "standart";
   onEmojiSelect?: (emoji: string) => void;
 };
 
@@ -14,6 +15,7 @@ export const EmojiList: React.FC<EmojiListProps> = ({
   className,
   categoryId,
   categories,
+  size = "standart",
   onEmojiSelect,
 }) => {
   const category = categories.find((c) => c.id === categoryId);
@@ -22,7 +24,13 @@ export const EmojiList: React.FC<EmojiListProps> = ({
   const recentEmojis = recentCategory?.emojis || [];
 
   return (
-    <div className={cn("max-h-[448px] min-h-[448px] overflow-y-auto p-5 pr-2", className)}>
+    <div
+      className={cn(
+        "max-h-[448px] min-h-[448px] overflow-y-auto p-5 pr-2",
+        size === "mini" && "max-h-[304px] min-h-[304px]",
+        className,
+      )}
+    >
       {recentEmojis.length > 0 && (
         <EmojiGroup
           key={recentCategory?.id}

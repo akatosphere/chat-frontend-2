@@ -1,9 +1,10 @@
-import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
 
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
+import { openFilePicker } from "@/features/chat/chat/lib/openFilePicker";
 import { openImagePicker } from "@/features/chat/chat/lib/openImagePicker";
-import { useSendMessageStore } from "@/features/chat/chat/model/store/useChatSendFilesStore";
+import { useSendFilesStore } from "@/features/chat/chat/model/store/useChatSendFilesStore";
+import { useSendImageStore } from "@/features/chat/chat/model/store/useChatSendImagesStore";
 import File from "@/shared/ui/icons/sendFiles/file.svg";
 import Image from "@/shared/ui/icons/sendFiles/image.svg";
 
@@ -11,9 +12,9 @@ import { useContextMenu } from "../ui/contextMenuProvider";
 
 export const useSendFilesContextMenu = () => {
   const { openMenu, activeMenuId } = useContextMenu();
-  const addImages = useSendMessageStore((s) => s.addImages);
+  const addImages = useSendImageStore((s) => s.addImages);
+  const addFiles = useSendFilesStore((s) => s.addFiles);
   const openModal = useModalStore((s) => s.openModal);
-  const router = useRouter();
   const menuId = "sendFiles";
 
   return {
@@ -34,13 +35,16 @@ export const useSendFilesContextMenu = () => {
           {
             label: "Выбрать файл",
             icon: File,
-            onClick: () => {
-              router.push("/create-channel");
+            onClick: async () => {
+              const files = await openFilePicker();
+              addFiles(files);
+              openModal("sendFile", { chatKey: "" });
             },
           },
         ],
         e.clientX,
         e.clientY,
+        "top-right",
       );
     },
     isOpen: activeMenuId === menuId,

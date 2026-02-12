@@ -1,46 +1,70 @@
 import { create } from "zustand";
 
-export type PendingImage = {
+import { detectAttachmentType } from "../../lib/detectAttachmentType";
+import { getVideoThumbnail } from "../../lib/getVideoThumbnail";
+
+export type AttachmentType = "image" | "video" | "audio" | "document";
+
+export type PendingFile = {
   id: string;
   file: File;
-  previewUrl: string;
+  type: AttachmentType;
+
+  title?: string;
+  weight?: number;
+  previewUrl?: string;
+  duration?: number;
 };
 
-type SendMessageState = {
-  text: string;
-  images: PendingImage[];
+type SendFilesState = {
+  attachments: PendingFile[];
 
-  setText: (text: string) => void;
-
-  addImages: (files: File[]) => void;
-  removeImage: (id: string) => void;
+  addFiles: (files: File[]) => void;
+  remove: (id: string) => void;
   clear: () => void;
 };
 
-export const useSendMessageStore = create<SendMessageState>((set) => ({
-  text: "",
-  images: [],
+export const useSendFilesStore = create<SendFilesState>((set) => ({
+  attachments: [],
 
-  setText: (text) => set({ text }),
+  addFiles: async (files) => {
+    const pending: PendingFile[] = files.map((file) => {
+      const type = detectAttachmentType(file);
+      const id = crypto.randomUUID();
 
-  addImages: (files) =>
-    set((state) => {
-      const remaining = 4 - state.images.length;
-      const nextFiles = files.slice(0, remaining);
-
-      const mapped = nextFiles.map((file) => ({
-        id: crypto.randomUUID(),
+      return {
+        id,
         file,
-        previewUrl: URL.createObjectURL(file),
-      }));
+        type,
+        title: file.name,
+        weight: file.size,
+        previewUrl: type === "image" ? URL.createObjectURL(file) : undefined,
+      };
+    });
 
-      return { images: [...state.images, ...mapped] };
-    }),
-
-  removeImage: (id) =>
     set((state) => ({
-      images: state.images.filter((img) => img.id !== id),
+      attachments: [...state.attachments, ...pending],
+    }));
+
+    for (const item of pending) {
+      if (item.type !== "video") continue;
+
+      try {
+        const previewUrl = await getVideoThumbnail(item.file);
+
+        set((state) => ({
+          attachments: state.attachments.map((a) => (a.id === item.id ? { ...a, previewUrl } : a)),
+        }));
+      } catch {
+        console.error("Ошибка создания обложки для видео");
+      }
+    }
+  },
+
+  remove: (id) =>
+    set((state) => ({
+      attachments: state.attachments.filter((a) => a.id !== id),
     })),
 
-  clear: () => set({ text: "", images: [] }),
+  clear: () => set({ attachments: [] }),
 }));

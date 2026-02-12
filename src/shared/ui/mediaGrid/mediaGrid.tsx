@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useSendMessageStore } from "@/features/chat/chat/model/store/useChatSendFilesStore";
+import { useSendImageStore } from "@/features/chat/chat/model/store/useChatSendImagesStore";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { MediaCard } from "./mediaCard";
@@ -20,7 +20,7 @@ type MediaGridProps = {
 };
 
 const sizes = {
-  sendImageModal: "destkop:w-[384px] desktop:max-w-[384px] w-[228px] max-w-[228px]",
+  sendImageModal: "destkop:w-[384px] desktop:max-w-[384px] w-full max-w-full",
   standart: "desktop:w-[500px] desktop:max-w-[500px] w-[228px] max-w-[228px]",
 };
 
@@ -31,7 +31,7 @@ export const MediaGrid: React.FC<MediaGridProps> = ({
   isDeleteMode = false,
 }) => {
   const count = items.length;
-  const { removeImage } = useSendMessageStore();
+  const { removeImage } = useSendImageStore();
   if (count === 0) return null;
 
   const onDelete = (id: string) => {
