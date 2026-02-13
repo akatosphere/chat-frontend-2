@@ -18,7 +18,7 @@ export default function CreateGroupPage() {
         backButton
         backButtonFn={backButtonFn}
       />
-      <SidebarContainer className="p-4">
+      <SidebarContainer className="">
         <CreateChat groupOrChannel="group" />
       </SidebarContainer>
     </>
