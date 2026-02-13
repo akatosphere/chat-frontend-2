@@ -1,9 +1,9 @@
-import { useUserStore } from "@/entities/chat/model/userStore";
-import { useChatStore } from "@/features/chat/chat/model/store/useChatStore";
+import { useUserStore } from "@/entities/user/model/userStore";
 import { ChatDialogBar } from "@/features/chat/chatActionsBar/components/chatDialogBar";
 import { SingleActionBar } from "@/features/chat/chatActionsBar/components/singleActionsBar";
 
 import { ChatKind, isChannel, isDialog, isGroup } from "../lib/chatActionsConfig";
+import { useChatStore } from "../model/useChatStore";
 
 type Props = {
   chat?: ChatKind;
