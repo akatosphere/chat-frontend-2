@@ -7,7 +7,6 @@ import { deleteChat } from "@/entities/chat/api/deleteChat";
 import { ChatType } from "@/entities/chat/model/types";
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
-import { useMainContentStore } from "@/shared/model/mainContent.store";
 import { useToast } from "@/shared/toast/ui/toastProvider";
 
 type UseDeleteChatParams = {
@@ -19,7 +18,6 @@ type UseDeleteChatParams = {
 export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatParams) => {
   const router = useRouter();
   const removeChat = useChatListStore((state) => state.removeChat);
-  const setShouldShowDefault = useMainContentStore((state) => state.setShouldShowDefault);
   const { showToast } = useToast();
   const closeModal = useModalStore((s) => s.closeModal);
 
@@ -55,13 +53,9 @@ export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatPara
         // Удалить из store
         removeChat(chatKey);
 
-        // Установить флаг для показа default контента
-        setShouldShowDefault(true);
-        console.log("Флаг true");
-
         setTimeout(() => {
           router.push("/chats");
-          console.log("redirect");
+          router.refresh();
         }, 300);
       } else {
         console.error("Ошибка при выходе из чата:", response.error);
@@ -71,7 +65,7 @@ export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatPara
     } finally {
       setIsLoading(false);
     }
-  }, [chatKey, closeModal, removeChat, router, showToast, toastMessage, setShouldShowDefault]);
+  }, [chatKey, closeModal, removeChat, router, showToast, toastMessage]);
 
   return {
     isLoading,
