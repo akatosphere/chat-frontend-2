@@ -1,5 +1,5 @@
 export type ModalPayloads = {
-  clearChat: { chatKey: string };
+  deleteChat: { chatKey: string };
   deleteMessage: { messageId: string; chatKey: string; chatKeyUser?: string };
   leaveChat: {
     chatName: string;

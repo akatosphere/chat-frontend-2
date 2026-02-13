@@ -2,17 +2,17 @@ import { errorHandler } from "@/shared/api/errorHandler";
 import { getApiClient } from "@/shared/api/getApiClient";
 import { Result } from "@/shared/api/types";
 
-export interface ClearChatData {
+export interface DeleteChatData {
   index: number;
 }
 
-export interface ClearChatSuccess {
+export interface DeleteChatSuccess {
   index: number;
 }
 
-export const clearChat = async (data: ClearChatData): Promise<Result<ClearChatSuccess>> => {
+export const deleteChat = async (data: DeleteChatData): Promise<Result<DeleteChatSuccess>> => {
   try {
-    const { data: response } = await getApiClient.delete<ClearChatSuccess>(
+    const { data: response } = await getApiClient.delete<DeleteChatSuccess>(
       `/api/v1/chat/list/${data.index}/`,
     );
 

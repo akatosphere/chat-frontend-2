@@ -2,7 +2,7 @@ import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-import { clearChat } from "@/features/chatList/api/clearChat";
+import { deleteChat } from "@/features/chatList/api/deleteChat";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 import { cn } from "@/shared/shadcn/lib/utils";
@@ -13,14 +13,14 @@ import {
 } from "@/shared/shadcn/ui/alert-dialog";
 import { Button } from "@/shared/shadcn/ui/button";
 
-export type ClearChatModalProps = {
+export type DeleteChatModalProps = {
   className?: string;
   isOpen: boolean;
   chatKey: string;
   onClose: () => void;
 };
 
-export const ClearChatModal: React.FC<ClearChatModalProps> = ({
+export const DeleteChatModal: React.FC<DeleteChatModalProps> = ({
   className,
   isOpen,
   chatKey,
@@ -39,7 +39,7 @@ export const ClearChatModal: React.FC<ClearChatModalProps> = ({
     if (!prev) return;
 
     try {
-      await clearChat({ index: prev.id });
+      await deleteChat({ index: prev.id });
       removeChat(chatKey);
       queryClient.removeQueries({ queryKey: ["chats"] });
       onClose();

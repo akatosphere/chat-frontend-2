@@ -55,7 +55,7 @@ export const useChatListItemContextMenu = (chat: ChatListItem, actions: ChatActi
             label: "Удалить",
             icon: Delete,
             destructive: true,
-            onClick: () => actions.clearChat(chat.id),
+            onClick: () => actions.deleteChat(chat.id),
           },
         ],
         e.clientX,

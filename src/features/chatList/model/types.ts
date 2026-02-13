@@ -10,7 +10,7 @@ export type ChatListState = {
 };
 export type ChatActions = {
   toggleReadStatus: (chatId: number) => void;
-  clearChat: (chatId: number) => Promise<void>;
+  deleteChat: (chatId: number) => Promise<void>;
   toggleFavorite: (chatId: number) => Promise<void>;
   toggleMuteStatus: (chatId: number) => Promise<void>;
 };

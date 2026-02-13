@@ -29,7 +29,7 @@ export const ChatList: React.FC<ChatListProps> = ({ chats, isSearch }) => {
             actions={{
               toggleFavorite: () => actions.toggleFavoriteAction(chat.key),
               toggleMuteStatus: () => actions.toggleMuteStatusAction(chat.key),
-              clearChat: () => actions.clearChatAction(chat.key),
+              deleteChat: () => actions.deleteChatAction(chat.key),
               toggleReadStatus: () => actions.toggleReadStatusAction(chat.key),
             }}
             className="last:after:hidden"
