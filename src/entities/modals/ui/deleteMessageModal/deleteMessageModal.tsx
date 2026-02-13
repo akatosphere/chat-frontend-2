@@ -14,7 +14,6 @@ import {
 } from "@/shared/shadcn/ui/alert-dialog";
 import { Button } from "@/shared/shadcn/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
-
 export type DeleteMessageModalProps = {
   className?: string;
   isOpen: boolean;

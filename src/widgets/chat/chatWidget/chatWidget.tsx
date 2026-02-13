@@ -4,7 +4,6 @@ import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { UserPreview } from "@/entities/user/model/types";
 import { normalizeChatInfo } from "@/features/chat/chat/lib/normalizeChatInfo";
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
-import { pluralize } from "@/shared/lib/pluralize";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { MappedChatMessage } from "../../../features/chat/chat/model/types/mappedTypes";
@@ -35,35 +34,21 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   const chatName = chatInfo.title || chatInfo.firstName || "Unknown";
   const chatAvatar = chatInfo.avatar || chatInfo.avatarUrl || "";
 
-  // Функция для получения текста статуса.
-  const getStatusText = () => {
-    // Если это группа или канал — показываем кол-во участников
-    if (
-      (chatType === "public-group" || chatType === "private-group") &&
-      chatInfo.membersCount !== undefined
-    ) {
-      return `${chatInfo.membersCount + 1} ${pluralize(chatInfo.membersCount + 1, "участник", "участника", "участников")}`;
-    }
-
-    if (
-      (chatType === "public-channel" || chatType === "private-channel") &&
-      chatInfo.membersCount !== undefined
-    ) {
-      return `${chatInfo.membersCount + 1} ${pluralize(chatInfo.membersCount + 1, "подписчик", "подписчика", "подписчиков")}`;
-    }
-    return "online";
-  };
-
   return (
     <div className={cn("desktop:h-full flex h-dvh w-full flex-col", className)}>
       <ChatHeader
         profileHref={`/chats/${chatKey}/profile`}
-        name={chatName}
-        status={getStatusText()}
         backHref="/chats"
-        photo={chatAvatar}
-        onCallClick={() => console.log("onCallClick")}
-        onSearchClick={() => console.log("onSearchClick")}
+        chat={{
+          name: chatName,
+          photo: chatAvatar,
+          wasOnlineAt: chatInfo.wasOnlineAt,
+          isOnline: chatInfo.isOnline,
+          membersCount: chatInfo.membersCount,
+          chatType: chatType,
+        }}
+        onCallClick={() => {}}
+        onSearchClick={() => {}}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Chat

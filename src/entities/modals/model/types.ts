@@ -16,6 +16,8 @@ export type ModalPayloads = {
     modalVariant: "channel" | "group" | "chat";
     onConfirm: () => void;
   };
+  sendImage: { chatKey: string };
+  sendFile: { chatKey: string };
   //новые модалки здесь
 };
 

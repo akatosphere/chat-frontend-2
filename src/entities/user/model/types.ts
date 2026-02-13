@@ -42,6 +42,8 @@ export type UserPreview = {
   fullName: string;
   avatarUrl: string;
   avatarWebpUrl: string;
+  wasOnlineAt?: number | null;
+  isOnline?: boolean | null;
 };
 
 export type ChatMember = UserPreview & {

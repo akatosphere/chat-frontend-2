@@ -36,6 +36,8 @@ export const UserPreviewDtoSchema = z.object({
   patronymic: z.string().nullish(),
   avatar_url: z.string().nullish(),
   avatar_webp_url: z.string().nullish(),
+  is_online: z.boolean().nullish(),
+  was_online_at: z.number().nullish(),
 });
 
 /**

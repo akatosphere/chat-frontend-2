@@ -9,7 +9,6 @@ export const getUserByUIDServer = async (chatKey: string): Promise<Result<User>>
   try {
     const api = await getApiServer();
     const res = await api.get(`/api/v1/contact/${chatKey}/`);
-    console.log("res.data: ", res.data);
 
     const validated = UserDtoSchema.safeParse(res.data);
 

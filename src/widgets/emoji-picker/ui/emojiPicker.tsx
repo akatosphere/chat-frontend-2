@@ -11,9 +11,14 @@ import { EmojiList } from "./emojiList";
 type EmojiPickerProps = {
   className?: string;
   onEmojiSelect?: (emoji: string) => void;
+  size?: "mini" | "standart";
 };
 
-export const EmojiPicker: React.FC<EmojiPickerProps> = ({ className, onEmojiSelect }) => {
+export const EmojiPicker: React.FC<EmojiPickerProps> = ({
+  className,
+  onEmojiSelect,
+  size = "standart",
+}) => {
   const [activeCategory, setActiveCategory] = useState<string>("smiles");
   const emojisCategories = useEmojisCategories();
   const recentEmojis = useRecentEmojiStore((state) => state.recent);
@@ -29,10 +34,12 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({ className, onEmojiSele
     <div
       className={cn(
         "desktop:w-[472px] w-[361px] rounded-md bg-white shadow-[-8px_0px_20px_0px_#6C688A24]",
+        size === "mini" && "w-[236px]",
         className,
       )}
     >
       <EmojiList
+        size={size}
         categoryId={activeCategory}
         onEmojiSelect={handleEmojiSelect}
         categories={emojisCategories}

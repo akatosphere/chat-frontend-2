@@ -9,6 +9,8 @@ import { LeaveChatModal } from "@/features/leaveChat/ui/leaveChatModal";
 
 import { useModalStore } from "../model/useGlobalModalStore";
 import { DeleteChatModal } from "./deleteChatModal/deleteChatModal";
+import { SendFileModal } from "./sendFileModal/sendFileModal";
+import { SendImageModal } from "./sendImageModal/sendImageModal";
 // eslint-disable-next-line
 const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
   deleteChat: DeleteChatModal,
@@ -16,6 +18,8 @@ const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
   leaveChat: LeaveChatModal,
   deleteChatGlobal: DeleteChatGlobalModal,
   clearChat: ClearChatModal,
+  sendImage: SendImageModal,
+  sendFile: SendFileModal,
   // новые модалки сюда
 };
 

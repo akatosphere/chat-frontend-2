@@ -50,7 +50,7 @@ export const handleCreateTextMessage: WSHandler = (data) => {
     const newChat: ChatListItem = {
       id: +newMessage.chatKey.slice(5),
       key: newMessage.chatKey,
-      title: "Чат",
+      title: "",
       type: newMessage.chatType,
       member: {
         uid: newMessage.fromUser.uid,

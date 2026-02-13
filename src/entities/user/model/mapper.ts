@@ -3,22 +3,19 @@ import { ChatMember, ChatMemberDto, User, UserDto, UserPreview, UserPreviewDto }
 /**
  * Базовый маппер для UserPreview
  */
-export const mapUserPreviewDto = (dto: UserPreviewDto): UserPreview => {
-  const firstName = dto.first_name || "";
-  const lastName = dto.last_name || "";
-
-  return {
-    uid: dto.uid,
-    username: dto.username,
-    nickname: dto.nickname,
-    firstName,
-    lastName,
-    patronymic: dto.patronymic || "",
-    fullName: `${firstName} ${lastName}`.trim() || dto.username,
-    avatarUrl: dto.avatar_url || "",
-    avatarWebpUrl: dto.avatar_webp_url || "",
-  };
-};
+export const mapUserPreviewDto = (dto: UserPreviewDto): UserPreview => ({
+  uid: dto.uid,
+  username: dto.username,
+  nickname: dto.nickname,
+  firstName: dto.first_name,
+  lastName: dto.last_name || "",
+  fullName: `${dto.first_name} ${dto.last_name}`.trim() || dto.username,
+  avatarUrl: dto.avatar_url || dto.avatar_webp_url || "",
+  wasOnlineAt: dto.was_online_at || null,
+  isOnline: dto.is_online || null,
+  patronymic: dto.patronymic || "",
+  avatarWebpUrl: dto.avatar_webp_url || "",
+});
 
 /**
  * Маппер для ChatMember (участник чата/контакт)

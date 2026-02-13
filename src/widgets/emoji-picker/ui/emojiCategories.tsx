@@ -19,7 +19,7 @@ export const EmojiCategories: React.FC<EmojiCategoriesProps> = ({
   return (
     <ul
       className={cn(
-        "desktop:py-5 desktop:px-5 scrollbar-hide flex gap-4.5 overflow-x-auto border-t border-[#e4e4e4] px-5.5 py-5.5 pb-8",
+        "desktop:py-5 desktop:px-5 scrollbar-hide desktop:scrollbar-shown flex gap-4.5 overflow-x-auto border-t border-[#e4e4e4] px-5.5 py-5.5 pb-8",
         className,
       )}
     >

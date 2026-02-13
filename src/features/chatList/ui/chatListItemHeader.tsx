@@ -15,6 +15,7 @@ type ChatListItemHeaderProps = {
 
 export const ChatListItemHeader = ({ chat, isActive }: ChatListItemHeaderProps) => {
   const lastMsg = chat.lastMessage;
+  console.log("lastMsg", chat);
   const displayName = getChatDisplayName(chat);
   const time = lastMsg ? formatLastSeen(lastMsg.created_at) : "";
 
