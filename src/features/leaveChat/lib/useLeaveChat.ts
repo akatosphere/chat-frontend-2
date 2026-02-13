@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
@@ -16,6 +17,7 @@ type UseLeaveChatParams = {
 };
 
 export const useLeaveChat = ({ chatKey, chatName, chatType }: UseLeaveChatParams) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const removeChat = useChatListStore((state) => state.removeChat);
   const { showToast } = useToast();
@@ -46,19 +48,19 @@ export const useLeaveChat = ({ chatKey, chatName, chatType }: UseLeaveChatParams
         // Закрыть модалку
         closeModal();
 
-        // Показать Toast
-        showToast(toastMessage, {
-          mobile: "/icons/toast/checkMobile.svg",
-          desktop: "/icons/toast/checkDesktop.svg",
-        });
-
         // Удалить из store
         removeChat(chatKey);
+        queryClient.removeQueries({ queryKey: ["chats"] });
 
         setTimeout(() => {
           router.push("/chats");
           router.refresh();
         }, 300);
+        // Показать Toast
+        showToast(toastMessage, {
+          mobile: "/icons/toast/checkMobile.svg",
+          desktop: "/icons/toast/checkDesktop.svg",
+        });
       } else {
         console.error("Ошибка при выходе из чата:", response.error);
       }

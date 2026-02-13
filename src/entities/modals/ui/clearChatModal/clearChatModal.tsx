@@ -1,4 +1,5 @@
 import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { clearChat } from "@/features/chatList/api/clearChat";
@@ -25,6 +26,7 @@ export const ClearChatModal: React.FC<ClearChatModalProps> = ({
   chatKey,
   onClose,
 }) => {
+  const queryClient = useQueryClient();
   const { chatsByKey, removeChat, upsertChat } = useChatListStore.getState();
   const router = useRouter();
   const name =
@@ -36,13 +38,14 @@ export const ClearChatModal: React.FC<ClearChatModalProps> = ({
     const prev = chatsByKey[chatKey];
     if (!prev) return;
 
-    removeChat(chatKey);
-    onClose();
-
-    router.push("/chats");
-    router.refresh();
     try {
       await clearChat({ index: prev.id });
+      removeChat(chatKey);
+      queryClient.removeQueries({ queryKey: ["chats"] });
+      onClose();
+
+      router.push("/chats");
+      router.refresh();
     } catch (e) {
       console.log(e);
       // rollback

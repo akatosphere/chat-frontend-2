@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
@@ -17,6 +18,7 @@ type UseDeleteChatParams = {
 
 export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatParams) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const removeChat = useChatListStore((state) => state.removeChat);
   const { showToast } = useToast();
   const closeModal = useModalStore((s) => s.closeModal);
@@ -50,8 +52,9 @@ export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatPara
           desktop: "/icons/toast/checkDesktop.svg",
         });
 
-        // Удалить из store
+        // Удалить из store и очистить кэш React Query
         removeChat(chatKey);
+        queryClient.removeQueries({ queryKey: ["chats"] });
 
         setTimeout(() => {
           router.push("/chats");
@@ -65,7 +68,7 @@ export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatPara
     } finally {
       setIsLoading(false);
     }
-  }, [chatKey, closeModal, removeChat, router, showToast, toastMessage]);
+  }, [chatKey, closeModal, queryClient, removeChat, router, showToast, toastMessage]);
 
   return {
     isLoading,
