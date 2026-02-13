@@ -125,17 +125,36 @@ src/
 
 ![Добавление в контакты](./screenshots/screenshot_3.png)
 
+<table>
+<tr>
+<td width="50%">
+
 ### Настройки (мобильная версия)
 
 ![Настройки (мобильная версия)](./screenshots/screenshot_4.png)
+
+</td>
+<td width="50%">
 
 ### Чат (мобильная версия)
 
 ![Чат (мобильная версия)](./screenshots/screenshot_5.png)
 
+</td>
+</tr>
+<tr>
+<td width="50%">
+
 ### Авторизация (мобильная версия)
 
 ![Авторизация (мобильная версия)](./screenshots/screenshot_6.png)
+
+</td>
+<td width="50%">
+
+</td>
+</tr>
+</table>
 
 ---
 
