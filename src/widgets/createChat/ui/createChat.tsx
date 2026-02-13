@@ -28,6 +28,14 @@ export const CreateChat: React.FC<CreateChatProps> = ({ className, groupOrChanne
     <section className={cn("h-full pb-4", className)}>
       {step === 1 && <Step1Widget />}
       {step === 2 && <Step2Widget />}
+      {step === "loading" && (
+        <div className="flex h-full items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent" />
+            <p className="text-gray subtext">Загрузка...</p>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

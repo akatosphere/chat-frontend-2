@@ -2,7 +2,6 @@
 
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 import { ChatListItem } from "@/entities/chat/model/types";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
@@ -20,15 +19,13 @@ type SubmitCreateChatBtnProps = {
 
 export const SubmitCreateChatBtn: React.FC<SubmitCreateChatBtnProps> = ({ className }) => {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
   const { upsertChat } = useChatListStore();
-  const { formData, reset } = useCreateChatStore();
+  const { formData, setStep } = useCreateChatStore();
   const selected = useSelectContactsStore((s) => s.selected);
   const uids = selected.map((c) => c.systemUid);
   const handleCreateChat = async () => {
-    setIsSubmitting(true);
-
+    setStep("loading");
     try {
       const response = await createChat({
         name: formData.title,
@@ -58,7 +55,6 @@ export const SubmitCreateChatBtn: React.FC<SubmitCreateChatBtnProps> = ({ classN
           queryKey: ["chats"],
         });
 
-        reset();
         router.push(`/chats/`);
         router.push(`/chats/${chatKey}`);
       } else {
@@ -68,14 +64,12 @@ export const SubmitCreateChatBtn: React.FC<SubmitCreateChatBtnProps> = ({ classN
     } catch (error) {
       console.error("Ошибка при создании чата:", error);
       alert("Не удалось отправить запрос. Проверьте соединение.");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   return (
-    <Button className={cn("", className)} onClick={handleCreateChat} disabled={isSubmitting}>
-      {isSubmitting ? "Создание..." : "Создать"}
+    <Button className={cn("", className)} onClick={handleCreateChat}>
+      Создать
     </Button>
   );
 };

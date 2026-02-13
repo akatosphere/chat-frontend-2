@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { ChatType } from "./types";
 
 interface CreateChatState {
-  step: 1 | 2;
+  step: 1 | 2 | "loading";
   groupOrChannel: "group" | "channel";
   formData: {
     title: string;
@@ -15,7 +15,7 @@ interface CreateChatState {
     } | null;
     uid_users_list: string[];
   };
-  setStep: (step: 1 | 2) => void;
+  setStep: (step: 1 | 2 | "loading") => void;
   setGroupOrChannel: (groupOrChannel: "group" | "channel") => void;
   updateData: (data: Partial<CreateChatState["formData"]>) => void;
   reset: () => void;
