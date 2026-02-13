@@ -2,12 +2,12 @@ import { WSBaseResponse } from "@/shared/api/ws/model/types";
 import { sendWSRequest } from "@/shared/api/ws/wsClient";
 import { WS_ACTIONS } from "@/shared/constants/constants";
 
-export type DeleteChatResponse = WSBaseResponse<{
+export type DeleteChatGlobalResponse = WSBaseResponse<{
   chat_key: string;
 }>;
 
-export const deleteChat = async (chatKey: string): Promise<DeleteChatResponse> => {
-  const response = await sendWSRequest<DeleteChatResponse>(WS_ACTIONS.DELETE_CHAT, {
+export const deleteChatGlobal = async (chatKey: string): Promise<DeleteChatGlobalResponse> => {
+  const response = await sendWSRequest<DeleteChatGlobalResponse>(WS_ACTIONS.DELETE_CHAT, {
     chat_key: chatKey,
   });
 

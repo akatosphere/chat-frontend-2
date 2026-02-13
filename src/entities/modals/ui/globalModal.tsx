@@ -4,7 +4,7 @@ import React from "react";
 
 import { ClearChatModal } from "@/entities/modals/ui/clearChatModal/clearChatModal";
 import { DeleteMessageModal } from "@/entities/modals/ui/deleteMessageModal/deleteMessageModal";
-import { DeleteChatModal } from "@/features/deleteChat/ui/deleteChatModal";
+import { DeleteChatGlobalModal } from "@/features/deleteChatGlobal/ui/deleteChatGlobalModal";
 import { LeaveChatModal } from "@/features/leaveChat/ui/leaveChatModal";
 
 import { useModalStore } from "../model/useGlobalModalStore";
@@ -13,7 +13,7 @@ const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
   clearChat: ClearChatModal,
   deleteMessage: DeleteMessageModal,
   leaveChat: LeaveChatModal,
-  deleteChat: DeleteChatModal,
+  deleteChatGlobal: DeleteChatGlobalModal,
   // новые модалки сюда
 };
 

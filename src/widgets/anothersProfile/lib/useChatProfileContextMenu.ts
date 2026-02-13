@@ -5,7 +5,7 @@ import { MouseEvent } from "react";
 
 import { ChatType } from "@/entities/chat/model/types";
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
-import { useDeleteChat } from "@/features/deleteChat/lib/useDeleteChat";
+import { useDeleteChatGlobal } from "@/features/deleteChatGlobal/lib/useDeleteChatGlobal";
 import { useLeaveChat } from "@/features/leaveChat/lib/useLeaveChat";
 import { MenuItem, useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
@@ -33,7 +33,7 @@ export const useChatProfileContextMenu = ({
     chatType: fullChatType,
   });
 
-  const { deleteModalVariant, confirmDelete } = useDeleteChat({
+  const { deleteModalGlobalVariant, confirmDelete } = useDeleteChatGlobal({
     chatKey,
     chatName,
     chatType: fullChatType,
@@ -70,9 +70,9 @@ export const useChatProfileContextMenu = ({
       icon: trashCan,
       destructive: true,
       onClick: () => {
-        openModal("deleteChat", {
+        openModal("deleteChatGlobal", {
           chatName,
-          modalVariant: deleteModalVariant,
+          modalVariant: deleteModalGlobalVariant,
           onConfirm: confirmDelete,
         });
       },

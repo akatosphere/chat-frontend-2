@@ -4,19 +4,19 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
-import { deleteChat } from "@/entities/chat/api/deleteChat";
+import { deleteChatGlobal } from "@/entities/chat/api/deleteChatGlobal";
 import { ChatType } from "@/entities/chat/model/types";
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { useToast } from "@/shared/toast/ui/toastProvider";
 
-type UseDeleteChatParams = {
+type UseDeleteChatGlobalParams = {
   chatKey: string;
   chatName: string;
   chatType: ChatType;
 };
 
-export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatParams) => {
+export const useDeleteChatGlobal = ({ chatKey, chatName, chatType }: UseDeleteChatGlobalParams) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const removeChat = useChatListStore((state) => state.removeChat);
@@ -26,7 +26,7 @@ export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatPara
   const [isLoading, setIsLoading] = useState(false);
 
   // Определение варианта модалки
-  const deleteModalVariant =
+  const deleteModalGlobalVariant =
     chatType === "public-channel" || chatType === "private-channel"
       ? ("channel" as const)
       : ("group" as const);
@@ -40,7 +40,7 @@ export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatPara
   const confirmDelete = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await deleteChat(chatKey);
+      const response = await deleteChatGlobal(chatKey);
 
       if (response.status === "OK") {
         // Закрыть модалку
@@ -72,7 +72,7 @@ export const useDeleteChat = ({ chatKey, chatName, chatType }: UseDeleteChatPara
 
   return {
     isLoading,
-    deleteModalVariant,
+    deleteModalGlobalVariant,
     chatName,
     confirmDelete,
   };

@@ -11,7 +11,7 @@ import {
 } from "@/shared/shadcn/ui/alert-dialog";
 import { Button } from "@/shared/shadcn/ui/button";
 
-type LeaveChatModalProps = {
+type DeleteChatGlobalModalProps = {
   className?: string;
   isOpen: boolean;
   onClose: () => void;
@@ -20,7 +20,7 @@ type LeaveChatModalProps = {
   modalVariant: "group" | "channel";
 };
 
-export const DeleteChatModal: React.FC<LeaveChatModalProps> = ({
+export const DeleteChatGlobalModal: React.FC<DeleteChatGlobalModalProps> = ({
   className,
   isOpen,
   onClose,

@@ -6,7 +6,7 @@ export type ModalPayloads = {
     modalVariant: "channel" | "public-group" | "private-group";
     onConfirm: () => void;
   };
-  deleteChat: {
+  deleteChatGlobal: {
     chatName: string;
     modalVariant: "group" | "channel";
     onConfirm: () => void;
