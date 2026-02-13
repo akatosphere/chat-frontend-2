@@ -29,6 +29,7 @@ interface ChatState {
   updateMessageStatus: (uid: string, status: MappedChatMessage["status"]) => void;
   markAsRead: (uid: string) => void;
   setFailedStatus: (requestUid: string) => void;
+  clearMessages: () => void;
   reset: () => void;
 }
 
@@ -97,6 +98,8 @@ export const useChatStore = create<ChatState>((set) => ({
       ),
     }));
   },
+
+  clearMessages: () => set({ messages: [], replyTarget: null }),
 
   reset: () => set({ messages: [], currentUserId: null, chatKey: null, isReady: false }),
 }));
