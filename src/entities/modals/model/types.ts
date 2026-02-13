@@ -11,6 +11,11 @@ export type ModalPayloads = {
     modalVariant: "group" | "channel";
     onConfirm: () => void;
   };
+  clearChat: {
+    chatName: string;
+    modalVariant: "channel" | "group" | "chat";
+    onConfirm: () => void;
+  };
   //новые модалки здесь
 };
 

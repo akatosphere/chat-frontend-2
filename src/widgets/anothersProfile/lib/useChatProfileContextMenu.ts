@@ -5,16 +5,18 @@ import { MouseEvent } from "react";
 
 import { ChatType } from "@/entities/chat/model/types";
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
+import { useClearChat } from "@/features/clearChat/lib/useClearChat";
 import { useDeleteChatGlobal } from "@/features/deleteChatGlobal/lib/useDeleteChatGlobal";
 import { useLeaveChat } from "@/features/leaveChat/lib/useLeaveChat";
 import { MenuItem, useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
 type UseChatProfileContextMenuParams = {
   isOwner: boolean;
-  chatType: "group" | "channel";
+  chatType: "group" | "channel" | "chat";
   chatKey: string;
   chatName: string;
   fullChatType: ChatType;
+  chatId: number | undefined;
 };
 
 export const useChatProfileContextMenu = ({
@@ -23,6 +25,7 @@ export const useChatProfileContextMenu = ({
   chatKey,
   chatName,
   fullChatType,
+  chatId,
 }: UseChatProfileContextMenuParams) => {
   const { openMenu, activeMenuId } = useContextMenu();
   const openModal = useModalStore((s) => s.openModal);
@@ -38,6 +41,11 @@ export const useChatProfileContextMenu = ({
     chatName,
     chatType: fullChatType,
   });
+  const { clearChatModalVariant, confirmClear } = useClearChat({
+    chatId,
+    chatName,
+    chatType: fullChatType,
+  });
 
   const clearLabel = chatType === "channel" ? "Очистить канал" : "Очистить чат";
   const leaveLabel = chatType === "channel" ? "Покинуть канал" : "Покинуть группу";
@@ -48,7 +56,11 @@ export const useChatProfileContextMenu = ({
       label: clearLabel,
       icon: erase,
       onClick: () => {
-        console.warn("Очистить - заглушка");
+        openModal("clearChat", {
+          chatName,
+          modalVariant: clearChatModalVariant,
+          onConfirm: confirmClear,
+        });
       },
     },
     {
