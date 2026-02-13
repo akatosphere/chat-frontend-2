@@ -11,9 +11,9 @@ export async function saveTokenToCookie(token: string | null) {
       value: token,
       httpOnly: false,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
       path: "/",
-      maxAge: 60 * 15,
+      maxAge: 60 * 30,
     });
   } else {
     cookieStore.delete("accessToken");

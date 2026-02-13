@@ -12,13 +12,13 @@ export const getGroupChannelServer = async (
     const res = await api.get(`/api/v1/chat/list/groups_or_channels/${chatKey}/`);
 
     const validated = ChatDetailsSchema.safeParse(res.data);
-
     if (!validated.success) {
       console.error("Zod Validation Error:", validated.error.format());
       return { success: false, error: "Данные чата некорректны" };
     }
 
     const mappedData = mapChatDetails(validated.data);
+    console.log(mappedData);
 
     return { success: true, data: mappedData };
   } catch {

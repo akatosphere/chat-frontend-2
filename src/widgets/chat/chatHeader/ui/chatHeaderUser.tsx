@@ -1,0 +1,45 @@
+import Image from "next/image";
+
+import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
+import ProfilePhoto from "@/shared/ui/icons/chat/header/profilePhoto.svg";
+import { Statusbar } from "@/shared/ui/statusbar/ui/statusbar";
+
+type Props = {
+  name: string;
+  wasOnlineAt?: number | null;
+  isOnline?: boolean | null;
+  membersCount?: number;
+  chatType: ChatType;
+  photo: string | null;
+};
+
+export const ChatHeaderUser = ({
+  name,
+  photo,
+  wasOnlineAt,
+  isOnline,
+  chatType,
+  membersCount,
+}: Props) => {
+  return (
+    <div className="border-light-gray desktop:border-none flex h-[60px] min-w-0 flex-1 items-center gap-3 border-b">
+      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
+        {photo ? (
+          <Image src={photo} alt="profile" fill className="object-cover" />
+        ) : (
+          <ProfilePhoto className="text-primary h-10 w-10" />
+        )}
+      </div>
+
+      <button className="flex min-w-0 cursor-pointer flex-col text-left">
+        <p className="desktop:text-lg truncate text-sm font-medium">{name}</p>
+        <Statusbar
+          time={wasOnlineAt || null}
+          isOnline={isOnline || null}
+          membersCount={membersCount}
+          chatType={chatType}
+        />
+      </button>
+    </div>
+  );
+};

@@ -1,56 +1,34 @@
 import { format, isToday, isYesterday } from "date-fns";
 import { ru } from "date-fns/locale";
 
-import { Message } from "../model/types";
+import { MappedChatMessage } from "../model/types/mappedTypes";
 
-export const groupMessagesByDate = (
-  messages: Message[],
-): {
-  id: string;
-  date: string;
-  label: string;
-  messages: Message[];
-}[] => {
-  const sortedMessages = [...messages].sort(
-    (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
-  );
+export const groupMessagesByDate = (messages: MappedChatMessage[]) => {
+  const sortedMessages = [...messages].sort((a, b) => a.createdAt - b.createdAt);
 
-  const groups = new Map<string, Message[]>();
+  const groups = new Map<string, MappedChatMessage[]>();
 
   for (const message of sortedMessages) {
-    const messageDate = message.createdAt;
+    const timestamp = message.createdAt * 1000;
+    const date = new Date(timestamp);
+    if (isNaN(date.getTime())) continue;
 
-    const localDateKey = format(messageDate, "yyyy-MM-dd");
-
-    const group = groups.get(localDateKey) ?? [];
-    group.push(message);
-    groups.set(localDateKey, group);
+    const key = format(date, "yyyy-MM-dd");
+    const bucket = groups.get(key) ?? [];
+    bucket.push(message);
+    groups.set(key, bucket);
   }
 
-  return Array.from(groups.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([dateKey, messages]) => {
-      const date = new Date(dateKey);
+  return Array.from(groups.entries()).map(([key, messages]) => {
+    const date = new Date(key);
 
-      let label: string;
-      if (isToday(date)) {
-        label = "Сегодня";
-      } else if (isYesterday(date)) {
-        label = "Вчера";
-      } else {
-        const currentYear = new Date().getFullYear();
-        const messageYear = date.getFullYear();
+    let label = format(date, "d MMMM yyyy", { locale: ru });
+    if (isToday(date)) label = "Сегодня";
+    else if (isYesterday(date)) label = "Вчера";
+    else if (date.getFullYear() === new Date().getFullYear()) {
+      label = format(date, "d MMMM", { locale: ru });
+    }
 
-        label = format(date, messageYear === currentYear ? "d MMMM" : "d MMMM yyyy", {
-          locale: ru,
-        });
-      }
-
-      return {
-        id: dateKey,
-        date: dateKey,
-        label,
-        messages,
-      };
-    });
+    return { id: key, date: key, label, messages };
+  });
 };

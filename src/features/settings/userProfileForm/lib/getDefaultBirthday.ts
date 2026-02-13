@@ -1,4 +1,4 @@
-export const getDefaultBirthday = (birthday?: number) => {
+export const getDefaultBirthday = (birthday?: number | null) => {
   if (!birthday) {
     return { day: 1, month: 1, year: 2000 };
   }

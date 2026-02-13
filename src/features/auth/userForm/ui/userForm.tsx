@@ -5,11 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 
+import { updateProfile } from "@/entities/user/api/updateProfile";
 import { FormInput } from "@/shared/form/ui/formInput";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
-import { updateMessengerProfile } from "../../../../entities/user/api/updateUserProfile";
 import { useUserFormStore } from "../model/store";
 import { UserFormData, userFormSchema } from "../model/validation";
 import { NicknameInput } from "./nicknameInput";
@@ -40,7 +40,7 @@ export const UserForm: React.FC<UserFormProps> = ({ className }) => {
   } = form;
 
   const onSubmit = async (data: UserFormData) => {
-    const result = await updateMessengerProfile({
+    const result = await updateProfile({
       first_name: data.firstName.trim(),
       nickname: data.nickname.trim(),
     });

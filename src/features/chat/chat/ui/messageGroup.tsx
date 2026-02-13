@@ -1,28 +1,49 @@
+import React from "react";
+
 import { getMessageMarginTop } from "../lib/getMessageMarginTop";
-import { MessageGroupType } from "../model/types";
+import { MappedChatMessage } from "../model/types/mappedTypes";
 import { DateBadge } from "./dateBage";
 import { MessageBubble } from "./messageBubble";
 
 type MessageGroupProps = {
-  className?: string;
-  group: MessageGroupType;
+  label: string;
+  messages: MappedChatMessage[];
+  currentUserId: string;
+  passDataAttributes?: boolean;
 };
-
-export const MessageGroup = ({ group }: MessageGroupProps) => {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const MessageGroupComponent: React.FC<MessageGroupProps> = ({
+  label,
+  messages,
+  currentUserId,
+  passDataAttributes = false,
+}) => {
   return (
     <div className="flex flex-col">
-      <DateBadge label={group.label} className="desktop:mb-5 mb-3" />
-
-      {group.messages.map((message, index) => {
-        const prev = index > 0 ? group.messages[index - 1] : undefined;
-        const mtClass = getMessageMarginTop(message, prev);
+      <DateBadge label={label} className="desktop:mb-5 mb-3" />
+      {messages.map((msg, idx) => {
+        const prev = messages[idx - 1];
+        const marginTop = getMessageMarginTop(msg, prev);
 
         return (
-          <div key={message.id} className={mtClass}>
-            <MessageBubble chatMessage={message} />
+          <div key={msg.uid} className={marginTop}>
+            <MessageBubble
+              chatMessage={msg}
+              currentUserId={currentUserId}
+              {...(passDataAttributes && {
+                "data-message-uid": msg.uid,
+                "data-chat-key": msg.chatKey,
+                "data-is-from-current-user": String(msg.fromUser.uid === currentUserId),
+                "data-is-new": String(msg.isNew),
+              })}
+            />
           </div>
         );
       })}
     </div>
   );
 };
+
+export const MessageGroup = React.memo(MessageGroupComponent);
+
+export default MessageGroup;

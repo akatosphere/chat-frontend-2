@@ -1,24 +1,25 @@
 import Mute from "@icons/chat/mute.svg";
 
-import { getMessageStatus } from "@/entities/chat/lib/getMessageStatus";
+import { ChatListItem } from "@/entities/chat/model/types";
+import { MESSAGE_STATUS } from "@/shared/constants/constants";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { formatLastSeen } from "../../../entities/chat/lib/formatLastSeen";
 import { getChatDisplayName } from "../../../entities/chat/lib/getUserDisplayName";
-import { ChatItemData } from "../../../entities/chat/model/types";
 import { StatusIcon } from "../../../entities/chat/ui/statusIcon";
 
 type ChatListItemHeaderProps = {
-  chat: ChatItemData;
+  chat: ChatListItem;
   isActive?: boolean;
 };
 
 export const ChatListItemHeader = ({ chat, isActive }: ChatListItemHeaderProps) => {
-  const user = chat.chat;
-  const lastMsg = chat.last_message;
+  const lastMsg = chat.lastMessage;
+  console.log("lastMsg", chat);
   const displayName = getChatDisplayName(chat);
   const time = lastMsg ? formatLastSeen(lastMsg.created_at) : "";
-  const status = getMessageStatus(lastMsg?.from_user || null, user.uid, lastMsg?.new);
+
+  const status = lastMsg?.new ? MESSAGE_STATUS.DELIVERED : MESSAGE_STATUS.READ;
 
   return (
     <div className="flex min-w-0 items-center justify-between">
@@ -31,7 +32,7 @@ export const ChatListItemHeader = ({ chat, isActive }: ChatListItemHeaderProps) 
         >
           {displayName}
         </h3>
-        {!chat.notifications && (
+        {!chat.notificationsEnabled && (
           <Mute
             className={cn(
               "desktop:w-3.5 desktop:h-3.5 text-gray h-[11px] w-[11px] shrink-0 transition-colors duration-200",

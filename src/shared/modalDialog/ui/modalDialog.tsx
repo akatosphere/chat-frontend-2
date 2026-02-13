@@ -1,5 +1,8 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import { useRef } from "react";
 
+import { useClickOutside } from "@/shared/lib/useClickOutside";
+// import { useClickOutside } from "@/shared/lib/useClickOutside";
 import { cn } from "@/shared/shadcn/lib/utils";
 import {
   AlertDialog,
@@ -40,9 +43,20 @@ export const ModalDialog: React.FC<ModalDialogProps> = ({
   overlay = "screen",
   children,
 }) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(contentRef, () => {
+    if (open && onOpenChange) {
+      onOpenChange(false);
+    }
+  });
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className={cn(modalDialogVariants({ variant, size, className }))}>
+      <AlertDialogContent
+        ref={contentRef}
+        className={cn(modalDialogVariants({ variant, size, className }))}
+      >
         {children}
       </AlertDialogContent>
       <AlertDialogOverlay

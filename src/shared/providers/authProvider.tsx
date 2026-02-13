@@ -1,11 +1,10 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { useAuthStore } from "../api/store";
 
-// Список публичных путей (ваша исходная логика)
 const PUBLIC_ROUTES = [
   "/auth",
   "/auth/phone",
@@ -21,52 +20,46 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
   const pathname = usePathname();
-  // Берем только нужные функции (не берем всё состояние, чтобы не было лишних ререндеров)
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
   const finishInitialization = useAuthStore((s) => s.finishInitialization);
   const isInitialized = useAuthStore((s) => s.isInitialized);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    // 1. Синхронизируем токен, полученный от SSR
-    if (initialToken) {
-      setAccessToken(initialToken);
-    }
+    if (initialized.current) return;
+    initialized.current = true;
 
-    const isPublicRoute = pathname ? PUBLIC_ROUTES.includes(pathname) : false;
-
-    if (isPublicRoute) {
-      finishInitialization();
-      return;
-    }
-
-    // 2. Если токена нет, пробуем рефреш
     const initAuth = async () => {
-      if (!initialToken) {
-        try {
-          const res = await fetch("/api/refresh-token", {
-            method: "POST",
-            credentials: "include",
-          });
-          if (res.ok) {
-            const data = await res.json();
-            setAccessToken(data.access);
+      if (initialToken) {
+        setAccessToken(initialToken);
+        finishInitialization();
+      } else {
+        const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname?.startsWith(route));
+        if (!isPublicRoute) {
+          try {
+            const res = await fetch("/api/refresh-token", {
+              method: "POST",
+              credentials: "include",
+            });
+            if (res.ok) {
+              const data = await res.json();
+              setAccessToken(data.access);
+            }
+          } catch (e) {
+            console.error("Client-side hydration refresh failed", e);
           }
-        } catch (e) {
-          console.error(e);
+          // Вызываем finishInitialization только после попытки refresh
+          finishInitialization();
+        } else {
+          finishInitialization();
         }
       }
-      finishInitialization();
     };
 
     initAuth();
-  }, [initialToken, pathname, setAccessToken, finishInitialization]);
-
-  const isPublicRoute = pathname ? PUBLIC_ROUTES.includes(pathname) : false;
-
-  // Если мы еще не готовы, показываем ничего или лоадер
-  // НО: если у нас есть initialToken, мы можем разрешить рендер сразу!
-  if (!isInitialized && !initialToken && !isPublicRoute) {
-    return null;
+  }, [initialToken, setAccessToken, finishInitialization, pathname]);
+  if (!isInitialized) {
+    if (!initialToken) return null;
   }
 
   return <>{children}</>;

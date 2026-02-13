@@ -1,3 +1,5 @@
+import { ChatType } from "@/features/createChat/model/types";
+
 import { ChatDetails } from "../model/schema";
 
 /**
@@ -8,7 +10,7 @@ export interface MappedChatDetails {
   uid: string;
   title: string;
   chatKey: string;
-  type: "private-group" | "public-group" | "channel";
+  type: ChatType;
   description: string;
   avatar: string | null;
   unreadCount: number;
@@ -25,6 +27,7 @@ export interface MappedChatDetails {
     name: string;
   }>;
   isFavorite: boolean;
+  createdBy: string;
   isNotificationsEnabled: boolean;
 }
 
@@ -51,7 +54,7 @@ export const mapChatDetails = (raw: ChatDetails): MappedChatDetails => {
     uid: raw.chat.uid,
     title: raw.name,
     chatKey: raw.chat_key,
-    type: raw.chat_type,
+    type: raw.chat_type as ChatType,
     description: raw.description || "",
     avatar: raw.chat.avatar_url,
 
@@ -65,6 +68,8 @@ export const mapChatDetails = (raw: ChatDetails): MappedChatDetails => {
       uid: p.uid,
       name: p.full_name,
     })),
+
+    createdBy: raw.created_by,
 
     isFavorite: raw.is_favorite,
     isNotificationsEnabled: raw.notifications,

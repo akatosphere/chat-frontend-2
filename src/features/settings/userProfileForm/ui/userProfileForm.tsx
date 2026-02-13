@@ -4,32 +4,31 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 
-import {
-  MessengerProfileResponse,
-  MessengerProfileSchema,
-} from "@/entities/user/api/updateUserProfile";
+import { UpdateProfileData, User } from "@/entities/user/model/types";
 import { NicknameInput } from "@/features/auth/userForm/ui/nicknameInput";
 import { FormInput } from "@/shared/form/ui/formInput";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
-import { AvatarSection } from "../../avatarSelection/ui/avatarSelection";
+import { AvatarSection } from "../../../../shared/avatar/ui/avatarSelection";
 import { useUserProfileForm } from "../lib/useUserProfileForm";
 import { prepareSubmitData } from "../model/prepareSubmitData";
 import { changeProfileSchema } from "../model/schema";
 import { BirthdaySelect } from "./birthdaySelect";
 
+type FormData = z.infer<typeof changeProfileSchema>;
+
 type UserProfileFormProps = {
   className?: string;
-  profile: MessengerProfileResponse;
+  profile: User;
   avatarUrl: string;
   name: string;
   phone: string;
   lastName: string;
   nickname: string;
   description: string;
-  birthday: number;
-  onSubmit: (data: z.infer<typeof MessengerProfileSchema>) => Promise<void>;
+  birthday: number | null;
+  onSubmit: (data: UpdateProfileData) => Promise<void>;
 };
 
 export const UserProfileForm: React.FC<UserProfileFormProps> = ({
@@ -45,11 +44,11 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
 }) => {
   const {
     currentAvatarUrl,
-    avatarError,
     isAvatarChangeModalOpen,
-    defaultValues,
-    setIsAvatarChangeModalOpen,
+    getDefaultValues,
+    onAvatarDelete,
     onAvatarChangeHandler,
+    setIsAvatarChangeModalOpen,
   } = useUserProfileForm({
     profile,
     avatarUrl,
@@ -60,16 +59,16 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
     birthday,
   });
 
-  const form = useForm<z.infer<typeof changeProfileSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(changeProfileSchema),
     mode: "onChange",
-    defaultValues: defaultValues(name, lastName, nickname, description),
+    defaultValues: getDefaultValues(name, lastName, nickname, description),
   });
 
   const { register, handleSubmit, control, formState } = form;
-  const { errors, isValid, isDirty, isSubmitting } = formState;
+  const { isValid, isDirty, isSubmitting } = formState;
 
-  const handleSubmitForm = async (data: z.infer<typeof changeProfileSchema>) => {
+  const handleSubmitForm = async (data: FormData) => {
     const submitData = prepareSubmitData(data, profile, birthday);
     await onSubmit(submitData);
   };
@@ -78,10 +77,10 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
     <div className={cn("", className)}>
       <AvatarSection
         avatarUrl={currentAvatarUrl}
+        onAvatarDelete={onAvatarDelete}
         onAvatarChange={onAvatarChangeHandler}
         isAvatarChangeModalOpen={isAvatarChangeModalOpen}
-        setIsAvatarChangeModalOpen={setIsAvatarChangeModalOpen}
-        error={avatarError}
+        setIsModalOpen={setIsAvatarChangeModalOpen}
       />
 
       <FormProvider {...form}>
@@ -89,7 +88,6 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
           <FormInput
             id="name"
             label="Изменить имя"
-            className="border-0"
             {...register("name")}
             inputClassName="desktop:border-0 font-normal"
           />
@@ -99,6 +97,7 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
             {...register("lastName")}
             inputClassName="desktop:border-0 font-normal"
           />
+
           <NicknameInput name="nickname" label="Изменить никнейм" isBordered={false} />
 
           <BirthdaySelect control={control} />
@@ -106,14 +105,17 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
           <FormInput
             id="description"
             label="Изменить описание"
-            className="border-0"
             inputClassName="desktop:border-0 font-normal"
             {...register("description")}
           />
 
-          {errors.birthday && <p className="text-red-500">{errors.birthday.message}</p>}
-
-          <Button variant="default" size="lg" disabled={!isValid || !isDirty || isSubmitting}>
+          <Button
+            variant="default"
+            size="lg"
+            type="submit"
+            className="mt-4"
+            disabled={!isValid || !isDirty || isSubmitting}
+          >
             Сохранить
           </Button>
         </form>
