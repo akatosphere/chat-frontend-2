@@ -7,6 +7,7 @@ import { clearChat } from "@/entities/chat/api/clearChat";
 import { ChatType } from "@/entities/chat/model/types";
 import { useChatStore } from "@/entities/chat/model/useChatStore";
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
+import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { useToast } from "@/shared/toast/ui/toastProvider";
 
 type UseClearChatParams = {
@@ -39,19 +40,38 @@ export const useClearChat = ({ chatId, chatName, chatType }: UseClearChatParams)
 
   const confirmClear = useCallback(async () => {
     setIsLoading(true);
+
+    // Получаем chatKey из store для optimistic update
+    const { chatsByKey } = useChatListStore.getState();
+    const chatKey = Object.keys(chatsByKey).find((key) => chatsByKey[key].id === chatId);
+
     try {
+      // 1. API запрос на очистку
       await clearChat({ index: chatId });
-      // Закрыть модалку
-      closeModal();
-      queryClient.removeQueries({ queryKey: ["chats"] });
-      // Показать Toast
+
+      // 2. Optimistic update - мгновенное обновление UI
+      if (chatKey) {
+        useChatListStore.getState().patchChat(chatKey, {
+          lastMessage: null,
+          unreadMessages: 0,
+          unreadFiles: 0,
+        });
+      }
+
+      // 3. Очищаем сообщения в открытом окне чата
       clearMessages();
+
+      // 4. Invalidate для фоновой перезагрузки (гарантия актуальности)
+      queryClient.invalidateQueries({ queryKey: ["chats"] });
+
+      // 5. Закрываем модалку и показываем успех
+      closeModal();
       showToast(toastMessage, {
         mobile: "/icons/toast/checkMobile.svg",
         desktop: "/icons/toast/checkDesktop.svg",
       });
     } catch (error) {
-      console.error("Ошибка при выходе из чата:", error);
+      console.error("Ошибка при очистке чата:", error);
     } finally {
       setIsLoading(false);
     }

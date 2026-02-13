@@ -41,7 +41,7 @@ export const DeleteChatModal: React.FC<DeleteChatModalProps> = ({
     try {
       await deleteChat({ index: prev.id });
       removeChat(chatKey);
-      queryClient.removeQueries({ queryKey: ["chats"] });
+      queryClient.invalidateQueries({ queryKey: ["chats"] });
       onClose();
 
       router.push("/chats");
