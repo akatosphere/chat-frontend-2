@@ -1,4 +1,5 @@
 import { useChatStore } from "@/entities/chat/model/useChatStore";
+import { useContactStore } from "@/entities/contact/model/store";
 import { useUserStore } from "@/entities/user/model/userStore";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 
@@ -11,6 +12,7 @@ export const logout = async () => {
   const store = useAuthStore.getState();
   const chatListStore = useChatListStore.getState();
   const chatStore = useChatStore.getState();
+  const contactsStore = useContactStore.getState();
   const queryClient = getQueryClient();
 
   if (!store.accessToken) {
@@ -23,6 +25,7 @@ export const logout = async () => {
   useUserStore.getState().reset();
   chatListStore.reset();
   chatStore.reset();
+  contactsStore.reset();
   delete getApiClient.defaults.headers.common["Authorization"];
 
   // чистим client-side куки
