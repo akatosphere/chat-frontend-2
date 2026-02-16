@@ -8,6 +8,7 @@ import { useIsInContact } from "@/entities/contact/lib/useIsInContact";
 import { ContactListResponse } from "@/entities/contact/model/types";
 import { User } from "@/entities/user/model/types";
 import { UserInfoList } from "@/entities/user/ui/UserInfoList";
+import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { AddedToContactsModal } from "@/features/contacts/addToContacts/ui/AddedToContactsModal";
 import { AddToContactsProfileBtn } from "@/features/contacts/addToContacts/ui/addToContactsProfileBtn";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
@@ -27,6 +28,8 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
   contactsInitialData,
 }) => {
   const isMobile = useIsMobileStore((state) => state.isMobile);
+  const getChatId = useChatListStore((s) => s.getChatIdByUid);
+  const chatId = getChatId(initialData?.uid ?? "");
   const closeProfile = useProfileClose();
   const [showModal, setShowModal] = useState(false);
   useContactsSync(contactsInitialData);
@@ -40,7 +43,10 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
     setShowModal(true);
   }, []);
 
-  const contextMenu = useAnothersProfileContextMenu();
+  const contextMenu = useAnothersProfileContextMenu({
+    chatId,
+    chatName: initialData?.fullName ?? "",
+  });
 
   return (
     <>

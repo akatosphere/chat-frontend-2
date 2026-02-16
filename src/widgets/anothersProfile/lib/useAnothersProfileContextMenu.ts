@@ -3,12 +3,27 @@ import forwardedd from "@icons/chat/forwardedd.svg";
 import erase from "@icons/erase.svg";
 import { MouseEvent, useMemo } from "react";
 
+import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
+import { useClearChat } from "@/features/clearChat/lib/useClearChat";
 import { useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
-export const useAnothersProfileContextMenu = () => {
-  const { openMenu, activeMenuId } = useContextMenu();
-  const menuId = "anothersProfile";
+type UseAnothersProfileContextMenuParams = {
+  chatId: number | null;
+  chatName: string;
+};
 
+export const useAnothersProfileContextMenu = ({
+  chatId,
+  chatName,
+}: UseAnothersProfileContextMenuParams) => {
+  const { openMenu, activeMenuId } = useContextMenu();
+  const openModal = useModalStore((s) => s.openModal);
+  const menuId = "anothersProfile";
+  const { clearChatModalVariant, confirmClear } = useClearChat({
+    chatId,
+    chatName,
+    chatType: "chat",
+  });
   return useMemo(
     () => ({
       onContextMenu: (e: MouseEvent) => {
@@ -27,7 +42,11 @@ export const useAnothersProfileContextMenu = () => {
               label: "Очистить чат",
               icon: erase,
               onClick: () => {
-                console.warn("Пожаловаться - заглушка");
+                openModal("clearChat", {
+                  chatName,
+                  modalVariant: clearChatModalVariant,
+                  onConfirm: confirmClear,
+                });
               },
             },
             {
@@ -45,6 +64,6 @@ export const useAnothersProfileContextMenu = () => {
       },
       isOpen: activeMenuId === menuId,
     }),
-    [openMenu, activeMenuId],
+    [openMenu, activeMenuId, chatName, clearChatModalVariant, confirmClear, openModal],
   );
 };
