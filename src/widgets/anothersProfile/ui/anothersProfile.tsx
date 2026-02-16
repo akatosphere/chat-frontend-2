@@ -47,7 +47,8 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
       <SidebarHeader
         title="Информация"
         closeButton={!isMobile}
-        closeButtonFn={!isMobile ? closeProfile : undefined}
+        closeButtonFn={closeProfile}
+        backButtonFn={closeProfile}
         backButton={isMobile}
         contextMenu={contextMenu}
       />
