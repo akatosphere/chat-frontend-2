@@ -18,7 +18,6 @@ export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutP
   // 1. Условие для области EXTRA (Профиль в чате)
   // Маршрут: /chats/{id}/profile
   const isExtraActive = pathParts[0] === "chats" && pathParts.length === 3;
-  console.log("isExtraActive: ", isExtraActive);
 
   // 2. Условие для области MAIN (Сам чат)
   // Маршрут: /chats/{id} или /chats/{uid}

@@ -10,6 +10,7 @@ import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
 import { useChatProfileContextMenu } from "../lib/useChatProfileContextMenu";
+import { useProfileClose } from "../lib/useProfileClose";
 
 type ChatProfileProps = {
   initialData: MappedChatDetails | null;
@@ -19,6 +20,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
   const currentUserUid = useUserStore((s) => s.userId);
   const isOwner = currentUserUid === initialData?.createdBy;
   const isMobile = useIsMobileStore((state) => state.isMobile);
+  const closeProfile = useProfileClose();
   const chatType =
     initialData?.type === "private-group" || initialData?.type === "public-group"
       ? "group"
@@ -47,6 +49,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
       <SidebarHeader
         title={title}
         closeButton={!isMobile}
+        closeButtonFn={!isMobile ? closeProfile : undefined}
         backButton={isMobile}
         contextMenu={contextMenu}
       />

@@ -15,6 +15,7 @@ import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
 import { useAnothersProfileContextMenu } from "../lib/useAnothersProfileContextMenu";
+import { useProfileClose } from "../lib/useProfileClose";
 
 type AnothersProfileProps = {
   initialData: User | null;
@@ -26,6 +27,7 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
   contactsInitialData,
 }) => {
   const isMobile = useIsMobileStore((state) => state.isMobile);
+  const closeProfile = useProfileClose();
   const [showModal, setShowModal] = useState(false);
   useContactsSync(contactsInitialData);
   const isInContact = useIsInContact(initialData?.uid ?? "");
@@ -45,6 +47,7 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
       <SidebarHeader
         title="Информация"
         closeButton={!isMobile}
+        closeButtonFn={!isMobile ? closeProfile : undefined}
         backButton={isMobile}
         contextMenu={contextMenu}
       />
