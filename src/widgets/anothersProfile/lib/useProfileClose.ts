@@ -13,6 +13,11 @@ export const useProfileClose = () => {
   const pathname = usePathname();
 
   const closeProfile = useCallback(() => {
+    if (!pathname) {
+      router.back();
+      return;
+    }
+
     // Парсим pathname: /chats/{chatKey}/profile -> /chats/{chatKey}
     const pathParts = pathname.split("/").filter(Boolean);
 
