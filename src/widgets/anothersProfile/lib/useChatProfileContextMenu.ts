@@ -16,7 +16,7 @@ type UseChatProfileContextMenuParams = {
   chatKey: string;
   chatName: string;
   fullChatType: ChatType;
-  chatId: number | undefined;
+  chatId: number | null;
 };
 
 export const useChatProfileContextMenu = ({

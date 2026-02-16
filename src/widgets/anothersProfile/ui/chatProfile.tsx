@@ -32,7 +32,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
     chatKey: initialData?.chatKey || "",
     chatName: initialData?.title || "",
     fullChatType: initialData?.type || "chat",
-    chatId: initialData?.id || undefined,
+    chatId: initialData?.id || null,
   });
 
   const getMembersLabel = () => {
