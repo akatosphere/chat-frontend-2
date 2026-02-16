@@ -48,7 +48,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
         title={title}
         closeButton={!isMobile}
         backButton={isMobile}
-        contextMenuHook={() => contextMenu}
+        contextMenu={contextMenu}
       />
       <SidebarContainer className="desktop:p-0 p-4" scrollbar={isMobile}>
         <div className="relative">

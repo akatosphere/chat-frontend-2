@@ -38,13 +38,15 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
     setShowModal(true);
   }, []);
 
+  const contextMenu = useAnothersProfileContextMenu();
+
   return (
     <>
       <SidebarHeader
         title="Информация"
         closeButton={!isMobile}
         backButton={isMobile}
-        contextMenuHook={useAnothersProfileContextMenu}
+        contextMenu={contextMenu}
       />
       <SidebarContainer className="desktop:p-0 p-4" scrollbar={isMobile}>
         <div className="relative">

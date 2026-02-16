@@ -14,7 +14,7 @@ type SidebarHeaderProps = {
   backButton?: boolean;
   closeButton?: boolean;
   backButtonFn?: () => void;
-  contextMenuHook?: () => { onContextMenu: (e: MouseEvent) => void; isOpen: boolean };
+  contextMenu?: { onContextMenu: (e: MouseEvent) => void; isOpen: boolean };
 };
 
 export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
@@ -23,11 +23,10 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   backButton,
   backButtonFn,
   closeButton,
-  contextMenuHook,
+  contextMenu,
 }) => {
   const router = useRouter();
   const onClick = backButtonFn || (() => router.back());
-  const contextMenu = contextMenuHook?.();
 
   return (
     <div
