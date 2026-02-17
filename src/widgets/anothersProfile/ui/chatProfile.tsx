@@ -7,12 +7,15 @@ import { useUserStore } from "@/entities/user/model/userStore";
 import { ProfileNotifications } from "@/features/notifications/ui/profileNotifications";
 import { pluralize } from "@/shared/lib/pluralize";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/shadcn/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/shadcn/ui/tabs";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
 import { useChatProfileContextMenu } from "../lib/useChatProfileContextMenu";
 import { useProfileClose } from "../lib/useProfileClose";
+import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
+import { MediaPage } from "./mediaPage";
+import { ParticipantsPage } from "./participantsPage";
 
 type ChatProfileProps = {
   initialData: MappedChatDetails | null;
@@ -28,6 +31,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
     initialData?.type === "private-group" || initialData?.type === "public-group"
       ? "group"
       : "channel";
+  const activeSection = useAnothersProfileUIStore((s) => s.activeSection);
   const title = chatType === "channel" ? "Информация о канале" : "Информация о группе";
   const contextMenu = useChatProfileContextMenu({
     isOwner,
@@ -69,32 +73,37 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
             <p className="text">{getMembersLabel()}</p>
           </div>
         </div>
-        <div className="flex flex-col items-start gap-4 px-4 pt-4 pb-6">
+        <div className="flex flex-col items-start gap-4 px-4 pt-4 pb-2">
           <ProfileNotifications />
           <ChatInfoList initialData={initialData} isOwner={isOwner} />
         </div>
-        <Tabs>
+        <Tabs defaultValue={activeSection}>
           <TabsList
             variant="line"
-            className="scrollbar-hover w-full transform-[rotateX(180deg)] flex-nowrap overflow-x-auto overflow-y-hidden"
+            className="border-light-gray scrollbar-hover w-full transform-[rotateX(180deg)] flex-nowrap overflow-x-auto overflow-y-hidden border-t pt-0"
           >
-            <TabsTrigger value="p" className="transform-[rotateX(180deg)]">
+            <TabsTrigger value="participants" className="transform-[rotateX(180deg)]">
               Участники
             </TabsTrigger>
-            <TabsTrigger value="dp" className="transform-[rotateX(180deg)]">
+            <TabsTrigger value="media" className="transform-[rotateX(180deg)]">
               Медиа
             </TabsTrigger>
-            <TabsTrigger value="fp" className="transform-[rotateX(180deg)]">
+            <TabsTrigger value="files" className="transform-[rotateX(180deg)]">
               Файлы
             </TabsTrigger>
-            <TabsTrigger value="ps" className="transform-[rotateX(180deg)]">
+            <TabsTrigger value="voices" className="transform-[rotateX(180deg)]">
               Голосовые
             </TabsTrigger>
-            <TabsTrigger value="pd" className="transform-[rotateX(180deg)]">
+            <TabsTrigger value="links" className="transform-[rotateX(180deg)]">
               Ссылки
             </TabsTrigger>
           </TabsList>
-          <div className="h-70">{/* Контент табов */}</div>
+          <TabsContent value="participants">
+            <ParticipantsPage />
+          </TabsContent>
+          <TabsContent value="media">
+            <MediaPage />
+          </TabsContent>
         </Tabs>
       </SidebarContainer>
     </>
