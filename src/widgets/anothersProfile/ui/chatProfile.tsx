@@ -20,6 +20,7 @@ type ChatProfileProps = {
 export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
   const currentUserUid = useUserStore((s) => s.userId);
   const isOwner = currentUserUid === initialData?.createdBy;
+  const chatKey = initialData?.chatKey || "";
   const isMobile = useIsMobileStore((state) => state.isMobile);
   const closeProfile = useProfileClose();
   const chatType =
@@ -30,7 +31,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
   const contextMenu = useChatProfileContextMenu({
     isOwner,
     chatType,
-    chatKey: initialData?.chatKey || "",
+    chatKey,
     chatName: initialData?.title || "",
     fullChatType: initialData?.type || "chat",
     chatId: initialData?.id || null,
@@ -69,7 +70,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
         </div>
         <div className="flex flex-col items-start gap-4 px-4 pt-4 pb-6">
           <ProfileNotifications />
-          <ChatInfoList initialData={initialData} />
+          <ChatInfoList initialData={initialData} isOwner={isOwner} />
         </div>
       </SidebarContainer>
     </>

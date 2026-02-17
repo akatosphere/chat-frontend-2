@@ -24,7 +24,7 @@ export const InfoItem: React.FC<InfoItemProps> = ({
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         {title && <p className="text-gray caption">{title}</p>}
         {text && (
-          <div className="flex min-w-0 items-center gap-2">
+          <div className={cn("flex min-w-0 items-center gap-2")}>
             <p className={cn("subtext wrap-break-word", className)}>{text}</p>
           </div>
         )}
