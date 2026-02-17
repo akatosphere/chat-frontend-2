@@ -74,14 +74,27 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
           <ChatInfoList initialData={initialData} isOwner={isOwner} />
         </div>
         <Tabs>
-          <TabsList variant="line" className="w-full overflow-hidden">
-            <TabsTrigger value="p">Участники</TabsTrigger>
-            <TabsTrigger value="dp">Медиа</TabsTrigger>
-            <TabsTrigger value="fp">Файлы</TabsTrigger>
-            <TabsTrigger value="ps">Голосовые</TabsTrigger>
-            <TabsTrigger value="pd">Ссылки</TabsTrigger>
+          <TabsList
+            variant="line"
+            className="scrollbar-hover w-full transform-[rotateX(180deg)] flex-nowrap overflow-x-auto overflow-y-hidden"
+          >
+            <TabsTrigger value="p" className="transform-[rotateX(180deg)]">
+              Участники
+            </TabsTrigger>
+            <TabsTrigger value="dp" className="transform-[rotateX(180deg)]">
+              Медиа
+            </TabsTrigger>
+            <TabsTrigger value="fp" className="transform-[rotateX(180deg)]">
+              Файлы
+            </TabsTrigger>
+            <TabsTrigger value="ps" className="transform-[rotateX(180deg)]">
+              Голосовые
+            </TabsTrigger>
+            <TabsTrigger value="pd" className="transform-[rotateX(180deg)]">
+              Ссылки
+            </TabsTrigger>
           </TabsList>
-          <div className="h-70"></div>
+          <div className="h-70">{/* Контент табов */}</div>
         </Tabs>
       </SidebarContainer>
     </>
