@@ -7,6 +7,7 @@ import { useUserStore } from "@/entities/user/model/userStore";
 import { ProfileNotifications } from "@/features/notifications/ui/profileNotifications";
 import { pluralize } from "@/shared/lib/pluralize";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
+import { Tabs, TabsList, TabsTrigger } from "@/shared/shadcn/ui/tabs";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
@@ -72,6 +73,16 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
           <ProfileNotifications />
           <ChatInfoList initialData={initialData} isOwner={isOwner} />
         </div>
+        <Tabs>
+          <TabsList variant="line" className="w-full overflow-hidden">
+            <TabsTrigger value="p">Участники</TabsTrigger>
+            <TabsTrigger value="dp">Медиа</TabsTrigger>
+            <TabsTrigger value="fp">Файлы</TabsTrigger>
+            <TabsTrigger value="ps">Голосовые</TabsTrigger>
+            <TabsTrigger value="pd">Ссылки</TabsTrigger>
+          </TabsList>
+          <div className="h-70"></div>
+        </Tabs>
       </SidebarContainer>
     </>
   );
