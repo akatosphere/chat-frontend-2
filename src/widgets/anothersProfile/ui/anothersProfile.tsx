@@ -11,6 +11,7 @@ import { UserInfoList } from "@/entities/user/ui/UserInfoList";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { AddedToContactsModal } from "@/features/contacts/addToContacts/ui/AddedToContactsModal";
 import { AddToContactsProfileBtn } from "@/features/contacts/addToContacts/ui/addToContactsProfileBtn";
+import { ProfileNotifications } from "@/features/notifications/ui/profileNotifications";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
@@ -71,7 +72,8 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
             <p className="text">{initialData?.isOnline ? "В сети" : "Не в сети"}</p>
           </div>
         </div>
-        <div className="flex flex-col items-start gap-6 px-4 pt-2">
+        <div className="flex flex-col items-start gap-4 px-4 pt-4 pb-6">
+          <ProfileNotifications />
           <UserInfoList initialData={initialData} />
           {initialData && !isInContact && (
             <AddToContactsProfileBtn

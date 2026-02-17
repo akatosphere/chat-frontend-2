@@ -15,7 +15,7 @@ export const ChatInfoList: React.FC<ChatInfoListProps> = ({ className, initialDa
   const inviteLink = "https:///link";
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex w-full flex-col gap-2">
       <div className={cn("flex w-full flex-col rounded-lg bg-white", className)}>
         {description && <InfoItem title="Описание" text={description} className="text-black" />}
       </div>

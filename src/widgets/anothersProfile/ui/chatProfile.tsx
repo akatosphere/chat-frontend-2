@@ -4,6 +4,7 @@ import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { ChatInfoList } from "@/entities/chat/ui/chatInfoList";
 import { useUserStore } from "@/entities/user/model/userStore";
+import { ProfileNotifications } from "@/features/notifications/ui/profileNotifications";
 import { pluralize } from "@/shared/lib/pluralize";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
@@ -66,7 +67,8 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
             <p className="text">{getMembersLabel()}</p>
           </div>
         </div>
-        <div className="px-4 pt-2">
+        <div className="flex flex-col items-start gap-4 px-4 pt-4 pb-6">
+          <ProfileNotifications />
           <ChatInfoList initialData={initialData} />
         </div>
       </SidebarContainer>
