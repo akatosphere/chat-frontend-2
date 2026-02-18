@@ -18,7 +18,6 @@ export const getUserByUIDServer = async (chatKey: string): Promise<Result<User>>
     }
 
     const mapped = mapUserDto(validated.data);
-    console.log("mapped: ", mapped);
 
     return { success: true, data: mapped };
   } catch {

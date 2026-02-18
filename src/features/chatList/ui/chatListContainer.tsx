@@ -23,7 +23,6 @@ export const ChatListContainer = ({ search }: Props) => {
   const chats = useMemo(() => order.map((id) => chatsById[id]).filter(Boolean), [order, chatsById]);
 
   const filtered = useMemo(() => filterChats(chats, search), [chats, search]);
-  console.log("filtered:", filtered);
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 

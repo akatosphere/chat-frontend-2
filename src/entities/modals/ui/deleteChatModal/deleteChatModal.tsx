@@ -46,8 +46,7 @@ export const DeleteChatModal: React.FC<DeleteChatModalProps> = ({
 
       router.push("/chats");
       router.refresh();
-    } catch (e) {
-      console.log(e);
+    } catch {
       // rollback
       upsertChat(prev);
     }

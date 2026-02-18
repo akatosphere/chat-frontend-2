@@ -78,7 +78,6 @@ export const useSendMessage = () => {
 
       addMessage(tempMessage);
 
-      console.log("tempMessage", tempMessage);
       optimisticSendMessage({
         chatKey: tempMessage.chatKey,
         message: {

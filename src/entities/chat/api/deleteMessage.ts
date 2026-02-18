@@ -35,7 +35,6 @@ export const deleteTextMessage = async (
       throw new Error(response.error || "Ошибка удаления сообщения");
     }
 
-    console.log(`Сообщение успешно удалено, ID: ${response.object.uid}`);
     return response.object;
   } catch (error) {
     console.error(`Ошибка в deleteMessage:`, error);

@@ -55,7 +55,6 @@ export const sendTextMessage = async (
       throw new Error(response.error || "Ошибка отправки сообщения");
     }
 
-    console.log(`Сообщение успешно отправлено, ID: ${response.object.id}`);
     return response.object;
   } catch (error) {
     console.error(`Ошибка в sendTextMessage:`, error);

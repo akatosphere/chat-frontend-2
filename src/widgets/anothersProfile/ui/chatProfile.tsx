@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { ChatInfoList } from "@/entities/chat/ui/chatInfoList";
@@ -37,7 +39,12 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
       ? "group"
       : "channel";
   const activeSection = useAnothersProfileUIStore((s) => s.activeSection);
+  const resetTabsUI = useAnothersProfileUIStore((s) => s.reset);
   const title = chatType === "channel" ? "Информация о канале" : "Информация о группе";
+
+  useEffect(() => {
+    return () => resetTabsUI();
+  }, []);
   const contextMenu = useChatProfileContextMenu({
     isOwner,
     chatType,
