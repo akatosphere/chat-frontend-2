@@ -16,11 +16,7 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = async
   const response = await getChatServer(chatKey, chatType);
 
   if (!response.success) {
-    return chatType === "chat" ? (
-      <AnothersProfile initialData={null} />
-    ) : (
-      <ChatProfile initialData={null} />
-    );
+    return <div>Ошибка загрузки профиля</div>;
   }
 
   if (chatType === "chat") {

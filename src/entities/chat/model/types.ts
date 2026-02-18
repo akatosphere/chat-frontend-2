@@ -7,6 +7,8 @@ export type ChatType =
   | "private-channel"
   | "chat";
 
+export type ChatTypeLight = "chat" | "channel" | "group";
+
 export interface LastMessage {
   id: number;
   uid: string;
