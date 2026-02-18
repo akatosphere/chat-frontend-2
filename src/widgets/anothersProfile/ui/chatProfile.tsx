@@ -7,15 +7,20 @@ import { useUserStore } from "@/entities/user/model/userStore";
 import { ProfileNotifications } from "@/features/notifications/ui/profileNotifications";
 import { pluralize } from "@/shared/lib/pluralize";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/shadcn/ui/tabs";
+import { OurTabsList } from "@/shared/ourTabs/ourTabsList";
+import { OurTabsTrigger } from "@/shared/ourTabs/ourTabsTrigger";
+import { Tabs, TabsContent } from "@/shared/shadcn/ui/tabs";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
 import { useChatProfileContextMenu } from "../lib/useChatProfileContextMenu";
 import { useProfileClose } from "../lib/useProfileClose";
 import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
-import { MediaPage } from "./mediaPage";
-import { ParticipantsPage } from "./participantsPage";
+import { FilesPage } from "./tabs/filesPage";
+import { LinksPage } from "./tabs/linksPage";
+import { MediaPage } from "./tabs/mediaPage";
+import { ParticipantsPage } from "./tabs/participantsPage";
+import { VoicesPage } from "./tabs/voicesPage";
 
 type ChatProfileProps = {
   initialData: MappedChatDetails | null;
@@ -78,31 +83,27 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
           <ChatInfoList initialData={initialData} isOwner={isOwner} />
         </div>
         <Tabs defaultValue={activeSection}>
-          <TabsList
-            variant="line"
-            className="border-light-gray scrollbar-hover w-full transform-[rotateX(180deg)] flex-nowrap overflow-x-auto overflow-y-hidden border-t pt-0"
-          >
-            <TabsTrigger value="participants" className="transform-[rotateX(180deg)]">
-              Участники
-            </TabsTrigger>
-            <TabsTrigger value="media" className="transform-[rotateX(180deg)]">
-              Медиа
-            </TabsTrigger>
-            <TabsTrigger value="files" className="transform-[rotateX(180deg)]">
-              Файлы
-            </TabsTrigger>
-            <TabsTrigger value="voices" className="transform-[rotateX(180deg)]">
-              Голосовые
-            </TabsTrigger>
-            <TabsTrigger value="links" className="transform-[rotateX(180deg)]">
-              Ссылки
-            </TabsTrigger>
-          </TabsList>
+          <OurTabsList>
+            <OurTabsTrigger value="participants">Участники</OurTabsTrigger>
+            <OurTabsTrigger value="media">Медиа</OurTabsTrigger>
+            <OurTabsTrigger value="files">Файлы</OurTabsTrigger>
+            <OurTabsTrigger value="voices">Голосовые</OurTabsTrigger>
+            <OurTabsTrigger value="links">Ссылки</OurTabsTrigger>
+          </OurTabsList>
           <TabsContent value="participants">
             <ParticipantsPage />
           </TabsContent>
           <TabsContent value="media">
             <MediaPage />
+          </TabsContent>
+          <TabsContent value="files">
+            <FilesPage />
+          </TabsContent>
+          <TabsContent value="voices">
+            <VoicesPage />
+          </TabsContent>
+          <TabsContent value="links">
+            <LinksPage />
           </TabsContent>
         </Tabs>
       </SidebarContainer>
