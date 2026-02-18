@@ -101,7 +101,9 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
         </div>
         <Tabs value={activeSection} onValueChange={handleTabChange}>
           <OurTabsList>
-            <OurTabsTrigger value="participants">Участники</OurTabsTrigger>
+            <OurTabsTrigger value="participants">
+              {chatType === "channel" ? "Подписчики" : "Участники"}
+            </OurTabsTrigger>
             <OurTabsTrigger value="media">Медиа</OurTabsTrigger>
             <OurTabsTrigger value="files">Файлы</OurTabsTrigger>
             <OurTabsTrigger value="voices">Голосовые</OurTabsTrigger>
