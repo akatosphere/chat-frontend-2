@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { Avatar } from "@/entities/chat/ui/avatar";
@@ -39,12 +39,22 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
       ? "group"
       : "channel";
   const activeSection = useAnothersProfileUIStore((s) => s.activeSection);
+  const setActiveSection = useAnothersProfileUIStore((s) => s.setActiveSection);
   const resetTabsUI = useAnothersProfileUIStore((s) => s.reset);
   const title = chatType === "channel" ? "Информация о канале" : "Информация о группе";
 
   useEffect(() => {
+    setActiveSection("participants");
     return () => resetTabsUI();
-  }, []);
+  }, [setActiveSection, resetTabsUI]);
+
+  const handleTabChange = useCallback(
+    (value: string) => {
+      setActiveSection(value as "participants" | "media" | "files" | "voices" | "links");
+    },
+    [setActiveSection],
+  );
+
   const contextMenu = useChatProfileContextMenu({
     isOwner,
     chatType,
@@ -89,7 +99,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
           <ProfileNotifications />
           <ChatInfoList initialData={initialData} isOwner={isOwner} />
         </div>
-        <Tabs defaultValue={activeSection}>
+        <Tabs value={activeSection} onValueChange={handleTabChange}>
           <OurTabsList>
             <OurTabsTrigger value="participants">Участники</OurTabsTrigger>
             <OurTabsTrigger value="media">Медиа</OurTabsTrigger>

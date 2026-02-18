@@ -55,6 +55,13 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
     setShowModal(true);
   }, []);
 
+  const handleTabChange = useCallback(
+    (value: string) => {
+      setActiveSection(value as "participants" | "media" | "files" | "voices" | "links");
+    },
+    [setActiveSection],
+  );
+
   const contextMenu = useAnothersProfileContextMenu({
     chatId,
     chatName: initialData?.fullName ?? "",
@@ -101,7 +108,7 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
             />
           )}
         </div>
-        <Tabs defaultValue={activeSection}>
+        <Tabs value={activeSection} onValueChange={handleTabChange}>
           <OurTabsList>
             <OurTabsTrigger value="media">Медиа</OurTabsTrigger>
             <OurTabsTrigger value="files">Файлы</OurTabsTrigger>
