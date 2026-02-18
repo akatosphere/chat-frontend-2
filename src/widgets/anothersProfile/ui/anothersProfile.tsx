@@ -8,11 +8,13 @@ import { useIsInContact } from "@/entities/contact/lib/useIsInContact";
 import { ContactListResponse } from "@/entities/contact/model/types";
 import { User } from "@/entities/user/model/types";
 import { UserInfoList } from "@/entities/user/ui/UserInfoList";
+import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
 import { AddedToContactsModal } from "@/features/contacts/addToContacts/ui/AddedToContactsModal";
 import { AddToContactsProfileBtn } from "@/features/contacts/addToContacts/ui/addToContactsProfileBtn";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
+import { Statusbar } from "@/shared/ui/statusbar/ui/statusbar";
 
 import { useAnothersProfileContextMenu } from "../lib/useAnothersProfileContextMenu";
 
@@ -56,7 +58,12 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
           />
           <div className="absolute bottom-3 left-4 text-white">
             <p className="title font-medium">{initialData?.fullName}</p>
-            <p className="text">{initialData?.isOnline ? "В сети" : "Не в сети"}</p>
+            <Statusbar
+              isOnline={initialData?.isOnline}
+              chatType={"direct" as ChatType}
+              time={initialData?.lastSeenAt ?? null}
+              className="text-white"
+            />
           </div>
         </div>
         <div className="flex flex-col items-start gap-6 px-4 pt-2">
