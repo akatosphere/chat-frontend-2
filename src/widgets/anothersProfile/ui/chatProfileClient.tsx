@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
@@ -13,6 +14,11 @@ import { useChatProfileContextMenu } from "../lib/useChatProfileContextMenu";
 import { useProfileClose } from "../lib/useProfileClose";
 import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
 import { ChatProfile } from "./chatProfile";
+import { FilesPage } from "./tabs/filesPage";
+import { LinksPage } from "./tabs/linksPage";
+import { MediaPage } from "./tabs/mediaPage";
+import { ParticipantsPage } from "./tabs/participantsPage";
+import { VoicesPage } from "./tabs/voicesPage";
 
 type ChatProfileClientProps = {
   chatKey: string;
@@ -25,10 +31,12 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
   chatType,
   chatInfo,
 }) => {
-  const { isMainActive, activeSection } = useAnothersProfileUIStore(
+  const { isMainActive, activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore(
     useShallow((s) => ({
       isMainActive: s.isMainActive,
       activeSection: s.activeSection,
+      setActiveSection: s.setActiveSection,
+      resetTabsUI: s.reset,
     })),
   );
   const isMobile = useIsMobileStore((state) => state.isMobile);
@@ -45,6 +53,21 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
     chatId: chatInfo?.id || null,
   });
 
+  const tabs: Record<string, React.ReactNode> = {
+    participants: <ParticipantsPage />,
+    media: <MediaPage />,
+    files: <FilesPage />,
+    voices: <VoicesPage />,
+    links: <LinksPage />,
+  };
+
+  useEffect(() => {
+    console.log("лог из чат профиль клиента");
+
+    setActiveSection("participants");
+    return () => resetTabsUI();
+  }, []);
+
   if (!chatInfo) {
     return <div>Ошибка загрузки профиля</div>;
   }
@@ -59,7 +82,11 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
         backButton={isMobile}
         contextMenu={contextMenu}
       />
-      <ChatProfile initialData={chatInfo} isMobile={isMobile} isOwner={isOwner} />
+      {isMainActive ? (
+        <ChatProfile initialData={chatInfo} isMobile={isMobile} isOwner={isOwner} />
+      ) : (
+        tabs[activeSection] || <LinksPage />
+      )}
     </>
   );
 };

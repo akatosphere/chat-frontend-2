@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { Avatar } from "@/entities/chat/ui/avatar";
@@ -34,11 +34,11 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
   contactsInitialData,
   isMobile,
 }) => {
-  const { activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore(
+  const { activeSection, setActiveSection, toggleIsMainActive } = useAnothersProfileUIStore(
     useShallow((s) => ({
       activeSection: s.activeSection,
       setActiveSection: s.setActiveSection,
-      resetTabsUI: s.reset,
+      toggleIsMainActive: s.toggleIsMainActive,
     })),
   );
   const [showModal, setShowModal] = useState(false);
@@ -53,17 +53,10 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
     setShowModal(true);
   }, []);
 
-  const handleTabChange = useCallback(
-    (value: string) => {
-      setActiveSection(value as "participants" | "media" | "files" | "voices" | "links");
-    },
-    [setActiveSection],
-  );
-
-  useEffect(() => {
-    setActiveSection("media");
-    return () => resetTabsUI();
-  }, []);
+  const handleTabChange = (value: string) => {
+    toggleIsMainActive();
+    setActiveSection(value as "participants" | "media" | "files" | "voices" | "links");
+  };
 
   return (
     <>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
@@ -31,24 +31,21 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData, isMobile,
     initialData?.type === "private-group" || initialData?.type === "public-group"
       ? "group"
       : "channel";
-  const { activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore(
+  const { activeSection, setActiveSection, toggleIsMainActive } = useAnothersProfileUIStore(
     useShallow((s) => ({
       activeSection: s.activeSection,
       setActiveSection: s.setActiveSection,
       resetTabsUI: s.reset,
+      toggleIsMainActive: s.toggleIsMainActive,
     })),
   );
 
-  useEffect(() => {
-    setActiveSection("participants");
-    return () => resetTabsUI();
-  }, [setActiveSection, resetTabsUI]);
-
   const handleTabChange = useCallback(
     (value: string) => {
+      toggleIsMainActive();
       setActiveSection(value as "participants" | "media" | "files" | "voices" | "links");
     },
-    [setActiveSection],
+    [setActiveSection, toggleIsMainActive],
   );
 
   const getMembersLabel = () => {

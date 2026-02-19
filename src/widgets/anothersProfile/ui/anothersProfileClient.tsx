@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { ChatTypeLight } from "@/entities/chat/model/types";
@@ -13,6 +14,11 @@ import { useAnothersProfileContextMenu } from "../lib/useAnothersProfileContextM
 import { useProfileClose } from "../lib/useProfileClose";
 import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
 import { AnothersProfile } from "./anothersProfile";
+import { FilesPage } from "./tabs/filesPage";
+import { LinksPage } from "./tabs/linksPage";
+import { MediaPage } from "./tabs/mediaPage";
+import { ParticipantsPage } from "./tabs/participantsPage";
+import { VoicesPage } from "./tabs/voicesPage";
 
 type AnothersProfileClientProps = {
   chatType: ChatTypeLight;
@@ -25,10 +31,12 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
   chatInfo,
   contacts,
 }) => {
-  const { isMainActive, activeSection } = useAnothersProfileUIStore(
+  const { isMainActive, activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore(
     useShallow((s) => ({
       isMainActive: s.isMainActive,
       activeSection: s.activeSection,
+      setActiveSection: s.setActiveSection,
+      resetTabsUI: s.reset,
     })),
   );
   const isMobile = useIsMobileStore((state) => state.isMobile);
@@ -38,6 +46,19 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
     chatId: chatInfo?.id || null,
     chatName: chatInfo?.fullName ?? "",
   });
+
+  useEffect(() => {
+    setActiveSection("media");
+    return () => resetTabsUI();
+  }, []);
+
+  const tabs: Record<string, React.ReactNode> = {
+    participants: <ParticipantsPage />,
+    media: <MediaPage />,
+    files: <FilesPage />,
+    voices: <VoicesPage />,
+    links: <LinksPage />,
+  };
 
   if (!chatInfo) {
     return <div>Ошибка загрузки профиля</div>;
@@ -53,7 +74,15 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
         backButton={isMobile}
         contextMenu={contextMenu}
       />
-      <AnothersProfile initialData={chatInfo} contactsInitialData={contacts} isMobile={isMobile} />
+      {isMainActive ? (
+        <AnothersProfile
+          initialData={chatInfo}
+          contactsInitialData={contacts}
+          isMobile={isMobile}
+        />
+      ) : (
+        tabs[activeSection] || <LinksPage />
+      )}
     </>
   );
 };
