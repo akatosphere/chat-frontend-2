@@ -10,7 +10,10 @@ type OurTabsTriggerProps = {
 
 export const OurTabsTrigger: React.FC<OurTabsTriggerProps> = ({ className, value, children }) => {
   return (
-    <TabsTrigger value={value} className={cn("transform-[rotateX(180deg)]", className)}>
+    <TabsTrigger
+      value={value}
+      className={cn("transform-[rotateX(180deg)] cursor-pointer", className)}
+    >
       {children}
     </TabsTrigger>
   );
