@@ -76,10 +76,10 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
     <>
       <SidebarHeader
         title={sidebarHeaderText}
-        closeButton={!isMobile}
+        closeButton={!isMobile && isMainActive}
         closeButtonFn={closeProfile}
         backButtonFn={closeProfile}
-        backButton={isMobile}
+        backButton={isMobile || !isMainActive}
         contextMenu={contextMenu}
       />
       {isMainActive ? (
