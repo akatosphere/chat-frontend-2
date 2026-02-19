@@ -1,5 +1,7 @@
 "use client";
 
+import { useShallow } from "zustand/react/shallow";
+
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { ChatTypeLight } from "@/entities/chat/model/types";
 import { useUserStore } from "@/entities/user/model/userStore";
@@ -23,10 +25,12 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
   chatType,
   chatInfo,
 }) => {
-  const { isMainActive, activeSection } = useAnothersProfileUIStore((s) => ({
-    isMainActive: s.isMainActive,
-    activeSection: s.activeSection,
-  }));
+  const { isMainActive, activeSection } = useAnothersProfileUIStore(
+    useShallow((s) => ({
+      isMainActive: s.isMainActive,
+      activeSection: s.activeSection,
+    })),
+  );
   const isMobile = useIsMobileStore((state) => state.isMobile);
   const sidebarHeaderText = getProfileHeaderText({ chatType, isMainActive, activeSection });
   const closeProfile = useProfileClose();

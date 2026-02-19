@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { useContactsSync } from "@/entities/contact/lib/useContactsSync";
@@ -33,11 +34,13 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
   contactsInitialData,
   isMobile,
 }) => {
-  const { activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore((s) => ({
-    activeSection: s.activeSection,
-    setActiveSection: s.setActiveSection,
-    resetTabsUI: s.reset,
-  }));
+  const { activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore(
+    useShallow((s) => ({
+      activeSection: s.activeSection,
+      setActiveSection: s.setActiveSection,
+      resetTabsUI: s.reset,
+    })),
+  );
   const [showModal, setShowModal] = useState(false);
   useContactsSync(contactsInitialData);
   const isInContact = useIsInContact(initialData?.uid ?? "");
@@ -59,7 +62,6 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
 
   useEffect(() => {
     setActiveSection("media");
-    console.log("setActiveSection media");
     return () => resetTabsUI();
   }, []);
 

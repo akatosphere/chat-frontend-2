@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { Avatar } from "@/entities/chat/ui/avatar";
@@ -30,11 +31,13 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData, isMobile,
     initialData?.type === "private-group" || initialData?.type === "public-group"
       ? "group"
       : "channel";
-  const { activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore((s) => ({
-    activeSection: s.activeSection,
-    setActiveSection: s.setActiveSection,
-    resetTabsUI: s.reset,
-  }));
+  const { activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore(
+    useShallow((s) => ({
+      activeSection: s.activeSection,
+      setActiveSection: s.setActiveSection,
+      resetTabsUI: s.reset,
+    })),
+  );
 
   useEffect(() => {
     setActiveSection("participants");
