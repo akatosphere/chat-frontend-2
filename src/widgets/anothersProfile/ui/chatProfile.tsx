@@ -5,18 +5,13 @@ import { useCallback, useEffect } from "react";
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { ChatInfoList } from "@/entities/chat/ui/chatInfoList";
-import { useUserStore } from "@/entities/user/model/userStore";
 import { ProfileNotifications } from "@/features/notifications/ui/profileNotifications";
 import { pluralize } from "@/shared/lib/pluralize";
-import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { OurTabsList } from "@/shared/ourTabs/ourTabsList";
 import { OurTabsTrigger } from "@/shared/ourTabs/ourTabsTrigger";
 import { Tabs, TabsContent } from "@/shared/shadcn/ui/tabs";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
-import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
-import { useChatProfileContextMenu } from "../lib/useChatProfileContextMenu";
-import { useProfileClose } from "../lib/useProfileClose";
 import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
 import { FilesPage } from "./tabs/filesPage";
 import { LinksPage } from "./tabs/linksPage";
@@ -26,22 +21,20 @@ import { VoicesPage } from "./tabs/voicesPage";
 
 type ChatProfileProps = {
   initialData: MappedChatDetails | null;
+  isOwner: boolean;
+  isMobile: boolean;
 };
 
-export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
-  const currentUserUid = useUserStore((s) => s.userId);
-  const isOwner = currentUserUid === initialData?.createdBy;
-  const chatKey = initialData?.chatKey || "";
-  const isMobile = useIsMobileStore((state) => state.isMobile);
-  const closeProfile = useProfileClose();
+export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData, isMobile, isOwner }) => {
   const chatType =
     initialData?.type === "private-group" || initialData?.type === "public-group"
       ? "group"
       : "channel";
-  const activeSection = useAnothersProfileUIStore((s) => s.activeSection);
-  const setActiveSection = useAnothersProfileUIStore((s) => s.setActiveSection);
-  const resetTabsUI = useAnothersProfileUIStore((s) => s.reset);
-  const title = chatType === "channel" ? "Информация о канале" : "Информация о группе";
+  const { activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore((s) => ({
+    activeSection: s.activeSection,
+    setActiveSection: s.setActiveSection,
+    resetTabsUI: s.reset,
+  }));
 
   useEffect(() => {
     setActiveSection("participants");
@@ -55,15 +48,6 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
     [setActiveSection],
   );
 
-  const contextMenu = useChatProfileContextMenu({
-    isOwner,
-    chatType,
-    chatKey,
-    chatName: initialData?.title || "",
-    fullChatType: initialData?.type || "chat",
-    chatId: initialData?.id || null,
-  });
-
   const getMembersLabel = () => {
     if (!initialData) return "";
     const count = initialData.membersCount + 1;
@@ -75,13 +59,6 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData }) => {
 
   return (
     <>
-      <SidebarHeader
-        title={title}
-        closeButton={!isMobile}
-        closeButtonFn={!isMobile ? closeProfile : undefined}
-        backButton={isMobile}
-        contextMenu={contextMenu}
-      />
       <SidebarContainer className="desktop:p-0 p-4" scrollbar={isMobile}>
         <div className="relative">
           <Avatar

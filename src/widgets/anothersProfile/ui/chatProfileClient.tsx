@@ -1,42 +1,44 @@
 "use client";
 
-import { useShallow } from "zustand/react/shallow";
-
+import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { ChatTypeLight } from "@/entities/chat/model/types";
-import { ContactListResponse } from "@/entities/contact/model/types";
-import { User } from "@/entities/user/model/types";
+import { useUserStore } from "@/entities/user/model/userStore";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
 import { getProfileHeaderText } from "../lib/getProfileHeaderText";
-import { useAnothersProfileContextMenu } from "../lib/useAnothersProfileContextMenu";
+import { useChatProfileContextMenu } from "../lib/useChatProfileContextMenu";
 import { useProfileClose } from "../lib/useProfileClose";
 import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
-import { AnothersProfile } from "./anothersProfile";
+import { ChatProfile } from "./chatProfile";
 
-type AnothersProfileClientProps = {
+type ChatProfileClientProps = {
+  chatKey: string;
   chatType: ChatTypeLight;
-  chatInfo: User | null;
-  contacts: ContactListResponse | null;
+  chatInfo: MappedChatDetails | null;
 };
 
-export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
+export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
+  chatKey,
   chatType,
   chatInfo,
-  contacts,
 }) => {
-  const { isMainActive, activeSection } = useAnothersProfileUIStore(
-    useShallow((s) => ({
-      isMainActive: s.isMainActive,
-      activeSection: s.activeSection,
-    })),
-  );
+  const { isMainActive, activeSection } = useAnothersProfileUIStore((s) => ({
+    isMainActive: s.isMainActive,
+    activeSection: s.activeSection,
+  }));
   const isMobile = useIsMobileStore((state) => state.isMobile);
   const sidebarHeaderText = getProfileHeaderText({ chatType, isMainActive, activeSection });
   const closeProfile = useProfileClose();
-  const contextMenu = useAnothersProfileContextMenu({
+  const currentUserUid = useUserStore((s) => s.userId);
+  const isOwner = currentUserUid === chatInfo?.createdBy;
+  const contextMenu = useChatProfileContextMenu({
+    isOwner,
+    chatType,
+    chatKey,
+    chatName: chatInfo?.title || "",
+    fullChatType: chatInfo?.type || "chat",
     chatId: chatInfo?.id || null,
-    chatName: chatInfo?.fullName ?? "",
   });
 
   if (!chatInfo) {
@@ -53,7 +55,7 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
         backButton={isMobile}
         contextMenu={contextMenu}
       />
-      <AnothersProfile initialData={chatInfo} contactsInitialData={contacts} isMobile={isMobile} />
+      <ChatProfile initialData={chatInfo} isMobile={isMobile} isOwner={isOwner} />
     </>
   );
 };

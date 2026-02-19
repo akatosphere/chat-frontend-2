@@ -8,19 +8,14 @@ import { useIsInContact } from "@/entities/contact/lib/useIsInContact";
 import { ContactListResponse } from "@/entities/contact/model/types";
 import { User } from "@/entities/user/model/types";
 import { UserInfoList } from "@/entities/user/ui/UserInfoList";
-import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { AddedToContactsModal } from "@/features/contacts/addToContacts/ui/AddedToContactsModal";
 import { AddToContactsProfileBtn } from "@/features/contacts/addToContacts/ui/addToContactsProfileBtn";
 import { ProfileNotifications } from "@/features/notifications/ui/profileNotifications";
-import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { OurTabsList } from "@/shared/ourTabs/ourTabsList";
 import { OurTabsTrigger } from "@/shared/ourTabs/ourTabsTrigger";
 import { Tabs, TabsContent } from "@/shared/shadcn/ui/tabs";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
-import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
-import { useAnothersProfileContextMenu } from "../lib/useAnothersProfileContextMenu";
-import { useProfileClose } from "../lib/useProfileClose";
 import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
 import { FilesPage } from "./tabs/filesPage";
 import { LinksPage } from "./tabs/linksPage";
@@ -30,19 +25,19 @@ import { VoicesPage } from "./tabs/voicesPage";
 type AnothersProfileProps = {
   initialData: User | null;
   contactsInitialData?: ContactListResponse | null;
+  isMobile: boolean;
 };
 
 export const AnothersProfile: React.FC<AnothersProfileProps> = ({
   initialData,
   contactsInitialData,
+  isMobile,
 }) => {
-  const isMobile = useIsMobileStore((state) => state.isMobile);
-  const getChatId = useChatListStore((s) => s.getChatIdByUid);
-  const chatId = getChatId(initialData?.uid ?? "");
-  const closeProfile = useProfileClose();
-  const activeSection = useAnothersProfileUIStore((s) => s.activeSection);
-  const setActiveSection = useAnothersProfileUIStore((s) => s.setActiveSection);
-  const resetTabsUI = useAnothersProfileUIStore((s) => s.reset);
+  const { activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore((s) => ({
+    activeSection: s.activeSection,
+    setActiveSection: s.setActiveSection,
+    resetTabsUI: s.reset,
+  }));
   const [showModal, setShowModal] = useState(false);
   useContactsSync(contactsInitialData);
   const isInContact = useIsInContact(initialData?.uid ?? "");
@@ -62,11 +57,6 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
     [setActiveSection],
   );
 
-  const contextMenu = useAnothersProfileContextMenu({
-    chatId,
-    chatName: initialData?.fullName ?? "",
-  });
-
   useEffect(() => {
     setActiveSection("media");
     console.log("setActiveSection media");
@@ -75,14 +65,6 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
 
   return (
     <>
-      <SidebarHeader
-        title="Информация"
-        closeButton={!isMobile}
-        closeButtonFn={closeProfile}
-        backButtonFn={closeProfile}
-        backButton={isMobile}
-        contextMenu={contextMenu}
-      />
       <SidebarContainer className="desktop:p-0 p-4" scrollbar={isMobile}>
         <div className="relative">
           <Avatar
