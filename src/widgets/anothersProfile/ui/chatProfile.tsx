@@ -78,13 +78,21 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData, isMobile,
         </div>
         <Tabs value={activeSection} onValueChange={handleTabChange}>
           <OurTabsList>
-            <OurTabsTrigger value="participants">
+            <OurTabsTrigger onClick={toggleIsMainActive} value="participants">
               {chatType === "channel" ? "Подписчики" : "Участники"}
             </OurTabsTrigger>
-            <OurTabsTrigger value="media">Медиа</OurTabsTrigger>
-            <OurTabsTrigger value="files">Файлы</OurTabsTrigger>
-            <OurTabsTrigger value="voices">Голосовые</OurTabsTrigger>
-            <OurTabsTrigger value="links">Ссылки</OurTabsTrigger>
+            <OurTabsTrigger onClick={toggleIsMainActive} value="media">
+              Медиа
+            </OurTabsTrigger>
+            <OurTabsTrigger onClick={toggleIsMainActive} value="files">
+              Файлы
+            </OurTabsTrigger>
+            <OurTabsTrigger onClick={toggleIsMainActive} value="voices">
+              Голосовые
+            </OurTabsTrigger>
+            <OurTabsTrigger onClick={toggleIsMainActive} value="links">
+              Ссылки
+            </OurTabsTrigger>
           </OurTabsList>
           <TabsContent value="participants">
             <ParticipantsPage />
