@@ -19,25 +19,25 @@ const MessageGroupComponent: React.FC<MessageGroupProps> = ({
   passDataAttributes = false,
 }) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex w-full flex-col">
       <DateBadge label={label} className="desktop:mb-5 mb-3" />
       {messages.map((msg, idx) => {
         const prev = messages[idx - 1];
         const marginTop = getMessageMarginTop(msg, prev);
 
         return (
-          <div key={msg.uid} className={marginTop}>
-            <MessageBubble
-              chatMessage={msg}
-              currentUserId={currentUserId}
-              {...(passDataAttributes && {
-                "data-message-uid": msg.uid,
-                "data-chat-key": msg.chatKey,
-                "data-is-from-current-user": String(msg.fromUser.uid === currentUserId),
-                "data-is-new": String(msg.isNew),
-              })}
-            />
-          </div>
+          <MessageBubble
+            key={msg.uid}
+            className={marginTop}
+            chatMessage={msg}
+            currentUserId={currentUserId}
+            {...(passDataAttributes && {
+              "data-message-uid": msg.uid,
+              "data-chat-key": msg.chatKey,
+              "data-is-from-current-user": String(msg.fromUser.uid === currentUserId),
+              "data-is-new": String(msg.isNew),
+            })}
+          />
         );
       })}
     </div>

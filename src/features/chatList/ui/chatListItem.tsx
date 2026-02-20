@@ -15,7 +15,7 @@ type ChatListItemProps = {
   isActive?: boolean;
   isLast?: boolean;
   actions: ChatActions;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 export const ChatListItemComponent = ({

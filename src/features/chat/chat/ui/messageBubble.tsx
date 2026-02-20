@@ -1,6 +1,7 @@
 import { memo, useCallback, useMemo, useRef } from "react";
 
 import { cn } from "@/shared/shadcn/lib/utils";
+import { Checkbox } from "@/shared/ui/checkbox";
 import { useMessageContextMenu } from "@/widgets/contextMenu/lib/useMessageContextMenu";
 
 import { useMessageNavigation } from "../model/store/useChatNavigationStore";
@@ -33,6 +34,10 @@ export const MessageBubble = memo(function MessageBubble({
     useCallback((s) => s.highlightMessageId === chatMessage.uid, [chatMessage.uid]),
   );
 
+  const { isSelectionMode, selectedMessageUids, toggleMessageSelection } = useChatStore();
+
+  const isSelected = selectedMessageUids.has(chatMessage.uid);
+
   const handleDoubleClick = () => {
     setReplyTarget(chatMessage);
   };
@@ -51,19 +56,38 @@ export const MessageBubble = memo(function MessageBubble({
 
   return (
     <div
-      ref={ref}
-      id={`msg-${chatMessage.uid}`}
       className={cn(
-        "flex px-4 transition-colors duration-300 ease-out select-none",
-        isMine ? "justify-end" : "justify-start",
-        (isHighlighted || isOpen) && "bg-muted",
+        "flex w-full min-w-0 flex-1 items-center transition-colors duration-300 ease-out",
+        (selectedMessageUids.has(chatMessage.uid) || isHighlighted || isOpen) && "bg-muted",
         className,
       )}
-      onDoubleClick={handleDoubleClick}
-      onContextMenu={onContextMenu}
-      {...outerDataAttributes}
     >
-      <MessageLayout isMine={isMine} message={chatMessage} blocks={chatMessage.blocks} />
+      {isSelectionMode && (
+        <Checkbox
+          checked={isSelected}
+          onChange={() => toggleMessageSelection(chatMessage.uid)}
+          className="ml-4"
+        />
+      )}
+      <div
+        ref={ref}
+        id={`msg-${chatMessage.uid}`}
+        className={cn(
+          "flex flex-1 px-4 transition-colors duration-300 ease-out select-none",
+          isMine ? "justify-end" : "justify-start",
+        )}
+        onDoubleClick={handleDoubleClick}
+        onClick={(e) => {
+          if (isSelectionMode) {
+            e.stopPropagation();
+            toggleMessageSelection(chatMessage.uid);
+          }
+        }}
+        onContextMenu={onContextMenu}
+        {...outerDataAttributes}
+      >
+        <MessageLayout isMine={isMine} message={chatMessage} blocks={chatMessage.blocks} />
+      </div>
     </div>
   );
 });

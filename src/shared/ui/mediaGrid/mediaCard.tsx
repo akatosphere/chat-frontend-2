@@ -9,8 +9,11 @@ import { MediaItem } from "./mediaGrid";
 type MediaCardProps = {
   className?: string;
   isFullWidth?: boolean;
+  isAbleToOpen?: boolean;
   isDeleteMode: boolean;
-  onDelete: (id: string) => void;
+  index: number;
+  onDelete: (id: number) => void;
+  onImageClick: (id: number) => void;
   item: MediaItem;
 };
 
@@ -18,19 +21,31 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   className,
   item,
   isDeleteMode,
+  isAbleToOpen = false,
+  index,
   onDelete,
+  onImageClick,
 }) => {
   return (
     <div className={cn("relative overflow-hidden bg-gray-100", className)}>
       {item.type === "video" && <video src={item.src} autoPlay loop muted />}
       {item.type === "image" && (
-        <Image src={item.src} alt={`Image`} fill className="object-cover" />
+        <Image
+          src={item.src}
+          alt={`Image`}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 626px"
+          className={cn("object-cover", isAbleToOpen && "cursor-pointer")}
+          onClick={() => isAbleToOpen && onImageClick(index)}
+        />
       )}
       {isDeleteMode && (
         <Button
           variant={"text"}
           size="inline"
-          onClick={() => onDelete(item.id || "")}
+          onClick={() => {
+            if (item.id) onDelete(item.id);
+          }}
           className="absolute right-3 bottom-2.5 h-9 w-9 rounded-md bg-[#00000033] transition-colors duration-200 hover:bg-[#00000066]"
         >
           <Trash className="h-5 w-5 text-white" />

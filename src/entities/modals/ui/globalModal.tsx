@@ -2,18 +2,20 @@
 
 import React from "react";
 
-import { DeleteChatModal } from "@/entities/modals/ui/deleteChatModal/deleteChatModal";
-import { DeleteMessageModal } from "@/entities/modals/ui/deleteMessageModal/deleteMessageModal";
+import { DeleteMessageModal } from "@/features/chat/chat/ui/deleteMessageModal/deleteMessageModal";
+import { ForwardModal } from "@/features/chat/chat/ui/forwardModal/forwardModal";
+import { DeleteChatModal } from "@/features/chatList/ui/deleteChatModal/deleteChatModal";
 
+import { SendFileModal } from "../../../features/chat/chat/ui/sendFileModal/sendFileModal";
+import { SendImageModal } from "../../../features/chat/chat/ui/sendImageModal/sendImageModal";
 import { useModalStore } from "../model/useGlobalModalStore";
-import { SendFileModal } from "./sendFileModal/sendFileModal";
-import { SendImageModal } from "./sendImageModal/sendImageModal";
 // eslint-disable-next-line
 const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
   deleteChat: DeleteChatModal,
   deleteMessage: DeleteMessageModal,
   sendImage: SendImageModal,
   sendFile: SendFileModal,
+  forward: ForwardModal,
   // новые модалки сюда
 };
 

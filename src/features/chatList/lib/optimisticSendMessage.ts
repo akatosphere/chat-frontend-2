@@ -9,6 +9,7 @@ export const optimisticSendMessage = ({
     id: number;
     uid: string;
     content: string;
+    files_summary: { types: string[]; count: number };
     created_at: number;
     from_user_id: string;
   };
@@ -20,6 +21,7 @@ export const optimisticSendMessage = ({
       content: message.content,
       created_at: message.created_at,
       updated_at: message.created_at,
+      files_summary: message.files_summary,
       new: true,
       from_user: message.from_user_id,
     },

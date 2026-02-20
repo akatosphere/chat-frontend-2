@@ -1,6 +1,9 @@
 "use client";
 
+import { useChatStore } from "@/features/chat/chat/model/store/useChatStore";
+import { ForwardBox } from "@/features/chat/chat/ui/forwardBox";
 import { ReplyBox } from "@/features/chat/chat/ui/replyBox";
+import { SelectBox } from "@/features/chat/chat/ui/selectBox";
 import { MessageForm } from "@/features/chat/sendMessage/ui/messageForm";
 import { useKeyboardOffset } from "@/shared/lib/useKeyboardOffset";
 import { cn } from "@/shared/shadcn/lib/utils";
@@ -13,9 +16,12 @@ type ChatFooterProps = {
 export const ChatFooter: React.FC<ChatFooterProps> = ({ className, onSendMessage }) => {
   const { isKeyboardOpen } = useKeyboardOffset();
 
+  const { isSelectionMode } = useChatStore();
+
   return (
     <>
       <ReplyBox />
+      <ForwardBox />
       <footer
         style={{ paddingBottom: "var(--keyboard-offset)" }}
         className={cn(
@@ -23,7 +29,11 @@ export const ChatFooter: React.FC<ChatFooterProps> = ({ className, onSendMessage
           className,
         )}
       >
-        <MessageForm isKeyboardOpen={isKeyboardOpen} onSubmitMessage={onSendMessage} />
+        {isSelectionMode ? (
+          <SelectBox />
+        ) : (
+          <MessageForm isKeyboardOpen={isKeyboardOpen} onSubmitMessage={onSendMessage} />
+        )}
       </footer>
     </>
   );

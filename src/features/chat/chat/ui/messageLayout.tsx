@@ -34,7 +34,14 @@ export const MessageLayout = ({
       )}
     >
       {blocks.map((block, i) => (
-        <MessageBlockRenderer key={i} block={block} isMine={isMine} time={time} status={status} />
+        <MessageBlockRenderer
+          key={i}
+          block={block}
+          isMine={isMine}
+          time={time}
+          status={status}
+          id={message.id}
+        />
       ))}
     </div>
   );

@@ -18,9 +18,9 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
 
   const isMobile = useIsMobileStore((state) => state.isMobile);
 
-  const submitMessage = () => {
+  const submitMessage = (isCanBeSendWithoutMessage = false) => {
     const trimmedMessage = textMessage.trim();
-    if (!trimmedMessage) return;
+    if (!trimmedMessage && !isCanBeSendWithoutMessage) return;
 
     if (isMobile && !isKeyboardOpen) {
       textareaRef.current?.blur();
@@ -40,9 +40,12 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
     resizeTextarea(textareaRef.current);
   }, [textMessage]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    event: React.FormEvent<HTMLFormElement>,
+    isCanBeSendWithoutMessage = false,
+  ) => {
     event.preventDefault();
-    submitMessage();
+    submitMessage(isCanBeSendWithoutMessage);
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

@@ -38,6 +38,7 @@ export interface ForwardedMessage {
   id: number;
   uid: string;
   from_user: string;
+  avatar: string;
   content: string;
   files_list: MessageFile[];
   first_name: string;

@@ -1,4 +1,5 @@
 import { GlobalModal } from "@/entities/modals/ui/globalModal";
+import { MediaViewerContainer } from "@/features/mediaViewer/ui/mediaViewerContainer";
 import { NavBar } from "@/shared/navBar/ui/navBar";
 import QueryCustomProvider from "@/shared/providers/queryProvider";
 import { AppHeader } from "@/shared/ui/appHeader";
@@ -11,6 +12,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
         <NavBar className="desktop:order-1 order-2" />
         <QueryCustomProvider>
           <GlobalModal />
+          <MediaViewerContainer />
           <ContextMenuProvider>{children}</ContextMenuProvider>
         </QueryCustomProvider>
       </div>

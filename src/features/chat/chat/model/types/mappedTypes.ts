@@ -39,12 +39,12 @@ export interface MappedMessageUser {
 export interface MappedMessageFile {
   id: number;
   uid: string;
-  file: string;
+  file?: string | File;
   fileUrl: string;
   fileWebp: string | null;
   fileWebpUrl: string | undefined;
   fileType: string | null;
-  isNew: boolean;
+  isNew?: boolean;
   createdAt: number;
   updatedAt: number;
 }
@@ -60,6 +60,7 @@ export interface MappedRepliedMessage {
 }
 
 export interface MappedForwardedMessage {
+  avatarUrl: string;
   id: number;
   uid: string;
   fromUserId: string;
