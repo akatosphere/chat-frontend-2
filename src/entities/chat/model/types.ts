@@ -1,4 +1,11 @@
+import { z } from "zod";
+
 import { ChatMemberDto } from "@/entities/user/model/types";
+
+import {
+  ChatParticipantDtoSchema,
+  ChatParticipantListResponseDtoSchema,
+} from "./participantSchema";
 
 export type ChatType =
   | "public-group"
@@ -106,4 +113,32 @@ export type LastMessagePreview = {
 export type GetLastMessagePreviewParams = {
   content?: string;
   files?: FilesSummary | null;
+};
+
+// --- Типы участников чата (эндпоинт /participants/) ---
+
+export type ChatParticipantDto = z.infer<typeof ChatParticipantDtoSchema>;
+export type ChatParticipantListResponseDto = z.infer<typeof ChatParticipantListResponseDtoSchema>;
+
+/** Участник группы/канала, маппированный в camelCase */
+export type ChatParticipant = {
+  uid: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  avatarUrl: string;
+  avatarWebpUrl: string;
+  isDeleted: boolean;
+  isOwner: boolean;
+  isBlocked: boolean;
+  isOnline: boolean;
+  wasOnlineAt: number;
+  isInContacts: boolean;
+};
+
+/** Маппированный ответ для пагинации участников */
+export type ChatParticipantListResponse = {
+  count: number;
+  next: string | null;
+  results: ChatParticipant[];
 };
