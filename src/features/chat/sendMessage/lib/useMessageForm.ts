@@ -92,7 +92,6 @@ export const useMessageForm = ({ onSubmitMessage, isKeyboardOpen }: UseMessageFo
     handleSubmit,
     onKeyDown,
     emojiPickerOpen,
-    setEmojiPickerOpen,
     onToggle,
     onEmojiSelect,
     pickerRef,

@@ -3,6 +3,8 @@
 import AttachBtn from "@icons/chat/attachBtn.svg";
 import MessageSendBtn from "@icons/chat/messageSendBtn.svg";
 import VoiceMessage from "@icons/chat/voiceMessage.svg";
+import { useState } from "react";
+import { createPortal } from "react-dom";
 
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
@@ -47,7 +49,6 @@ export const MessageForm: React.FC<MessageFormProps> = ({
     handleSubmit,
     onKeyDown,
     emojiPickerOpen,
-    setEmojiPickerOpen,
     onToggle,
     onEmojiSelect,
     pickerRef,
@@ -58,6 +59,22 @@ export const MessageForm: React.FC<MessageFormProps> = ({
   });
 
   const { onContextMenu, isOpen } = useSendFilesContextMenu();
+
+  const [pickerStyle, setPickerStyle] = useState<React.CSSProperties>({});
+
+  const updatePickerPosition = () => {
+    const btnRect = emojiBtnRef.current?.getBoundingClientRect();
+    if (!btnRect) return;
+    const isDesktop = window.innerWidth >= 1023;
+    setPickerStyle({
+      position: "fixed",
+      bottom: window.innerHeight - btnRect.top + 8,
+      zIndex: 50,
+      ...(isDesktop
+        ? { right: window.innerWidth - btnRect.right }
+        : { left: "50%", transform: "translateX(-50%)" }),
+    });
+  };
 
   return (
     <div className="relative w-full">
@@ -105,20 +122,6 @@ export const MessageForm: React.FC<MessageFormProps> = ({
                 )}
               />
             </div>
-            {emojiPickerOpen && (
-              <div
-                ref={pickerRef}
-                className={cn(
-                  "desktop:right-0 desktop:left-auto desktop:translate-x-0 absolute bottom-18 left-1/2 -translate-x-1/2 transform",
-                  variant === "modal" && "right-0 bottom-12 left-auto translate-x-0",
-                )}
-              >
-                <EmojiPicker
-                  onEmojiSelect={onEmojiSelect}
-                  size={variant === "modal" ? "mini" : "standart"}
-                />
-              </div>
-            )}
           </div>
 
           <InputGroupAddon
@@ -132,14 +135,20 @@ export const MessageForm: React.FC<MessageFormProps> = ({
             <InputGroupButton
               onClick={(e) => {
                 e.stopPropagation();
-                setEmojiPickerOpen(!emojiPickerOpen);
               }}
               type="button"
               size="icon-auto"
               variant="ghost"
               asChild
             >
-              <EmojiBtnToggle className="h-5 w-5" pressed={emojiPickerOpen} onToggle={onToggle} />
+              <EmojiBtnToggle
+                className="h-5 w-5"
+                pressed={emojiPickerOpen}
+                onToggle={() => {
+                  if (!emojiPickerOpen) updatePickerPosition();
+                  onToggle();
+                }}
+              />
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>
@@ -161,6 +170,16 @@ export const MessageForm: React.FC<MessageFormProps> = ({
           )}
         </div>
       </form>
+      {emojiPickerOpen &&
+        createPortal(
+          <div ref={pickerRef} style={pickerStyle}>
+            <EmojiPicker
+              onEmojiSelect={onEmojiSelect}
+              size={variant === "modal" ? "mini" : "standart"}
+            />
+          </div>,
+          document.body,
+        )}
     </div>
   );
 };
