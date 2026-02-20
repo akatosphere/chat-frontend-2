@@ -3,7 +3,7 @@ export type ModalPayloads = {
   deleteMessage: { messageId: string; chatKey: string; chatKeyUser?: string };
   sendImage: { chatKey: string };
   sendFile: { chatKey: string };
-  forward: { messageId: string; chatKey: string };
+  forward: { messageId: number; chatKey: string };
   //новые модалки здесь
 };
 
