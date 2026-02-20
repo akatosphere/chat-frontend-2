@@ -8,6 +8,7 @@ type AvatarProps = {
   avatarUrl?: string | null;
   size?:
     | "xs"
+    | "s"
     | "sm"
     | "md"
     | "lg"
@@ -20,6 +21,7 @@ type AvatarProps = {
 
 const AVATAR_SIZES = {
   xs: "w-4.5 h-4.5",
+  s: "w-8 h-8",
   sm: "w-10 h-10",
   md: "w-15 h-15",
   lg: "w-20.5 h-20.5",
