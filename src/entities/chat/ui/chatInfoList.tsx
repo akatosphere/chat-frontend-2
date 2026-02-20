@@ -12,32 +12,34 @@ type ChatInfoListProps = {
   isOwner: boolean;
 };
 
-export const ChatInfoList: React.FC<ChatInfoListProps> = ({ className, initialData, isOwner }) => {
+export const ChatInfoList = ({ className, initialData, isOwner }: ChatInfoListProps) => {
   const description = initialData?.description;
-  const { data, isLoading, isError } = useInviteLink(initialData?.chatKey);
-  const inviteLink = isOwner
-    ? isLoading
-      ? "..."
-      : isError
-        ? "ошибка генерации пригласительной ссылки"
-        : data?.invite_link
-    : "";
+
+  const { data, isLoading, isError } = useInviteLink(isOwner ? initialData?.chatKey : undefined);
+
+  const inviteLink = isLoading
+    ? "..."
+    : isError
+      ? "ошибка генерации пригласительной ссылки"
+      : data?.invite_link;
+
+  const hasInviteLink = !!data?.invite_link;
 
   return (
     <div className="flex w-full flex-col gap-2">
       <div className={cn("flex w-full flex-col rounded-lg bg-white", className)}>
         {description && <InfoItem title="Описание" text={description} className="text-black" />}
       </div>
-      <div className={cn("flex w-full flex-col rounded-lg bg-white", className)}>
-        {isOwner && (
+      {isOwner && (
+        <div className={cn("flex w-full flex-col rounded-lg bg-white", className)}>
           <InfoItem
-            copy={true}
+            copy
             title="ссылка на приглашение"
             text={inviteLink}
-            className={cn(data?.invite_link ? "text-primary" : "text-black")}
+            className={cn(hasInviteLink ? "text-primary" : "text-black")}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

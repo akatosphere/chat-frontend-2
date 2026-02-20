@@ -12,6 +12,7 @@ export const getChatServer = async (chatKey: string, chatType: "group" | "channe
     if (groupRes.success) {
       return { data: groupRes.data, success: true, type: groupRes.data.type };
     }
+
     return groupRes;
   }
 

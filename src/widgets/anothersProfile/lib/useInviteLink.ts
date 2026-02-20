@@ -2,19 +2,25 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getInviteLink } from "@/entities/chat/api/getInviteLink";
 
-// Определим интерфейс ответа для типизации
-interface InviteResponse {
+type InviteResponse = {
   chat_key: string;
   chat_type: string;
   invite_link: string;
   expires_at: number;
-}
+};
+
+const emptyInviteResponse: InviteResponse = {
+  chat_key: "",
+  chat_type: "",
+  invite_link: "",
+  expires_at: 0,
+};
 
 export const useInviteLink = (chatKey: string | undefined) => {
   return useQuery({
     queryKey: ["inviteLink", chatKey],
     queryFn: async () => {
-      if (!chatKey) throw new Error("Chat key is required");
+      if (!chatKey) return emptyInviteResponse;
 
       const response = await getInviteLink(chatKey);
       if (!response.success) {
@@ -23,6 +29,7 @@ export const useInviteLink = (chatKey: string | undefined) => {
       return response.data as InviteResponse;
     },
     enabled: !!chatKey,
+    placeholderData: emptyInviteResponse,
     refetchOnWindowFocus: false,
   });
 };
