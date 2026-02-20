@@ -6,6 +6,7 @@ import { useShallow } from "zustand/react/shallow";
 import { ChatTypeLight } from "@/entities/chat/model/types";
 import { ContactListResponse } from "@/entities/contact/model/types";
 import { User } from "@/entities/user/model/types";
+import { useUserInfoStore } from "@/entities/user/model/useUserInfoStore";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
 
@@ -42,15 +43,25 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
   const isMobile = useIsMobileStore((state) => state.isMobile);
   const sidebarHeaderText = getProfileHeaderText({ chatType, isMainActive, activeSection });
   const closeProfile = useProfileClose();
-  const contextMenu = useAnothersProfileContextMenu({
-    chatId: chatInfo?.id || null,
-    chatName: chatInfo?.fullName ?? "",
-  });
+
+  const cachedUserInfo = useUserInfoStore((s) =>
+    chatInfo ? s.userInfoByUid[chatInfo.uid] : undefined,
+  );
 
   useEffect(() => {
+    if (chatInfo) {
+      useUserInfoStore.getState().setUserInfo(chatInfo.uid, chatInfo);
+    }
     setActiveSection("media");
     return () => resetTabsUI();
-  }, []);
+  }, [chatInfo]);
+
+  const displayData = cachedUserInfo ?? chatInfo;
+
+  const contextMenu = useAnothersProfileContextMenu({
+    chatId: displayData?.id || null,
+    chatName: displayData?.fullName ?? "",
+  });
 
   const tabs: Record<string, React.ReactNode> = {
     participants: <ParticipantsPage />,
@@ -60,7 +71,7 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
     links: <LinksPage />,
   };
 
-  if (!chatInfo) {
+  if (!displayData) {
     return <div>Ошибка загрузки профиля</div>;
   }
 
@@ -76,7 +87,7 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
       />
       {isMainActive ? (
         <AnothersProfile
-          initialData={chatInfo}
+          initialData={displayData}
           contactsInitialData={contacts}
           isMobile={isMobile}
         />

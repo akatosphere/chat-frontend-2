@@ -5,6 +5,7 @@ import { useShallow } from "zustand/react/shallow";
 
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { ChatTypeLight } from "@/entities/chat/model/types";
+import { useChatInfoStore } from "@/entities/chat/model/useChatInfoStore";
 import { useUserStore } from "@/entities/user/model/userStore";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
 import { SidebarHeader } from "@/shared/ui/sidebarHeader/sidebarHeader";
@@ -43,14 +44,26 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
   const sidebarHeaderText = getProfileHeaderText({ chatType, isMainActive, activeSection });
   const closeProfile = useProfileClose();
   const currentUserUid = useUserStore((s) => s.userId);
-  const isOwner = currentUserUid === chatInfo?.createdBy;
+  const cachedChatInfo = useChatInfoStore((s) => s.chatInfoByKey[chatKey]);
+
+  useEffect(() => {
+    if (chatInfo) {
+      useChatInfoStore.getState().setChatInfo(chatKey, chatInfo);
+    }
+    setActiveSection("participants");
+    return () => resetTabsUI();
+  }, [chatKey, chatInfo]);
+
+  const displayData = cachedChatInfo ?? chatInfo;
+
+  const isOwner = currentUserUid === displayData?.createdBy;
   const contextMenu = useChatProfileContextMenu({
     isOwner,
     chatType,
     chatKey,
-    chatName: chatInfo?.title || "",
-    fullChatType: chatInfo?.type || "chat",
-    chatId: chatInfo?.id || null,
+    chatName: displayData?.title || "",
+    fullChatType: displayData?.type || "chat",
+    chatId: displayData?.id || null,
   });
 
   const tabs: Record<string, React.ReactNode> = {
@@ -61,14 +74,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
     links: <LinksPage />,
   };
 
-  useEffect(() => {
-    console.log("лог из чат профиль клиента");
-
-    setActiveSection("participants");
-    return () => resetTabsUI();
-  }, []);
-
-  if (!chatInfo) {
+  if (!displayData) {
     return <div>Ошибка загрузки профиля</div>;
   }
 
@@ -83,7 +89,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
         contextMenu={contextMenu}
       />
       {isMainActive ? (
-        <ChatProfile initialData={chatInfo} isMobile={isMobile} isOwner={isOwner} />
+        <ChatProfile initialData={displayData} isMobile={isMobile} isOwner={isOwner} />
       ) : (
         tabs[activeSection] || <LinksPage />
       )}
