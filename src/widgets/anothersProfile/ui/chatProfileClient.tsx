@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
-import { ChatTypeLight } from "@/entities/chat/model/types";
+import { ChatParticipantListResponse, ChatTypeLight } from "@/entities/chat/model/types";
 import { useChatInfoStore } from "@/entities/chat/model/useChatInfoStore";
 import { useUserStore } from "@/entities/user/model/userStore";
 import { useIsMobileStore } from "@/shared/model/isMobile.store";
@@ -25,12 +25,14 @@ type ChatProfileClientProps = {
   chatKey: string;
   chatType: ChatTypeLight;
   chatInfo: MappedChatDetails | null;
+  initialParticipants: ChatParticipantListResponse | null;
 };
 
 export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
   chatKey,
   chatType,
   chatInfo,
+  initialParticipants,
 }) => {
   const { isMainActive, activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore(
     useShallow((s) => ({
@@ -45,7 +47,6 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
   const closeProfile = useProfileClose();
   const currentUserUid = useUserStore((s) => s.userId);
   const cachedChatInfo = useChatInfoStore((s) => s.chatInfoByKey[chatKey]);
-
   useEffect(() => {
     if (chatInfo) {
       useChatInfoStore.getState().setChatInfo(chatKey, chatInfo);
@@ -67,7 +68,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
   });
 
   const tabs: Record<string, React.ReactNode> = {
-    participants: <ParticipantsPage />,
+    participants: <ParticipantsPage initialParticipants={initialParticipants} chatKey={chatKey} />,
     media: <MediaPage />,
     files: <FilesPage />,
     voices: <VoicesPage />,
@@ -89,7 +90,13 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
         contextMenu={contextMenu}
       />
       {isMainActive ? (
-        <ChatProfile initialData={displayData} isMobile={isMobile} isOwner={isOwner} />
+        <ChatProfile
+          initialData={displayData}
+          isMobile={isMobile}
+          isOwner={isOwner}
+          chatKey={chatKey}
+          initialParticipants={initialParticipants}
+        />
       ) : (
         tabs[activeSection] || <LinksPage />
       )}

@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
+import { ChatParticipantListResponse } from "@/entities/chat/model/types";
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { ChatInfoList } from "@/entities/chat/ui/chatInfoList";
 import { ProfileNotifications } from "@/features/notifications/ui/profileNotifications";
@@ -21,12 +22,20 @@ import { ParticipantsPage } from "./tabs/participantsPage";
 import { VoicesPage } from "./tabs/voicesPage";
 
 type ChatProfileProps = {
+  initialParticipants: ChatParticipantListResponse | null;
   initialData: MappedChatDetails | null;
   isOwner: boolean;
   isMobile: boolean;
+  chatKey: string;
 };
 
-export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData, isMobile, isOwner }) => {
+export const ChatProfile: React.FC<ChatProfileProps> = ({
+  initialData,
+  isMobile,
+  isOwner,
+  initialParticipants,
+  chatKey,
+}) => {
   const chatType =
     initialData?.type === "private-group" || initialData?.type === "public-group"
       ? "group"
@@ -95,7 +104,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({ initialData, isMobile,
             </OurTabsTrigger>
           </OurTabsList>
           <TabsContent value="participants">
-            <ParticipantsPage />
+            <ParticipantsPage initialParticipants={initialParticipants} chatKey={chatKey} />
           </TabsContent>
           <TabsContent value="media">
             <MediaPage />

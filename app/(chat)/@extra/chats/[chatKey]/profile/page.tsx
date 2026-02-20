@@ -1,4 +1,5 @@
 import { getChatServer } from "@/entities/chat/api/getChatServer";
+import { getParticipantsServer } from "@/entities/chat/lib/getParticipantsServer";
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { getContactsServer } from "@/entities/contact/api/getContactsServer";
 import { User } from "@/entities/user/model/types";
@@ -29,8 +30,10 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       />
     );
   } else {
+    const initialParticipants = await getParticipantsServer(chatKey);
     return (
       <ChatProfileClient
+        initialParticipants={initialParticipants}
         chatKey={chatKey}
         chatType={chatType}
         chatInfo={response?.data as MappedChatDetails | null}

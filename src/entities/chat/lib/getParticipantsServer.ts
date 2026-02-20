@@ -4,7 +4,7 @@ import { mapChatParticipantListResponse } from "../model/participantMapper";
 import { ChatParticipantListResponse, ChatParticipantListResponseDto } from "../model/types";
 
 /** Для серверных компонентов (SSR) */
-export const getContactsServer = async (
+export const getParticipantsServer = async (
   chatKey: string,
 ): Promise<ChatParticipantListResponse | null> => {
   try {

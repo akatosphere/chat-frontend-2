@@ -18,7 +18,6 @@ import { AnothersProfile } from "./anothersProfile";
 import { FilesPage } from "./tabs/filesPage";
 import { LinksPage } from "./tabs/linksPage";
 import { MediaPage } from "./tabs/mediaPage";
-import { ParticipantsPage } from "./tabs/participantsPage";
 import { VoicesPage } from "./tabs/voicesPage";
 
 type AnothersProfileClientProps = {
@@ -64,7 +63,6 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
   });
 
   const tabs: Record<string, React.ReactNode> = {
-    participants: <ParticipantsPage />,
     media: <MediaPage />,
     files: <FilesPage />,
     voices: <VoicesPage />,
