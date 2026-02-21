@@ -1,6 +1,7 @@
 import { memo, useCallback, useMemo, useRef } from "react";
 
 import { Avatar } from "@/entities/chat/ui/avatar";
+import { getChatType } from "@/shared/lib/getChatType";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Checkbox } from "@/shared/ui/checkbox";
 
@@ -59,6 +60,7 @@ export const MessageBubble = memo(function MessageBubble({
   }, [dataAttributes]);
 
   const { onContextMenu, isOpen } = useMessageContextMenu(chatMessage);
+  const chatType = getChatType(chatMessage.chatKey);
 
   return (
     <div
@@ -75,8 +77,8 @@ export const MessageBubble = memo(function MessageBubble({
           className="ml-4"
         />
       )}
-      {!isMine && (
-        <div className="flex w-8 shrink-0 items-end pb-0.5">
+      {!isMine && chatType != "chat" && (
+        <div className="ml-4 flex w-8 shrink-0 items-end pb-0.5">
           {isLastInGroup && <Avatar size="s" avatarUrl={chatMessage.fromUser.avatarUrl} />}
         </div>
       )}
