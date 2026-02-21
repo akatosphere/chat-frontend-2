@@ -1,10 +1,11 @@
+import { ChatParticipant } from "@/entities/chat/model/types";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { SimpleCard } from "@/shared/ui/list/simpleCard";
 
 import { Contact } from "../model/types";
 
 export type ContactCardProps = {
-  contact: Contact;
+  contact: Contact | ChatParticipant;
   isLast?: boolean;
   onClick?: () => void;
   after?: React.ReactNode;
@@ -13,10 +14,10 @@ export type ContactCardProps = {
 export const ContactCard = (props: ContactCardProps) => {
   const { contact, isLast = false, onClick, after } = props;
   const avatarLetter = contact.firstName?.charAt(0).toUpperCase() || "?";
-  const href = `/chats/${contact.systemUid}`;
+  const href = "systemUid" in contact ? `/chats/${contact.systemUid}` : `/chats/${contact.uid}`;
   return (
-    <SimpleCard href={href} isLast={isLast} onClick={onClick} className="w-full justify-between">
-      <div className="flex gap-3">
+    <SimpleCard href={href} onClick={onClick} className="w-full justify-between">
+      <div className="flex w-full gap-3">
         {/* Аватар с буквой */}
         <div className="shrink-0">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
@@ -33,7 +34,12 @@ export const ContactCard = (props: ContactCardProps) => {
         </div>
 
         {/* Текстовая информация */}
-        <div className="flex min-w-0 flex-1 flex-col justify-center">
+        <div
+          className={cn(
+            "after:bg-gray relative flex min-w-0 flex-1 flex-col justify-center after:absolute after:top-[calc(100%+10px)] after:right-0 after:left-0 after:h-px after:opacity-15 after:content-['']",
+            isLast && "after:hidden",
+          )}
+        >
           {/* Имя */}
           <h3 className="subtext desktop:text max-w-50 min-w-0 truncate font-semibold text-gray-900">
             {contact.fullName}
