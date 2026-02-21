@@ -32,7 +32,9 @@ export const mapMessageFile = (file: MessageFile): MappedMessageFile => ({
   id: file.id,
   uid: file.uid,
   file: file.file,
-  fileUrl: file.file_url,
+  fileUrl: file.file_url.includes("https://")
+    ? file.file_url
+    : `${process.env.NEXT_PUBLIC_API_URL}/${file.file_url}`,
   fileWebp: file.file_webp ?? null,
   fileWebpUrl: file.file_webp_url,
   fileType: file.file_type ?? null,
@@ -51,15 +53,18 @@ export const mapRepliedMessage = (message: RepliedMessage): MappedRepliedMessage
   filesList: message.files_list.map(mapMessageFile),
 });
 
-export const mapForwardedMessage = (message: ForwardedMessage): MappedForwardedMessage => ({
-  id: message.id,
-  uid: message.uid,
-  fromUserId: message.from_user,
-  content: message.content,
-  filesList: message.files_list.map(mapMessageFile),
-  firstName: message.first_name,
-  lastName: message.last_name,
-});
+export const mapForwardedMessage = (message: ForwardedMessage): MappedForwardedMessage => {
+  return {
+    id: message.id,
+    uid: message.uid,
+    fromUserId: message.from_user,
+    avatarUrl: message.avatar,
+    content: message.content,
+    filesList: message.files_list.map(mapMessageFile),
+    firstName: message.first_name,
+    lastName: message.last_name,
+  };
+};
 
 export const mapChatMessage = (message: ChatMessage | ChatMessageUI): MappedChatMessage => {
   const messageUI = {

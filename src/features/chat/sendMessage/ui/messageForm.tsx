@@ -78,7 +78,16 @@ export const MessageForm: React.FC<MessageFormProps> = ({
 
   return (
     <div className="relative w-full">
-      <form className={cn("relative flex items-end px-4 py-3", className)} onSubmit={handleSubmit}>
+      <form
+        className={cn("relative flex items-end px-4 py-3", className)}
+        onSubmit={(e) => {
+          if (variant === "modal") {
+            handleSubmit(e, true);
+          } else {
+            handleSubmit(e);
+          }
+        }}
+      >
         {!isAttachBtnDisabled && (
           <div className="flex h-11 flex-row-reverse pr-3">
             <Button

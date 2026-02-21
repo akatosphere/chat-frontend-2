@@ -16,7 +16,6 @@ export const MessagePreview = ({ lastMsg, isActive }: MessagePreviewProps) => {
     content: lastMsg?.content,
     files: lastMsg?.files_summary || null,
   });
-
   return (
     <div className="minitext text-text-gray line-clamp-2 flex min-w-0 items-start">
       {!lastMsg?.has_replied_message && lastMsg?.has_forwarded_message && (

@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 
 import { ChatListItem } from "@/entities/chat/model/types";
 import { useChatStore } from "@/entities/chat/model/useChatStore";
@@ -16,7 +15,6 @@ interface ChatListProps {
 }
 
 export const ChatList: React.FC<ChatListProps> = ({ chats, isSearch }) => {
-  const [activeId, setActiveId] = useState<number>();
   const { chatKey } = useChatStore((s) => s);
 
   const actions = useChatListActions();
@@ -35,8 +33,7 @@ export const ChatList: React.FC<ChatListProps> = ({ chats, isSearch }) => {
             className="last:after:hidden"
             key={chat.id}
             chat={chat}
-            isActive={activeId === chat.id || chat.key === chatKey || chat.member.uid === chatKey}
-            onClick={() => setActiveId(chat.id)}
+            isActive={chat.key === chatKey || chat.member.uid === chatKey}
             isLast={chat.id === chats[chats.length - 1].id}
           />
         ))

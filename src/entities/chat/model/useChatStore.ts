@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
+import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
 import { MESSAGE_STATUS } from "@/shared/constants/constants";
 
-import { MappedChatMessage } from "../../../features/chat/chat/model/types/mappedTypes";
-import { ChatType } from "../../../features/chat/chat/model/types/serverTypes";
+import { ChatType } from "./types";
 
 interface ChatState {
   messages: MappedChatMessage[];
@@ -14,8 +14,20 @@ interface ChatState {
   isReady: boolean;
   isHide: boolean;
   chatKeyUser: string | null;
+
   replyTarget: MappedChatMessage | null;
+  forwardTarget: MappedChatMessage | null;
+
   setReplyTarget: (message: MappedChatMessage | null) => void;
+  setForwardTarget: (message: MappedChatMessage | null) => void;
+
+  isSelectionMode: boolean;
+  selectedMessageUids: Set<string>;
+
+  enterSelectionMode: (uid?: string) => void;
+  toggleMessageSelection: (uid: string) => void;
+  exitSelectionMode: () => void;
+
   deleteMessage: (uid: string) => void;
   setInitialData: (
     messages: MappedChatMessage[],
@@ -40,22 +52,48 @@ export const useChatStore = create<ChatState>((set) => ({
   isReady: false,
   isHide: false,
   replyTarget: null,
+  forwardTarget: null,
   chatType: null,
   createdBy: null,
   chatKeyUser: null,
+  isSelectionMode: false,
+  selectedMessageUids: new Set(),
+
+  enterSelectionMode: (uid) =>
+    set(() => ({
+      isSelectionMode: true,
+      selectedMessageUids: uid ? new Set([uid]) : new Set(),
+    })),
+
+  toggleMessageSelection: (uid) =>
+    set((state) => {
+      const next = new Set(state.selectedMessageUids);
+      next.has(uid) ? next.delete(uid) : next.add(uid);
+
+      return {
+        selectedMessageUids: next,
+        isSelectionMode: next.size > 0,
+      };
+    }),
+
+  exitSelectionMode: () =>
+    set(() => ({
+      isSelectionMode: false,
+      selectedMessageUids: new Set(),
+    })),
 
   setInitialData: (messages, currentUserId, chatKey, chatType, createdBy, chatKeyUser) => {
     set({ messages, currentUserId, chatKey, isReady: true, chatType, createdBy, chatKeyUser });
   },
 
   setReplyTarget: (message) => set({ replyTarget: message }),
+  setForwardTarget: (message) => set({ forwardTarget: message }),
 
   deleteMessage: (uid) =>
     set((state) => ({ messages: state.messages.filter((msg) => msg.uid !== uid) })),
 
   addMessage: (message) => {
     set((state) => {
-      // Проверяем наличие сообщения по uid — если есть, обновляем
       const existingByUidIndex = state.messages.findIndex((msg) => msg.uid === message.uid);
       if (existingByUidIndex !== -1) {
         const updated = [...state.messages];
@@ -63,7 +101,6 @@ export const useChatStore = create<ChatState>((set) => ({
         return { messages: updated };
       }
 
-      // Проверяем по requestUid — если есть, обновляем
       if (message.requestUid) {
         const existingByRequestUidIndex = state.messages.findIndex(
           (msg) => msg.requestUid === message.requestUid,
@@ -101,5 +138,13 @@ export const useChatStore = create<ChatState>((set) => ({
 
   clearMessages: () => set({ messages: [], replyTarget: null }),
 
-  reset: () => set({ messages: [], currentUserId: null, chatKey: null, isReady: false }),
+  reset: () =>
+    set({
+      messages: [],
+      currentUserId: null,
+      chatKey: null,
+      isReady: false,
+      replyTarget: null,
+      forwardTarget: null,
+    }),
 }));

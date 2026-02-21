@@ -37,9 +37,9 @@ export type UserPreview = {
   username: string;
   nickname: string;
   firstName: string;
-  lastName: string; // В Entity лучше хранить строку, пустую по умолчанию
-  patronymic: string;
-  fullName: string;
+  patronymic?: string;
+  lastName: string;
+  fullName?: string;
   avatarUrl: string;
   avatarWebpUrl: string;
   wasOnlineAt?: number | null;

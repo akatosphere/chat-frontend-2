@@ -5,14 +5,15 @@ import Forwarded from "@icons/chat/forwardedd.svg";
 import { MouseEvent } from "react";
 
 import { useChatStore } from "@/entities/chat/model/useChatStore";
+import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
 import { useDeleteMessage } from "@/features/chat/chat/hooks";
 import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
 import { useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
 export const useMessageContextMenu = (message: MappedChatMessage) => {
   const { openMenu, activeMenuId } = useContextMenu();
-
-  const { setReplyTarget, chatType } = useChatStore();
+  const { openModal } = useModalStore();
+  const { setReplyTarget, chatType, setForwardTarget, enterSelectionMode } = useChatStore();
   const isOwner = useChatStore((s) => s.createdBy === s.currentUserId);
   const isAviableToDelete =
     chatType === "chat" || chatType === "public-group" || chatType === "private-group"
@@ -33,14 +34,17 @@ export const useMessageContextMenu = (message: MappedChatMessage) => {
           {
             label: "Переслать",
             icon: Forwarded,
-            onClick: () => console.log("Переслать", message.id),
+            onClick: () => {
+              setForwardTarget(message);
+              openModal("forward", { chatKey: message.chatKey, messageId: message.id });
+            },
           },
           {
             label: "Скопировать",
             icon: Copy,
             onClick: () => console.log("Скопировать", message.id),
           },
-          { label: "Выбрать", icon: Select, onClick: () => console.log("Выбрать", message.id) },
+          { label: "Выбрать", icon: Select, onClick: () => enterSelectionMode(message.uid) },
           ...(isAviableToDelete
             ? [
                 {

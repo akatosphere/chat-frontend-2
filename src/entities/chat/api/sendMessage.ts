@@ -1,8 +1,4 @@
-import {
-  ChatMessage,
-  ForwardedMessage,
-  MessageFile,
-} from "@/features/chat/chat/model/types/serverTypes";
+import { ChatMessage } from "@/features/chat/chat/model/types/serverTypes";
 import { sendWSRequest } from "@/shared/api/ws/wsClient";
 import { WS_ACTIONS } from "@/shared/constants/constants";
 
@@ -10,9 +6,9 @@ export interface SendTextMessagePayload {
   chat_key?: string | null;
   to_user_uid?: string | null;
   content: string;
-  files?: MessageFile[];
+  files?: { data: string; filename: string }[];
   replied_messages?: string[] | null;
-  forwarded_messages?: ForwardedMessage[];
+  forwarded_messages?: string[] | null;
   status?: "publish" | "draft";
 }
 
@@ -21,9 +17,9 @@ export const sendTextMessage = async (
 ): Promise<ChatMessage> => {
   const object: {
     content: string;
-    files: MessageFile[];
+    files: { data: string; filename: string }[];
     replied_messages: string[] | null;
-    forwarded_messages: ForwardedMessage[];
+    forwarded_messages: string[] | null;
     chat_key?: string;
     to_user_uid?: string;
   } = {

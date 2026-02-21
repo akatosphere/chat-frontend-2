@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { useEffect } from "react";
 
+import { cn } from "@/shared/shadcn/lib/utils";
+
 type ToastProps = {
   message?: string;
   duration?: number;
   onClose: () => void;
+  iconColor?: string;
   icon: {
     mobile: string;
     desktop?: string;
@@ -16,6 +19,7 @@ export const Toast = ({
   duration = 3000,
   onClose,
   icon,
+  iconColor,
 }: ToastProps) => {
   useEffect(() => {
     let active = true;
@@ -46,7 +50,7 @@ export const Toast = ({
           height={16}
           alt=""
           aria-hidden
-          className="block md:hidden"
+          className={cn("block md:hidden", iconColor ? `fill-${iconColor}` : "")}
         />
         <Image
           src={icon.desktop ?? icon.mobile}

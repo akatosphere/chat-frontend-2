@@ -17,7 +17,7 @@ export const prepareSubmitData = (
     nickname: data.nickname.trim(),
     first_name: data.name.trim(),
     last_name: data.lastName.trim(),
-    patronymic: "",
+    // patronymic: "",
     additional_information: data.description?.trim() || "",
     birthday: timestamp,
     gender: profile.gender,

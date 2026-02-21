@@ -94,6 +94,12 @@ export const handleCreateTextMessage: WSHandler = (data) => {
       message: {
         id: newMessage.id,
         uid: newMessage.uid,
+        files_summary: {
+          count: newMessage.filesList.length,
+          types: newMessage.filesList
+            ? newMessage.filesList.map((f) => f.fileType).filter((t): t is string => t !== null)
+            : [],
+        },
         content: newMessage.content,
         created_at: newMessage.createdAt,
         from_user_id: newMessage.fromUser.uid,
