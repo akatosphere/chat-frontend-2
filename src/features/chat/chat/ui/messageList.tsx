@@ -69,8 +69,8 @@ export const MessageList: React.FC<MessageListProps> = ({ className, currentUser
     }, 1200);
 
     return () => clearTimeout(timer);
-  }, [requestId]);
-
+    // Добавляем все зависимости, которые просит линтер:
+  }, [requestId, targetMessageId, scrollToMessage, clearHighlight]);
   const showEmptyState = groups.length === 0 && !isInitialLoading;
   const showLoadingState = isInitialLoading || !isReady;
 
@@ -104,6 +104,7 @@ export const MessageList: React.FC<MessageListProps> = ({ className, currentUser
               messages={group.messages}
               currentUserId={currentUserId}
               passDataAttributes={true}
+              isGroup={chatType === "public-group" || chatType === "private-group"}
             />
           ))}
         </div>

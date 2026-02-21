@@ -11,10 +11,12 @@ export const MessageLayout = ({
   isMine,
   message,
   blocks,
+  isFirstInGroup,
 }: {
   isMine: boolean;
   message: MappedChatMessage;
   blocks: MessageBlock[];
+  isFirstInGroup?: boolean;
 }) => {
   const time = new Date(message.createdAt * 1000).toLocaleTimeString([], {
     hour: "2-digit",
@@ -33,6 +35,12 @@ export const MessageLayout = ({
         isMine ? "bg-light-green rounded-br-sm" : "desktop:bg-gray-tone rounded-bl-sm bg-white",
       )}
     >
+      {!isMine && isFirstInGroup && (
+        <div className="text-primary truncate px-3 pt-2 text-[13px] leading-none font-bold">
+          {`${message.fromUser.firstName} ${message.fromUser.lastName || ""}`.trim()}
+        </div>
+      )}
+
       {blocks.map((block, i) => (
         <MessageBlockRenderer key={i} block={block} isMine={isMine} time={time} status={status} />
       ))}
