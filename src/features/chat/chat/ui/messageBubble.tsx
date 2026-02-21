@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useRef } from "react";
 
-import { Avatar } from "@/entities/chat/ui/avatar"; // Проверьте правильность пути к вашему компоненту Avatar
+import { Avatar } from "@/entities/chat/ui/avatar";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { useChatStore } from "../../../../entities/chat/model/useChatStore";
@@ -13,8 +13,8 @@ type MessageBubbleProps = {
   className?: string;
   chatMessage: MappedChatMessage;
   currentUserId: string;
-  isFirstInGroup?: boolean; // Добавлено
-  isLastInGroup?: boolean; // Добавлено
+  isFirstInGroup?: boolean;
+  isLastInGroup?: boolean;
   "data-message-uid"?: string;
   "data-chat-key"?: string;
   "data-is-from-current-user"?: string;
@@ -27,8 +27,8 @@ export const MessageBubble = memo(function MessageBubble({
   className,
   chatMessage,
   currentUserId,
-  isFirstInGroup, // Принимаем
-  isLastInGroup, // Принимаем
+  isFirstInGroup,
+  isLastInGroup,
   ...dataAttributes
 }: MessageBubbleProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -60,7 +60,7 @@ export const MessageBubble = memo(function MessageBubble({
       ref={ref}
       id={`msg-${chatMessage.uid}`}
       className={cn(
-        "flex gap-x-2 px-4 transition-colors duration-300 ease-out select-none", // Добавлен gap-x-2
+        "flex gap-x-2 px-4 transition-colors duration-300 ease-out select-none",
         isMine ? "justify-end" : "justify-start",
         (isHighlighted || isOpen) && "bg-muted",
         className,
@@ -76,14 +76,12 @@ export const MessageBubble = memo(function MessageBubble({
       )}
 
       <div className="flex min-w-0 flex-col">
-        {/* Имя отправителя (только для чужих сообщений, если это первое сообщение в блоке) */}
-        {!isMine && isFirstInGroup && (
-          <span className="text-primary mb-1 ml-2 text-[13px] leading-none font-medium">
-            {chatMessage.fromUser.username}
-          </span>
-        )}
-
-        <MessageLayout isMine={isMine} message={chatMessage} blocks={chatMessage.blocks} />
+        <MessageLayout
+          isMine={isMine}
+          message={chatMessage}
+          blocks={chatMessage.blocks}
+          isFirstInGroup={isFirstInGroup}
+        />
       </div>
     </div>
   );
