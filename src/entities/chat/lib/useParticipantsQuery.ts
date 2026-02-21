@@ -8,7 +8,7 @@ export const useParticipantsQuery = (
   initialData?: ChatParticipantListResponse | null,
 ) => {
   return useInfiniteQuery({
-    queryKey: ["contacts"],
+    queryKey: ["participants"],
     queryFn: ({ pageParam }) => getParticipants(chatKey, pageParam),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
