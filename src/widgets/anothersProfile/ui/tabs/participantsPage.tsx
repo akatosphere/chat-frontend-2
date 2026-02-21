@@ -33,7 +33,7 @@ export const ParticipantsPage: React.FC<ParticipantsPageProps> = ({
         </div>
       ))}
       {hasNextPage && (
-        <div ref={loadMoreRef} className="flex justify-center py-4">
+        <div ref={loadMoreRef} className="flex flex-col justify-center py-4">
           {isFetchingNextPage && <p className="text-sm text-gray-400">Загрузка...</p>}
         </div>
       )}

@@ -10,6 +10,7 @@ export const getGroupChannelServer = async (
   try {
     const api = await getApiServer();
     const res = await api.get(`/api/v1/chat/list/groups_or_channels/${chatKey}/`);
+    console.log("res: ", res.data);
 
     const validated = ChatDetailsSchema.safeParse(res.data);
     if (!validated.success) {
