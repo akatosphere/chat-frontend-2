@@ -8,10 +8,12 @@ import { useChatStore } from "@/entities/chat/model/useChatStore";
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
 import { useDeleteMessage } from "@/features/chat/chat/hooks";
 import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
+import { useCopyToClipboard } from "@/shared/copy/lib/useCopyToClipboard";
 import { useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
 export const useMessageContextMenu = (message: MappedChatMessage) => {
   const { openMenu, activeMenuId } = useContextMenu();
+  const { copy } = useCopyToClipboard();
   const { openModal } = useModalStore();
   const { setReplyTarget, chatType, setForwardTarget, enterSelectionMode } = useChatStore();
   const isOwner = useChatStore((s) => s.createdBy === s.currentUserId);
@@ -42,7 +44,9 @@ export const useMessageContextMenu = (message: MappedChatMessage) => {
           {
             label: "Скопировать",
             icon: Copy,
-            onClick: () => console.log("Скопировать", message.id),
+            onClick: async () => {
+              await copy(message.content);
+            },
           },
           { label: "Выбрать", icon: Select, onClick: () => enterSelectionMode(message.uid) },
           ...(isAviableToDelete

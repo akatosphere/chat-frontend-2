@@ -9,6 +9,8 @@ import { pluralize } from "@/shared/lib/pluralize";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
 
+import { useCopySelectedMessages } from "../hooks/useCopySelectedMessages";
+
 type SelectBoxProps = {
   className?: string;
 };
@@ -16,6 +18,11 @@ type SelectBoxProps = {
 export const SelectBox: React.FC<SelectBoxProps> = ({ className }) => {
   const { selectedMessageUids, exitSelectionMode, chatKey } = useChatStore();
   const { openModal } = useModalStore();
+  const copySelectedMessages = useCopySelectedMessages(Array.from(selectedMessageUids));
+
+  const handleCopy = () => {
+    copySelectedMessages().then(() => exitSelectionMode());
+  };
 
   if (!selectedMessageUids.size) return null;
 
@@ -42,7 +49,12 @@ export const SelectBox: React.FC<SelectBoxProps> = ({ className }) => {
         <Button variant={"text"} size={"inline"} className="text-gray h-9 w-9 shrink-0">
           <Forward className="h-6 w-6" />
         </Button>
-        <Button variant={"text"} size={"inline"} className="text-gray h-9 w-9 shrink-0">
+        <Button
+          variant="text"
+          size="inline"
+          className="text-gray h-9 w-9 shrink-0"
+          onClick={handleCopy}
+        >
           <Copy className="h-6 w-6" />
         </Button>
         <Button
