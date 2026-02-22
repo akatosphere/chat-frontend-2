@@ -9,8 +9,8 @@ type ForwardBoxProps = {
 };
 
 export const ForwardBox: React.FC<ForwardBoxProps> = ({ className }) => {
-  const { forwardTarget, setForwardTarget } = useChatStore();
-  if (!forwardTarget) return null;
+  const { forwardTargets, setForwardTargets } = useChatStore();
+  if (!forwardTargets.length) return null;
 
   return (
     <div className={cn("bg-primary-secondary/10 w-full px-4 py-1", className)}>
@@ -19,16 +19,16 @@ export const ForwardBox: React.FC<ForwardBoxProps> = ({ className }) => {
           <span className="text-primary">Переслать сообщение</span>
           <div className="emojis-apple text-gray truncate">
             <span className="font-medium">
-              {forwardTarget.fromUser.lastName
-                ? forwardTarget.fromUser.firstName + " " + forwardTarget.fromUser.lastName
-                : forwardTarget.fromUser.firstName}
+              {forwardTargets[0].fromUser.lastName
+                ? forwardTargets[0].fromUser.firstName + " " + forwardTargets[0].fromUser.lastName
+                : forwardTargets[0].fromUser.firstName}
             </span>
             {": "}
-            {forwardTarget.content}
+            {forwardTargets[0].content}
           </div>
         </div>
         <Button
-          onClick={() => setForwardTarget(null)}
+          onClick={() => setForwardTargets([])}
           variant={"text"}
           size={"inline"}
           className="h-3.5 w-3.5 shrink-0"

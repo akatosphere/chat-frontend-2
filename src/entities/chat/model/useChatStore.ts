@@ -16,10 +16,10 @@ interface ChatState {
   chatKeyUser: string | null;
 
   replyTarget: MappedChatMessage | null;
-  forwardTarget: MappedChatMessage | null;
+  forwardTargets: MappedChatMessage[];
 
   setReplyTarget: (message: MappedChatMessage | null) => void;
-  setForwardTarget: (message: MappedChatMessage | null) => void;
+  setForwardTargets: (messages: MappedChatMessage[]) => void;
 
   isSelectionMode: boolean;
   selectedMessageUids: Set<string>;
@@ -36,12 +36,14 @@ interface ChatState {
     chatType: ChatType,
     createdBy?: string,
     chatKeyUser?: string | null,
+    forwardTargets?: [],
   ) => void;
   addMessage: (message: MappedChatMessage) => void;
   updateMessageStatus: (uid: string, status: MappedChatMessage["status"]) => void;
   markAsRead: (uid: string) => void;
   setFailedStatus: (requestUid: string) => void;
   clearMessages: () => void;
+  clearForwardTargets: () => void;
   reset: () => void;
 }
 
@@ -52,7 +54,7 @@ export const useChatStore = create<ChatState>((set) => ({
   isReady: false,
   isHide: false,
   replyTarget: null,
-  forwardTarget: null,
+  forwardTargets: [],
   chatType: null,
   createdBy: null,
   chatKeyUser: null,
@@ -87,7 +89,8 @@ export const useChatStore = create<ChatState>((set) => ({
   },
 
   setReplyTarget: (message) => set({ replyTarget: message }),
-  setForwardTarget: (message) => set({ forwardTarget: message }),
+  setForwardTargets: (messages) => set({ forwardTargets: messages }),
+  clearForwardTargets: () => set({ forwardTargets: [] }),
 
   deleteMessage: (uid) =>
     set((state) => ({ messages: state.messages.filter((msg) => msg.uid !== uid) })),
@@ -145,6 +148,6 @@ export const useChatStore = create<ChatState>((set) => ({
       chatKey: null,
       isReady: false,
       replyTarget: null,
-      forwardTarget: null,
+      forwardTargets: [],
     }),
 }));

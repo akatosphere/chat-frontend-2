@@ -16,12 +16,21 @@ type SelectBoxProps = {
 };
 
 export const SelectBox: React.FC<SelectBoxProps> = ({ className }) => {
-  const { selectedMessageUids, exitSelectionMode, chatKey } = useChatStore();
+  const { messages, selectedMessageUids, setForwardTargets, exitSelectionMode, chatKey } =
+    useChatStore();
   const { openModal } = useModalStore();
   const copySelectedMessages = useCopySelectedMessages(Array.from(selectedMessageUids));
 
   const handleCopy = () => {
     copySelectedMessages().then(() => exitSelectionMode());
+  };
+
+  const handleForward = () => {
+    const selectedMessages = messages.filter((m) => selectedMessageUids.has(m.uid));
+
+    setForwardTargets(selectedMessages);
+    openModal("forward", { chatKey: chatKey! });
+    exitSelectionMode();
   };
 
   if (!selectedMessageUids.size) return null;
@@ -46,7 +55,12 @@ export const SelectBox: React.FC<SelectBoxProps> = ({ className }) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant={"text"} size={"inline"} className="text-gray h-9 w-9 shrink-0">
+        <Button
+          variant={"text"}
+          size={"inline"}
+          className="text-gray h-9 w-9 shrink-0"
+          onClick={handleForward}
+        >
           <Forward className="h-6 w-6" />
         </Button>
         <Button

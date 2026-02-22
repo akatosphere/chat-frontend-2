@@ -5,13 +5,15 @@ import { MessageBlock } from "./types";
 export const buildMessageBlocks = (msg: MappedChatMessage): MessageBlock[] => {
   const blocks: MessageBlock[] = [];
   if (msg.forwardedMessages.length > 0) {
-    const f = msg.forwardedMessages[0];
-    blocks.push({
-      type: "forwarded",
-      content: f.content,
-      authorName: `${f.firstName} ${f.lastName}`,
-      avatarUrl: f.avatarUrl,
-      chatKey: f.fromUserId,
+    const f = msg.forwardedMessages;
+    f.map((f) => {
+      blocks.push({
+        type: "forwarded",
+        content: f.content,
+        authorName: `${f.firstName} ${f.lastName}`,
+        avatarUrl: f.avatarUrl,
+        chatKey: f.fromUserId,
+      });
     });
   }
   if (msg.repliedMessages.length > 0) {

@@ -15,7 +15,7 @@ export const useMessageContextMenu = (message: MappedChatMessage) => {
   const { openMenu, activeMenuId } = useContextMenu();
   const { copy } = useCopyToClipboard();
   const { openModal } = useModalStore();
-  const { setReplyTarget, chatType, setForwardTarget, enterSelectionMode } = useChatStore();
+  const { setReplyTarget, chatType, setForwardTargets, enterSelectionMode } = useChatStore();
   const isOwner = useChatStore((s) => s.createdBy === s.currentUserId);
   const isAviableToDelete =
     chatType === "chat" || chatType === "public-group" || chatType === "private-group"
@@ -37,7 +37,7 @@ export const useMessageContextMenu = (message: MappedChatMessage) => {
             label: "Переслать",
             icon: Forwarded,
             onClick: () => {
-              setForwardTarget(message);
+              setForwardTargets([message]);
               openModal("forward", { chatKey: message.chatKey, messageId: message.id });
             },
           },

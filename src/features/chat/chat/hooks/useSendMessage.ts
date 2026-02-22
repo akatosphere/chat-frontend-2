@@ -21,8 +21,8 @@ export const useSendMessage = () => {
     addMessage,
     setFailedStatus,
     replyTarget,
-    forwardTarget,
-    setForwardTarget,
+    forwardTargets,
+    setForwardTargets,
     setReplyTarget,
   } = useChatStore();
 
@@ -67,20 +67,16 @@ export const useSendMessage = () => {
               },
             ]
           : [],
-        forwardedMessages: forwardTarget
-          ? [
-              {
-                id: forwardTarget.id,
-                uid: forwardTarget.uid,
-                firstName: forwardTarget.fromUser.firstName,
-                lastName: forwardTarget.fromUser.lastName,
-                fromUserId: forwardTarget.fromUser.uid,
-                avatarUrl: "",
-                content: forwardTarget.content,
-                filesList: forwardTarget.filesList,
-              },
-            ]
-          : [],
+        forwardedMessages: forwardTargets.map((msg) => ({
+          id: msg.id,
+          uid: msg.uid,
+          firstName: msg.fromUser.firstName,
+          lastName: msg.fromUser.lastName,
+          fromUserId: msg.fromUser.uid,
+          avatarUrl: "",
+          content: msg.content,
+          filesList: msg.filesList,
+        })),
         filesList: images.map((img) => ({
           fileUrl: "/icons/imageLoader.svg",
           file: img.file,
@@ -108,7 +104,7 @@ export const useSendMessage = () => {
       tempMessage.blocks = buildMessageBlocks(tempMessage);
       addMessage(tempMessage);
       setReplyTarget(null);
-      setForwardTarget(null);
+      setForwardTargets([]);
 
       // Подготовка файлов для отправки на сервер
       const filesPayload = await Promise.all(
@@ -152,7 +148,7 @@ export const useSendMessage = () => {
           files: filesPayload,
           status: "publish",
           replied_messages: replyTarget ? [`${replyTarget.uid}`] : [],
-          forwarded_messages: forwardTarget ? [`${forwardTarget.uid}`] : [],
+          forwarded_messages: forwardTargets.map((m) => m.uid),
           request_uid: requestUid,
         });
 
@@ -198,8 +194,8 @@ export const useSendMessage = () => {
       setFailedStatus,
       replyTarget,
       setReplyTarget,
-      setForwardTarget,
-      forwardTarget,
+      setForwardTargets,
+      forwardTargets,
       chatKeyUser,
     ],
   );
