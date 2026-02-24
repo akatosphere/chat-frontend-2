@@ -16,7 +16,7 @@ type ChatFooterProps = {
 export const ChatFooter: React.FC<ChatFooterProps> = ({ className, onSendMessage }) => {
   const { isKeyboardOpen } = useKeyboardOffset();
 
-  const { isSelectionMode } = useChatStore();
+  const { isSelectionMode, forwardTargets } = useChatStore();
 
   return (
     <>
@@ -32,7 +32,11 @@ export const ChatFooter: React.FC<ChatFooterProps> = ({ className, onSendMessage
         {isSelectionMode ? (
           <SelectBox />
         ) : (
-          <MessageForm isKeyboardOpen={isKeyboardOpen} onSubmitMessage={onSendMessage} />
+          <MessageForm
+            isKeyboardOpen={isKeyboardOpen}
+            onSubmitMessage={onSendMessage}
+            isAbleToSendWithoutText={forwardTargets.length > 0}
+          />
         )}
       </footer>
     </>

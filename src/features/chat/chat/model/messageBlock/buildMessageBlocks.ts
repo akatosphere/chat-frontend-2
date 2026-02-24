@@ -12,6 +12,7 @@ export const buildMessageBlocks = (msg: MappedChatMessage): MessageBlock[] => {
         content: f.content,
         authorName: `${f.firstName} ${f.lastName}`,
         avatarUrl: f.avatarUrl,
+        filesList: f.filesList,
         chatKey: f.fromUserId,
       });
     });
@@ -23,6 +24,7 @@ export const buildMessageBlocks = (msg: MappedChatMessage): MessageBlock[] => {
       messageUid: r.uid,
       authorName: r.firstName + " " + r.lastName,
       content: r.content,
+      filesList: r.filesList,
     });
   }
 
