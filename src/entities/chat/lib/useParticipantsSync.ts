@@ -10,13 +10,22 @@ export const useParticipantsSync = (
   chatKey: string,
   initialData?: ChatParticipantListResponse | null,
 ) => {
+  console.log("синх участников");
+  console.log("chatKey: ", chatKey);
+  console.log("initialData: ", initialData);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useParticipantsQuery(
     chatKey,
     initialData,
   );
-
+  console.log("data: ", data);
   const setParticipants = useParticipantsStore((s) => s.setParticipants);
+  const reset = useParticipantsStore((s) => s.reset);
+  const participants = useParticipantsStore((s) => s.participants);
+  useEffect(() => {
+    reset();
+  }, [chatKey, reset]);
 
+  console.log("участникик в сторе: ", participants);
   useEffect(() => {
     if (!data) return;
 
