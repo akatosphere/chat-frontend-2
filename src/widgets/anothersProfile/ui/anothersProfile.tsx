@@ -9,6 +9,7 @@ import { useIsInContact } from "@/entities/contact/lib/useIsInContact";
 import { ContactListResponse } from "@/entities/contact/model/types";
 import { User } from "@/entities/user/model/types";
 import { UserInfoList } from "@/entities/user/ui/UserInfoList";
+import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
 import { AddedToContactsModal } from "@/features/contacts/addToContacts/ui/AddedToContactsModal";
 import { AddToContactsProfileBtn } from "@/features/contacts/addToContacts/ui/addToContactsProfileBtn";
 import { ProfileNotifications } from "@/features/notifications/ui/profileNotifications";
@@ -16,6 +17,7 @@ import { OurTabsList } from "@/shared/ourTabs/ourTabsList";
 import { OurTabsTrigger } from "@/shared/ourTabs/ourTabsTrigger";
 import { Tabs, TabsContent } from "@/shared/shadcn/ui/tabs";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
+import { Statusbar } from "@/shared/ui/statusbar/ui/statusbar";
 
 import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
 import { FilesPage } from "./tabs/filesPage";
@@ -70,7 +72,12 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
           />
           <div className="absolute bottom-3 left-4 text-white">
             <p className="title font-medium">{initialData?.fullName}</p>
-            <p className="text">{initialData?.isOnline ? "В сети" : "Не в сети"}</p>
+            <Statusbar
+              isOnline={initialData?.isOnline}
+              chatType={"direct" as ChatType}
+              time={initialData?.lastSeenAt ?? null}
+              className="text-white"
+            />
           </div>
         </div>
         <div className="flex flex-col items-start gap-4 px-4 pt-4 pb-6">

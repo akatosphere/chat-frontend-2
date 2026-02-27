@@ -132,7 +132,7 @@ export type ChatParticipant = {
   isOwner: boolean;
   isBlocked: boolean;
   isOnline: boolean;
-  wasOnlineAt: number;
+  lastSeenAt: number;
   isInContacts: boolean;
 };
 
