@@ -27,6 +27,7 @@ type ChatProfileProps = {
   isOwner: boolean;
   isMobile: boolean;
   chatKey: string;
+  canInvite: boolean;
 };
 
 export const ChatProfile: React.FC<ChatProfileProps> = ({
@@ -35,6 +36,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
   isOwner,
   initialParticipants,
   chatKey,
+  canInvite,
 }) => {
   const chatType =
     initialData?.type === "private-group" || initialData?.type === "public-group"
@@ -48,8 +50,6 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
       toggleIsMainActive: s.toggleIsMainActive,
     })),
   );
-  const canInvite =
-    isOwner || initialData?.type == "public-channel" || initialData?.type == "public-group";
   const handleTabChange = useCallback(
     (value: string) => {
       toggleIsMainActive();
