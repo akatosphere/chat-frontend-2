@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
+import ChatPhoto from "@/shared/ui/icons/chat/header/chatPhoto.svg";
 import ProfilePhoto from "@/shared/ui/icons/chat/header/profilePhoto.svg";
 import { Statusbar } from "@/shared/ui/statusbar/ui/statusbar";
 
@@ -26,8 +27,10 @@ export const ChatHeaderUser = ({
       <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
         {photo ? (
           <Image src={photo} alt="profile" fill className="object-cover" />
-        ) : (
+        ) : chatType === "chat" ? (
           <ProfilePhoto className="text-primary h-10 w-10" />
+        ) : (
+          <ChatPhoto className="text-primary h-10 w-10" />
         )}
       </div>
 

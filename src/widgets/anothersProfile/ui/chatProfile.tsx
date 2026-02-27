@@ -74,7 +74,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
             size="anothersProfileAvatar"
             className="flex w-full justify-center"
             avatarUrl={initialData?.avatar}
-            variant="user"
+            variant="chat"
           />
           <div className="absolute bottom-3 left-4 text-white">
             <p className="title font-medium">{initialData?.title}</p>
