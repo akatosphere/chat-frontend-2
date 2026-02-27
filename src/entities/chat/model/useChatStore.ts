@@ -1,12 +1,18 @@
 import { create } from "zustand";
 
-import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
+import { MappedChatMessage, MappedMessageFile } from "@/features/chat/chat/model/types/mappedTypes";
 import { MESSAGE_STATUS } from "@/shared/constants/constants";
 
+// Импортируем твой API метод
+import { getChatMedia } from "../api/getChatMedia";
 import { ChatType } from "./types";
 
 interface ChatState {
   messages: MappedChatMessage[];
+  // В медиа храним массив файлов
+  media: MappedMessageFile[];
+  isLoadingMedia: boolean;
+
   currentUserId: string | null;
   chatKey: string | null;
   chatType: ChatType | null;
@@ -38,6 +44,10 @@ interface ChatState {
     chatKeyUser?: string | null,
   ) => void;
   addMessage: (message: MappedChatMessage) => void;
+
+  fetchMedia: (chatKey: string) => Promise<void>;
+  addMediaItem: (message: MappedChatMessage) => void;
+
   updateMessageStatus: (uid: string, status: MappedChatMessage["status"]) => void;
   markAsRead: (uid: string) => void;
   setFailedStatus: (requestUid: string) => void;
@@ -45,8 +55,10 @@ interface ChatState {
   reset: () => void;
 }
 
-export const useChatStore = create<ChatState>((set) => ({
+export const useChatStore = create<ChatState>((set, get) => ({
   messages: [],
+  media: [],
+  isLoadingMedia: false,
   currentUserId: null,
   chatKey: null,
   isReady: false,
@@ -68,7 +80,11 @@ export const useChatStore = create<ChatState>((set) => ({
   toggleMessageSelection: (uid) =>
     set((state) => {
       const next = new Set(state.selectedMessageUids);
-      next.has(uid) ? next.delete(uid) : next.add(uid);
+      if (next.has(uid)) {
+        next.delete(uid);
+      } else {
+        next.add(uid);
+      }
 
       return {
         selectedMessageUids: next,
@@ -89,10 +105,45 @@ export const useChatStore = create<ChatState>((set) => ({
   setReplyTarget: (message) => set({ replyTarget: message }),
   setForwardTarget: (message) => set({ forwardTarget: message }),
 
-  deleteMessage: (uid) =>
-    set((state) => ({ messages: state.messages.filter((msg) => msg.uid !== uid) })),
+  deleteMessage: (uid: string) => {
+    set((state) => ({
+      messages: state.messages.filter((msg) => msg.uid !== uid),
+      // Удаляем из медиа, если uid файла совпадает с uid сообщения
+      media: state.media.filter((file) => file.uid !== uid),
+    }));
+  },
 
-  addMessage: (message) => {
+  fetchMedia: async (chatKey: string) => {
+    if (!chatKey) return;
+    set({ isLoadingMedia: true });
+    try {
+      const data = await getChatMedia(chatKey);
+      // Полностью перезаписываем медиа данными из истории
+      set({ media: data, isLoadingMedia: false });
+    } catch {
+      set({ isLoadingMedia: false });
+    }
+  },
+
+  addMediaItem: (message: MappedChatMessage) => {
+    const firstFile =
+      message.filesList && message.filesList.length > 0 ? message.filesList[0] : null;
+
+    // Проверяем: это картинка?
+    if (firstFile?.fileType?.startsWith("image/")) {
+      const state = get();
+      // Защита от дублей: проверяем, нет ли уже такого UID в медиа-сторе
+      const alreadyInMedia = state.media.some((item) => item.uid === firstFile.uid);
+
+      if (!alreadyInMedia) {
+        set((state) => ({
+          media: [firstFile, ...state.media],
+        }));
+      }
+    }
+  },
+
+  addMessage: (message: MappedChatMessage) => {
     set((state) => {
       const existingByUidIndex = state.messages.findIndex((msg) => msg.uid === message.uid);
       if (existingByUidIndex !== -1) {
@@ -114,6 +165,9 @@ export const useChatStore = create<ChatState>((set) => ({
 
       return { messages: [...state.messages, message] };
     });
+
+    // Автоматически пытаемся добавить файл в медиа-вкладку при получении сообщения
+    get().addMediaItem(message);
   },
 
   updateMessageStatus: (uid, status) => {
@@ -136,11 +190,13 @@ export const useChatStore = create<ChatState>((set) => ({
     }));
   },
 
-  clearMessages: () => set({ messages: [], replyTarget: null }),
+  clearMessages: () => set({ messages: [], media: [], replyTarget: null }),
 
   reset: () =>
     set({
       messages: [],
+      media: [],
+      isLoadingMedia: false,
       currentUserId: null,
       chatKey: null,
       isReady: false,
