@@ -68,7 +68,13 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
   });
 
   const tabs: Record<string, React.ReactNode> = {
-    participants: <ParticipantsPage initialParticipants={initialParticipants} chatKey={chatKey} />,
+    participants: (
+      <ParticipantsPage
+        chatType={chatType}
+        initialParticipants={initialParticipants}
+        chatKey={chatKey}
+      />
+    ),
     media: <MediaPage />,
     files: <FilesPage />,
     voices: <VoicesPage />,
@@ -88,6 +94,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
         backButtonFn={closeProfile}
         backButton={isMobile || !isMainActive}
         contextMenu={contextMenu}
+        settings={isOwner}
       />
       {isMainActive ? (
         <ChatProfile

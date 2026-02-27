@@ -48,7 +48,8 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
       toggleIsMainActive: s.toggleIsMainActive,
     })),
   );
-
+  const canInvite =
+    isOwner || initialData?.type == "public-channel" || initialData?.type == "public-group";
   const handleTabChange = useCallback(
     (value: string) => {
       toggleIsMainActive();
@@ -88,7 +89,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
         <Tabs value={activeSection} onValueChange={handleTabChange}>
           <OurTabsList>
             <OurTabsTrigger onClick={toggleIsMainActive} value="participants">
-              {chatType === "channel" ? "Подписчики" : "Участники"}
+              Участники
             </OurTabsTrigger>
             <OurTabsTrigger onClick={toggleIsMainActive} value="media">
               Медиа
@@ -104,7 +105,12 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
             </OurTabsTrigger>
           </OurTabsList>
           <TabsContent value="participants">
-            <ParticipantsPage initialParticipants={initialParticipants} chatKey={chatKey} />
+            <ParticipantsPage
+              canInvite={canInvite}
+              initialParticipants={initialParticipants}
+              chatKey={chatKey}
+              chatType={chatType}
+            />
           </TabsContent>
           <TabsContent value="media">
             <MediaPage />
