@@ -18,6 +18,7 @@ type SidebarHeaderProps = {
   backButtonFn?: () => void;
   closeButtonFn?: () => void;
   contextMenu?: { onContextMenu: (e: MouseEvent) => void; isOpen: boolean };
+  onSettingsClick?: () => void;
 };
 
 export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
@@ -29,6 +30,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   closeButton,
   closeButtonFn,
   contextMenu,
+  onSettingsClick,
 }) => {
   const router = useRouter();
   const onBackClick = backButtonFn || (() => router.back());
@@ -69,7 +71,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
       {contextMenu && (
         <div className="flex gap-2">
           {settings && (
-            <Button variant="ghost" size="icon-auto">
+            <Button variant="ghost" size="icon-auto" onClick={onSettingsClick}>
               <Settings className="text-primary h-6 w-6" />
             </Button>
           )}

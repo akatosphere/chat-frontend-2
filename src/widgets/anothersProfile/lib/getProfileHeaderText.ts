@@ -21,5 +21,9 @@ export const getProfileHeaderText = ({
     return CHAT_TYPE_LABELS[chatType];
   }
 
-  return activeSection === "participants" ? "Участники" : "Вложения";
+  return activeSection === "participants"
+    ? "Участники"
+    : activeSection === "settings"
+      ? "Настройки"
+      : "Вложения";
 };

@@ -19,6 +19,7 @@ import { FilesPage } from "./tabs/filesPage";
 import { LinksPage } from "./tabs/linksPage";
 import { MediaPage } from "./tabs/mediaPage";
 import { ParticipantsPage } from "./tabs/participantsPage";
+import { SettingsPage } from "./tabs/settingsPage";
 import { VoicesPage } from "./tabs/voicesPage";
 
 type ChatProfileClientProps = {
@@ -34,14 +35,16 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
   chatInfo,
   initialParticipants,
 }) => {
-  const { isMainActive, activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore(
-    useShallow((s) => ({
-      isMainActive: s.isMainActive,
-      activeSection: s.activeSection,
-      setActiveSection: s.setActiveSection,
-      resetTabsUI: s.reset,
-    })),
-  );
+  const { isMainActive, activeSection, setActiveSection, resetTabsUI, toggleIsMainActive } =
+    useAnothersProfileUIStore(
+      useShallow((s) => ({
+        isMainActive: s.isMainActive,
+        activeSection: s.activeSection,
+        setActiveSection: s.setActiveSection,
+        resetTabsUI: s.reset,
+        toggleIsMainActive: s.toggleIsMainActive,
+      })),
+    );
   const isMobile = useIsMobileStore((state) => state.isMobile);
   const sidebarHeaderText = getProfileHeaderText({ chatType, isMainActive, activeSection });
   const closeProfile = useProfileClose();
@@ -82,6 +85,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
     files: <FilesPage />,
     voices: <VoicesPage />,
     links: <LinksPage />,
+    settings: <SettingsPage />,
   };
 
   if (!displayData) {
@@ -98,6 +102,10 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
         backButton={isMobile || !isMainActive}
         contextMenu={contextMenu}
         settings={isOwner}
+        onSettingsClick={() => {
+          toggleIsMainActive();
+          setActiveSection("settings");
+        }}
       />
       {isMainActive ? (
         <ChatProfile

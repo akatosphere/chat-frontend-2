@@ -3,9 +3,11 @@ import { devtools } from "zustand/middleware";
 
 interface AnothersProfileUIState {
   isMainActive: boolean;
-  activeSection: "participants" | "media" | "files" | "voices" | "links";
+  activeSection: "participants" | "media" | "files" | "voices" | "links" | "settings";
   toggleIsMainActive: () => void;
-  setActiveSection: (section: "participants" | "media" | "files" | "voices" | "links") => void;
+  setActiveSection: (
+    section: "participants" | "media" | "files" | "voices" | "links" | "settings",
+  ) => void;
   reset: () => void;
 }
 
