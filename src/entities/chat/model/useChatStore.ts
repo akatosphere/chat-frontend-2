@@ -115,6 +115,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   fetchMedia: async (chatKey: string) => {
     if (!chatKey) return;
+    set({ media: [], isLoadingMedia: true });
+    if (!chatKey) return;
     set({ isLoadingMedia: true });
     try {
       const data = await getChatMedia(chatKey);
