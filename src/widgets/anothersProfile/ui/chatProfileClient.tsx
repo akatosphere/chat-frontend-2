@@ -15,11 +15,11 @@ import { useChatProfileContextMenu } from "../lib/useChatProfileContextMenu";
 import { useProfileClose } from "../lib/useProfileClose";
 import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
 import { ChatProfile } from "./chatProfile";
+import { ChatSettingsPage } from "./tabs/chatSettingsPage";
 import { FilesPage } from "./tabs/filesPage";
 import { LinksPage } from "./tabs/linksPage";
 import { MediaPage } from "./tabs/mediaPage";
 import { ParticipantsPage } from "./tabs/participantsPage";
-import { SettingsPage } from "./tabs/settingsPage";
 import { VoicesPage } from "./tabs/voicesPage";
 
 type ChatProfileClientProps = {
@@ -85,7 +85,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
     files: <FilesPage />,
     voices: <VoicesPage />,
     links: <LinksPage />,
-    settings: <SettingsPage />,
+    settings: <ChatSettingsPage chatKey={chatKey} chatInfo={displayData} />,
   };
 
   if (!displayData) {
