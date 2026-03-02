@@ -39,17 +39,6 @@ export const MessageLayout = ({
 
   return (
     <div className={cn("flex flex-col", isMine ? "items-end" : "items-start")}>
-      {showSenderName && (
-        <span
-          className={cn(
-            "ml-3 text-xs leading-none font-medium tracking-wide text-blue-600",
-            hasMedia ? "mb-1.5" : "mb-1",
-          )}
-        >
-          {message.fromUser.firstName} {message.fromUser.lastName}
-        </span>
-      )}
-
       <div
         className={cn(
           "relative w-fit min-w-0 overflow-hidden rounded-2xl select-text",
@@ -57,6 +46,18 @@ export const MessageLayout = ({
           hasMedia && blocks[0]?.type === "media" && "pt-0",
         )}
       >
+        {/* Блок имени перенесен внутрь пузыря */}
+        {showSenderName && (
+          <div
+            className={cn(
+              "px-4 pt-2 text-xs leading-none font-medium tracking-wide text-blue-600",
+              hasMedia && blocks[0]?.type === "media" ? "mb-3" : "mb-0",
+            )}
+          >
+            {message.fromUser.firstName} {message.fromUser.lastName}
+          </div>
+        )}
+
         {blocks.map((block, i) => (
           <MessageBlockRenderer
             key={i}
