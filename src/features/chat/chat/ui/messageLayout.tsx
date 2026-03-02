@@ -50,7 +50,7 @@ export const MessageLayout = ({
         {showSenderName && (
           <div
             className={cn(
-              "px-4 pt-2 text-xs leading-none font-medium tracking-wide text-blue-600",
+              "text-primary px-4 pt-2 text-xs leading-none font-medium tracking-wide",
               hasMedia && blocks[0]?.type === "media" ? "mb-3" : "mb-0",
             )}
           >
