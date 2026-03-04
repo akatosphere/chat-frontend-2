@@ -14,7 +14,6 @@ export const getContactsServer = async (): Promise<ContactListResponse | null> =
         page_size: 30,
       },
     });
-    console.log(data);
 
     return mapContactListResponse(data);
   } catch (error) {

@@ -18,6 +18,7 @@ export type ModalPayloads = {
   };
   sendImage: { chatKey: string };
   sendFile: { chatKey: string };
+  forward: { messageId: number; chatKey: string };
   //новые модалки здесь
 };
 

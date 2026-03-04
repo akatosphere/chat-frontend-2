@@ -19,10 +19,13 @@ export const MessageText: React.FC<MessageTextProps> = ({
   time,
   status,
 }) => {
+  const isEmpty = block.text.trim() === "";
   return (
     <div
       className={cn(
-        "relative flex h-fit w-full items-stretch justify-between px-3 pt-1.5 pb-2.5",
+        isEmpty
+          ? "absolute right-3 bottom-2"
+          : "relative flex h-fit w-full items-stretch justify-between px-3 pt-1.5 pb-2.5",
         className,
       )}
     >
@@ -30,9 +33,14 @@ export const MessageText: React.FC<MessageTextProps> = ({
         {block.text}
       </p>
       <div className="flex flex-col justify-end">
-        <div className="minitext text-gray leading-subtext mt-auto flex items-center gap-0.5 select-none">
+        <div
+          className={cn(
+            "minitext text-gray leading-subtext mt-auto flex items-center gap-0.5 select-none",
+            isEmpty && "rounded-full bg-[#00000066] px-1.5 py-0.5 text-white",
+          )}
+        >
           <span>{time}</span>
-          {isMine && <StatusIcon status={status} className="h-2.5 w-3.5" />}
+          {isMine && <StatusIcon status={status} className="h-2.5 w-3.5" isActive={isEmpty} />}
         </div>
       </div>
     </div>

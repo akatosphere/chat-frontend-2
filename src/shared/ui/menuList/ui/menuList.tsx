@@ -12,7 +12,6 @@ type MenuListProps = {
 };
 
 export const MenuList: React.FC<MenuListProps> = ({ className, items, onAction, icons }) => {
-  console.log(icons);
   return (
     <ul className={cn("flex w-full flex-col rounded-lg bg-white", className)}>
       {items.map((item, index) => {

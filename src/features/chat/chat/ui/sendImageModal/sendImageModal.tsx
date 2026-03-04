@@ -2,17 +2,18 @@ import AttachBtn from "@icons/chat/attachBtn.svg";
 import Close from "@icons/close.svg";
 import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
 
-import { openFilePicker } from "@/features/chat/chat/lib/openFilePicker";
-import { useSendFilesStore } from "@/features/chat/chat/model/store/useChatSendFilesStore";
+import { useSendMessage } from "@/features/chat/chat/hooks";
+import { openImagePicker } from "@/features/chat/chat/lib/openImagePicker";
+import { useSendImageStore } from "@/features/chat/chat/model/store/useChatSendImagesStore";
 import { MessageForm } from "@/features/chat/sendMessage/ui/messageForm";
-import { pluralize } from "@/shared/lib/pluralize";
 import { useKeyboardOffset } from "@/shared/lib/useKeyboardOffset";
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { AlertDialogHeader, AlertDialogTitle } from "@/shared/shadcn/ui/alert-dialog";
 import { Button } from "@/shared/shadcn/ui/button";
-import { FileList } from "@/shared/ui/fileList/fileList";
-export type SendFileModalProps = {
+import { MediaGrid, MediaItem } from "@/shared/ui/mediaGrid/mediaGrid";
+
+export type SendImageModalProps = {
   className?: string;
   isOpen: boolean;
   chatKey: string;
@@ -20,10 +21,19 @@ export type SendFileModalProps = {
   onClose: () => void;
 };
 
-export const SendFileModal: React.FC<SendFileModalProps> = ({ className, isOpen, onClose }) => {
-  const files = useSendFilesStore((s) => s.attachments);
-  const { clear, addFiles } = useSendFilesStore();
+export const SendImageModal: React.FC<SendImageModalProps> = ({ className, isOpen, onClose }) => {
+  const images = useSendImageStore((s) => s.images);
+  const { clear, addImages } = useSendImageStore();
   const { isKeyboardOpen } = useKeyboardOffset();
+  const sendMessage = useSendMessage();
+  const imagesToUpload: MediaItem[] = images.map((img) => {
+    const obj = {
+      id: img.id,
+      type: "image" as const,
+      src: img.previewUrl,
+    };
+    return obj;
+  });
 
   const handleClose = () => {
     clear();
@@ -31,26 +41,28 @@ export const SendFileModal: React.FC<SendFileModalProps> = ({ className, isOpen,
   };
 
   const handleAttach = async () => {
-    const files = await openFilePicker();
-    if (files.length) addFiles(files);
+    const files = await openImagePicker();
+    if (files.length) addImages(files);
   };
 
-  if (!files.length) return null;
+  const handleSend = async (text: string) => {
+    // if (images.length === 0) return;
+    console.log("text", text);
+    handleClose();
+    await sendMessage(text || "", images);
+  };
+
+  if (!images.length) return null;
   return (
     <ModalDialog
-      className={cn(
-        "desktop:w-[432px] desktop:max-w-[432px] bg-[#F5F6F8] p-0 py-6 pl-5",
-        className,
-      )}
+      className={cn("desktop:w-[432px] desktop:max-w-[432px] bg-[#F5F6F8]", className)}
       open={isOpen}
       onOpenChange={handleClose}
     >
       <AlertDialogHeader>
-        <AlertDialogTitle className="flex items-center justify-between gap-2 pr-5">
+        <AlertDialogTitle className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-medium">
-              Отправить {files.length} {pluralize(files.length, "файл", "файла", "файлов")}
-            </span>
+            <span className="font-medium">Отправить медиа-файл</span>
             <Button
               variant="text"
               size="icon"
@@ -67,13 +79,13 @@ export const SendFileModal: React.FC<SendFileModalProps> = ({ className, isOpen,
           />
         </AlertDialogTitle>
         <AlertDialogDescription></AlertDialogDescription>
-        <div className="w-full">
-          <FileList files={files} />
+        <div className="">
+          <MediaGrid items={imagesToUpload} size="sendImageModal" className="w-full" isDeleteMode />
           <MessageForm
-            className="mt-4 p-0 pr-5"
+            className="mt-4 p-0"
             variant="modal"
             isKeyboardOpen={isKeyboardOpen}
-            onSubmitMessage={() => {}}
+            onSubmitMessage={handleSend}
             isAttachBtnDisabled={true}
             isVoiceBtnDisabled={true}
             placeholder="Добавить подпись"

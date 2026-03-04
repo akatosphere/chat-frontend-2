@@ -11,7 +11,7 @@ import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { useToast } from "@/shared/toast/ui/toastProvider";
 
 type UseClearChatParams = {
-  chatId: number | undefined;
+  chatId: number | null;
   chatName: string;
   chatType: ChatType;
 };

@@ -54,7 +54,10 @@ export async function proxy(request: NextRequest) {
   const refreshToken = request.cookies.get("refresh_token")?.value;
   const isFilled = request.cookies.get("is_filled")?.value === "true";
 
-  const response = NextResponse.next();
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", path);
+
+  const response = NextResponse.next({ request: { headers: requestHeaders } });
 
   // --- ЛОГИКА РЕФРЕША ---
   // Если токена нет ИЛИ он просрочен, но есть рефреш

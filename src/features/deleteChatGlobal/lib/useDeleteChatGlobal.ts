@@ -54,12 +54,9 @@ export const useDeleteChatGlobal = ({ chatKey, chatName, chatType }: UseDeleteCh
 
         // Удалить из store и очистить кэш React Query
         removeChat(chatKey);
-        queryClient.removeQueries({ queryKey: ["chats"] });
-
-        setTimeout(() => {
-          router.push("/chats");
-          router.refresh();
-        }, 300);
+        queryClient.invalidateQueries({ queryKey: ["chats"] });
+        router.push("/chats");
+        router.refresh();
       } else {
         console.error("Ошибка при выходе из чата:", response.error);
       }

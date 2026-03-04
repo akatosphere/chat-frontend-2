@@ -56,7 +56,9 @@ export const SubmitCreateChatBtn: React.FC<SubmitCreateChatBtnProps> = ({ classN
         });
 
         router.push(`/chats/`);
-        router.push(`/chats/${chatKey}`);
+        setTimeout(() => {
+          router.push(`/chats/${chatKey}`);
+        }, 100);
       } else {
         console.error("Ошибка сервера:", response.error);
         alert(`Ошибка: ${response.error}`);

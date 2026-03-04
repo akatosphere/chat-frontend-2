@@ -3,14 +3,14 @@ import { useEffect, useRef } from "react";
 type UseInfiniteScrollProps = {
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
-  isSearching: boolean;
+  isSearching?: boolean;
   fetchNextPage: () => void;
 };
 
 export const useInfiniteScroll = ({
   hasNextPage,
   isFetchingNextPage,
-  isSearching,
+  isSearching = false,
   fetchNextPage,
 }: UseInfiniteScrollProps) => {
   const loadMoreRef = useRef<HTMLDivElement>(null);

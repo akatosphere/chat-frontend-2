@@ -14,7 +14,8 @@ type SidebarHeaderProps = {
   backButton?: boolean;
   closeButton?: boolean;
   backButtonFn?: () => void;
-  contextMenuHook?: () => { onContextMenu: (e: MouseEvent) => void; isOpen: boolean };
+  closeButtonFn?: () => void;
+  contextMenu?: { onContextMenu: (e: MouseEvent) => void; isOpen: boolean };
 };
 
 export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
@@ -23,11 +24,12 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   backButton,
   backButtonFn,
   closeButton,
-  contextMenuHook,
+  closeButtonFn,
+  contextMenu,
 }) => {
   const router = useRouter();
-  const onClick = backButtonFn || (() => router.back());
-  const contextMenu = contextMenuHook?.();
+  const onBackClick = backButtonFn || (() => router.back());
+  const onCloseClick = closeButtonFn || (() => router.back());
 
   return (
     <div
@@ -39,13 +41,13 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     >
       <div className="flex">
         {backButton && (
-          <Button variant="ghost" size="icon-auto" className="z-10 h-6 w-6" onClick={onClick}>
+          <Button variant="ghost" size="icon-auto" className="z-10 h-6 w-6" onClick={onBackClick}>
             <BackArrow className="text-black" />
           </Button>
         )}
 
         {closeButton && (
-          <Button variant="ghost" size="icon-auto" className="z-10" onClick={onClick}>
+          <Button variant="ghost" size="icon-auto" className="z-10" onClick={onCloseClick}>
             <Close className="text-primary h-4 w-4" />
           </Button>
         )}

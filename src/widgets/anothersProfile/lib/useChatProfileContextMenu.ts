@@ -1,7 +1,7 @@
 import erase from "@icons/erase.svg";
 import exit from "@icons/menu/exit.svg";
 import trashCan from "@icons/trashCan.svg";
-import { MouseEvent } from "react";
+import { MouseEvent, useMemo } from "react";
 
 import { ChatType } from "@/entities/chat/model/types";
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
@@ -16,7 +16,7 @@ type UseChatProfileContextMenuParams = {
   chatKey: string;
   chatName: string;
   fullChatType: ChatType;
-  chatId: number | undefined;
+  chatId: number | null;
 };
 
 export const useChatProfileContextMenu = ({
@@ -27,6 +27,7 @@ export const useChatProfileContextMenu = ({
   fullChatType,
   chatId,
 }: UseChatProfileContextMenuParams) => {
+  const menuId = "chatProfile";
   const { openMenu, activeMenuId } = useContextMenu();
   const openModal = useModalStore((s) => s.openModal);
 
@@ -51,53 +52,71 @@ export const useChatProfileContextMenu = ({
   const leaveLabel = chatType === "channel" ? "Покинуть канал" : "Покинуть группу";
   const deleteLabel = chatType === "channel" ? "Удалить канал" : "Удалить группу";
 
-  const menuItems: MenuItem[] = [
-    {
-      label: clearLabel,
-      icon: erase,
-      onClick: () => {
-        openModal("clearChat", {
-          chatName,
-          modalVariant: clearChatModalVariant,
-          onConfirm: confirmClear,
-        });
+  const menuItems = useMemo(() => {
+    const items: MenuItem[] = [
+      {
+        label: clearLabel,
+        icon: erase,
+        onClick: () => {
+          openModal("clearChat", {
+            chatName,
+            modalVariant: clearChatModalVariant,
+            onConfirm: confirmClear,
+          });
+        },
       },
-    },
-    {
-      label: leaveLabel,
-      icon: exit,
-      onClick: () => {
-        openModal("leaveChat", {
-          chatName,
-          modalVariant: leaveModalVariant,
-          onConfirm: confirmLeave,
-        });
+      {
+        label: leaveLabel,
+        icon: exit,
+        onClick: () => {
+          openModal("leaveChat", {
+            chatName,
+            modalVariant: leaveModalVariant,
+            onConfirm: confirmLeave,
+          });
+        },
       },
-    },
-  ];
+    ];
 
-  if (isOwner) {
-    menuItems.push({
-      label: deleteLabel,
-      icon: trashCan,
-      destructive: true,
-      onClick: () => {
-        openModal("deleteChatGlobal", {
-          chatName,
-          modalVariant: deleteModalGlobalVariant,
-          onConfirm: confirmDelete,
-        });
-      },
-    });
-  }
+    if (isOwner) {
+      items.push({
+        label: deleteLabel,
+        icon: trashCan,
+        destructive: true,
+        onClick: () => {
+          openModal("deleteChatGlobal", {
+            chatName,
+            modalVariant: deleteModalGlobalVariant,
+            onConfirm: confirmDelete,
+          });
+        },
+      });
+    }
 
-  return {
-    onContextMenu: (e: MouseEvent) => {
-      e.preventDefault();
-      openMenu(menuId, menuItems, e.clientX, e.clientY);
-    },
-    isOpen: activeMenuId === menuId,
-  };
+    return items;
+  }, [
+    clearLabel,
+    leaveLabel,
+    deleteLabel,
+    isOwner,
+    openModal,
+    chatName,
+    clearChatModalVariant,
+    confirmClear,
+    leaveModalVariant,
+    confirmLeave,
+    deleteModalGlobalVariant,
+    confirmDelete,
+  ]);
+
+  return useMemo(
+    () => ({
+      onContextMenu: (e: MouseEvent) => {
+        e.preventDefault();
+        openMenu(menuId, menuItems, e.clientX, e.clientY);
+      },
+      isOpen: activeMenuId === menuId,
+    }),
+    [openMenu, menuItems, activeMenuId],
+  );
 };
-
-const menuId = "chatProfile";

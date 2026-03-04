@@ -26,10 +26,9 @@ export const getLastMessagePreview = ({
   // только картинки
   if (hasImages && !hasVideos && !hasFiles) {
     const icons: PreviewIconType[] = Array(Math.min(count, MAX_ICONS_DISPLAY)).fill("photo");
-
     return {
       icons,
-      text: content || `${count} фото`,
+      text: content && content !== " " ? content : `${count} фото`,
     };
   }
 
@@ -39,7 +38,7 @@ export const getLastMessagePreview = ({
 
     return {
       icons,
-      text: content || `${count} видео`,
+      text: content && content !== " " ? content : `${count} видео`,
     };
   }
 
@@ -48,7 +47,10 @@ export const getLastMessagePreview = ({
     if (count === 1) {
       return {
         icons: [],
-        text: content || `${count} ${pluralize(count, "файл", "файла", "файлов")}`,
+        text:
+          content && content !== " "
+            ? content
+            : `${count} ${pluralize(count, "файл", "файла", "файлов")}`,
       };
     }
 
@@ -56,7 +58,10 @@ export const getLastMessagePreview = ({
 
     return {
       icons,
-      text: content || `${count} ${pluralize(count, "файл", "файла", "файлов")}`,
+      text:
+        content && content !== " "
+          ? content
+          : `${count} ${pluralize(count, "файл", "файла", "файлов")}`,
     };
   }
 
@@ -68,6 +73,6 @@ export const getLastMessagePreview = ({
 
   return {
     icons,
-    text: content || `${count} медиа`,
+    text: content && content !== " " ? content : `${count} медиа`,
   };
 };

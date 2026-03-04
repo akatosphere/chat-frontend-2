@@ -25,10 +25,13 @@ type ChatListState = {
   // async
   addNewChat: (chatKey: string) => Promise<void>;
 
+  // selectors
+  getChatIdByUid: (uid: string) => number | null;
+
   reset: () => void;
 };
 
-export const useChatListStore = create<ChatListState>((set) => ({
+export const useChatListStore = create<ChatListState>((set, get) => ({
   chatsByKey: {},
   order: [],
   count: 0,
@@ -104,6 +107,11 @@ export const useChatListStore = create<ChatListState>((set) => ({
         [chat.key]: chat,
       }),
     }));
+  },
+
+  getChatIdByUid: (uid) => {
+    const chat = Object.values(get().chatsByKey).find((c) => c.member.uid === uid);
+    return chat?.id ?? null;
   },
 
   reset: () => set({ chatsByKey: {}, order: [], count: 0 }),

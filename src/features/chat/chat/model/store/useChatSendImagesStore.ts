@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export type PendingImage = {
-  id: string;
+  id: number;
   file: File;
   previewUrl: string;
 };
@@ -13,7 +13,7 @@ type SendImageState = {
   setText: (text: string) => void;
 
   addImages: (files: File[]) => void;
-  removeImage: (id: string) => void;
+  removeImage: (id: number) => void;
   clear: () => void;
 };
 
@@ -29,7 +29,7 @@ export const useSendImageStore = create<SendImageState>((set) => ({
       const nextFiles = files.slice(0, remaining);
 
       const mapped = nextFiles.map((file) => ({
-        id: crypto.randomUUID(),
+        id: Date.now() + Math.random(),
         file,
         previewUrl: URL.createObjectURL(file),
       }));

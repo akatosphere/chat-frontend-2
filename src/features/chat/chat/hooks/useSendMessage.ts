@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { sendTextMessage } from "@/entities/chat/api/sendMessage";
+import { PendingImage } from "@/features/chat/chat/model/store/useChatSendImagesStore";
 import { optimisticSendMessage } from "@/features/chatList/lib/optimisticSendMessage";
 import { MESSAGE_STATUS } from "@/shared/constants/constants";
 
@@ -20,16 +21,21 @@ export const useSendMessage = () => {
     addMessage,
     setFailedStatus,
     replyTarget,
+    forwardTarget,
+    setForwardTarget,
     setReplyTarget,
   } = useChatStore();
 
   return useCallback(
-    async (text: string) => {
-      if (!text.trim() || !currentUserId || !chatKey) return;
+    async (text: string, images: PendingImage[] = []) => {
+      // if (!text.trim() && images.length === 0) return; // не отправляем пустое
+      if (!currentUserId || !chatKey) return;
+      console.log(images);
 
       const requestUid = uuidv4();
       const now = Date.now() / 1000;
 
+      // Подготавливаем временное сообщение
       const tempMessage: MappedChatMessage = {
         id: Math.random(),
         uid: uuidv4(),
@@ -47,7 +53,7 @@ export const useSendMessage = () => {
           avatarWebpUrl: "",
         },
         toUser: null,
-        content: text,
+        content: text || " ",
         repliedMessages: replyTarget
           ? [
               {
@@ -61,8 +67,33 @@ export const useSendMessage = () => {
               },
             ]
           : [],
-        forwardedMessages: [],
-        filesList: [],
+        forwardedMessages: forwardTarget
+          ? [
+              {
+                id: forwardTarget.id,
+                uid: forwardTarget.uid,
+                firstName: forwardTarget.fromUser.firstName,
+                lastName: forwardTarget.fromUser.lastName,
+                fromUserId: forwardTarget.fromUser.uid,
+                avatarUrl: "",
+                content: forwardTarget.content,
+                filesList: forwardTarget.filesList,
+              },
+            ]
+          : [],
+        filesList: images.map((img) => ({
+          fileUrl: "/icons/imageLoader.svg",
+          file: img.file,
+          id: img.id,
+          uid: img.id + uuidv4(),
+          fileWebpUrl: "",
+          fileType: "",
+          fileWebp: null,
+          createdAt: now,
+          updatedAt: now,
+          name: img.file.name,
+          type: "image",
+        })),
         isNew: true,
         createdAt: now,
         updatedAt: now,
@@ -75,30 +106,53 @@ export const useSendMessage = () => {
       };
 
       tempMessage.blocks = buildMessageBlocks(tempMessage);
-
       addMessage(tempMessage);
+      setReplyTarget(null);
+      setForwardTarget(null);
 
-      console.log("tempMessage", tempMessage);
+      // Подготовка файлов для отправки на сервер
+      const filesPayload = await Promise.all(
+        images.map(async (img) => {
+          const base64 = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+
+            reader.onload = () => {
+              const result = reader.result as string;
+              resolve(result.split(",")[1]);
+            };
+
+            reader.onerror = reject;
+            reader.readAsDataURL(img.file);
+          });
+
+          return {
+            filename: img.file.name,
+            data: base64,
+          };
+        }),
+      );
+
       optimisticSendMessage({
         chatKey: tempMessage.chatKey,
         message: {
           id: tempMessage.id,
           uid: tempMessage.uid,
           content: tempMessage.content,
+          files_summary: { types: ["image/png"], count: images.length },
           created_at: now,
           from_user_id: currentUserId,
         },
       });
-
-      setReplyTarget(null);
 
       try {
         const serverMessage = await sendTextMessage({
           chat_key: chatType !== "chat" ? chatKey : null,
           to_user_uid: chatType === "chat" ? chatKey : null,
           content: text,
+          files: filesPayload,
           status: "publish",
           replied_messages: replyTarget ? [`${replyTarget.uid}`] : [],
+          forwarded_messages: forwardTarget ? [`${forwardTarget.uid}`] : [],
           request_uid: requestUid,
         });
 
@@ -113,6 +167,7 @@ export const useSendMessage = () => {
           updated[tempIndex] = mapped;
           useChatStore.setState({ messages: updated });
         } else {
+          console.log("addMessage", mapped);
           addMessage(mapped);
         }
 
@@ -122,6 +177,10 @@ export const useSendMessage = () => {
             id: mapped.id,
             uid: mapped.uid,
             content: mapped.content,
+            files_summary: {
+              types: mapped.filesList.map((f) => f.fileType).filter((t): t is string => t !== null),
+              count: mapped.filesList.length,
+            },
             created_at: mapped.createdAt,
             from_user_id: mapped.fromUser.uid,
           },
@@ -139,6 +198,8 @@ export const useSendMessage = () => {
       setFailedStatus,
       replyTarget,
       setReplyTarget,
+      setForwardTarget,
+      forwardTarget,
       chatKeyUser,
     ],
   );

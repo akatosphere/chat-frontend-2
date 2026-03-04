@@ -19,6 +19,9 @@ export const optimisticDeleteMessage = (
       useChatListStore.getState().patchChat(chatKey, {
         lastMessage: {
           ...chat.lastMessage,
+          files_summary: null,
+          has_forwarded_message: false,
+          has_replied_message: false,
           content: "Сообщение удалено",
           new: false,
         },

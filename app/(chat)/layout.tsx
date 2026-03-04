@@ -1,4 +1,5 @@
 import { GlobalModal } from "@/entities/modals/ui/globalModal";
+import { MediaViewerContainer } from "@/features/mediaViewer/ui/mediaViewerContainer";
 import { ResponsiveLayout } from "@/shared/layouts/responsiveLayout";
 import { NavBar } from "@/shared/navBar/ui/navBar";
 import QueryCustomProvider from "@/shared/providers/queryProvider";
@@ -16,6 +17,7 @@ export default function ChatLayout({ children, sidebar, extra }: ChatLayoutProps
   return (
     <QueryCustomProvider>
       <GlobalModal />
+      <MediaViewerContainer />
       <ContextMenuProvider>
         <ToastProvider>
           <div className="desktop:pb-1 desktop:px-3 mx-auto flex h-dvh max-h-dvh min-h-dvh max-w-300 flex-col gap-4 overflow-hidden">

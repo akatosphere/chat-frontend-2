@@ -3,11 +3,11 @@ import { getApiClient } from "@/shared/api/getApiClient";
 import { Result } from "@/shared/api/types";
 
 export interface ClearChatData {
-  index: number | undefined;
+  index: number | null;
 }
 
 export interface ClearChatSuccess {
-  index: number | undefined;
+  index: number | null;
 }
 
 export const clearChat = async (data: ClearChatData): Promise<Result<ClearChatSuccess>> => {

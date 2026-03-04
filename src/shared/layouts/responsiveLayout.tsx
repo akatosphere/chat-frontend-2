@@ -48,16 +48,7 @@ export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutP
         {children}
       </MainContent>
       {/* EXTRA: Правая колонка (Профиль/Инфо) */}
-      {isExtraActive && (
-        <Sidebar
-          className={cn(
-            "desktop:flex", // Покажется на десктопе
-            "flex", // Покажется на мобилке (так как isSidebarActive и isMainActive будут false)
-          )}
-        >
-          {extra}
-        </Sidebar>
-      )}
+      {isExtraActive && <Sidebar className={cn("flex")}>{extra}</Sidebar>}
     </>
   );
 };

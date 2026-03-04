@@ -1,6 +1,14 @@
 "use client";
 
-import { ComponentType, createContext, ReactNode, SVGProps, useContext, useState } from "react";
+import {
+  ComponentType,
+  createContext,
+  ReactNode,
+  SVGProps,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 
 import { ContextMenuContent } from "./contextMenuContent";
@@ -63,8 +71,17 @@ export const ContextMenuProvider = ({ children }: { children: ReactNode }) => {
     setState((prev) => ({ ...prev, isOpen: false }));
   };
 
+  const value = useMemo(
+    () => ({
+      openMenu,
+      closeMenu,
+      activeMenuId,
+    }),
+    [openMenu, closeMenu, activeMenuId],
+  );
+
   return (
-    <contextMenuContext.Provider value={{ openMenu, closeMenu, activeMenuId }}>
+    <contextMenuContext.Provider value={value}>
       {children}
       {state.isOpen &&
         createPortal(
