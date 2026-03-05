@@ -1,11 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
-import { useChatInfoStore } from "@/entities/chat/model/useChatInfoStore";
-import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { formSchema } from "@/features/createChat/model/schema";
 import { CreateChatFormValues } from "@/features/createChat/model/types";
 import { fileToBase64 } from "@/shared/lib/files/fileToBase64";
@@ -14,7 +11,6 @@ import { editChat } from "../api/ws";
 import { mapChatTypeToValue, mapValueToChatType } from "./mapChatType";
 
 export const useEditChat = (chatKey: string, chatInfo: MappedChatDetails) => {
-  const queryClient = useQueryClient();
   const groupOrChannel: "group" | "channel" = chatInfo.type.includes("group") ? "group" : "channel";
 
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
@@ -70,41 +66,13 @@ export const useEditChat = (chatKey: string, chatInfo: MappedChatDetails) => {
         // если avatarChanged === true, но avatar не File — значит удалён, отправляем null
       }
 
-      const response = await editChat({
+      await editChat({
         chat_key: chatKey,
         name: data.title,
         description: data.description,
         chat_type: finalChatType,
         avatar: avatarPayload,
       });
-
-      if (response.status === "OK") {
-        useChatInfoStore.getState().patchChatInfo(chatKey, {
-          title: data.title,
-          description: data.description,
-          type: finalChatType,
-          ...(avatarChanged && avatarPayload
-            ? { avatar: `data:image/png;base64,${avatarPayload.data}` }
-            : {}),
-          ...(avatarChanged && !avatarPayload ? { avatar: null } : {}),
-        });
-        const chatListStore = useChatListStore.getState();
-        const currentChat = chatListStore.chatsByKey[chatKey];
-        const avatarUrl = avatarPayload ? `data:image/png;base64,${avatarPayload.data}` : null;
-        chatListStore.patchChat(chatKey, {
-          title: data.title,
-          ...(avatarChanged && currentChat
-            ? {
-                member: {
-                  ...currentChat.member,
-                  avatar_url: avatarUrl,
-                  avatar_webp_url: avatarUrl,
-                },
-              }
-            : {}),
-        });
-        queryClient.invalidateQueries({ queryKey: ["chats"] });
-      }
     } finally {
       setIsSubmitting(false);
     }

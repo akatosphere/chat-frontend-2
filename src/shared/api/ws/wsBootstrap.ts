@@ -1,3 +1,4 @@
+import { handleEditChat } from "@/entities/chat/api/ws/editChatHandler";
 import {
   handleCreateTextMessage,
   handleDeleteMessage,
@@ -13,4 +14,6 @@ export const bootstrapWSHandlers = () => {
   registerWSHandler(WS_ACTIONS.CHANGE_STATUS_READ_MESSAGE, handleReadStatus);
 
   registerWSHandler(WS_ACTIONS.DELETE_MESSAGE, handleDeleteMessage);
+
+  registerWSHandler(WS_ACTIONS.EDIT_CHAT, handleEditChat);
 };
