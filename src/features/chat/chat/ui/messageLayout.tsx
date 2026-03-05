@@ -34,8 +34,7 @@ export const MessageLayout = ({
     [message.isNew, message.status],
   );
 
-  // Проверка на наличие медиа для корректного отступа имени
-  const hasMedia = useMemo(() => blocks.some((b) => b.type === "media"), [blocks]);
+  const isFirstBlockMedia = blocks[0]?.type === "media";
 
   return (
     <div className={cn("flex flex-col", isMine ? "items-end" : "items-start")}>
@@ -43,15 +42,14 @@ export const MessageLayout = ({
         className={cn(
           "relative w-fit min-w-0 overflow-hidden rounded-2xl select-text",
           isMine ? "bg-light-green rounded-br-sm" : "desktop:bg-gray-tone rounded-bl-sm bg-white",
-          hasMedia && blocks[0]?.type === "media" && "pt-0",
+          isFirstBlockMedia && "pt-0",
         )}
       >
-        {/* Блок имени перенесен внутрь пузыря */}
         {showSenderName && (
           <div
             className={cn(
-              "text-primary px-4 pt-2 text-xs leading-none font-medium tracking-wide",
-              hasMedia && blocks[0]?.type === "media" ? "mb-3" : "mb-0",
+              "text-primary px-3 pt-2 text-xs leading-none font-medium tracking-wide",
+              isFirstBlockMedia ? "mb-3" : "mb-0.5",
             )}
           >
             {message.fromUser.firstName} {message.fromUser.lastName}
@@ -66,6 +64,8 @@ export const MessageLayout = ({
             time={time}
             status={status}
             id={message.id}
+            // Передаем флаг, если это первый текстовый блок под именем
+            hasNameAbove={i === 0 && showSenderName}
           />
         ))}
       </div>

@@ -12,12 +12,14 @@ export const MessageBlockRenderer = ({
   time,
   status,
   id,
+  hasNameAbove, // 1. Принимаем проп
 }: {
   block: MessageBlock;
   isMine: boolean;
   time: string;
   status: SendingStatus;
   id: number;
+  hasNameAbove?: boolean; // 2. Добавляем в определение типа
 }) => {
   switch (block.type) {
     case "reply":
@@ -38,7 +40,15 @@ export const MessageBlockRenderer = ({
       return null;
 
     case "text":
-      return <MessageText block={block} isMine={isMine} time={time} status={status} />;
+      return (
+        <MessageText
+          block={block}
+          isMine={isMine}
+          time={time}
+          status={status}
+          hasNameAbove={hasNameAbove} // Прокидываем в MessageText
+        />
+      );
 
     default:
       return null;
