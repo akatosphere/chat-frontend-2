@@ -44,7 +44,7 @@ export const MediaPage: React.FC<MediaPageProps> = ({ className }) => {
   const isEmpty = formattedImages.length === 0;
 
   return (
-    <div className={cn("flex h-full w-full flex-col bg-white", className)}>
+    <div className={cn("flex h-full w-full flex-col", className)}>
       {/* Показываем лоадер только при ПЕРВОЙ загрузке */}
       {isLoadingMedia && isEmpty ? (
         <div className="text-muted-foreground flex flex-1 items-center justify-center text-sm">
