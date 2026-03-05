@@ -17,7 +17,7 @@ export const mapChatParticipantDto = (dto: ChatParticipantDto): ChatParticipant 
   isOwner: dto.is_owner,
   isBlocked: dto.is_blocked,
   isOnline: dto.is_online,
-  wasOnlineAt: dto.was_online_at,
+  lastSeenAt: dto.was_online_at,
   isInContacts: dto.is_in_contacts,
 });
 
