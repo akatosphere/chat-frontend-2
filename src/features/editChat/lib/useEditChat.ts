@@ -88,9 +88,20 @@ export const useEditChat = (chatKey: string, chatInfo: MappedChatDetails) => {
             : {}),
           ...(avatarChanged && !avatarPayload ? { avatar: null } : {}),
         });
-        useChatListStore.getState().patchChat(chatKey, {
+        const chatListStore = useChatListStore.getState();
+        const currentChat = chatListStore.chatsByKey[chatKey];
+        const avatarUrl = avatarPayload ? `data:image/png;base64,${avatarPayload.data}` : null;
+        chatListStore.patchChat(chatKey, {
           title: data.title,
-          avatar: data.avatar,
+          ...(avatarChanged && currentChat
+            ? {
+                member: {
+                  ...currentChat.member,
+                  avatar_url: avatarUrl,
+                  avatar_webp_url: avatarUrl,
+                },
+              }
+            : {}),
         });
         queryClient.invalidateQueries({ queryKey: ["chats"] });
       }
