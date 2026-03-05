@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { useChatInfoStore } from "@/entities/chat/model/useChatInfoStore";
+import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { formSchema } from "@/features/createChat/model/schema";
 import { CreateChatFormValues } from "@/features/createChat/model/types";
 import { fileToBase64 } from "@/shared/lib/files/fileToBase64";
@@ -12,6 +14,7 @@ import { editChat } from "../api/ws";
 import { mapChatTypeToValue, mapValueToChatType } from "./mapChatType";
 
 export const useEditChat = (chatKey: string, chatInfo: MappedChatDetails) => {
+  const queryClient = useQueryClient();
   const groupOrChannel: "group" | "channel" = chatInfo.type.includes("group") ? "group" : "channel";
 
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
@@ -85,6 +88,11 @@ export const useEditChat = (chatKey: string, chatInfo: MappedChatDetails) => {
             : {}),
           ...(avatarChanged && !avatarPayload ? { avatar: null } : {}),
         });
+        useChatListStore.getState().patchChat(chatKey, {
+          title: data.title,
+          avatar: data.avatar,
+        });
+        queryClient.invalidateQueries({ queryKey: ["chats"] });
       }
     } finally {
       setIsSubmitting(false);

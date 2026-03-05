@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
+import { useChatInfoStore } from "@/entities/chat/model/useChatInfoStore";
 import { UserPreview } from "@/entities/user/model/types";
 import { normalizeChatInfo } from "@/features/chat/chat/lib/normalizeChatInfo";
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
@@ -27,8 +30,18 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   chatKey,
   chatKeyUser,
 }) => {
-  // Приводит пришедшие данные к единому интерфейсу
-  const chatInfo = normalizeChatInfo(initialChatInfo);
+  const storedChatInfo = useChatInfoStore((s) => s.chatInfoByKey[chatKey]);
+  const setChatInfo = useChatInfoStore((s) => s.setChatInfo);
+
+  // Инициализируем стор начальными данными (только для групп/каналов)
+  useEffect(() => {
+    if ("type" in initialChatInfo) {
+      setChatInfo(chatKey, initialChatInfo);
+    }
+  }, [chatKey, initialChatInfo, setChatInfo]);
+
+  // Используем данные из стора, если есть, иначе из пропсов
+  const chatInfo = normalizeChatInfo(storedChatInfo ?? initialChatInfo);
 
   // Единственное название чата в зависимости от типа
   const chatName = chatInfo.title || chatInfo.firstName || "Unknown";
