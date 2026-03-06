@@ -22,7 +22,7 @@ export const useChatListItemContextMenu = (chat: ChatListItem, actions: ChatActi
       openMenu(
         menuId,
         [
-          ...(chat.type === "chat"
+          ...(chat.type === "chat" && !chat.member.is_in_contacts
             ? [
                 {
                   label: "Добавить в контакты",

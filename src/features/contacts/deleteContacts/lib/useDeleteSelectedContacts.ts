@@ -17,7 +17,7 @@ export const useDeleteSelectedContacts = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const uids = selectedContacts.map((c) => c.uid);
+      const uids = selectedContacts.map((c) => c.systemUid);
 
       // Запускаем все запросы параллельно
       const results = await Promise.all(uids.map((uid) => deleteContact(uid)));

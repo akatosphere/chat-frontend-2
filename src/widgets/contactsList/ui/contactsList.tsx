@@ -10,6 +10,8 @@ type ContactsListProps = {
 };
 
 export const ContactsList: React.FC<ContactsListProps> = ({ className, contacts }) => {
+  console.log(contacts);
+
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       <ListSeparator text="Мои контакты" after={<DeleteContactsToggler />} />
