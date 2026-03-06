@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useSendImageStore } from "@/features/chat/chat/model/store/useChatSendImagesStore";
+import { useSendMediaStore } from "@/features/chat/chat/model/store/useChatSendImagesStore";
 import { useMediaViewerStore } from "@/features/mediaViewer/model/useMediaViewerStore";
 import { cn } from "@/shared/shadcn/lib/utils";
 
@@ -44,12 +44,12 @@ export const MediaGrid: React.FC<MediaGridProps> = ({
   id = 0,
 }) => {
   const count = items.length;
-  const { removeImage } = useSendImageStore();
+  const { removeMedia } = useSendMediaStore();
   const { open } = useMediaViewerStore();
   if (count === 0) return null;
 
   const onDelete = (id: number) => {
-    removeImage(id);
+    removeMedia(id);
   };
 
   const onImageClick = (mediaId: number) => {

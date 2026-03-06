@@ -1,4 +1,5 @@
 import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
+import { IMAGE_TYPES, VIDEO_TYPES } from "@/features/chatList/model/constants";
 
 import { MessageBlock } from "./types";
 
@@ -25,11 +26,16 @@ export const buildMessageBlocks = (msg: MappedChatMessage): MessageBlock[] => {
   }
 
   if (msg.filesList.length > 0) {
+    console.log(msg.filesList);
     blocks.push({
       type: "media",
       items: msg.filesList.map((file) => ({
         id: file.id,
-        type: "image",
+        type: IMAGE_TYPES.includes(file.fileType as string)
+          ? "image"
+          : VIDEO_TYPES.includes(file.fileType as string)
+            ? "video"
+            : "document",
         src: file.fileUrl,
       })),
     });
