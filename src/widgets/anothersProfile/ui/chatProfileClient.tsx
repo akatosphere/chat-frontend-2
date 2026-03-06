@@ -35,18 +35,18 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
   chatInfo,
   initialParticipants,
 }) => {
-  const { isMainActive, activeSection, setActiveSection, resetTabsUI, toggleIsMainActive } =
+  const { activeSection, activeTab, setActiveTab, resetTabsUI, setActiveSection } =
     useAnothersProfileUIStore(
       useShallow((s) => ({
-        isMainActive: s.isMainActive,
         activeSection: s.activeSection,
-        setActiveSection: s.setActiveSection,
+        activeTab: s.activeTab,
+        setActiveTab: s.setActiveTab,
         resetTabsUI: s.reset,
-        toggleIsMainActive: s.toggleIsMainActive,
+        setActiveSection: s.setActiveSection,
       })),
     );
   const isMobile = useIsMobileStore((state) => state.isMobile);
-  const sidebarHeaderText = getProfileHeaderText({ chatType, isMainActive, activeSection });
+  const sidebarHeaderText = getProfileHeaderText({ chatType, activeSection, activeTab });
   const closeProfile = useProfileClose();
   const currentUserUid = useUserStore((s) => s.userId);
   const cachedChatInfo = useChatInfoStore((s) => s.chatInfoByKey[chatKey]);
@@ -57,7 +57,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
     if (chatInfo && !useChatInfoStore.getState().chatInfoByKey[chatKey]) {
       useChatInfoStore.getState().setChatInfo(chatKey, chatInfo);
     }
-    setActiveSection("participants");
+    setActiveTab("participants");
     return () => resetTabsUI();
   }, [chatKey, chatInfo]);
 
@@ -99,18 +99,17 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
     <>
       <SidebarHeader
         title={sidebarHeaderText}
-        closeButton={!isMobile && isMainActive}
+        closeButton={!isMobile && activeSection === "main"}
         closeButtonFn={closeProfile}
         backButtonFn={closeProfile}
-        backButton={isMobile || !isMainActive}
+        backButton={isMobile || !(activeSection === "main")}
         contextMenu={contextMenu}
         settings={isOwner}
         onSettingsClick={() => {
-          toggleIsMainActive();
           setActiveSection("settings");
         }}
       />
-      {isMainActive ? (
+      {activeSection === "main" ? (
         <ChatProfile
           initialData={displayData}
           isMobile={isMobile}
@@ -120,7 +119,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
           canInvite={canInvite}
         />
       ) : (
-        tabs[activeSection] || <LinksPage />
+        tabs[activeTab] || <LinksPage />
       )}
     </>
   );

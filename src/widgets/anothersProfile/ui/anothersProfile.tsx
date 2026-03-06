@@ -36,11 +36,11 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
   contactsInitialData,
   isMobile,
 }) => {
-  const { activeSection, setActiveSection, toggleIsMainActive } = useAnothersProfileUIStore(
+  const { activeTab, setActiveTab, setActiveSection } = useAnothersProfileUIStore(
     useShallow((s) => ({
-      activeSection: s.activeSection,
+      activeTab: s.activeTab,
+      setActiveTab: s.setActiveTab,
       setActiveSection: s.setActiveSection,
-      toggleIsMainActive: s.toggleIsMainActive,
     })),
   );
   const [showModal, setShowModal] = useState(false);
@@ -56,8 +56,8 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
   }, []);
 
   const handleTabChange = (value: string) => {
-    toggleIsMainActive();
-    setActiveSection(value as "participants" | "media" | "files" | "voices" | "links");
+    setActiveSection("tab");
+    setActiveTab(value as "participants" | "media" | "files" | "voices" | "links");
   };
 
   return (
@@ -92,18 +92,18 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
             />
           )}
         </div>
-        <Tabs value={activeSection} onValueChange={handleTabChange}>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
           <OurTabsList>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="media">
+            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="media">
               Медиа
             </OurTabsTrigger>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="files">
+            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="files">
               Файлы
             </OurTabsTrigger>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="voices">
+            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="voices">
               Голосовые
             </OurTabsTrigger>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="links">
+            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="links">
               Ссылки
             </OurTabsTrigger>
           </OurTabsList>

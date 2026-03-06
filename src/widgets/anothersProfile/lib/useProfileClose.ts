@@ -14,10 +14,10 @@ import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
 export const useProfileClose = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { isMainActive, toggleIsMainActive } = useAnothersProfileUIStore(
+  const { activeSection, setActiveSection } = useAnothersProfileUIStore(
     useShallow((s) => ({
-      isMainActive: s.isMainActive,
-      toggleIsMainActive: s.toggleIsMainActive,
+      activeSection: s.activeSection,
+      setActiveSection: s.setActiveSection,
     })),
   );
 
@@ -27,7 +27,7 @@ export const useProfileClose = () => {
       return;
     }
 
-    if (isMainActive) {
+    if (activeSection === "main") {
       // Парсим pathname: /chats/{chatKey}/profile -> /chats/{chatKey}
       const pathParts = pathname.split("/").filter(Boolean);
 
@@ -39,9 +39,9 @@ export const useProfileClose = () => {
         router.back();
       }
     } else {
-      toggleIsMainActive();
+      setActiveSection("main");
     }
-  }, [pathname, router, isMainActive, toggleIsMainActive]);
+  }, [pathname, router, activeSection, setActiveSection]);
 
   return closeProfile;
 };

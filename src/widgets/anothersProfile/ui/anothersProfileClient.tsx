@@ -31,16 +31,16 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
   chatInfo,
   contacts,
 }) => {
-  const { isMainActive, activeSection, setActiveSection, resetTabsUI } = useAnothersProfileUIStore(
+  const { activeSection, activeTab, setActiveTab, resetTabsUI } = useAnothersProfileUIStore(
     useShallow((s) => ({
-      isMainActive: s.isMainActive,
       activeSection: s.activeSection,
-      setActiveSection: s.setActiveSection,
+      activeTab: s.activeTab,
+      setActiveTab: s.setActiveTab,
       resetTabsUI: s.reset,
     })),
   );
   const isMobile = useIsMobileStore((state) => state.isMobile);
-  const sidebarHeaderText = getProfileHeaderText({ chatType, isMainActive, activeSection });
+  const sidebarHeaderText = getProfileHeaderText({ chatType, activeSection, activeTab });
   const closeProfile = useProfileClose();
 
   const cachedUserInfo = useUserInfoStore((s) =>
@@ -51,7 +51,7 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
     if (chatInfo) {
       useUserInfoStore.getState().setUserInfo(chatInfo.uid, chatInfo);
     }
-    setActiveSection("media");
+    setActiveTab("media");
     return () => resetTabsUI();
   }, [chatInfo]);
 
@@ -77,20 +77,20 @@ export const AnothersProfileClient: React.FC<AnothersProfileClientProps> = ({
     <>
       <SidebarHeader
         title={sidebarHeaderText}
-        closeButton={!isMobile && isMainActive}
+        closeButton={!isMobile && activeSection === "main"}
         closeButtonFn={closeProfile}
         backButtonFn={closeProfile}
-        backButton={isMobile || !isMainActive}
+        backButton={isMobile || !(activeSection === "main")}
         contextMenu={contextMenu}
       />
-      {isMainActive ? (
+      {activeSection === "main" ? (
         <AnothersProfile
           initialData={displayData}
           contactsInitialData={contacts}
           isMobile={isMobile}
         />
       ) : (
-        tabs[activeSection] || <LinksPage />
+        tabs[activeTab] || <LinksPage />
       )}
     </>
   );
