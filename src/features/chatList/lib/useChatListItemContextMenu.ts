@@ -8,39 +8,34 @@ import Unmute from "@icons/chat/unMute.svg";
 import { MouseEvent, useCallback, useState } from "react";
 
 import { ChatListItem } from "@/entities/chat/model/types";
-import { addToContacts } from "@/entities/contact/api/addToContacts";
 import { ChatActions } from "@/features/chatList/model/types";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
+import { useAddToContacts } from "@/features/contacts/addToContacts/lib/useAddToContacts";
 import { useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
 export const useChatListItemContextMenu = (chat: ChatListItem, actions: ChatActions) => {
   const { openMenu, activeMenuId } = useContextMenu();
   const patchChat = useChatListStore((s) => s.patchChat);
   const [showAddedModal, setShowAddedModal] = useState(false);
+  const { mutate: addContact } = useAddToContacts();
 
   const menuId = `chat-${chat.id}`;
 
   const handleAddToContacts = () => {
+    if (!chat.member.username) return;
+
     patchChat(chat.key, {
       member: { ...chat.member, is_in_contacts: true },
     });
 
-    if (chat.member.username) {
-      addToContacts({
+    addContact(
+      {
         phone: chat.member.username,
         first_name: chat.member.first_name,
         last_name: chat.member.last_name ?? "",
-      }).then((res) => {
-        if (!res.success) {
-          console.error(res.error);
-          patchChat(chat.key, {
-            member: { ...chat.member, is_in_contacts: false },
-          });
-        } else {
-          setShowAddedModal(true);
-        }
-      });
-    }
+      },
+      () => setShowAddedModal(true),
+    );
   };
 
   const handleModalClose = useCallback(() => {
