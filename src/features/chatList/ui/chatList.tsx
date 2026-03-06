@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { ChatListItem } from "@/entities/chat/model/types";
 import { useChatStore } from "@/entities/chat/model/useChatStore";
 import { Button } from "@/shared/shadcn/ui/button";
@@ -46,8 +48,8 @@ export const ChatList: React.FC<ChatListProps> = ({ chats, isSearch }) => {
                 title="У вас пока нет чатов"
                 description="Начните общение и здесь всё появится"
               />
-              <Button variant="default" size="lg" className="mt-10 w-full">
-                Начать чат
+              <Button asChild variant="default" size="lg" className="mt-10 w-full">
+                <Link href="/contacts">Начать чат</Link>
               </Button>
             </div>
           )}

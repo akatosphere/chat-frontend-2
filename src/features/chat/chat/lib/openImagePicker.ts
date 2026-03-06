@@ -1,8 +1,8 @@
-export const openImagePicker = (): Promise<File[]> => {
+export const openMediaPicker = (): Promise<File[]> => {
   return new Promise((resolve) => {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = "image/*";
+    input.accept = "image/*,video/*";
     input.multiple = true;
 
     input.onchange = () => {

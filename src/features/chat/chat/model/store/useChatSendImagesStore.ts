@@ -1,46 +1,52 @@
 import { create } from "zustand";
 
-export type PendingImage = {
+export type PendingMedia = {
   id: number;
   file: File;
   previewUrl: string;
+  type: "image" | "video";
 };
 
-type SendImageState = {
+type SendMediaState = {
   text: string;
-  images: PendingImage[];
+  media: PendingMedia[];
 
   setText: (text: string) => void;
 
-  addImages: (files: File[]) => void;
-  removeImage: (id: number) => void;
+  addMedia: (files: File[]) => void;
+  removeMedia: (id: number) => void;
   clear: () => void;
 };
 
-export const useSendImageStore = create<SendImageState>((set) => ({
+export const useSendMediaStore = create<SendMediaState>((set) => ({
   text: "",
-  images: [],
+  media: [],
 
   setText: (text) => set({ text }),
 
-  addImages: (files) =>
+  addMedia: (files) =>
     set((state) => {
-      const remaining = 4 - state.images.length;
+      const remaining = 4 - state.media.length;
       const nextFiles = files.slice(0, remaining);
 
-      const mapped = nextFiles.map((file) => ({
-        id: Date.now() + Math.random(),
-        file,
-        previewUrl: URL.createObjectURL(file),
-      }));
+      const mapped = nextFiles.map((file) => {
+        const isVideo = file.type.startsWith("video/");
 
-      return { images: [...state.images, ...mapped] };
+        return {
+          id: Date.now() + Math.random(),
+          file,
+          previewUrl: URL.createObjectURL(file),
+          type: (isVideo ? "video" : "image") as PendingMedia["type"],
+        };
+      });
+
+      return { media: [...state.media, ...mapped] };
     }),
 
-  removeImage: (id) =>
+  removeMedia: (id) =>
     set((state) => ({
-      images: state.images.filter((img) => img.id !== id),
+      media: state.media.filter((mediaItem) => mediaItem.id !== id),
     })),
 
-  clear: () => set({ text: "", images: [] }),
+  clear: () => set({ text: "", media: [] }),
 }));

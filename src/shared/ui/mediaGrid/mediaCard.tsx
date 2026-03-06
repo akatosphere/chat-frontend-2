@@ -28,7 +28,16 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 }) => {
   return (
     <div className={cn("relative overflow-hidden bg-gray-100", className)}>
-      {item.type === "video" && <video src={item.src} autoPlay loop muted />}
+      {item.type === "video" && (
+        <video
+          src={item.src}
+          className={cn("h-full w-full object-cover", isAbleToOpen && "cursor-pointer")}
+          onClick={() => isAbleToOpen && onImageClick(index)}
+          autoPlay
+          loop
+          muted
+        />
+      )}
       {item.type === "image" && (
         <Image
           src={item.src}

@@ -70,7 +70,7 @@ export const MediaViewer = () => {
           )}
 
           {media.fileType?.startsWith("video") && (
-            <video src={media.fileUrl} controls autoPlay className="max-h-[80vh]" />
+            <video src={media.fileUrl} controls autoPlay className="h-full w-full object-cover" />
           )}
         </div>
       </div>

@@ -2,13 +2,13 @@ import { useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { sendTextMessage } from "@/entities/chat/api/sendMessage";
-import { PendingImage } from "@/features/chat/chat/model/store/useChatSendImagesStore";
 import { optimisticSendMessage } from "@/features/chatList/lib/optimisticSendMessage";
 import { MESSAGE_STATUS } from "@/shared/constants/constants";
 
 import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 import { mapChatMessage } from "../model/mapper";
 import { buildMessageBlocks } from "../model/messageBlock/buildMessageBlocks";
+import { PendingMedia } from "../model/store/useChatSendImagesStore";
 import { MappedChatMessage } from "../model/types/mappedTypes";
 import { ChatType } from "../model/types/serverTypes";
 
@@ -27,7 +27,7 @@ export const useSendMessage = () => {
   } = useChatStore();
 
   return useCallback(
-    async (text: string, images: PendingImage[] = []) => {
+    async (text: string, images: PendingMedia[] = []) => {
       // if (!text.trim() && images.length === 0) return; // не отправляем пустое
       if (!currentUserId || !chatKey) return;
       console.log(images);
