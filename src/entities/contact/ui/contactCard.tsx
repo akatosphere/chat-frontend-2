@@ -1,6 +1,8 @@
 import { ChatParticipant } from "@/entities/chat/model/types";
+import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { SimpleCard } from "@/shared/ui/list/simpleCard";
+import { Statusbar } from "@/shared/ui/statusbar/ui/statusbar";
 
 import { Contact } from "../model/types";
 
@@ -13,6 +15,7 @@ export type ContactCardProps = {
 
 export const ContactCard = (props: ContactCardProps) => {
   const { contact, isLast = false, onClick, after } = props;
+
   const avatarLetter = contact.firstName?.charAt(0).toUpperCase() || "?";
   const href = "systemUid" in contact ? `/chats/${contact.systemUid}` : `/chats/${contact.uid}`;
   return (
@@ -20,7 +23,7 @@ export const ContactCard = (props: ContactCardProps) => {
       <div className="flex w-full gap-3">
         {/* Аватар с буквой */}
         <div className="shrink-0">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
+          <div className="bg-gray-tone flex h-12 w-12 items-center justify-center rounded-full">
             {contact.avatarUrl ? (
               <img
                 src={contact.avatarUrl}
@@ -28,7 +31,7 @@ export const ContactCard = (props: ContactCardProps) => {
                 className="h-full w-full rounded-full object-cover"
               />
             ) : (
-              <span className="text-lg font-medium text-gray-600">{avatarLetter}</span>
+              <span className="text-primary text-lg font-medium">{avatarLetter}</span>
             )}
           </div>
         </div>
@@ -45,14 +48,11 @@ export const ContactCard = (props: ContactCardProps) => {
             {contact.fullName}
           </h3>
 
-          {/* Подпись - онлайн */}
-          <div className="mt-1 flex items-center gap-1">
-            <p
-              className={cn("minitext truncate", contact.isOnline ? "text-primary" : "text-black")}
-            >
-              {contact.isOnline ? "В сети" : "Не в сети"}
-            </p>
-          </div>
+          <Statusbar
+            isOnline={contact.isOnline}
+            chatType={"direct" as ChatType}
+            time={contact.lastSeenAt} //
+          />
         </div>
       </div>
       {after && <div className="flex shrink-0 items-center justify-center">{after}</div>}

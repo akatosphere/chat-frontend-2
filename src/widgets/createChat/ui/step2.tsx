@@ -10,7 +10,7 @@ import { ListSeparator } from "@/shared/ui/listSeparator";
 import { NoSearchResults } from "@/shared/ui/noSearchResults";
 import { Searchbar } from "@/shared/ui/searchbar";
 
-import { useStep2Logic } from "../lib/useStep2Logic.";
+import { useStep2Logic } from "../lib/useStep2Logic";
 
 type Step2WidgetProps = {
   className?: string;
