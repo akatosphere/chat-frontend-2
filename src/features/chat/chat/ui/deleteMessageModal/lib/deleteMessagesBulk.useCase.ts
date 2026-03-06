@@ -1,5 +1,5 @@
+import { ChatType } from "@/entities/chat/model/types";
 import { useChatStore } from "@/entities/chat/model/useChatStore";
-import { ChatType } from "@/features/createChat/model/types";
 
 import { deleteMessageUseCase } from "./deleteMessage.useCase";
 
