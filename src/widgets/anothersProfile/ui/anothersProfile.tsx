@@ -94,18 +94,10 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
         </div>
         <Tabs value={activeTab} onValueChange={handleTabChange}>
           <OurTabsList>
-            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="media">
-              Медиа
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="files">
-              Файлы
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="voices">
-              Голосовые
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="links">
-              Ссылки
-            </OurTabsTrigger>
+            <OurTabsTrigger value="media">Медиа</OurTabsTrigger>
+            <OurTabsTrigger value="files">Файлы</OurTabsTrigger>
+            <OurTabsTrigger value="voices">Голосовые</OurTabsTrigger>
+            <OurTabsTrigger value="links">Ссылки</OurTabsTrigger>
           </OurTabsList>
           <TabsContent value="media">
             <MediaPage />

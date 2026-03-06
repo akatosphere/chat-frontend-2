@@ -87,21 +87,11 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
         </div>
         <Tabs value={activeTab} onValueChange={handleTabChange}>
           <OurTabsList>
-            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="participants">
-              Участники
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="media">
-              Медиа
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="files">
-              Файлы
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="voices">
-              Голосовые
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={() => setActiveSection("tab")} value="links">
-              Ссылки
-            </OurTabsTrigger>
+            <OurTabsTrigger value="participants">Участники</OurTabsTrigger>
+            <OurTabsTrigger value="media">Медиа</OurTabsTrigger>
+            <OurTabsTrigger value="files">Файлы</OurTabsTrigger>
+            <OurTabsTrigger value="voices">Голосовые</OurTabsTrigger>
+            <OurTabsTrigger value="links">Ссылки</OurTabsTrigger>
           </OurTabsList>
           <TabsContent value="participants">
             <ParticipantsPage

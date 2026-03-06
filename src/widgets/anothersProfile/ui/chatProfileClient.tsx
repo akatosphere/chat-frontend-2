@@ -50,8 +50,6 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
   const closeProfile = useProfileClose();
   const currentUserUid = useUserStore((s) => s.userId);
   const cachedChatInfo = useChatInfoStore((s) => s.chatInfoByKey[chatKey]);
-  console.log("chatInfo from Server: ", chatInfo);
-  console.log("chatInfo from Store: ", cachedChatInfo);
 
   useEffect(() => {
     if (chatInfo && !useChatInfoStore.getState().chatInfoByKey[chatKey]) {
