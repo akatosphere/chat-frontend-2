@@ -66,6 +66,10 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
     return `${count} ${pluralize(count, "участник", "участника", "участников")}`;
   };
 
+  if (!initialData) {
+    return <div>Ошибка загрузки профиля</div>;
+  }
+
   return (
     <>
       <SidebarContainer className="desktop:p-0 p-4" scrollbar={isMobile}>

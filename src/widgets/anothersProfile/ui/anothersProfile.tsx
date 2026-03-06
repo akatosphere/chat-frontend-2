@@ -60,6 +60,10 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
     setActiveTab(value as "participants" | "media" | "files" | "voices" | "links");
   };
 
+  if (!initialData) {
+    return <div>Ошибка загрузки профиля</div>;
+  }
+
   return (
     <>
       <SidebarContainer className="desktop:p-0 p-4" scrollbar={isMobile}>
