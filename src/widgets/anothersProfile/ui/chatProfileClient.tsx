@@ -86,7 +86,6 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
     files: <FilesPage />,
     voices: <VoicesPage />,
     links: <LinksPage />,
-    settings: <ChatSettingsPage chatKey={chatKey} chatInfo={displayData} />,
   };
 
   if (!displayData) {
@@ -116,6 +115,8 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
           initialParticipants={initialParticipants}
           canInvite={canInvite}
         />
+      ) : activeSection === "settings" ? (
+        <ChatSettingsPage chatKey={chatKey} chatInfo={displayData} />
       ) : (
         tabs[activeTab] || <LinksPage />
       )}
