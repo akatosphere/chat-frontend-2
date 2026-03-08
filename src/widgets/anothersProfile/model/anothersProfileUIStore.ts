@@ -14,7 +14,8 @@ export const useAnothersProfileUIStore = create<AnothersProfileUIState>()(
   devtools(
     (set) => ({
       isMainActive: true,
-      activeSection: "participants",
+      activeSection: "main",
+      activeTab: "participants",
 
       setActiveSection: (section) =>
         set(

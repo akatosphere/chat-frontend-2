@@ -34,10 +34,16 @@ export const useChatListItemContextMenu = (chat: ChatListItem, actions: ChatActi
         first_name: chat.member.first_name,
         last_name: chat.member.last_name ?? "",
       },
+      // onSuccess
       () => setShowAddedModal(true),
+      // onError (Откат)
+      () => {
+        patchChat(chat.key, {
+          member: { ...chat.member, is_in_contacts: false },
+        });
+      },
     );
   };
-
   const handleModalClose = useCallback(() => {
     setShowAddedModal(false);
   }, []);

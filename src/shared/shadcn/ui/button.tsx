@@ -14,7 +14,7 @@ const buttonVariants = cva(
         outline:
           "border-primary text-primary desktop:hover:border-accent desktop:hover:text-primary-dark active:border-accent active:text-primary-dark disabled:border-muted border border-[2px]",
         text: "text-primary desktop:hover:text-primary-light active:text-primary-light bg-transparent p-0",
-        ghost: "",
+        ghost: "disabled:bg-transparent",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

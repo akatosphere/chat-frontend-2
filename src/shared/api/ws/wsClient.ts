@@ -98,6 +98,7 @@ export const sendWSRequest = <TResponse>(
   if (!socket || socket.readyState !== WebSocket.OPEN) {
     // Вместо простого throw можно сделать более умную логику (например, очередь)
     // Но для начала — просто ошибка, как и было
+    alert("Ошибка отправки запроса");
     return Promise.reject(new Error("WebSocket is not connected"));
   }
 

@@ -73,21 +73,6 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
     chatId: displayData?.id || null,
   });
 
-  const tabs: Record<string, React.ReactNode> = {
-    participants: (
-      <ParticipantsPage
-        chatType={chatType}
-        initialParticipants={initialParticipants}
-        chatKey={chatKey}
-        canInvite={canInvite}
-      />
-    ),
-    media: <MediaPage />,
-    files: <FilesPage />,
-    voices: <VoicesPage />,
-    links: <LinksPage />,
-  };
-
   if (!displayData) {
     return <div>Ошибка загрузки профиля</div>;
   }
@@ -118,7 +103,29 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
       ) : activeSection === "settings" ? (
         <ChatSettingsPage chatKey={chatKey} chatInfo={displayData} />
       ) : (
-        tabs[activeTab] || <LinksPage />
+        (() => {
+          switch (activeTab) {
+            case "participants":
+              return (
+                <ParticipantsPage
+                  chatType={chatType}
+                  initialParticipants={initialParticipants}
+                  chatKey={chatKey}
+                  canInvite={canInvite}
+                />
+              );
+            case "media":
+              return <MediaPage />;
+            case "files":
+              return <FilesPage />;
+            case "voices":
+              return <VoicesPage />;
+            case "links":
+              return <LinksPage />;
+            default:
+              return <MediaPage />;
+          }
+        })()
       )}
     </>
   );
