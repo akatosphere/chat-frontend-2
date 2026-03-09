@@ -1,3 +1,5 @@
+import { LinkItUrl } from "react-linkify-it";
+
 import { StatusIcon } from "@/entities/chat/ui/statusIcon";
 import { cn } from "@/shared/shadcn/lib/utils";
 
@@ -34,9 +36,11 @@ export const MessageText: React.FC<MessageTextProps> = ({
         className,
       )}
     >
-      <p className="subtext emojis-apple min-w-0 pr-2 wrap-break-word whitespace-pre-wrap">
-        {block.text}
-      </p>
+      <LinkItUrl>
+        <p className="subtext emojis-apple min-w-0 pr-2 wrap-break-word whitespace-pre-wrap">
+          {block.text}
+        </p>
+      </LinkItUrl>
       <div className="flex flex-col justify-end">
         <div
           className={cn(
