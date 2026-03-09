@@ -8,7 +8,7 @@ import { useContactStore } from "@/entities/contact/model/store";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 import { useSelectContactsStore } from "@/features/contacts/model/SelectContactsStore";
 
-import { getChatByUid } from "./getChatKeyByUid";
+import { getChatByUid } from "../../../../entities/chat/lib/getChatKeyByUid";
 
 export const useDeleteSelectedContacts = () => {
   const queryClient = useQueryClient();
