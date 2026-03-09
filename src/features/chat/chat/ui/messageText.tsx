@@ -34,7 +34,7 @@ export const MessageText: React.FC<MessageTextProps> = ({
         className,
       )}
     >
-      <p className="subtext emojis-apple min-w-0 pr-2 wrap-break-word whitespace-pre-wrap">
+      <p className="subtext emojis-apple min-w-0 pr-2 break-all whitespace-pre-wrap">
         {block.text}
       </p>
       <div className="flex flex-col justify-end">
