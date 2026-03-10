@@ -1,8 +1,6 @@
 import { headers } from "next/headers";
 
 import { getChatServer } from "@/entities/chat/api/getChatServer";
-import { getMessages } from "@/entities/chat/api/getMessages";
-import { mapChatMessages } from "@/features/chat/chat/model/mapper";
 import { getChatType } from "@/shared/lib/getChatType";
 import { ChatWidget } from "@/widgets/chat/chatWidget/chatWidget";
 
@@ -34,22 +32,12 @@ export default async function ChatsPage() {
     );
   }
 
-  const messagesResult = await getMessages({
-    uid: chatInfo.data.uid,
-    page: 1,
-    page_size: 50,
-    ordering: "-created_at",
-  });
-
-  const messages = messagesResult.success ? mapChatMessages(messagesResult.data.results) : [];
-
   return (
     <ChatWidget
       chatKey={chatKey}
       chatType={chatInfo.type}
-      chatKeyUser={messages[0]?.chatKey || null}
       initialChatInfo={chatInfo.data}
-      initialMessages={messages}
+      chatUid={chatInfo.data.uid}
     />
   );
 }
