@@ -9,7 +9,7 @@ type ToInvitePageBtnProps = {
 };
 
 export const ToInvitePageBtn: React.FC<ToInvitePageBtnProps> = ({ chatType }) => {
-  const buttonText = chatType === "group" ? "Пригласить участников" : "Пригласить подписчиков";
+  const buttonText = chatType === "group" ? "Добавить участников" : "Добавить подписчиков";
   const setActiveSection = useAnothersProfileUIStore((s) => s.setActiveSection);
 
   return (

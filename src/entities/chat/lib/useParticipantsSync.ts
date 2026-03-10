@@ -20,12 +20,11 @@ export const useParticipantsSync = (
   console.log("data: ", data);
   const setParticipants = useParticipantsStore((s) => s.setParticipants);
   const reset = useParticipantsStore((s) => s.reset);
-  const participants = useParticipantsStore((s) => s.participants);
+
   useEffect(() => {
     reset();
   }, [chatKey, reset]);
 
-  console.log("участникик в сторе: ", participants);
   useEffect(() => {
     if (!data) return;
 
@@ -33,7 +32,7 @@ export const useParticipantsSync = (
     const allFetchedParticipants = data.pages.flatMap((page) => page.results);
     const totalCount = data.pages[0]?.count ?? 0;
 
-    // Обновляем стор.
+    // Обновляем стор
     setParticipants(allFetchedParticipants, totalCount);
   }, [data, setParticipants]);
 

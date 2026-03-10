@@ -1,7 +1,9 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 import { addMembersToChat } from "@/entities/chat/api/addMemberToChat";
+import { useChatInfoStore } from "@/entities/chat/model/useChatInfoStore";
 import { useChatStore } from "@/entities/chat/model/useChatStore";
 import { useContactsSync } from "@/entities/contact/lib/useContactsSync";
 import { useContactStore } from "@/entities/contact/model/store";
@@ -24,6 +26,7 @@ type InvitePageProps = {
 export const InvitePage: React.FC<InvitePageProps> = () => {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
   const { fetchNextPage, hasNextPage, isFetchingNextPage } = useContactsSync();
   const { contacts, isInitialized } = useContactStore();
   const chatKey = useChatStore((s) => s.chatKey);
@@ -47,10 +50,21 @@ export const InvitePage: React.FC<InvitePageProps> = () => {
 
     setIsLoading(true);
     try {
-      await addMembersToChat({
+      const response = await addMembersToChat({
         chat_key: chatKey,
         uid_users_list: selectedContacts.map((c) => c.systemUid),
       });
+
+      const addedCount = response.added_users.length;
+
+      // Инвалидируем query-кэш участников, чтобы при следующем маунте данные рефетчились с сервера
+      await queryClient.invalidateQueries({ queryKey: ["participants", chatKey] });
+
+      useChatInfoStore.getState().patchChatInfo(chatKey, {
+        membersCount:
+          (useChatInfoStore.getState().chatInfoByKey[chatKey]?.membersCount ?? 0) + addedCount,
+      });
+
       setActiveSection("main");
     } catch {
       alert("Ошибка при добавлении пользователей");

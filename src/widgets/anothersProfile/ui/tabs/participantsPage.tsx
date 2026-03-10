@@ -33,6 +33,8 @@ export const ParticipantsPage: React.FC<ParticipantsPageProps> = ({
   );
 
   const participants = useParticipantsStore((s) => s.participants);
+  console.log("участники со страницы: ", participants);
+
   const loadMoreRef = useInfiniteScroll({
     hasNextPage,
     isFetchingNextPage,
