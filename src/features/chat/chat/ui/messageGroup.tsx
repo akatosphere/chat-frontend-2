@@ -31,7 +31,6 @@ const messageGroupBase: React.FC<MessageGroupProps> = ({
         const isLastInGroup = isGroup && msg.fromUser.uid !== next?.fromUser.uid;
 
         const marginTop = getMessageMarginTop(msg, prev);
-        console.log(marginTop);
         return (
           <MessageBubble
             key={msg.uid}
