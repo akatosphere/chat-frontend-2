@@ -21,6 +21,10 @@ export const getProfileHeaderText = ({
     return CHAT_TYPE_LABELS[chatType];
   } else if (activeSection === "settings") {
     return "Настройки";
+  } else if (activeSection === "invite" && chatType == "group") {
+    return "Пригласить участников";
+  } else if (activeSection === "invite" && chatType == "channel") {
+    return "Пригласить подписчиков";
   } else {
     return activeTab === "participants" ? "Участники" : "Вложения";
   }

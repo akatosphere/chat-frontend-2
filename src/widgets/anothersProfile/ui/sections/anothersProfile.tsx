@@ -19,11 +19,11 @@ import { Tabs, TabsContent } from "@/shared/shadcn/ui/tabs";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { Statusbar } from "@/shared/ui/statusbar/ui/statusbar";
 
-import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
-import { FilesPage } from "./tabs/filesPage";
-import { LinksPage } from "./tabs/linksPage";
-import { MediaPage } from "./tabs/mediaPage";
-import { VoicesPage } from "./tabs/voicesPage";
+import { useAnothersProfileUIStore } from "../../model/anothersProfileUIStore";
+import { FilesPage } from "../tabs/filesPage";
+import { LinksPage } from "../tabs/linksPage";
+import { MediaPage } from "../tabs/mediaPage";
+import { VoicesPage } from "../tabs/voicesPage";
 
 type AnothersProfileProps = {
   initialData: User | null;

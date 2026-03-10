@@ -14,12 +14,12 @@ import { OurTabsTrigger } from "@/shared/ourTabs/ourTabsTrigger";
 import { Tabs, TabsContent } from "@/shared/shadcn/ui/tabs";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 
-import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
-import { FilesPage } from "./tabs/filesPage";
-import { LinksPage } from "./tabs/linksPage";
-import { MediaPage } from "./tabs/mediaPage";
-import { ParticipantsPage } from "./tabs/participantsPage";
-import { VoicesPage } from "./tabs/voicesPage";
+import { useAnothersProfileUIStore } from "../../model/anothersProfileUIStore";
+import { FilesPage } from "../tabs/filesPage";
+import { LinksPage } from "../tabs/linksPage";
+import { MediaPage } from "../tabs/mediaPage";
+import { ParticipantsPage } from "../tabs/participantsPage";
+import { VoicesPage } from "../tabs/voicesPage";
 
 type ChatProfileProps = {
   initialParticipants: ChatParticipantListResponse | null;

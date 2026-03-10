@@ -14,8 +14,9 @@ import { getProfileHeaderText } from "../lib/getProfileHeaderText";
 import { useChatProfileContextMenu } from "../lib/useChatProfileContextMenu";
 import { useProfileClose } from "../lib/useProfileClose";
 import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
-import { ChatProfile } from "./chatProfile";
-import { ChatSettingsPage } from "./tabs/chatSettingsPage";
+import { ChatProfile } from "./sections/chatProfile";
+import { ChatSettingsPage } from "./sections/chatSettingsPage";
+import { InvitePage } from "./sections/invitePage";
 import { FilesPage } from "./tabs/filesPage";
 import { LinksPage } from "./tabs/linksPage";
 import { MediaPage } from "./tabs/mediaPage";
@@ -102,6 +103,8 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
         />
       ) : activeSection === "settings" ? (
         <ChatSettingsPage chatKey={chatKey} chatInfo={displayData} />
+      ) : activeSection === "invite" ? (
+        <InvitePage />
       ) : (
         (() => {
           switch (activeTab) {

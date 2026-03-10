@@ -2,9 +2,9 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 interface AnothersProfileUIState {
-  activeSection: "main" | "tab" | "settings";
+  activeSection: "main" | "tab" | "settings" | "invite";
   activeTab: "participants" | "media" | "files" | "voices" | "links" | "settings";
-  setActiveSection: (section: "main" | "tab" | "settings") => void;
+  setActiveSection: (section: "main" | "tab" | "settings" | "invite") => void;
   setActiveTab: (tab: "participants" | "media" | "files" | "voices" | "links" | "settings") => void;
   reset: () => void;
 }

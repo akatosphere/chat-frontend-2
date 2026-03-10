@@ -14,7 +14,7 @@ import { getProfileHeaderText } from "../lib/getProfileHeaderText";
 import { useAnothersProfileContextMenu } from "../lib/useAnothersProfileContextMenu";
 import { useProfileClose } from "../lib/useProfileClose";
 import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
-import { AnothersProfile } from "./anothersProfile";
+import { AnothersProfile } from "./sections/anothersProfile";
 import { FilesPage } from "./tabs/filesPage";
 import { LinksPage } from "./tabs/linksPage";
 import { MediaPage } from "./tabs/mediaPage";
