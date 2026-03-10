@@ -11,6 +11,7 @@ interface ChatState {
   chatKey: string | null;
   chatType: ChatType | null;
   createdBy: string | null;
+  chatUid: string | null;
   isReady: boolean;
   isHide: boolean;
   chatKeyUser: string | null;
@@ -24,6 +25,11 @@ interface ChatState {
   isSelectionMode: boolean;
   selectedMessageUids: Set<string>;
 
+  isVoiceRecord: boolean;
+
+  enterVoiceRecord: () => void;
+  exitVoiceRecord: () => void;
+
   enterSelectionMode: (uid?: string) => void;
   toggleMessageSelection: (uid: string) => void;
   exitSelectionMode: () => void;
@@ -36,14 +42,17 @@ interface ChatState {
     chatType: ChatType,
     createdBy?: string,
     chatKeyUser?: string | null,
+    chatUid?: string,
     forwardTargets?: [],
   ) => void;
+  prependMessages: (messages: MappedChatMessage[]) => void;
   addMessage: (message: MappedChatMessage) => void;
   updateMessageStatus: (uid: string, status: MappedChatMessage["status"]) => void;
   markAsRead: (uid: string) => void;
   setFailedStatus: (requestUid: string) => void;
   clearMessages: () => void;
   clearForwardTargets: () => void;
+  clearReplyTarget: () => void;
   reset: () => void;
 }
 
@@ -51,12 +60,14 @@ export const useChatStore = create<ChatState>((set) => ({
   messages: [],
   currentUserId: null,
   chatKey: null,
+  chatUid: null,
   isReady: false,
   isHide: false,
   replyTarget: null,
   forwardTargets: [],
   chatType: null,
   createdBy: null,
+  isVoiceRecord: false,
   chatKeyUser: null,
   isSelectionMode: false,
   selectedMessageUids: new Set(),
@@ -66,6 +77,9 @@ export const useChatStore = create<ChatState>((set) => ({
       isSelectionMode: true,
       selectedMessageUids: uid ? new Set([uid]) : new Set(),
     })),
+
+  enterVoiceRecord: () => set({ isVoiceRecord: true }),
+  exitVoiceRecord: () => set({ isVoiceRecord: false }),
 
   toggleMessageSelection: (uid) =>
     set((state) => {
@@ -84,11 +98,33 @@ export const useChatStore = create<ChatState>((set) => ({
       selectedMessageUids: new Set(),
     })),
 
-  setInitialData: (messages, currentUserId, chatKey, chatType, createdBy, chatKeyUser) => {
-    set({ messages, currentUserId, chatKey, isReady: true, chatType, createdBy, chatKeyUser });
+  setInitialData: (messages, currentUserId, chatKey, chatType, createdBy, chatKeyUser, chatUid) => {
+    set({
+      messages,
+      currentUserId,
+      chatKey,
+      isReady: true,
+      chatType,
+      chatUid,
+      createdBy,
+      chatKeyUser,
+    });
+  },
+
+  prependMessages: (newMessages) => {
+    set((state) => {
+      if (newMessages.length === 0) return state;
+      const existingUids = new Set(state.messages.map((msg) => msg.uid));
+      const uniqueNewMessages = newMessages.filter((msg) => !existingUids.has(msg.uid));
+      if (uniqueNewMessages.length === 0) return state;
+      return {
+        messages: [...uniqueNewMessages, ...state.messages],
+      };
+    });
   },
 
   setReplyTarget: (message) => set({ replyTarget: message }),
+  clearReplyTarget: () => set({ replyTarget: null }),
   setForwardTargets: (messages) => set({ forwardTargets: messages }),
   clearForwardTargets: () => set({ forwardTargets: [] }),
 
@@ -148,6 +184,6 @@ export const useChatStore = create<ChatState>((set) => ({
       chatKey: null,
       isReady: false,
       replyTarget: null,
-      forwardTargets: [],
+      // forwardTargets: [],
     }),
 }));

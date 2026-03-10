@@ -5,6 +5,7 @@ import { ForwardBox } from "@/features/chat/chat/ui/forwardBox";
 import { ReplyBox } from "@/features/chat/chat/ui/replyBox";
 import { SelectBox } from "@/features/chat/chat/ui/selectBox";
 import { MessageForm } from "@/features/chat/sendMessage/ui/messageForm";
+import { VoiceRecordBox } from "@/features/recordVoiceMessage/ui/voiceRecordBox";
 import { useKeyboardOffset } from "@/shared/lib/useKeyboardOffset";
 import { cn } from "@/shared/shadcn/lib/utils";
 
@@ -15,8 +16,7 @@ type ChatFooterProps = {
 
 export const ChatFooter: React.FC<ChatFooterProps> = ({ className, onSendMessage }) => {
   const { isKeyboardOpen } = useKeyboardOffset();
-
-  const { isSelectionMode, forwardTargets } = useChatStore();
+  const { isSelectionMode, forwardTargets, isVoiceRecord, enterVoiceRecord } = useChatStore();
 
   return (
     <>
@@ -31,8 +31,11 @@ export const ChatFooter: React.FC<ChatFooterProps> = ({ className, onSendMessage
       >
         {isSelectionMode ? (
           <SelectBox />
+        ) : isVoiceRecord ? (
+          <VoiceRecordBox />
         ) : (
           <MessageForm
+            onVoiceBtnClick={enterVoiceRecord}
             isKeyboardOpen={isKeyboardOpen}
             onSubmitMessage={onSendMessage}
             isAbleToSendWithoutText={forwardTargets.length > 0}

@@ -4,10 +4,11 @@ import Image from "next/image";
 import { getLastMessagePreview } from "@/entities/chat/lib/getLastMessagePreview";
 import { useChatStore } from "@/entities/chat/model/useChatStore";
 import { useUserStore } from "@/entities/user/model/userStore";
-import { IMAGE_TYPES } from "@/features/chatList/model/constants";
+import { FILE_TYPES, IMAGE_TYPES } from "@/features/chatList/model/constants";
 import { pluralize } from "@/shared/lib/pluralize";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
+import { FileIcon } from "@/shared/ui/fileList/fileIcon";
 
 type ForwardBoxProps = {
   className?: string;
@@ -28,6 +29,21 @@ export const ForwardBox: React.FC<ForwardBoxProps> = ({ className }) => {
     IMAGE_TYPES.some((t) => t.startsWith(file.fileType || "")),
   )?.fileUrl;
 
+  const firstFile = forwardTargets.find((file) =>
+    FILE_TYPES.some((t) => t.startsWith(file.filesList[0]?.fileType || " ")),
+  );
+
+  console.log("forwardTargets", firstFile);
+
+  const singleFileCaption = () => {
+    if (firstFile?.filesList.length === 1) {
+      return firstFile.filesList[0].fileUrl.split("/").pop();
+    }
+    return "";
+  };
+
+  const fileCaption = singleFileCaption();
+
   const caption = getLastMessagePreview({
     content: forwardTargets[0].content,
     files: {
@@ -47,6 +63,14 @@ export const ForwardBox: React.FC<ForwardBoxProps> = ({ className }) => {
       )}
     >
       <div className="border-primary-secondary flex items-center justify-between border-l-4">
+        {firstFile && (
+          <FileIcon
+            size="mini"
+            className="ml-1"
+            type={"document"}
+            previewUrl={firstFile.filesList[0].fileUrl}
+          />
+        )}
         {firstImage && (
           <Image
             src={firstImage}
@@ -64,7 +88,7 @@ export const ForwardBox: React.FC<ForwardBoxProps> = ({ className }) => {
           <div className="emojis-apple text-gray truncate">
             <span className="font-medium">{userTag}</span>
             {": "}
-            {caption.text || forwardTargets[0].content}
+            {fileCaption || caption.text || forwardTargets[0].content}
           </div>
         </div>
         <Button

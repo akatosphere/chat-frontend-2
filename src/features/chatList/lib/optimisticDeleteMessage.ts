@@ -7,6 +7,7 @@ export const optimisticDeleteMessage = (
 ) => {
   const chats = useChatListStore.getState().chatsByKey;
   if (!chats) return;
+  console.log(chats, chatId, toUserId, lastMessageUid);
   for (const chatKey in chats) {
     const chat = chats[chatKey];
     const currentChat =
@@ -15,6 +16,8 @@ export const optimisticDeleteMessage = (
         : chat.type === "chat" && (chat.member.uid === chatId || chat.member.uid === toUserId)
           ? chat
           : null;
+
+    console.log("optimisticDeleteMessage", currentChat, chat.lastMessage?.uid, lastMessageUid);
     if (currentChat && chat.lastMessage?.uid === lastMessageUid) {
       useChatListStore.getState().patchChat(chatKey, {
         lastMessage: {

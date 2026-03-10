@@ -9,12 +9,14 @@ import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
 import { useDeleteMessage } from "@/features/chat/chat/hooks";
 import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
 import { useCopyToClipboard } from "@/shared/copy/lib/useCopyToClipboard";
+import { useToast } from "@/shared/toast/ui/toastProvider";
 import { useContextMenu } from "@/shared/ui/contextMenu/contextMenuProvider";
 
 export const useMessageContextMenu = (message: MappedChatMessage) => {
   const { openMenu, activeMenuId } = useContextMenu();
   const { copy } = useCopyToClipboard();
   const { openModal } = useModalStore();
+  const { showToast } = useToast();
   const { setReplyTarget, chatType, setForwardTargets, enterSelectionMode } = useChatStore();
   const isOwner = useChatStore((s) => s.createdBy === s.currentUserId);
   const isAviableToDelete =
@@ -38,7 +40,7 @@ export const useMessageContextMenu = (message: MappedChatMessage) => {
             icon: Forwarded,
             onClick: () => {
               setForwardTargets([message]);
-              openModal("forward", { chatKey: message.chatKey, messageId: message.id });
+              openModal("forward", { chatKey: message.chatKey });
             },
           },
           {
@@ -46,6 +48,10 @@ export const useMessageContextMenu = (message: MappedChatMessage) => {
             icon: Copy,
             onClick: async () => {
               await copy(message.content);
+              showToast("Сообщение скопировано", {
+                mobile: "/icons/toast/checkMobile.svg",
+                desktop: "/icons/toast/checkDesktop.svg",
+              });
             },
           },
           { label: "Выбрать", icon: Select, onClick: () => enterSelectionMode(message.uid) },

@@ -2,9 +2,11 @@ import Close from "@icons/chat/close.svg";
 import Image from "next/image";
 
 import { getLastMessagePreview } from "@/entities/chat/lib/getLastMessagePreview";
-import { IMAGE_TYPES } from "@/features/chatList/model/constants";
+import { FILE_TYPES, IMAGE_TYPES } from "@/features/chatList/model/constants";
+import { truncateFileName } from "@/shared/lib/truncateFilename";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
+import { FileIcon } from "@/shared/ui/fileList/fileIcon";
 
 import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 
@@ -17,6 +19,19 @@ export const ReplyBox: React.FC<ReplyBoxProps> = ({ className }) => {
   const firstImage = replyTarget?.filesList?.find((file) =>
     IMAGE_TYPES.some((t) => t.startsWith(file.fileType || "")),
   )?.fileUrl;
+
+  const firstFile = replyTarget?.filesList?.find((file) =>
+    FILE_TYPES.some((t) => t.startsWith(file.fileType || "")),
+  );
+
+  const singleFileCaption = () => {
+    if (replyTarget?.filesList.length === 1 && firstFile) {
+      return firstFile.fileUrl.split("/").pop();
+    }
+    return "";
+  };
+
+  const fileCaption = singleFileCaption();
 
   const caption = getLastMessagePreview({
     content: replyTarget?.content,
@@ -39,6 +54,9 @@ export const ReplyBox: React.FC<ReplyBoxProps> = ({ className }) => {
       )}
     >
       <div className="border-primary-secondary flex items-center justify-between border-l-4">
+        {firstFile && (
+          <FileIcon size="mini" className="ml-1" type={"document"} previewUrl={firstFile.fileUrl} />
+        )}
         {firstImage && (
           <Image
             src={firstImage}
@@ -57,7 +75,12 @@ export const ReplyBox: React.FC<ReplyBoxProps> = ({ className }) => {
                 : replyTarget.fromUser.firstName}
             </span>
           </span>
-          <p className="emojis-apple text-gray truncate">{caption.text || replyTarget.content}</p>
+          {!fileCaption && (
+            <p className="emojis-apple text-gray truncate">{caption.text || replyTarget.content}</p>
+          )}
+          {fileCaption && (
+            <p className="emojis-apple text-gray truncate">{truncateFileName(fileCaption)}</p>
+          )}
         </div>
         <Button
           onClick={() => setReplyTarget(null)}

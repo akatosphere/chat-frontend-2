@@ -24,6 +24,7 @@ type MessageFormProps = {
   className?: string;
   onEmojiBtnClick?: () => void;
   onAttachBtnClick?: () => void;
+  onVoiceBtnClick?: () => void;
   onSubmitMessage: (message: string) => void;
   isKeyboardOpen: boolean;
   isAttachBtnDisabled?: boolean;
@@ -37,6 +38,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
   className,
   onAttachBtnClick,
   onSubmitMessage,
+  onVoiceBtnClick,
   isKeyboardOpen,
   isAttachBtnDisabled = false,
   isVoiceBtnDisabled = false,
@@ -175,7 +177,7 @@ export const MessageForm: React.FC<MessageFormProps> = ({
               <MessageSendBtn className={cn(variant === "main" ? "h-11 w-11" : "h-8 w-8")} />
             </Button>
           ) : (
-            <Button variant="ghost" size="icon-auto" type="button">
+            <Button variant="ghost" size="icon-auto" type="button" onClick={onVoiceBtnClick}>
               <VoiceMessage className="h-11 w-11" />
             </Button>
           )}

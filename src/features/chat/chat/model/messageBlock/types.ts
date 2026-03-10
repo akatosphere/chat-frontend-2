@@ -2,7 +2,13 @@ import { FileItem, MediaItem } from "@/shared/ui/mediaGrid/mediaGrid";
 
 import { MappedMessageFile } from "../types/mappedTypes";
 
-export type MessageBlock = ReplyBlock | ForwardedBlock | TextBlock | FileBlock | MediaBlock;
+export type MessageBlock =
+  | ReplyBlock
+  | ForwardedBlock
+  | TextBlock
+  | FileBlock
+  | MediaBlock
+  | AudioBlock;
 
 export type ReplyBlock = {
   type: "reply";
@@ -34,4 +40,9 @@ export type FileBlock = {
 export type MediaBlock = {
   type: "media";
   items: MediaItem[];
+};
+
+export type AudioBlock = {
+  type: "audio";
+  item: MediaItem[];
 };

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { ChatListItem } from "@/entities/chat/model/types";
 import { useChatStore } from "@/entities/chat/model/useChatStore";
 import { Button } from "@/shared/shadcn/ui/button";
@@ -15,7 +17,11 @@ interface ChatListProps {
 }
 
 export const ChatList: React.FC<ChatListProps> = ({ chats, isSearch }) => {
-  const { chatKey } = useChatStore((s) => s);
+  const { chatKey, clearForwardTargets, clearReplyTarget, exitSelectionMode } = useChatStore(
+    (s) => s,
+  );
+
+  const [clickedItem, setClickedItem] = useState<number | null>(null);
 
   const actions = useChatListActions();
 
@@ -32,8 +38,16 @@ export const ChatList: React.FC<ChatListProps> = ({ chats, isSearch }) => {
             }}
             className="last:after:hidden"
             key={chat.id}
+            onClick={() => {
+              clearForwardTargets();
+              clearReplyTarget();
+              exitSelectionMode();
+              setClickedItem(chat.id);
+            }}
             chat={chat}
-            isActive={chat.key === chatKey || chat.member.uid === chatKey}
+            isActive={
+              clickedItem === chat.id || chat.key === chatKey || chat.member.uid === chatKey
+            }
             isLast={chat.id === chats[chats.length - 1].id}
           />
         ))

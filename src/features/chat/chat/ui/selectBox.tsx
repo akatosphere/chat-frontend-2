@@ -8,6 +8,7 @@ import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
 import { pluralize } from "@/shared/lib/pluralize";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
+import { useToast } from "@/shared/toast/ui/toastProvider";
 
 import { useCopySelectedMessages } from "../hooks/useCopySelectedMessages";
 
@@ -18,11 +19,18 @@ type SelectBoxProps = {
 export const SelectBox: React.FC<SelectBoxProps> = ({ className }) => {
   const { messages, selectedMessageUids, setForwardTargets, exitSelectionMode, chatKey } =
     useChatStore();
+  const { showToast } = useToast();
   const { openModal } = useModalStore();
   const copySelectedMessages = useCopySelectedMessages(Array.from(selectedMessageUids));
 
   const handleCopy = () => {
-    copySelectedMessages().then(() => exitSelectionMode());
+    copySelectedMessages().then(() => {
+      exitSelectionMode();
+      showToast("Сообщения скопированы", {
+        mobile: "/icons/toast/checkMobile.svg",
+        desktop: "/icons/toast/checkDesktop.svg",
+      });
+    });
   };
 
   const handleForward = () => {

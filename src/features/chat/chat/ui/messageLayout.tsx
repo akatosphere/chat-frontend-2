@@ -23,6 +23,8 @@ export const MessageLayout = ({
     minute: "2-digit",
   });
 
+  const hasText = blocks.some((b) => b.type === "text" && b.text !== " ");
+
   const status = useMemo(
     () => getMessageStatus(message.isNew, message.status),
     [message.isNew, message.status],
@@ -32,6 +34,9 @@ export const MessageLayout = ({
     <div
       className={cn(
         "desktop:max-w-[500px] relative w-fit max-w-[83%] min-w-0 overflow-hidden rounded-2xl select-text",
+        blocks.filter((b) => b.type === "media").length > 0
+          ? "desktop:w-full w-fit"
+          : "desktop:w-fit w-fit",
         isMine ? "bg-light-green rounded-br-sm" : "desktop:bg-gray-tone rounded-bl-sm bg-white",
       )}
     >
@@ -46,6 +51,7 @@ export const MessageLayout = ({
           key={i}
           block={block}
           isMine={isMine}
+          hasText={hasText}
           time={time}
           status={status}
           id={message.id}

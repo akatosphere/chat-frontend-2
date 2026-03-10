@@ -47,9 +47,8 @@ export const SendImageModal: React.FC<SendImageModalProps> = ({ className, isOpe
 
   const handleSend = async (text: string) => {
     // if (images.length === 0) return;
-    console.log("text", text);
     handleClose();
-    await sendMessage(text || "", images);
+    await sendMessage(text || "", images, []);
   };
 
   if (!images.length) return null;

@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
 
 import { getChatServer } from "@/entities/chat/api/getChatServer";
-import { getMessages } from "@/entities/chat/api/getMessages";
-import { mapChatMessages } from "@/features/chat/chat/model/mapper";
 import { getChatType } from "@/shared/lib/getChatType";
 import { ChatWidget } from "@/widgets/chat/chatWidget/chatWidget";
 
@@ -17,23 +15,13 @@ export default async function ChatPage({ params }: ChatPageProps) {
 
   if (!chatInfo?.success) return notFound();
 
-  const messagesResult = await getMessages({
-    uid: chatInfo.data.uid,
-    page: 1,
-    page_size: 50,
-    ordering: "-created_at",
-  });
-
-  console.log("messagesResult", messagesResult);
-  const messages = messagesResult.success ? mapChatMessages(messagesResult.data.results) : [];
   return (
     <>
       <ChatWidget
         chatKey={chatKey}
         chatType={chatInfo.type}
-        chatKeyUser={messages[0]?.chatKey || null}
+        chatUid={chatInfo.data.uid}
         initialChatInfo={chatInfo.data}
-        initialMessages={messages}
       />
     </>
   );

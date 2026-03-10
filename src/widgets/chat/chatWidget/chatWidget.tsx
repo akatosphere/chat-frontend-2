@@ -6,31 +6,26 @@ import { normalizeChatInfo } from "@/features/chat/chat/lib/normalizeChatInfo";
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
 import { cn } from "@/shared/shadcn/lib/utils";
 
-import { MappedChatMessage } from "../../../features/chat/chat/model/types/mappedTypes";
 import { Chat } from "../../../features/chat/chat/ui/chat";
 import { ChatHeader } from "../chatHeader/ui/chatHeader";
 
 type ChatWidgetProps = {
   className?: string;
   chatKey: string;
-  chatKeyUser: string | null;
   chatType: ChatType;
   initialChatInfo: MappedChatDetails | UserPreview;
-  initialMessages: MappedChatMessage[];
+  chatUid: string;
 };
 
 export const ChatWidget: React.FC<ChatWidgetProps> = ({
   className,
   initialChatInfo,
   chatType,
-  initialMessages,
   chatKey,
-  chatKeyUser,
+  chatUid,
 }) => {
-  // Приводит пришедшие данные к единому интерфейсу
   const chatInfo = normalizeChatInfo(initialChatInfo);
 
-  // Единственное название чата в зависимости от типа
   const chatName = chatInfo.title || chatInfo.firstName || "Unknown";
   const chatAvatar = chatInfo.avatar || chatInfo.avatarUrl || "";
 
@@ -52,11 +47,10 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Chat
-          initialMessages={initialMessages}
           chatKey={chatKey}
           chatType={chatType}
-          chatKeyUser={chatKeyUser}
           createdBy={chatInfo.createdBy}
+          chatUid={chatUid}
         />
       </div>
     </div>
