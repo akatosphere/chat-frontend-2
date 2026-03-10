@@ -28,6 +28,7 @@ export const MessageText: React.FC<MessageTextProps> = ({
   return (
     <div
       className={cn(
+        "classic-links",
         isEmpty
           ? "absolute right-3 bottom-2"
           : "relative flex h-fit w-full items-stretch justify-between px-3 pb-2.5",
