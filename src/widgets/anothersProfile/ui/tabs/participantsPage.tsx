@@ -4,7 +4,7 @@ import { useParticipantsSync } from "@/entities/chat/lib/useParticipantsSync";
 import { ChatParticipantListResponse } from "@/entities/chat/model/types";
 import { useParticipantsStore } from "@/entities/chat/model/useParticipantsStore";
 import { ContactCard } from "@/entities/contact/ui/contactCard";
-import { InviteToChatBtn } from "@/features/inviteToChat/ui/inviteToChatBtn";
+import { ToInvitePageBtn } from "@/features/inviteToChat/ui/toInvitePageBtn";
 import { useInfiniteScroll } from "@/shared/lib/useInfiniteScroll";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Searchbar } from "@/shared/ui/searchbar";
@@ -43,7 +43,7 @@ export const ParticipantsPage: React.FC<ParticipantsPageProps> = ({
   return (
     <div className="flex w-full flex-col p-2">
       <div className="flex w-full flex-col items-start gap-4 p-2">
-        {canInvite && <InviteToChatBtn chatType={chatType} />}
+        {canInvite && <ToInvitePageBtn chatType={chatType} />}
         <Searchbar className="w-full" value={search} onChange={setSearch} />
       </div>
       {search ? (

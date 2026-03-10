@@ -22,9 +22,9 @@ export const getProfileHeaderText = ({
   } else if (activeSection === "settings") {
     return "Настройки";
   } else if (activeSection === "invite" && chatType == "group") {
-    return "Пригласить участников";
+    return "Добавить участников";
   } else if (activeSection === "invite" && chatType == "channel") {
-    return "Пригласить подписчиков";
+    return "Добавить подписчиков";
   } else {
     return activeTab === "participants" ? "Участники" : "Вложения";
   }
