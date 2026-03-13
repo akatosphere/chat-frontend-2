@@ -19,6 +19,7 @@ type ChatProps = {
   createdBy?: string;
   chatKey: string;
   chatKeyUser: string | null;
+  join?: boolean;
 };
 
 export const Chat = ({
@@ -28,6 +29,7 @@ export const Chat = ({
   chatType,
   createdBy,
   chatKeyUser,
+  join = false,
 }: ChatProps) => {
   const currentUserId = useUserStore((s) => s.userId);
   const setInitialData = useChatStore((s) => s.setInitialData);
@@ -43,7 +45,7 @@ export const Chat = ({
   return (
     <div className={cn("flex h-full flex-col", className)}>
       <MessageList currentUserId={currentUserId || ""} className="flex-1" />
-      <ChatFooter onSendMessage={handleSendMessage} />
+      <ChatFooter onSendMessage={handleSendMessage} join={join} />
     </div>
   );
 };

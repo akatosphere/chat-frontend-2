@@ -77,6 +77,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
           chatType={chatType}
           chatKeyUser={chatKeyUser}
           createdBy={chatInfo.createdBy}
+          join={join}
         />
       </div>
     </div>
