@@ -1,10 +1,28 @@
-import { LinkItUrl } from "react-linkify-it";
+import Link from "next/link";
+import { LinkIt, urlRegex } from "react-linkify-it";
 
+import { parseInviteUrl } from "@/entities/chat/lib/parseInviteUrl";
 import { StatusIcon } from "@/entities/chat/ui/statusIcon";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { TextBlock } from "../model/messageBlock/types";
 import { SendingStatus } from "../model/types/serverTypes";
+
+const urlComponent = (match: string, key: number) => {
+  const inviteData = parseInviteUrl(match);
+  if (inviteData) {
+    return (
+      <Link key={key} href={`/chats/join/${inviteData.chatKey}?token=${inviteData.token}`}>
+        {match}
+      </Link>
+    );
+  }
+  return (
+    <a key={key} href={match} target="_blank" rel="noopener noreferrer">
+      {match}
+    </a>
+  );
+};
 
 type MessageTextProps = {
   className?: string;
@@ -37,11 +55,11 @@ export const MessageText: React.FC<MessageTextProps> = ({
         className,
       )}
     >
-      <LinkItUrl>
+      <LinkIt component={urlComponent} regex={urlRegex}>
         <p className="subtext emojis-apple min-w-0 pr-2 break-all whitespace-pre-wrap">
           {block.text}
         </p>
-      </LinkItUrl>
+      </LinkIt>
       <div className="flex flex-col justify-end">
         <div
           className={cn(

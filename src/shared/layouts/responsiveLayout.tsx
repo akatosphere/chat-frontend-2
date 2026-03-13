@@ -17,11 +17,14 @@ export const ResponsiveLayout = ({ children, sidebar, extra }: ResponsiveLayoutP
 
   // 1. Условие для области EXTRA (Профиль в чате)
   // Маршрут: /chats/{id}/profile
-  const isExtraActive = pathParts[0] === "chats" && pathParts.length === 3;
+  const isExtraActive =
+    pathParts[0] === "chats" && pathParts.length === 3 && pathParts[2] === "profile";
 
-  // 2. Условие для области MAIN (Сам чат)
-  // Маршрут: /chats/{id} или /chats/{uid}
-  const isMainActive = pathParts[0] === "chats" && pathParts.length === 2;
+  // 2. Условие для области MAIN (Сам чат или страница приглашения)
+  // Маршрут: /chats/{id}, /chats/{uid} или /chats/join/{chatKey}
+  const isMainActive =
+    pathParts[0] === "chats" &&
+    (pathParts.length === 2 || (pathParts.length === 3 && pathParts[1] === "join"));
 
   // 3. Условие для области SIDEBAR (Списки, настройки, создание групп)
   // Все остальные маршруты: /chats, /settings, /settings/profile, /contacts и т.д.

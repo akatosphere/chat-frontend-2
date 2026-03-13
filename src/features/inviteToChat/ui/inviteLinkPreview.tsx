@@ -48,12 +48,12 @@ export const InviteLinkPreview = ({ chatKey, token }: InviteLinkPreviewProps) =>
   return (
     <div className="mx-3 mt-1.5">
       <Link href={`/chats/join/${chatKey}?token=${token}`}>
-        <div className="flex items-start gap-1 rounded border-l-4 border-[#9587F5] bg-white/50 p-1 px-2.5">
+        <div className="border-primary flex items-start gap-1 rounded border-l-4 bg-white/50 p-1 px-2.5">
           <Avatar avatarUrl={data.avatarUrl} size="sm" variant="chat" />
           <div className="flex flex-col gap-0.5">
-            <span className="text-sm leading-[130%] font-bold text-[#7769E1]">{data.name}</span>
-            <span className="text-base leading-[130%] text-[#747474]">{subtitle}</span>
-            <span className="text-base leading-[120%] font-medium text-[#7769E1] uppercase">
+            <span className="text-primary text-sm leading-[130%] font-bold">{data.name}</span>
+            <span className="text-gray text-base leading-[130%]">{subtitle}</span>
+            <span className="text-primary text-base leading-[120%] font-medium uppercase">
               {isChannel ? "Перейти в канал" : "Перейти в группу"}
             </span>
           </div>
