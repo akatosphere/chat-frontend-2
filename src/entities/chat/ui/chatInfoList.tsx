@@ -22,7 +22,7 @@ export const ChatInfoList = ({ className, initialData, isOwner }: ChatInfoListPr
     const tokenMatch = data.invite_link.match(/[?&]token=([^\s&]+)/);
     const token = tokenMatch?.[1];
     if (!token || !data.chat_key) return data.invite_link;
-    return `${process.env.NEXT_PUBLIC_APP_URL}/chats/join/${data.chat_key}?token=${token}`;
+    return `${process.env.NEXT_PUBLIC_APP_URL}/chats/${data.chat_key}?token=${token}`;
   })();
 
   const inviteLink = isLoading

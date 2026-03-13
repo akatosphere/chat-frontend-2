@@ -12,7 +12,7 @@ const urlComponent = (match: string, key: number) => {
   const inviteData = parseInviteUrl(match);
   if (inviteData) {
     return (
-      <Link key={key} href={`/chats/join/${inviteData.chatKey}?token=${inviteData.token}`}>
+      <Link key={key} href={`/chats/${inviteData.chatKey}?token=${inviteData.token}`}>
         {match}
       </Link>
     );

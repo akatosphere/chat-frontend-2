@@ -6,6 +6,8 @@ import { getChatTypeLight } from "@/entities/chat/lib/getChatTypeLight";
 import { mapChatMessages } from "@/features/chat/chat/model/mapper";
 import { ChatWidget } from "@/widgets/chat/chatWidget/chatWidget";
 
+import { getInitialJoin } from "../../../../src/entities/chat/lib/getInitialJoin";
+
 type ChatPageProps = {
   params: Promise<{ chatKey: string }>;
 };
@@ -17,14 +19,11 @@ export default async function ChatPage({ params }: ChatPageProps) {
 
   if (!chatInfo?.success) return notFound();
 
-  const messagesResult = await getMessages({
-    uid: chatInfo.data.uid,
-    page: 1,
-    page_size: 50,
-    ordering: "-created_at",
-  });
+  const [messagesResult, initialJoin] = await Promise.all([
+    getMessages({ uid: chatInfo.data.uid, page: 1, page_size: 50, ordering: "-created_at" }),
+    getInitialJoin(chatInfo.data),
+  ]);
 
-  console.log("messagesResult", messagesResult);
   const messages = messagesResult.success ? mapChatMessages(messagesResult.data.results) : [];
   return (
     <>
@@ -34,6 +33,7 @@ export default async function ChatPage({ params }: ChatPageProps) {
         chatKeyUser={messages[0]?.chatKey || null}
         initialChatInfo={chatInfo.data}
         initialMessages={messages}
+        initialJoin={initialJoin}
       />
     </>
   );

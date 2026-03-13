@@ -22,6 +22,7 @@ type ChatWidgetProps = {
   chatType: ChatType;
   initialChatInfo: MappedChatDetails | UserPreview;
   initialMessages: MappedChatMessage[];
+  initialJoin?: boolean;
 };
 
 export const ChatWidget: React.FC<ChatWidgetProps> = ({
@@ -31,10 +32,11 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   initialMessages,
   chatKey,
   chatKeyUser,
+  initialJoin = false,
 }) => {
   const storedChatInfo = useChatInfoStore((s) => s.chatInfoByKey[chatKey]);
   const userId = useUserStore((s) => s.userId);
-  const join = getIsJoin(storedChatInfo ?? initialChatInfo, userId);
+  const join = userId !== null ? getIsJoin(storedChatInfo ?? initialChatInfo, userId) : initialJoin;
   const setChatInfo = useChatInfoStore((s) => s.setChatInfo);
 
   // Инициализируем стор начальными данными (только для групп/каналов)
