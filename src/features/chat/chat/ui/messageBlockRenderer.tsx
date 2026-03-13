@@ -1,3 +1,4 @@
+import { InviteLinkPreview } from "@/features/inviteToChat/ui/inviteLinkPreview";
 import { MediaGrid } from "@/shared/ui/mediaGrid/mediaGrid";
 
 import { MessageBlock } from "../model/messageBlock/types";
@@ -38,6 +39,9 @@ export const MessageBlockRenderer = ({
       );
     case "file":
       return null;
+
+    case "inviteLink":
+      return <InviteLinkPreview chatKey={block.chatKey} token={block.token} />;
 
     case "text":
       return (

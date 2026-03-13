@@ -142,3 +142,17 @@ export type ChatParticipantListResponse = {
   next: string | null;
   results: ChatParticipant[];
 };
+
+export type ChatPreviewDto = {
+  name: string;
+  description: string;
+  participants_count: number;
+  avatar_webp_url: string | null;
+};
+
+export type ChatPreview = {
+  name: string;
+  description: string;
+  participantsCount: number;
+  avatarUrl: string | null;
+};

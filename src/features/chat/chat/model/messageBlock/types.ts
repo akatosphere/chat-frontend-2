@@ -1,6 +1,12 @@
 import { FileItem, MediaItem } from "@/shared/ui/mediaGrid/mediaGrid";
 
-export type MessageBlock = ReplyBlock | ForwardedBlock | TextBlock | FileBlock | MediaBlock;
+export type MessageBlock =
+  | ReplyBlock
+  | ForwardedBlock
+  | TextBlock
+  | FileBlock
+  | MediaBlock
+  | InviteLinkBlock;
 
 export type ReplyBlock = {
   type: "reply";
@@ -30,4 +36,10 @@ export type FileBlock = {
 export type MediaBlock = {
   type: "media";
   items: MediaItem[];
+};
+
+export type InviteLinkBlock = {
+  type: "inviteLink";
+  chatKey: string;
+  token: string;
 };
