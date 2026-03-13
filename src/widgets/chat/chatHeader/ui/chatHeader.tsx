@@ -21,11 +21,19 @@ type Props = {
   profileHref: string;
   onCallClick: () => void;
   onSearchClick: () => void;
+  join?: boolean;
 };
 
-export const ChatHeader = ({ chat, backHref, onCallClick, onSearchClick, profileHref }: Props) => {
+export const ChatHeader = ({
+  chat,
+  backHref,
+  onCallClick,
+  onSearchClick,
+  profileHref,
+  join = false,
+}: Props) => {
   return (
-    <header className="desktop:bg-main-light-gray desktop:border-muted desktop:rounded-t-lg desktop:border-b flex h-[60px] items-center justify-between px-4">
+    <header className="desktop:bg-main-light-gray desktop:border-muted desktop:rounded-t-lg desktop:border-b flex h-15 items-center justify-between px-4">
       <BackButton href={backHref} className="desktop:hidden mr-6 shrink-0" width={12} height={20} />
       <Link href={profileHref} className="flex w-full flex-1 items-center justify-between">
         <ChatHeaderUser
@@ -38,7 +46,7 @@ export const ChatHeader = ({ chat, backHref, onCallClick, onSearchClick, profile
         />
       </Link>
 
-      <ChatHeaderActions onCallClick={onCallClick} onSearchClick={onSearchClick} />
+      <ChatHeaderActions onCallClick={onCallClick} onSearchClick={onSearchClick} join={join} />
     </header>
   );
 };

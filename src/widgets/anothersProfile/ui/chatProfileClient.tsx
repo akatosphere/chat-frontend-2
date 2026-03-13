@@ -63,8 +63,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
   const displayData = cachedChatInfo ?? chatInfo;
 
   const isOwner = currentUserUid === displayData?.createdBy;
-  const canInvite =
-    isOwner || displayData?.type == "public-channel" || displayData?.type == "public-group";
+
   const contextMenu = useChatProfileContextMenu({
     isOwner,
     chatType,
@@ -99,7 +98,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
           isOwner={isOwner}
           chatKey={chatKey}
           initialParticipants={initialParticipants}
-          canInvite={canInvite}
+          canInvite={isOwner}
         />
       ) : activeSection === "settings" ? (
         <ChatSettingsPage chatKey={chatKey} chatInfo={displayData} />
@@ -114,7 +113,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
                   chatType={chatType}
                   initialParticipants={initialParticipants}
                   chatKey={chatKey}
-                  canInvite={canInvite}
+                  canInvite={isOwner}
                 />
               );
             case "media":

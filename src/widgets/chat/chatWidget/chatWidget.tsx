@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { useChatInfoStore } from "@/entities/chat/model/useChatInfoStore";
 import { UserPreview } from "@/entities/user/model/types";
+import { useUserStore } from "@/entities/user/model/userStore";
 import { normalizeChatInfo } from "@/features/chat/chat/lib/normalizeChatInfo";
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
 import { cn } from "@/shared/shadcn/lib/utils";
@@ -12,6 +13,7 @@ import { cn } from "@/shared/shadcn/lib/utils";
 import { MappedChatMessage } from "../../../features/chat/chat/model/types/mappedTypes";
 import { Chat } from "../../../features/chat/chat/ui/chat";
 import { ChatHeader } from "../chatHeader/ui/chatHeader";
+import { getIsJoin } from "./lib/getIsJoin";
 
 type ChatWidgetProps = {
   className?: string;
@@ -31,6 +33,8 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   chatKeyUser,
 }) => {
   const storedChatInfo = useChatInfoStore((s) => s.chatInfoByKey[chatKey]);
+  const userId = useUserStore((s) => s.userId);
+  const join = getIsJoin(storedChatInfo ?? initialChatInfo, userId);
   const setChatInfo = useChatInfoStore((s) => s.setChatInfo);
 
   // Инициализируем стор начальными данными (только для групп/каналов)
@@ -60,6 +64,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
           membersCount: chatInfo.membersCount,
           chatType: chatType,
         }}
+        join={join}
         onCallClick={() => {}}
         onSearchClick={() => {}}
       />
