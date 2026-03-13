@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 
 import { getChatServer } from "@/entities/chat/api/getChatServer";
 import { getMessages } from "@/entities/chat/api/getMessages";
+import { getChatTypeLight } from "@/entities/chat/lib/getChatTypeLight";
 import { mapChatMessages } from "@/features/chat/chat/model/mapper";
-import { getChatType } from "@/shared/lib/getChatType";
 import { ChatWidget } from "@/widgets/chat/chatWidget/chatWidget";
 
 type ChatPageProps = {
@@ -13,7 +13,7 @@ type ChatPageProps = {
 export default async function ChatPage({ params }: ChatPageProps) {
   const { chatKey } = await params;
 
-  const chatInfo = await getChatServer(chatKey, getChatType(chatKey));
+  const chatInfo = await getChatServer(chatKey, getChatTypeLight(chatKey));
 
   if (!chatInfo?.success) return notFound();
 
