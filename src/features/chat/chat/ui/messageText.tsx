@@ -10,6 +10,7 @@ type MessageTextProps = {
   isMine: boolean;
   time: string;
   status: SendingStatus;
+  hasNameAbove?: boolean; // Добавили проп для отслеживания имени сверху
 };
 
 export const MessageText: React.FC<MessageTextProps> = ({
@@ -18,6 +19,7 @@ export const MessageText: React.FC<MessageTextProps> = ({
   isMine,
   time,
   status,
+  hasNameAbove,
 }) => {
   if (!block.text) return null;
   const isEmpty = block.text.trim() === "";
@@ -27,7 +29,9 @@ export const MessageText: React.FC<MessageTextProps> = ({
       className={cn(
         isEmpty
           ? "absolute right-3 bottom-2"
-          : "relative flex h-fit w-full items-stretch justify-between px-3 pt-1.5 pb-2.5",
+          : "relative flex h-fit w-full items-stretch justify-between px-3 pb-2.5",
+        // Если текст не пустой: убираем pt-1.5 и ставим pt-0, если имя уже заняло место сверху
+        !isEmpty && (hasNameAbove ? "pt-0" : "pt-1.5"),
         className,
       )}
     >

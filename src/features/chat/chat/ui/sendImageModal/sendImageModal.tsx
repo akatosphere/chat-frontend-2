@@ -3,7 +3,6 @@ import Close from "@icons/close.svg";
 import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
 
 import { useSendMessage } from "@/features/chat/chat/hooks";
-import { openImagePicker } from "@/features/chat/chat/lib/openImagePicker";
 import { useSendImageStore } from "@/features/chat/chat/model/store/useChatSendImagesStore";
 import { MessageForm } from "@/features/chat/sendMessage/ui/messageForm";
 import { useKeyboardOffset } from "@/shared/lib/useKeyboardOffset";
@@ -12,6 +11,8 @@ import { cn } from "@/shared/shadcn/lib/utils";
 import { AlertDialogHeader, AlertDialogTitle } from "@/shared/shadcn/ui/alert-dialog";
 import { Button } from "@/shared/shadcn/ui/button";
 import { MediaGrid, MediaItem } from "@/shared/ui/mediaGrid/mediaGrid";
+
+import { openImagePicker } from "../../lib/openImagePicker";
 
 export type SendImageModalProps = {
   className?: string;
