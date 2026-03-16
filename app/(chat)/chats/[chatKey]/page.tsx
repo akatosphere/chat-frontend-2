@@ -17,7 +17,7 @@ export default async function ChatPage({ params }: ChatPageProps) {
 
   const chatInfo = await getChatServer(chatKey, getChatTypeLight(chatKey));
 
-  if (!chatInfo?.success) return notFound();
+  if (!chatInfo?.success) return notFound(); // тут проблема с приватными чатами
 
   const [messagesResult, initialJoin] = await Promise.all([
     getMessages({ uid: chatInfo.data.uid, page: 1, page_size: 50, ordering: "-created_at" }),
