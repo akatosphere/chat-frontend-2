@@ -33,6 +33,7 @@ export const Chat = ({
 }: ChatProps) => {
   const currentUserId = useUserStore((s) => s.userId);
   const setInitialData = useChatStore((s) => s.setInitialData);
+  const isOwner = useChatStore((s) => s.createdBy === currentUserId);
 
   const handleSendMessage = useSendMessage();
 
@@ -44,8 +45,10 @@ export const Chat = ({
 
   return (
     <div className={cn("flex h-full flex-col", className)}>
-      <MessageList currentUserId={currentUserId || ""} className="flex-1" />
-      <ChatFooter onSendMessage={handleSendMessage} join={join} />
+      <MessageList currentUserId={currentUserId || ""} className="flex-1" isOwner={isOwner} />
+      {((chatType != "public-channel" && chatType != "private-channel") || isOwner) && (
+        <ChatFooter onSendMessage={handleSendMessage} join={join} />
+      )}
     </div>
   );
 };

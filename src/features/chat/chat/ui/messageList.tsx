@@ -14,13 +14,13 @@ import { ScrollDownBtn } from "./scrollDownBtn";
 interface MessageListProps {
   className?: string;
   currentUserId: string;
+  isOwner: boolean;
 }
 
-export const MessageList: React.FC<MessageListProps> = ({ className, currentUserId }) => {
+export const MessageList: React.FC<MessageListProps> = ({ className, currentUserId, isOwner }) => {
   const messages = useChatStore((s) => s.messages);
   const isReady = useChatStore((s) => s.isReady);
   const chatType = useChatStore((s) => s.chatType);
-  const isOwner = useChatStore((s) => s.createdBy === currentUserId);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
