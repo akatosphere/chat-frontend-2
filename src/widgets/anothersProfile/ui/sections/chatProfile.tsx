@@ -103,6 +103,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
               initialParticipants={initialParticipants}
               chatKey={chatKey}
               chatType={chatType}
+              isOwner={isOwner}
             />
           </TabsContent>
           <TabsContent value="media">

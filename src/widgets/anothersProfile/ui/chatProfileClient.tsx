@@ -114,6 +114,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
                   initialParticipants={initialParticipants}
                   chatKey={chatKey}
                   canInvite={isOwner}
+                  isOwner={isOwner}
                 />
               );
             case "media":

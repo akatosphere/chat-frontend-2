@@ -9,6 +9,7 @@ import { DeleteChatModal } from "@/features/chatList/ui/deleteChatModal/deleteCh
 import { ClearChatModal } from "@/features/clearChat/ui/clearChatModal";
 import { DeleteChatGlobalModal } from "@/features/deleteChatGlobal/ui/deleteChatGlobalModal";
 import { LeaveChatModal } from "@/features/leaveChat/ui/leaveChatModal";
+import { RemoveParticipantModal } from "@/features/removeParticipant/ui/removeParticipantModal";
 
 import { SendFileModal } from "../../../features/chat/chat/ui/sendFileModal/sendFileModal";
 import { useModalStore } from "../model/useGlobalModalStore";
@@ -22,6 +23,7 @@ const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
   sendImage: SendMediaModal,
   sendFile: SendFileModal,
   forward: ForwardModal,
+  removeParticipant: RemoveParticipantModal,
   // новые модалки сюда
 };
 

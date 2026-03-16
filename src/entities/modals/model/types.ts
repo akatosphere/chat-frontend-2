@@ -19,6 +19,11 @@ export type ModalPayloads = {
   sendImage: { chatKey: string };
   sendFile: { chatKey: string };
   forward: { messageId: number; chatKey: string };
+  removeParticipant: {
+    participantName: string;
+    onConfirm: () => void;
+    chatType: "group" | "channel" | "chat";
+  };
   //новые модалки здесь
 };
 
