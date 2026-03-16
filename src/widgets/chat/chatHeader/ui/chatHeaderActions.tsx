@@ -1,5 +1,6 @@
 // import Image from "next/imag
 
+import { ChatType } from "@/entities/chat/model/types";
 import { Button } from "@/shared/shadcn/ui/button";
 import ProfileCall from "@/shared/ui/icons/chat/header/profileCall.svg";
 import ProfileCallInChatDesktop from "@/shared/ui/icons/chat/header/profileCallDesktop.svg";
@@ -9,14 +10,24 @@ type Props = {
   onCallClick: () => void;
   onSearchClick: () => void;
   join?: boolean;
+  chatType: ChatType;
 };
 
-export const ChatHeaderActions = ({ onCallClick, onSearchClick, join = false }: Props) => {
+export const ChatHeaderActions = ({
+  onCallClick,
+  onSearchClick,
+  join = false,
+  chatType,
+}: Props) => {
   return (
     <div className="flex items-center">
       {join ? (
         <div className="flex gap-3">
-          <Button size="sm">Вступить</Button>
+          <Button size="sm">
+            {chatType === "private-group" || chatType === "public-group"
+              ? "Вступить"
+              : "Подписаться"}
+          </Button>
           {/* Поиск на десктопе */}
           <button
             aria-label="Поиск"

@@ -46,7 +46,12 @@ export const ChatHeader = ({
         />
       </Link>
 
-      <ChatHeaderActions onCallClick={onCallClick} onSearchClick={onSearchClick} join={join} />
+      <ChatHeaderActions
+        onCallClick={onCallClick}
+        onSearchClick={onSearchClick}
+        join={join}
+        chatType={chat.chatType}
+      />
     </header>
   );
 };
