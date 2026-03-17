@@ -35,7 +35,6 @@ export const MessageLayout = ({
   );
 
   const isFirstBlockMedia = blocks[0]?.type === "media";
-  console.log("messageLayout");
 
   return (
     <div className={cn("flex flex-col", isMine ? "items-end" : "items-start")}>

@@ -41,7 +41,13 @@ export const MessageBlockRenderer = ({
       return null;
 
     case "inviteLink":
-      return <InviteLinkPreview chatKey={block.chatKey} token={block.token} />;
+      return (
+        <InviteLinkPreview
+          chatKey={block.chatKey}
+          token={block.token}
+          isPrivate={block.isPrivate}
+        />
+      );
 
     case "text":
       return (
