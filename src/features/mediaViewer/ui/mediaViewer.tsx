@@ -86,8 +86,8 @@ export const MediaViewer = () => {
           message="Файл успешно скачан"
           onClose={() => setIsToastOpen(false)}
           icon={{
-            mobile: "@icons/sendFiles/downloaded.svg",
-            desktop: "shared/ui/icons/sendFiles/downloaded.svg",
+            mobile: "/download.svg",
+            desktop: "/download.svg",
           }}
         />
       )}

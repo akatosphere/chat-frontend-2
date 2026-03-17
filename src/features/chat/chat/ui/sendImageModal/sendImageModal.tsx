@@ -3,7 +3,7 @@ import Close from "@icons/close.svg";
 import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
 
 import { useSendMessage } from "@/features/chat/chat/hooks";
-import { useSendMediaStore } from "@/features/chat/chat/model/store/useChatSendImagesStore";
+import { useSendImageStore } from "@/features/chat/chat/model/store/useChatSendImagesStore";
 import { MessageForm } from "@/features/chat/sendMessage/ui/messageForm";
 import { useKeyboardOffset } from "@/shared/lib/useKeyboardOffset";
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
@@ -12,9 +12,9 @@ import { AlertDialogHeader, AlertDialogTitle } from "@/shared/shadcn/ui/alert-di
 import { Button } from "@/shared/shadcn/ui/button";
 import { MediaGrid, MediaItem } from "@/shared/ui/mediaGrid/mediaGrid";
 
-import { openMediaPicker } from "../../lib/openImagePicker";
+import { openImagePicker } from "../../lib/openImagePicker";
 
-export type SendMediaModalProps = {
+export type SendImageModalProps = {
   className?: string;
   isOpen: boolean;
   chatKey: string;
@@ -22,15 +22,15 @@ export type SendMediaModalProps = {
   onClose: () => void;
 };
 
-export const SendMediaModal: React.FC<SendMediaModalProps> = ({ className, isOpen, onClose }) => {
-  const media = useSendMediaStore((s) => s.media);
-  const { clear, addMedia } = useSendMediaStore();
+export const SendImageModal: React.FC<SendImageModalProps> = ({ className, isOpen, onClose }) => {
+  const images = useSendImageStore((s) => s.images);
+  const { clear, addImages } = useSendImageStore();
   const { isKeyboardOpen } = useKeyboardOffset();
   const sendMessage = useSendMessage();
-  const mediaToUpload: MediaItem[] = media.map((img) => {
+  const imagesToUpload: MediaItem[] = images.map((img) => {
     const obj = {
       id: img.id,
-      type: img.type,
+      type: "image" as const,
       src: img.previewUrl,
     };
     return obj;
@@ -42,17 +42,17 @@ export const SendMediaModal: React.FC<SendMediaModalProps> = ({ className, isOpe
   };
 
   const handleAttach = async () => {
-    const files = await openMediaPicker();
-    if (files.length) addMedia(files);
+    const files = await openImagePicker();
+    if (files.length) addImages(files);
   };
 
   const handleSend = async (text: string) => {
     // if (images.length === 0) return;
     handleClose();
-    await sendMessage(text || "", media);
+    await sendMessage(text || "", images, []);
   };
 
-  if (!media.length) return null;
+  if (!images.length) return null;
   return (
     <ModalDialog
       className={cn("desktop:w-[432px] desktop:max-w-[432px] bg-[#F5F6F8]", className)}
@@ -80,7 +80,7 @@ export const SendMediaModal: React.FC<SendMediaModalProps> = ({ className, isOpe
         </AlertDialogTitle>
         <AlertDialogDescription></AlertDialogDescription>
         <div className="">
-          <MediaGrid items={mediaToUpload} size="sendImageModal" className="w-full" isDeleteMode />
+          <MediaGrid items={imagesToUpload} size="sendImageModal" className="w-full" isDeleteMode />
           <MessageForm
             className="mt-4 p-0"
             variant="modal"

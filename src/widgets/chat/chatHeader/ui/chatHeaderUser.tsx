@@ -35,7 +35,7 @@ export const ChatHeaderUser = ({
       </div>
 
       <button className="flex min-w-0 cursor-pointer flex-col text-left">
-        <p className="desktop:text-lg truncate text-sm font-medium">{name}</p>
+        <p className="desktop:text-lg truncate text-sm leading-5 font-medium">{name}</p>
         <Statusbar
           time={wasOnlineAt || null}
           isOnline={isOnline || null}

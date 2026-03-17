@@ -15,6 +15,7 @@ export const WSProvider = ({ children }: { children: React.ReactNode }) => {
   const accessToken = useAuthStore((s) => s.accessToken);
   const isInitialized = useAuthStore((s) => s.isInitialized);
   const setUserId = useUserStore((s) => s.setUserId);
+  const userId = useUserStore((s) => s.userId);
 
   const prevTokenRef = useRef<string | null>(null);
   const userIdExtractedRef = useRef<boolean>(false);
@@ -34,7 +35,7 @@ export const WSProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    if (accessToken) {
+    if (accessToken && !userId) {
       fetchUserProfile();
     }
 

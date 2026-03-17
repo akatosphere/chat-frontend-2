@@ -42,6 +42,7 @@ export interface MappedMessageFile {
   file?: string | File;
   fileUrl: string;
   fileWebp: string | null;
+  name?: string;
   fileWebpUrl: string | undefined;
   fileType: string | null;
   isNew?: boolean;

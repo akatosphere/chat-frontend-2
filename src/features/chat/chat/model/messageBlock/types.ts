@@ -1,18 +1,22 @@
 import { FileItem, MediaItem } from "@/shared/ui/mediaGrid/mediaGrid";
 
+import { MappedMessageFile } from "../types/mappedTypes";
+
 export type MessageBlock =
   | ReplyBlock
   | ForwardedBlock
   | TextBlock
   | FileBlock
   | MediaBlock
-  | InviteLinkBlock;
+  | InviteLinkBlock
+  | AudioBlock;
 
 export type ReplyBlock = {
   type: "reply";
   messageUid: string;
   authorName: string;
   content: string;
+  filesList: MappedMessageFile[];
 };
 
 export type ForwardedBlock = {
@@ -20,6 +24,7 @@ export type ForwardedBlock = {
   authorName: string;
   chatKey: string;
   content: string;
+  filesList: MappedMessageFile[];
   avatarUrl: string;
 };
 
@@ -42,4 +47,9 @@ export type InviteLinkBlock = {
   type: "inviteLink";
   chatKey: string;
   token: string;
+};
+
+export type AudioBlock = {
+  type: "audio";
+  item: MediaItem[];
 };

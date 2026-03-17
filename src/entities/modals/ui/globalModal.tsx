@@ -4,7 +4,7 @@ import React from "react";
 
 import { DeleteMessageModal } from "@/features/chat/chat/ui/deleteMessageModal/deleteMessageModal";
 import { ForwardModal } from "@/features/chat/chat/ui/forwardModal/forwardModal";
-import { SendMediaModal } from "@/features/chat/chat/ui/sendImageModal/sendImageModal";
+import { SendImageModal } from "@/features/chat/chat/ui/sendImageModal/sendImageModal";
 import { DeleteChatModal } from "@/features/chatList/ui/deleteChatModal/deleteChatModal";
 import { ClearChatModal } from "@/features/clearChat/ui/clearChatModal";
 import { DeleteChatGlobalModal } from "@/features/deleteChatGlobal/ui/deleteChatGlobalModal";
@@ -20,7 +20,7 @@ const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
   leaveChat: LeaveChatModal,
   deleteChatGlobal: DeleteChatGlobalModal,
   clearChat: ClearChatModal,
-  sendImage: SendMediaModal,
+  sendImage: SendImageModal,
   sendFile: SendFileModal,
   forward: ForwardModal,
   removeParticipant: RemoveParticipantModal,

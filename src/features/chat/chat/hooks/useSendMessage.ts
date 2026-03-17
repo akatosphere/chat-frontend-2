@@ -8,7 +8,8 @@ import { MESSAGE_STATUS } from "@/shared/constants/constants";
 import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 import { mapChatMessage } from "../model/mapper";
 import { buildMessageBlocks } from "../model/messageBlock/buildMessageBlocks";
-import { PendingMedia } from "../model/store/useChatSendImagesStore";
+import { PendingFile } from "../model/store/useChatSendFilesStore";
+import { PendingImage } from "../model/store/useChatSendImagesStore";
 import { MappedChatMessage } from "../model/types/mappedTypes";
 import { ChatType } from "../model/types/serverTypes";
 
@@ -21,20 +22,18 @@ export const useSendMessage = () => {
     addMessage,
     setFailedStatus,
     replyTarget,
-    forwardTarget,
-    setForwardTarget,
+    forwardTargets,
+    setForwardTargets,
     setReplyTarget,
   } = useChatStore();
 
-  return useCallback(
-    async (text: string, images: PendingMedia[] = []) => {
-      // if (!text.trim() && images.length === 0) return; // не отправляем пустое
+  const sendSingleMessage = useCallback(
+    async (text: string, images: PendingImage[], files: PendingFile[]) => {
       if (!currentUserId || !chatKey) return;
 
       const requestUid = uuidv4();
       const now = Date.now() / 1000;
 
-      // Подготавливаем временное сообщение
       const tempMessage: MappedChatMessage = {
         id: Math.random(),
         uid: uuidv4(),
@@ -66,33 +65,44 @@ export const useSendMessage = () => {
               },
             ]
           : [],
-        forwardedMessages: forwardTarget
-          ? [
-              {
-                id: forwardTarget.id,
-                uid: forwardTarget.uid,
-                firstName: forwardTarget.fromUser.firstName,
-                lastName: forwardTarget.fromUser.lastName,
-                fromUserId: forwardTarget.fromUser.uid,
-                avatarUrl: "",
-                content: forwardTarget.content,
-                filesList: forwardTarget.filesList,
-              },
-            ]
-          : [],
-        filesList: images.map((img) => ({
-          fileUrl: "/icons/imageLoader.svg",
-          file: img.file,
-          id: img.id,
-          uid: img.id + uuidv4(),
-          fileWebpUrl: "",
-          fileType: "",
-          fileWebp: null,
-          createdAt: now,
-          updatedAt: now,
-          name: img.file.name,
-          type: "image",
+        forwardedMessages: forwardTargets.map((msg) => ({
+          id: msg.id,
+          uid: msg.uid,
+          firstName: msg.fromUser.firstName,
+          lastName: msg.fromUser.lastName,
+          fromUserId: msg.fromUser.uid,
+          avatarUrl: "",
+          content: msg.content,
+          filesList: msg.filesList,
         })),
+        filesList: [
+          ...images.map((img) => ({
+            id: img.id,
+            uid: `${img.id}-${uuidv4()}`,
+            file: img.file,
+            name: img.file.name,
+            type: "image",
+            fileUrl: "/icons/imageLoader.svg",
+            createdAt: now,
+            updatedAt: now,
+            fileType: "image/png",
+            fileWebp: null,
+            fileWebpUrl: "",
+          })),
+          ...files.map((file) => ({
+            id: Number(file.id),
+            uid: `${file.id}-${uuidv4()}`,
+            file: file.file,
+            name: file.file.name,
+            type: file.type,
+            fileUrl: "",
+            createdAt: now,
+            updatedAt: now,
+            fileType: file.type,
+            fileWebp: null,
+            fileWebpUrl: "",
+          })),
+        ],
         isNew: true,
         createdAt: now,
         updatedAt: now,
@@ -106,28 +116,22 @@ export const useSendMessage = () => {
 
       tempMessage.blocks = buildMessageBlocks(tempMessage);
       addMessage(tempMessage);
-      setReplyTarget(null);
-      setForwardTarget(null);
 
-      // Подготовка файлов для отправки на сервер
+      setReplyTarget(null);
+      setForwardTargets([]);
+
+      const allFiles = [...images.map((i) => i.file), ...files.map((f) => f.file)];
+
       const filesPayload = await Promise.all(
-        images.map(async (img) => {
+        allFiles.map(async (file) => {
           const base64 = await new Promise<string>((resolve, reject) => {
             const reader = new FileReader();
-
-            reader.onload = () => {
-              const result = reader.result as string;
-              resolve(result.split(",")[1]);
-            };
-
+            reader.onload = () => resolve((reader.result as string).split(",")[1]);
             reader.onerror = reject;
-            reader.readAsDataURL(img.file);
+            reader.readAsDataURL(file);
           });
 
-          return {
-            filename: img.file.name,
-            data: base64,
-          };
+          return { filename: file.name, data: base64 };
         }),
       );
 
@@ -137,7 +141,10 @@ export const useSendMessage = () => {
           id: tempMessage.id,
           uid: tempMessage.uid,
           content: tempMessage.content,
-          files_summary: { types: ["image/png"], count: images.length },
+          files_summary: {
+            types: images.map((f) => f.type).concat(files.map((f) => f.type)),
+            count: tempMessage.filesList.length,
+          },
           created_at: now,
           from_user_id: currentUserId,
         },
@@ -151,7 +158,7 @@ export const useSendMessage = () => {
           files: filesPayload,
           status: "publish",
           replied_messages: replyTarget ? [`${replyTarget.uid}`] : [],
-          forwarded_messages: forwardTarget ? [`${forwardTarget.uid}`] : [],
+          forwarded_messages: forwardTargets.map((m) => m.uid),
           request_uid: requestUid,
         });
 
@@ -192,13 +199,34 @@ export const useSendMessage = () => {
       currentUserId,
       chatKey,
       chatType,
+      chatKeyUser,
       addMessage,
       setFailedStatus,
       replyTarget,
+      forwardTargets,
       setReplyTarget,
-      setForwardTarget,
-      forwardTarget,
-      chatKeyUser,
+      setForwardTargets,
     ],
+  );
+
+  return useCallback(
+    async (text: string, images: PendingImage[] = [], files: PendingFile[] = []) => {
+      if (images.length) {
+        await sendSingleMessage(text, images, []);
+        return;
+      }
+
+      if (files.length) {
+        if (text.trim().length > 0) await sendSingleMessage(text, [], []);
+        for (let i = 0; i < files.length; i++) {
+          await sendSingleMessage("", [], [files[i]]);
+        }
+        return;
+      }
+
+      await sendSingleMessage(text, [], []);
+    },
+
+    [sendSingleMessage],
   );
 };

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { LinkIt, urlRegex } from "react-linkify-it";
 
 import { parseInviteUrl } from "@/entities/chat/lib/parseInviteUrl";
-import { StatusIcon } from "@/entities/chat/ui/statusIcon";
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { TextBlock } from "../model/messageBlock/types";
@@ -23,6 +22,7 @@ const urlComponent = (match: string, key: number) => {
     </a>
   );
 };
+import { MessageTimeAndStatus } from "./messageTimeAndStatus";
 
 type MessageTextProps = {
   className?: string;
@@ -41,8 +41,9 @@ export const MessageText: React.FC<MessageTextProps> = ({
   status,
   hasNameAbove,
 }) => {
+  if (!block.text) return null;
   const isEmpty = block.text.trim() === "";
-
+  if (isEmpty) return null;
   return (
     <div
       className={cn(
@@ -56,20 +57,12 @@ export const MessageText: React.FC<MessageTextProps> = ({
       )}
     >
       <LinkIt component={urlComponent} regex={urlRegex}>
-        <p className="subtext emojis-apple min-w-0 pr-2 break-all whitespace-pre-wrap">
+        <p className="subtext emojis-apple desktop:wrap-break-word min-w-0 pr-2 wrap-anywhere whitespace-pre-wrap">
           {block.text}
         </p>
       </LinkIt>
       <div className="flex flex-col justify-end">
-        <div
-          className={cn(
-            "minitext text-gray leading-subtext mt-auto flex items-center gap-0.5 select-none",
-            isEmpty && "rounded-full bg-[#00000066] px-1.5 py-0.5 text-white",
-          )}
-        >
-          <span>{time}</span>
-          {isMine && <StatusIcon status={status} className="h-2.5 w-3.5" isActive={isEmpty} />}
-        </div>
+        <MessageTimeAndStatus isMine={isMine} time={time} status={status} isEmpty={isEmpty} />
       </div>
     </div>
   );

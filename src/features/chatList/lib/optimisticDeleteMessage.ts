@@ -15,6 +15,7 @@ export const optimisticDeleteMessage = (
         : chat.type === "chat" && (chat.member.uid === chatId || chat.member.uid === toUserId)
           ? chat
           : null;
+
     if (currentChat && chat.lastMessage?.uid === lastMessageUid) {
       useChatListStore.getState().patchChat(chatKey, {
         lastMessage: {

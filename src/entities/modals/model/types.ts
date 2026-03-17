@@ -18,7 +18,7 @@ export type ModalPayloads = {
   };
   sendImage: { chatKey: string };
   sendFile: { chatKey: string };
-  forward: { messageId: number; chatKey: string };
+  forward: { chatKey: string };
   removeParticipant: {
     participantName: string;
     onConfirm: () => void;

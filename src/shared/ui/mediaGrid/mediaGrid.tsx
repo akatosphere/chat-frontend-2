@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useSendMediaStore } from "@/features/chat/chat/model/store/useChatSendImagesStore";
+import { useSendImageStore } from "@/features/chat/chat/model/store/useChatSendImagesStore";
 import { useMediaViewerStore } from "@/features/mediaViewer/model/useMediaViewerStore";
 import { cn } from "@/shared/shadcn/lib/utils";
 
@@ -18,6 +18,7 @@ export type FileItem = {
   type: string;
   src: string;
   title?: string;
+  fileType?: string;
   duration?: number;
 };
 
@@ -32,7 +33,7 @@ type MediaGridProps = {
 
 const sizes = {
   sendImageModal: "destkop:w-[384px] desktop:max-w-[384px] w-full max-w-full",
-  standart: "desktop:w-[500px] desktop:max-w-[500px] w-[228px] max-w-[228px]",
+  standart: "desktop:w-full desktop:min-w-[288px] desktop:max-w-[500px] w-[228px] max-w-[228px]",
 };
 
 export const MediaGrid: React.FC<MediaGridProps> = ({
@@ -44,12 +45,12 @@ export const MediaGrid: React.FC<MediaGridProps> = ({
   id = 0,
 }) => {
   const count = items.length;
-  const { removeMedia } = useSendMediaStore();
+  const { removeImage } = useSendImageStore();
   const { open } = useMediaViewerStore();
   if (count === 0) return null;
 
   const onDelete = (id: number) => {
-    removeMedia(id);
+    removeImage(id);
   };
 
   const onImageClick = (mediaId: number) => {

@@ -17,16 +17,15 @@ type ForwardModalProps = {
   className?: string;
   isOpen: boolean;
   chatKey: string;
-  messageId: string;
   onClose: () => void;
 };
 
 export const ForwardModal: React.FC<ForwardModalProps> = ({ className, isOpen, onClose }) => {
   const [search, setSearch] = useState("");
-  const { setForwardTarget } = useChatStore();
+  const { setForwardTargets } = useChatStore();
 
   const handleClose = () => {
-    setForwardTarget(null);
+    setForwardTargets([]);
     onClose();
   };
   return (

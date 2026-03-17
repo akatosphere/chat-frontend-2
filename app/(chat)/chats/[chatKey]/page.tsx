@@ -1,9 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { getChatServer } from "@/entities/chat/api/getChatServer";
-import { getMessages } from "@/entities/chat/api/getMessages";
 import { getChatTypeLight } from "@/entities/chat/lib/getChatTypeLight";
-import { mapChatMessages } from "@/features/chat/chat/model/mapper";
 import { ChatWidget } from "@/widgets/chat/chatWidget/chatWidget";
 
 import { getInitialJoin } from "../../../../src/entities/chat/lib/getInitialJoin";
@@ -19,20 +17,15 @@ export default async function ChatPage({ params }: ChatPageProps) {
 
   if (!chatInfo?.success) return notFound(); // тут проблема с приватными чатами
 
-  const [messagesResult, initialJoin] = await Promise.all([
-    getMessages({ uid: chatInfo.data.uid, page: 1, page_size: 50, ordering: "-created_at" }),
-    getInitialJoin(chatInfo.data),
-  ]);
+  const initialJoin = await getInitialJoin(chatInfo.data);
 
-  const messages = messagesResult.success ? mapChatMessages(messagesResult.data.results) : [];
   return (
     <>
       <ChatWidget
         chatKey={chatKey}
         chatType={chatInfo.type}
-        chatKeyUser={messages[0]?.chatKey || null}
+        chatUid={chatInfo.data.uid}
         initialChatInfo={chatInfo.data}
-        initialMessages={messages}
         initialJoin={initialJoin}
       />
     </>
