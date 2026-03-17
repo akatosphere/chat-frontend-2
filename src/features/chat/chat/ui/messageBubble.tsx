@@ -3,7 +3,7 @@ import { memo, useCallback, useMemo, useRef } from "react";
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { getChatType } from "@/shared/lib/getChatType";
 import { cn } from "@/shared/shadcn/lib/utils";
-import { Checkbox } from "@/shared/ui/checkbox";
+import { Checkbox } from "@/shared/ui/checkBox";
 
 import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 import { useMessageContextMenu } from "../lib/useMessageContextMenu";

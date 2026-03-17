@@ -15,6 +15,7 @@ interface ChatState {
   isReady: boolean;
   isHide: boolean;
   chatKeyUser: string | null;
+  chatId: number | null;
 
   replyTarget: MappedChatMessage | null;
   forwardTargets: MappedChatMessage[];
@@ -43,6 +44,7 @@ interface ChatState {
     createdBy?: string,
     chatKeyUser?: string | null,
     chatUid?: string,
+    chatId?: number,
     forwardTargets?: [],
   ) => void;
   prependMessages: (messages: MappedChatMessage[]) => void;
@@ -62,6 +64,7 @@ export const useChatStore = create<ChatState>((set) => ({
   chatKey: null,
   chatUid: null,
   isReady: false,
+  chatId: null,
   isHide: false,
   replyTarget: null,
   forwardTargets: [],
@@ -98,7 +101,16 @@ export const useChatStore = create<ChatState>((set) => ({
       selectedMessageUids: new Set(),
     })),
 
-  setInitialData: (messages, currentUserId, chatKey, chatType, createdBy, chatKeyUser, chatUid) => {
+  setInitialData: (
+    messages,
+    currentUserId,
+    chatKey,
+    chatType,
+    createdBy,
+    chatKeyUser,
+    chatUid,
+    chatId,
+  ) => {
     set({
       messages,
       currentUserId,
@@ -106,6 +118,7 @@ export const useChatStore = create<ChatState>((set) => ({
       isReady: true,
       chatType,
       chatUid,
+      chatId,
       createdBy,
       chatKeyUser,
     });

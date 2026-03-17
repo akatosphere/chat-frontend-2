@@ -1,9 +1,11 @@
 import { useChatListStore } from "../model/useChatListStore";
 
 export const optimisticSendMessage = ({
+  isFromMe,
   chatKey,
   message,
 }: {
+  isFromMe: boolean;
   chatKey: string;
   message: {
     id: number;
@@ -14,6 +16,7 @@ export const optimisticSendMessage = ({
     from_user_id: string;
   };
 }) => {
+  const unreadMessages = useChatListStore.getState().chatsByKey[chatKey]?.unreadMessages;
   useChatListStore.getState().patchChat(chatKey, {
     lastMessage: {
       id: message.id,
@@ -26,6 +29,6 @@ export const optimisticSendMessage = ({
       from_user: message.from_user_id,
     },
     lastActivityAt: message.created_at,
-    unreadMessages: 0,
+    unreadMessages: isFromMe ? 0 : unreadMessages + 1,
   });
 };

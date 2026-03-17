@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
+import { cn } from "@/shared/shadcn/lib/utils";
 import ProfilePhoto from "@/shared/ui/icons/chat/header/profilePhoto.svg";
 import { Statusbar } from "@/shared/ui/statusbar/ui/statusbar";
 
@@ -11,6 +12,7 @@ type Props = {
   membersCount?: number;
   chatType: ChatType;
   photo: string | null;
+  isInfoHidden?: boolean;
 };
 
 export const ChatHeaderUser = ({
@@ -20,6 +22,7 @@ export const ChatHeaderUser = ({
   isOnline,
   chatType,
   membersCount,
+  isInfoHidden,
 }: Props) => {
   return (
     <div className="border-light-gray desktop:border-none flex h-[60px] min-w-0 flex-1 items-center gap-3 border-b">
@@ -31,7 +34,9 @@ export const ChatHeaderUser = ({
         )}
       </div>
 
-      <button className="flex min-w-0 cursor-pointer flex-col text-left">
+      <button
+        className={cn("flex min-w-0 cursor-pointer flex-col text-left", isInfoHidden && "hidden")}
+      >
         <p className="desktop:text-lg truncate text-sm leading-5 font-medium">{name}</p>
         <Statusbar
           time={wasOnlineAt || null}

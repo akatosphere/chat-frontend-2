@@ -136,6 +136,7 @@ export const useSendMessage = () => {
       );
 
       optimisticSendMessage({
+        isFromMe: true,
         chatKey: tempMessage.chatKey,
         message: {
           id: tempMessage.id,
@@ -177,6 +178,7 @@ export const useSendMessage = () => {
         }
 
         optimisticSendMessage({
+          isFromMe: true,
           chatKey: mapped.chatKey,
           message: {
             id: mapped.id,

@@ -1,6 +1,7 @@
 import { cn } from "@/shared/shadcn/lib/utils";
 
 import { TextBlock } from "../model/messageBlock/types";
+import { useMessageNavigation } from "../model/store/useChatNavigationStore";
 import { SendingStatus } from "../model/types/serverTypes";
 import { MessageTimeAndStatus } from "./messageTimeAndStatus";
 
@@ -19,6 +20,29 @@ export const MessageText: React.FC<MessageTextProps> = ({
   time,
   status,
 }) => {
+  const searchQuery = useMessageNavigation((s) => s.searchQuery);
+  const highlightText = (text: string, query?: string | null) => {
+    if (!query) return text;
+
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+
+    const index = lowerText.indexOf(lowerQuery);
+
+    if (index === -1) return text;
+
+    const before = text.slice(0, index);
+    const match = text.slice(index, index + query.length);
+    const after = text.slice(index + query.length);
+
+    return (
+      <>
+        {before}
+        <span className="text-[#0079ff]">{match}</span>
+        {after}
+      </>
+    );
+  };
   if (!block.text) return null;
   const isEmpty = block.text.trim() === "";
   if (isEmpty) return null;
@@ -32,7 +56,7 @@ export const MessageText: React.FC<MessageTextProps> = ({
       )}
     >
       <p className="subtext emojis-apple desktop:wrap-break-word min-w-0 pr-2 wrap-anywhere whitespace-pre-wrap">
-        {block.text}
+        {highlightText(block.text, searchQuery)}
       </p>
       <div className="flex flex-col justify-end">
         <MessageTimeAndStatus isMine={isMine} time={time} status={status} isEmpty={isEmpty} />

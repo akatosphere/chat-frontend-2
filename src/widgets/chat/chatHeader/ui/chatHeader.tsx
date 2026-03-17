@@ -1,8 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
+import { searchMessages } from "@/features/chat/chat/lib/searchMessages";
+import { useMessageNavigation } from "@/features/chat/chat/model/store/useChatNavigationStore";
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
+import { SearchbarMessages } from "@/features/chat/chat/ui/searchbarMessages";
+import { useDebouncedValue } from "@/shared/lib/hooks/useDebounceValue";
+import { cn } from "@/shared/shadcn/lib/utils";
 import { BackButton } from "@/shared/ui/backButton";
 
 import { ChatHeaderActions } from "./chatHeaderActions";
@@ -15,30 +21,122 @@ type Props = {
     isOnline?: boolean | null;
     membersCount?: number;
     chatType: ChatType;
+    chatUid: string;
     photo: string | null;
   };
   backHref: string;
   profileHref: string;
-  onCallClick: () => void;
-  onSearchClick: () => void;
 };
 
-export const ChatHeader = ({ chat, backHref, onCallClick, onSearchClick, profileHref }: Props) => {
-  return (
-    <header className="desktop:bg-main-light-gray desktop:border-muted desktop:rounded-t-lg desktop:border-b flex h-[60px] items-center justify-between px-4">
-      <BackButton href={backHref} className="desktop:hidden mr-6 shrink-0" width={12} height={20} />
-      <Link href={profileHref} className="flex w-full flex-1 items-center justify-between">
-        <ChatHeaderUser
-          chatType={chat.chatType}
-          name={chat.name}
-          photo={chat.photo}
-          isOnline={chat.isOnline}
-          membersCount={chat.membersCount}
-          wasOnlineAt={chat.wasOnlineAt}
-        />
-      </Link>
+export const ChatHeader = ({ chat, backHref, profileHref }: Props) => {
+  const [searchValue, setSearch] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const resetSearch = useMessageNavigation((s) => s.resetSearch);
+  const resetNavigationStore = useMessageNavigation((s) => s.reset);
+  const [resultsCount, setResultsCount] = useState(0);
+  const [page, setPage] = useState(1);
 
-      <ChatHeaderActions onCallClick={onCallClick} onSearchClick={onSearchClick} />
-    </header>
+  const debounceSearch = useDebouncedValue(searchValue, 400);
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    resetSearch();
+    resetNavigationStore();
+    setPage(1);
+  };
+
+  useEffect(() => {
+    const runSearch = async () => {
+      if (!debounceSearch.trim()) {
+        setResultsCount(0);
+        resetSearch();
+        resetNavigationStore();
+        return;
+      }
+
+      const count = await searchMessages({
+        userUid: chat.chatUid,
+        query: debounceSearch,
+        page: 0,
+      });
+
+      setResultsCount(count ?? 0);
+      setPage(1);
+    };
+
+    runSearch();
+  }, [debounceSearch, chat.chatUid, resetSearch, resetNavigationStore]);
+
+  const handlePageChange = async (direction: number) => {
+    if (!searchValue.trim()) return;
+
+    const nextPage = Math.min(Math.max(1, page + direction), resultsCount);
+
+    setPage(nextPage);
+
+    await searchMessages({
+      userUid: chat.chatUid,
+      query: searchValue,
+      page: nextPage - 1,
+    });
+  };
+
+  const onSearchClick = () => {
+    setIsSearchOpen(!isSearchOpen);
+    setSearch("");
+    resetNavigationStore();
+  };
+
+  const onCloseSearchClick = () => {
+    setIsSearchOpen(false);
+    setSearch("");
+    resetSearch();
+    resetNavigationStore();
+  };
+
+  const onCallClick = () => {};
+  return (
+    <div className="flex flex-col">
+      <header className="desktop:bg-main-light-gray desktop:border-muted desktop:rounded-t-lg desktop:border-b relative flex h-[60px] items-center justify-between px-4">
+        <BackButton
+          href={backHref}
+          className="desktop:hidden mr-6 shrink-0"
+          width={12}
+          height={20}
+        />
+        <Link href={profileHref} className="flex w-full flex-1 items-center justify-between">
+          <ChatHeaderUser
+            chatType={chat.chatType}
+            name={chat.name}
+            photo={chat.photo}
+            isOnline={chat.isOnline}
+            membersCount={chat.membersCount}
+            wasOnlineAt={chat.wasOnlineAt}
+            isInfoHidden={isSearchOpen}
+          />
+        </Link>
+
+        <SearchbarMessages
+          value={searchValue}
+          onChange={handleSearchChange}
+          onPageChange={handlePageChange}
+          onClose={onCloseSearchClick}
+          disablePrev={searchValue === "" || page === 1}
+          disableNext={resultsCount === 0 || page === resultsCount}
+          isSearchOpen={isSearchOpen}
+          className={cn(isSearchOpen ? "flex w-full pl-3" : "hidden")}
+        />
+        <ChatHeaderActions
+          onCallClick={onCallClick}
+          onSearchClick={onSearchClick}
+          className={cn(isSearchOpen ? "hidden" : "flex")}
+        />
+      </header>
+      {isSearchOpen && searchValue && (
+        <div className="bg-primary-accent-light text-gray subtext flex items-center justify-start px-4 py-2">
+          Результаты: {resultsCount > 0 ? `${page} из ${resultsCount}` : "0"}
+        </div>
+      )}
+    </div>
   );
 };

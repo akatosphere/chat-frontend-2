@@ -1,17 +1,19 @@
-// import Image from "next/imag
+"use client";
 
+import { cn } from "@/shared/shadcn/lib/utils";
 import ProfileCall from "@/shared/ui/icons/chat/header/profileCall.svg";
 import ProfileCallInChatDesktop from "@/shared/ui/icons/chat/header/profileCallDesktop.svg";
 import SearchInChat from "@/shared/ui/icons/chat/header/searchWebInChat.svg";
 
 type Props = {
+  className?: string;
   onCallClick: () => void;
   onSearchClick: () => void;
 };
 
-export const ChatHeaderActions = ({ onCallClick, onSearchClick }: Props) => {
+export const ChatHeaderActions = ({ className, onCallClick, onSearchClick }: Props) => {
   return (
-    <div className="flex items-center">
+    <div className={cn("flex items-center", className)}>
       {/* Поиск на десктопе */}
       <button
         aria-label="Поиск"

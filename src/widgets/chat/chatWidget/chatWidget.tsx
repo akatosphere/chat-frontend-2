@@ -1,5 +1,3 @@
-"use client";
-
 import { MappedChatDetails } from "@/entities/chat/lib/mapChat";
 import { UserPreview } from "@/entities/user/model/types";
 import { normalizeChatInfo } from "@/features/chat/chat/lib/normalizeChatInfo";
@@ -40,10 +38,9 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
           wasOnlineAt: chatInfo.wasOnlineAt,
           isOnline: chatInfo.isOnline,
           membersCount: chatInfo.membersCount,
+          chatUid: chatUid,
           chatType: chatType,
         }}
-        onCallClick={() => {}}
-        onSearchClick={() => {}}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Chat

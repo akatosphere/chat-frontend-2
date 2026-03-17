@@ -6,7 +6,7 @@ import { getMessagesClient } from "@/entities/chat/api/getMessagesClient";
 
 import { ChatMessageList } from "../model/types/serverTypes";
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 5;
 
 const extractPageFromUrl = (url: string | null | undefined): number | null => {
   if (!url) return null;

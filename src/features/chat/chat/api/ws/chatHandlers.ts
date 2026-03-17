@@ -96,6 +96,7 @@ export const handleCreateTextMessage: WSHandler = (data) => {
     chatListStore.upsertChat(newChat);
   } else if (!isMine) {
     optimisticSendMessage({
+      isFromMe: false,
       chatKey: newMessage.chatKey,
       message: {
         id: newMessage.id,
@@ -116,7 +117,8 @@ export const handleCreateTextMessage: WSHandler = (data) => {
 
 export const handleReadStatus: WSHandler = (data) => {
   if (!data.object) return;
-
+  const chatKey = data.object.chat_data.chat_key;
+  console.log("handleReadStatus", data);
   const updatedMsg = mapChatMessage(data.object as ChatMessage);
   if (!updatedMsg.uid) return;
 
@@ -125,6 +127,25 @@ export const handleReadStatus: WSHandler = (data) => {
       msg.uid === updatedMsg.uid ? { ...msg, isNew: false } : msg,
     ),
   }));
+
+  const currentChat = useChatListStore.getState().chatsByKey[chatKey || ""];
+
+  if (!currentChat) return;
+  const patch: Partial<ChatListItem> = {
+    unreadMessages: Math.max(0, currentChat.unreadMessages - 1),
+  };
+
+  if (currentChat.lastMessage) {
+    patch.lastMessage = {
+      ...currentChat.lastMessage,
+      new: updatedMsg.id === currentChat.lastMessage?.id ? false : true,
+    };
+  }
+
+  useChatListStore.getState().patchChat(chatKey, patch);
+
+  console.log("handleReadStatus patched", useChatListStore.getState().chatsByKey[chatKey]);
+
   return;
 };
 

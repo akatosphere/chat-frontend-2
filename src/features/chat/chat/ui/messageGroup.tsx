@@ -10,6 +10,7 @@ type MessageGroupProps = {
   messages: MappedChatMessage[];
   currentUserId: string;
   passDataAttributes?: boolean;
+  chatId?: number;
   isGroup?: boolean;
 };
 
@@ -17,6 +18,7 @@ const messageGroupBase: React.FC<MessageGroupProps> = ({
   label,
   messages,
   currentUserId,
+  chatId,
   isGroup = false,
   passDataAttributes = false,
 }) => {
@@ -41,6 +43,8 @@ const messageGroupBase: React.FC<MessageGroupProps> = ({
             isLastInGroup={isLastInGroup}
             {...(passDataAttributes && {
               "data-message-uid": msg.uid,
+              "data-message-id": msg.id,
+              "data-chat-id": chatId,
               "data-chat-key": msg.chatKey,
               "data-is-from-current-user": String(msg.fromUser.uid === currentUserId),
               "data-is-new": String(msg.isNew),
