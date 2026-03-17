@@ -26,7 +26,6 @@ export const buildMessageBlocks = (msg: MappedChatMessage): MessageBlock[] => {
   }
 
   if (msg.filesList.length > 0) {
-    console.log(msg.filesList);
     blocks.push({
       type: "media",
       items: msg.filesList.map((file) => ({

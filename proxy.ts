@@ -31,6 +31,8 @@ function isTokenExpired(token: string): boolean {
 }
 
 async function refreshTokens(refreshToken: string) {
+  console.log("REFRESH TOKEN");
+
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login/refresh/token/`,

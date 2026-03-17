@@ -95,12 +95,6 @@ export const sendWSRequest = <TResponse>(
 ): Promise<TResponse> => {
   const socket = getSocket();
 
-  if (!socket || socket.readyState !== WebSocket.OPEN) {
-    // Вместо простого throw можно сделать более умную логику (например, очередь)
-    // Но для начала — просто ошибка, как и было
-    return Promise.reject(new Error("WebSocket is not connected"));
-  }
-
   const request_uid = requestUid || uuidv4();
 
   const message = {
@@ -116,6 +110,7 @@ export const sendWSRequest = <TResponse>(
   if (!socket || socket.readyState !== WebSocket.OPEN) {
     console.log(`⏳ WS: Socket not ready. Queuing action: ${action}`);
     requestQueue.push(message);
+    scheduleReconnect();
   } else {
     // Если всё ок — отправляем сразу
     socket.send(JSON.stringify(message));
@@ -125,6 +120,7 @@ export const sendWSRequest = <TResponse>(
 };
 
 const scheduleReconnect = () => {
+  console.log("currentToken from connectWS: ", currentToken);
   if (!currentToken) return;
 
   clearReconnectTimeout();
@@ -140,6 +136,8 @@ const scheduleReconnect = () => {
 
 export const connectWS = (accessToken: string) => {
   // защита от лишних connect
+  console.log("accessTOken from connectWS: ", accessToken);
+
   if (
     socket &&
     currentToken === accessToken &&

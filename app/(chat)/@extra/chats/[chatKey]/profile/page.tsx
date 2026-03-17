@@ -18,7 +18,6 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   if (!response.success) {
     return <div>Ошибка загрузки профиля</div>;
   }
-  console.log("чат: ", response.data);
 
   if (chatType == "chat") {
     const contacts = await getContactsServer();

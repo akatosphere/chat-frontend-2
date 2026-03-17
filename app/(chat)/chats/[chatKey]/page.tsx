@@ -24,7 +24,6 @@ export default async function ChatPage({ params }: ChatPageProps) {
     ordering: "-created_at",
   });
 
-  console.log("messagesResult", messagesResult);
   const messages = messagesResult.success ? mapChatMessages(messagesResult.data.results) : [];
   return (
     <>

@@ -26,8 +26,7 @@ export const checkAvatarParams = async (
     if (width < AVATAR_PARAMS.minWidth || height < AVATAR_PARAMS.minHeight) {
       return { isValid: false, error: "Минимальный размер изображения 320x320px" };
     }
-  } catch (error) {
-    console.log(error);
+  } catch {
     return { isValid: false, error: "Не удалось прочитать изображение" };
   }
 
