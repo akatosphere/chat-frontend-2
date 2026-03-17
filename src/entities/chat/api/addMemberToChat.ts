@@ -30,7 +30,6 @@ export const addMembersToChat = async (
       uid_users_list: payload.uid_users_list,
     },
   };
-  console.log("wsPayload: ", wsPayload);
   const response = await sendWSRequest<{
     request_uid: string;
     status: "OK" | "error";
@@ -42,6 +41,5 @@ export const addMembersToChat = async (
     throw new Error(response.error || "Ошибка добавления участников");
   }
 
-  console.log("response.object: ", response.object);
   return response.object;
 };

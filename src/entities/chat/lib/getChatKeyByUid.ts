@@ -5,7 +5,6 @@ export const getChatByUid = (
   chatsByKey: Record<string, ChatListItem>,
 ): ChatListItem | undefined => {
   const foundEntry = Object.entries(chatsByKey).find(([_, chat]) => {
-    console.log("условие: ", chat.member.uid == uid);
     return chat.member.uid == uid;
   });
 

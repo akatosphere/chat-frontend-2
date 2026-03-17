@@ -10,14 +10,10 @@ export const useParticipantsSync = (
   chatKey: string,
   initialData?: ChatParticipantListResponse | null,
 ) => {
-  console.log("синх участников");
-  console.log("chatKey: ", chatKey);
-  console.log("initialData: ", initialData);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useParticipantsQuery(
     chatKey,
     initialData,
   );
-  console.log("data: ", data);
   const setParticipants = useParticipantsStore((s) => s.setParticipants);
   const reset = useParticipantsStore((s) => s.reset);
 

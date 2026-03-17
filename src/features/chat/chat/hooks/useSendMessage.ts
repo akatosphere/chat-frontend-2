@@ -30,7 +30,6 @@ export const useSendMessage = () => {
     async (text: string, images: PendingMedia[] = []) => {
       // if (!text.trim() && images.length === 0) return; // не отправляем пустое
       if (!currentUserId || !chatKey) return;
-      console.log(images);
 
       const requestUid = uuidv4();
       const now = Date.now() / 1000;
@@ -167,7 +166,6 @@ export const useSendMessage = () => {
           updated[tempIndex] = mapped;
           useChatStore.setState({ messages: updated });
         } else {
-          console.log("addMessage", mapped);
           addMessage(mapped);
         }
 
