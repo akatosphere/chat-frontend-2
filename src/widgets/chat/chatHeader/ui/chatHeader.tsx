@@ -22,6 +22,7 @@ type Props = {
   onCallClick: () => void;
   onSearchClick: () => void;
   join?: boolean;
+  chatKey?: string;
 };
 
 export const ChatHeader = ({
@@ -31,6 +32,7 @@ export const ChatHeader = ({
   onSearchClick,
   profileHref,
   join = false,
+  chatKey,
 }: Props) => {
   return (
     <header className="desktop:bg-main-light-gray desktop:border-muted desktop:rounded-t-lg desktop:border-b flex h-15 items-center justify-between px-4">
@@ -51,6 +53,7 @@ export const ChatHeader = ({
         onSearchClick={onSearchClick}
         join={join}
         chatType={chat.chatType}
+        chatKey={chatKey}
       />
     </header>
   );

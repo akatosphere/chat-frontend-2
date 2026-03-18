@@ -28,6 +28,7 @@ export type ModalPayloads = {
   };
   chatPreview: {
     chatKey: string;
+    token: string;
     previewData: ChatPreview;
   };
   //новые модалки здесь

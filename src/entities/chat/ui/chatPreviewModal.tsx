@@ -1,4 +1,5 @@
 import Close from "@icons/close.svg";
+import { useRouter } from "next/navigation";
 
 import { pluralize } from "@/shared/lib/pluralize";
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
@@ -11,6 +12,7 @@ import {
 import { Button } from "@/shared/shadcn/ui/button";
 import { InfoItem } from "@/shared/ui/infoItems/infoItem";
 
+import { joinByInvite } from "../api/ws/joinByInvite";
 import { getChatTypeLight } from "../lib/getChatTypeLight";
 import { ChatPreview } from "../model/types";
 import { Avatar } from "./avatar";
@@ -20,8 +22,8 @@ type ChatPreviewModalProps = {
   chatKey: string;
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
   previewData: ChatPreview;
+  token: string;
 };
 
 export const ChatPreviewModal: React.FC<ChatPreviewModalProps> = ({
@@ -30,9 +32,19 @@ export const ChatPreviewModal: React.FC<ChatPreviewModalProps> = ({
   isOpen,
   onClose,
   previewData,
-  // onConfirm,
+  token,
 }) => {
   const chatType = getChatTypeLight(chatKey);
+  const router = useRouter();
+  const onJoin = async () => {
+    try {
+      await joinByInvite(chatKey, token);
+      onClose();
+      router.push(`/chats/${chatKey}`);
+    } catch {
+      alert("ошибка вступления в чат");
+    }
+  };
   return (
     <ModalDialog className={cn(className, "px-2 pb-6")} open={isOpen} onOpenChange={onClose}>
       <AlertDialogHeader className="relative flex w-full items-center justify-between gap-2">
@@ -63,7 +75,9 @@ export const ChatPreviewModal: React.FC<ChatPreviewModalProps> = ({
               ></InfoItem>
             </div>
           )}
-          <Button>{chatType === "group" ? "Вступить в группу" : "Подписаться"}</Button>
+          <Button onClick={onJoin}>
+            {chatType === "group" ? "Вступить в группу" : "Подписаться"}
+          </Button>
         </div>
       </AlertDialogFooter>
     </ModalDialog>

@@ -21,7 +21,9 @@ export const handleInviteLinkClick = async (url: string, router: AppRouterInstan
   const chatResult = await getChat(chatKey, chatType);
 
   if (!chatResult.success) {
-    useModalStore.getState().openModal("chatPreview", { chatKey, previewData: previewResult.data });
+    useModalStore
+      .getState()
+      .openModal("chatPreview", { chatKey, previewData: previewResult.data, token: token });
     return;
   }
 

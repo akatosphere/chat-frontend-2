@@ -1,5 +1,10 @@
+"use client";
+
 // import Image from "next/imag
 
+import { useSearchParams } from "next/navigation";
+
+import { joinByInvite } from "@/entities/chat/api/ws/joinByInvite";
 import { ChatType } from "@/entities/chat/model/types";
 import { Button } from "@/shared/shadcn/ui/button";
 import ProfileCall from "@/shared/ui/icons/chat/header/profileCall.svg";
@@ -11,6 +16,7 @@ type Props = {
   onSearchClick: () => void;
   join?: boolean;
   chatType: ChatType;
+  chatKey?: string;
 };
 
 export const ChatHeaderActions = ({
@@ -18,12 +24,30 @@ export const ChatHeaderActions = ({
   onSearchClick,
   join = false,
   chatType,
+  chatKey,
 }: Props) => {
+  const token = useSearchParams()?.get("token") ?? undefined;
+  const onJoin =
+    chatKey && token
+      ? async () => {
+          try {
+            await joinByInvite(chatKey, token);
+          } catch {
+            // ошибка вступления
+          }
+        }
+      : () => {};
   return (
     <div className="flex items-center">
       {join ? (
         <div className="flex gap-3">
-          <Button size="sm">
+          <Button
+            size="sm"
+            onClick={() => {
+              console.log("кнопка нажата");
+              onJoin();
+            }}
+          >
             {chatType === "private-group" || chatType === "public-group"
               ? "Вступить"
               : "Подписаться"}
