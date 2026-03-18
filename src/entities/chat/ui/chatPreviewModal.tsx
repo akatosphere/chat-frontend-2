@@ -11,11 +11,13 @@ import {
 import { Button } from "@/shared/shadcn/ui/button";
 import { InfoItem } from "@/shared/ui/infoItems/infoItem";
 
+import { getChatTypeLight } from "../lib/getChatTypeLight";
 import { ChatPreview } from "../model/types";
 import { Avatar } from "./avatar";
 
 type ChatPreviewModalProps = {
   className?: string;
+  chatKey: string;
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -24,13 +26,15 @@ type ChatPreviewModalProps = {
 
 export const ChatPreviewModal: React.FC<ChatPreviewModalProps> = ({
   className,
+  chatKey,
   isOpen,
   onClose,
   previewData,
   // onConfirm,
 }) => {
+  const chatType = getChatTypeLight(chatKey);
   return (
-    <ModalDialog className={cn(className, "p-2 pb-6")} open={isOpen} onOpenChange={onClose}>
+    <ModalDialog className={cn(className, "px-2 pb-6")} open={isOpen} onOpenChange={onClose}>
       <AlertDialogHeader className="relative flex w-full items-center justify-between gap-2">
         <Close
           className="absolute top-1 right-1 h-3 w-3 cursor-pointer text-black transition duration-200 hover:opacity-80"
@@ -38,9 +42,13 @@ export const ChatPreviewModal: React.FC<ChatPreviewModalProps> = ({
         />
         <div className="mt-4 flex w-full flex-col items-center justify-center gap-3">
           <Avatar avatarUrl={previewData.avatarUrl} size="lg" variant="chat" />
-          <div className="flex w-full flex-col items-center justify-center gap-1">
-            <AlertDialogTitle className="title">{previewData.name}</AlertDialogTitle>
-            <p className="subtext text-gray">{`${previewData.participantsCount} ${pluralize(previewData.participantsCount, "участник", "участника", "участников")}`}</p>
+          <div className="flex w-full flex-col items-center justify-center gap-1 px-8">
+            <AlertDialogTitle className="title text-center">{previewData.name}</AlertDialogTitle>
+            <p className="subtext text-gray">
+              {chatType === "group"
+                ? `${previewData.participantsCount} ${pluralize(previewData.participantsCount, "участник", "участника", "участников")}`
+                : `${previewData.participantsCount - 1} ${pluralize(previewData.participantsCount - 1, "подписчик", "подписчика", "подписчиков")}`}
+            </p>
           </div>
         </div>
       </AlertDialogHeader>
@@ -55,7 +63,7 @@ export const ChatPreviewModal: React.FC<ChatPreviewModalProps> = ({
               ></InfoItem>
             </div>
           )}
-          <Button>Вступить в группу</Button>
+          <Button>{chatType === "group" ? "Вступить в группу" : "Подписаться"}</Button>
         </div>
       </AlertDialogFooter>
     </ModalDialog>
