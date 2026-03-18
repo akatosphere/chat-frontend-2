@@ -42,5 +42,4 @@ export type InviteLinkBlock = {
   type: "inviteLink";
   chatKey: string;
   token: string;
-  isPrivate: boolean;
 };

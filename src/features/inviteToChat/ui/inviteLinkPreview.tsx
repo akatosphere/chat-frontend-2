@@ -9,10 +9,9 @@ import { Avatar } from "@/entities/chat/ui/avatar";
 type InviteLinkPreviewProps = {
   chatKey: string;
   token: string;
-  isPrivate: boolean;
 };
 
-export const InviteLinkPreview = ({ chatKey, token, isPrivate }: InviteLinkPreviewProps) => {
+export const InviteLinkPreview = ({ chatKey, token }: InviteLinkPreviewProps) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["chatPreview", token],
     queryFn: async () => {
@@ -48,7 +47,7 @@ export const InviteLinkPreview = ({ chatKey, token, isPrivate }: InviteLinkPrevi
 
   return (
     <div className="mx-3 mt-1.5">
-      <Link href={`/chats/${isPrivate ? "join/" : ""}${chatKey}?token=${token}`}>
+      <Link href={`/chats/${chatKey}?token=${token}`}>
         <div className="border-primary flex items-start gap-1 rounded border-l-4 bg-white/50 p-1 px-2.5">
           <Avatar avatarUrl={data.avatarUrl} size="sm" variant="chat" />
           <div className="flex flex-col gap-0.5">

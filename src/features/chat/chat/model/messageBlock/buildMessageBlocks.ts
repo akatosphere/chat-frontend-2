@@ -48,7 +48,6 @@ export const buildMessageBlocks = (msg: MappedChatMessage): MessageBlock[] => {
         type: "inviteLink",
         chatKey: inviteData.chatKey,
         token: inviteData.token,
-        isPrivate: inviteData.isPrivate,
       });
     }
 

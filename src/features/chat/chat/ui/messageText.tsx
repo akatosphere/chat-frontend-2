@@ -11,13 +11,6 @@ import { SendingStatus } from "../model/types/serverTypes";
 const urlComponent = (match: string, key: number) => {
   const inviteData = parseInviteUrl(match);
   if (inviteData) {
-    if (inviteData.isPrivate) {
-      return (
-        <Link key={key} href={`/chats/join/${inviteData.chatKey}?token=${inviteData.token}`}>
-          {match}
-        </Link>
-      );
-    }
     return (
       <Link key={key} href={`/chats/${inviteData.chatKey}?token=${inviteData.token}`}>
         {match}
