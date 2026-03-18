@@ -1,27 +1,40 @@
-import Link from "next/link";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 import { LinkIt, urlRegex } from "react-linkify-it";
 
 import { parseInviteUrl } from "@/entities/chat/lib/parseInviteUrl";
 import { StatusIcon } from "@/entities/chat/ui/statusIcon";
 import { cn } from "@/shared/shadcn/lib/utils";
 
+import { handleInviteLinkClick } from "../lib/handleInviteLinkClick";
 import { TextBlock } from "../model/messageBlock/types";
 import { SendingStatus } from "../model/types/serverTypes";
 
-const urlComponent = (match: string, key: number) => {
-  const inviteData = parseInviteUrl(match);
-  if (inviteData) {
+const createUrlComponent = (router: AppRouterInstance) => {
+  const urlComponent = (match: string, key: number) => {
+    const inviteData = parseInviteUrl(match);
+    if (inviteData) {
+      return (
+        <a
+          key={key}
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            handleInviteLinkClick(match, router);
+          }}
+        >
+          {match}
+        </a>
+      );
+    }
     return (
-      <Link key={key} href={`/chats/${inviteData.chatKey}?token=${inviteData.token}`}>
+      <a key={key} href={match} target="_blank" rel="noopener noreferrer">
         {match}
-      </Link>
+      </a>
     );
-  }
-  return (
-    <a key={key} href={match} target="_blank" rel="noopener noreferrer">
-      {match}
-    </a>
-  );
+  };
+  urlComponent.displayName = "urlComponent";
+  return urlComponent;
 };
 
 type MessageTextProps = {
@@ -41,6 +54,7 @@ export const MessageText: React.FC<MessageTextProps> = ({
   status,
   hasNameAbove,
 }) => {
+  const router = useRouter();
   const isEmpty = block.text.trim() === "";
 
   return (
@@ -55,7 +69,7 @@ export const MessageText: React.FC<MessageTextProps> = ({
         className,
       )}
     >
-      <LinkIt component={urlComponent} regex={urlRegex}>
+      <LinkIt component={createUrlComponent(router)} regex={urlRegex}>
         <p className="subtext emojis-apple min-w-0 pr-2 break-all whitespace-pre-wrap">
           {block.text}
         </p>

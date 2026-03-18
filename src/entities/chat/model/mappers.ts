@@ -1,3 +1,4 @@
+import { ChatPreview, ChatPreviewDto } from "../model/types";
 import { ChatListItem, ChatListItemDto } from "./types";
 
 export const mapChatListItem = (dto: ChatListItemDto): ChatListItem => ({
@@ -24,3 +25,10 @@ export const mapChatListItem = (dto: ChatListItemDto): ChatListItem => ({
 });
 
 export const mapChatList = (dtos: ChatListItemDto[]) => dtos.map(mapChatListItem);
+
+export const mapChatPreview = (dto: ChatPreviewDto): ChatPreview => ({
+  name: dto.name,
+  description: dto.description,
+  participantsCount: dto.participants_count,
+  avatarUrl: dto.avatar_webp_url,
+});

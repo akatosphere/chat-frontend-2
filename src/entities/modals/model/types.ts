@@ -24,6 +24,9 @@ export type ModalPayloads = {
     onConfirm: () => void;
     chatType: "group" | "channel" | "chat";
   };
+  chatPreview: {
+    chatKey: string;
+  };
   //новые модалки здесь
 };
 

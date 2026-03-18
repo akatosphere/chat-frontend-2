@@ -1,0 +1,29 @@
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
+import { getChat } from "@/entities/chat/api/getChat";
+import { getChatPreview } from "@/entities/chat/api/getChatPreview";
+import { parseInviteUrl } from "@/entities/chat/lib/parseInviteUrl";
+import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
+
+export const handleInviteLinkClick = async (url: string, router: AppRouterInstance) => {
+  const inviteData = parseInviteUrl(url);
+  if (!inviteData) return null;
+
+  const { chatKey, token } = inviteData;
+
+  const previewResult = await getChatPreview(token);
+  if (!previewResult.success) {
+    console.warn("ссылка невалидна");
+    return null;
+  }
+
+  const chatType = chatKey.startsWith("channel_") ? "channel" : "group";
+  const chatResult = await getChat(chatKey, chatType);
+
+  if (!chatResult.success) {
+    useModalStore.getState().openModal("chatPreview", { chatKey });
+    return;
+  }
+
+  router.push(`/chats/${chatKey}`);
+};
