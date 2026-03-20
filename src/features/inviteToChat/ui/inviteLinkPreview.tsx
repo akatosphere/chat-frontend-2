@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { getChatPreview } from "@/entities/chat/api/getChatPreview";
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { handleInviteLinkClick } from "@/features/chat/chat/lib/handleInviteLinkClick";
+import { useToast } from "@/shared/toast/ui/toastProvider";
 
 type InviteLinkPreviewProps = {
   chatKey: string;
@@ -14,6 +15,7 @@ type InviteLinkPreviewProps = {
 
 export const InviteLinkPreview = ({ chatKey, token }: InviteLinkPreviewProps) => {
   const router = useRouter();
+  const { showToast } = useToast();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["chatPreview", token],
     queryFn: async () => {
@@ -51,7 +53,13 @@ export const InviteLinkPreview = ({ chatKey, token }: InviteLinkPreviewProps) =>
     <div className="mx-3 mt-1.5">
       <div
         className="cursor-pointer"
-        onClick={() => handleInviteLinkClick(`/chats/${chatKey}?token=${token}`, router)}
+        onClick={() =>
+          handleInviteLinkClick({
+            url: `/chats/${chatKey}?token=${token}`,
+            router: router,
+            showToast: showToast,
+          })
+        }
       >
         <div className="border-primary flex items-start gap-1 rounded border-l-4 bg-white/50 p-1 px-2.5">
           <Avatar avatarUrl={data.avatarUrl} size="sm" variant="chat" />

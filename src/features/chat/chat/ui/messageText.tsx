@@ -5,12 +5,22 @@ import { LinkIt, urlRegex } from "react-linkify-it";
 import { parseInviteUrl } from "@/entities/chat/lib/parseInviteUrl";
 import { StatusIcon } from "@/entities/chat/ui/statusIcon";
 import { cn } from "@/shared/shadcn/lib/utils";
+import { useToast } from "@/shared/toast/ui/toastProvider";
 
 import { handleInviteLinkClick } from "../lib/handleInviteLinkClick";
 import { TextBlock } from "../model/messageBlock/types";
 import { SendingStatus } from "../model/types/serverTypes";
 
-const createUrlComponent = (router: AppRouterInstance) => {
+const createUrlComponent = (
+  router: AppRouterInstance,
+  showToast: (
+    message: string,
+    icon: {
+      mobile: string;
+      desktop?: string | undefined;
+    },
+  ) => void,
+) => {
   const urlComponent = (match: string, key: number) => {
     const inviteData = parseInviteUrl(match);
     if (inviteData) {
@@ -20,7 +30,11 @@ const createUrlComponent = (router: AppRouterInstance) => {
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            handleInviteLinkClick(match, router);
+            handleInviteLinkClick({
+              url: match,
+              router: router,
+              showToast: showToast,
+            });
           }}
         >
           {match}
@@ -54,6 +68,7 @@ export const MessageText: React.FC<MessageTextProps> = ({
   status,
   hasNameAbove,
 }) => {
+  const { showToast } = useToast();
   const router = useRouter();
   const isEmpty = block.text.trim() === "";
 
@@ -69,7 +84,7 @@ export const MessageText: React.FC<MessageTextProps> = ({
         className,
       )}
     >
-      <LinkIt component={createUrlComponent(router)} regex={urlRegex}>
+      <LinkIt component={createUrlComponent(router, showToast)} regex={urlRegex}>
         <p className="subtext emojis-apple min-w-0 pr-2 break-all whitespace-pre-wrap">
           {block.text}
         </p>

@@ -5,7 +5,19 @@ import { getChatPreview } from "@/entities/chat/api/getChatPreview";
 import { parseInviteUrl } from "@/entities/chat/lib/parseInviteUrl";
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
 
-export const handleInviteLinkClick = async (url: string, router: AppRouterInstance) => {
+type Params = {
+  url: string;
+  router: AppRouterInstance;
+  showToast: (
+    message: string,
+    icon: {
+      mobile: string;
+      desktop?: string | undefined;
+    },
+  ) => void;
+};
+
+export const handleInviteLinkClick = async ({ url, router, showToast }: Params) => {
   const inviteData = parseInviteUrl(url);
   if (!inviteData) return null;
 
@@ -13,7 +25,10 @@ export const handleInviteLinkClick = async (url: string, router: AppRouterInstan
 
   const previewResult = await getChatPreview(token);
   if (!previewResult.success) {
-    console.warn("ссылка невалидна");
+    showToast("Срок действия ссылки истек", {
+      mobile: "/icons/toast/block.svg",
+      desktop: "/icons/toast/block.svg",
+    });
     return null;
   }
 
