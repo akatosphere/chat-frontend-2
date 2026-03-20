@@ -1,6 +1,6 @@
 import Close from "@icons/close.svg";
-import { useRouter } from "next/navigation";
 
+import { useJoinToChat } from "@/features/joinToChat/lib/useJoinToChat";
 import { pluralize } from "@/shared/lib/pluralize";
 import { ModalDialog } from "@/shared/modalDialog/ui/modalDialog";
 import { cn } from "@/shared/shadcn/lib/utils";
@@ -12,7 +12,6 @@ import {
 import { Button } from "@/shared/shadcn/ui/button";
 import { InfoItem } from "@/shared/ui/infoItems/infoItem";
 
-import { joinByInvite } from "../api/ws/joinByInvite";
 import { getChatTypeLight } from "../lib/getChatTypeLight";
 import { ChatPreview } from "../model/types";
 import { Avatar } from "./avatar";
@@ -35,16 +34,7 @@ export const ChatPreviewModal: React.FC<ChatPreviewModalProps> = ({
   token,
 }) => {
   const chatType = getChatTypeLight(chatKey);
-  const router = useRouter();
-  const onJoin = async () => {
-    try {
-      await joinByInvite(chatKey, token);
-      onClose();
-      router.push(`/chats/${chatKey}`);
-    } catch {
-      alert("ошибка вступления в чат");
-    }
-  };
+  const { onJoin, isLoading } = useJoinToChat({ chatKey, token, closeModal: onClose });
   return (
     <ModalDialog className={cn(className, "px-2 pb-6")} open={isOpen} onOpenChange={onClose}>
       <AlertDialogHeader className="relative flex w-full items-center justify-between gap-2">
@@ -75,7 +65,7 @@ export const ChatPreviewModal: React.FC<ChatPreviewModalProps> = ({
               ></InfoItem>
             </div>
           )}
-          <Button onClick={onJoin}>
+          <Button onClick={onJoin} disabled={isLoading}>
             {chatType === "group" ? "Вступить в группу" : "Подписаться"}
           </Button>
         </div>

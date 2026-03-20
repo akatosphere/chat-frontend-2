@@ -42,5 +42,5 @@ export const handleInviteLinkClick = async ({ url, router, showToast }: Params) 
     return;
   }
 
-  router.push(`/chats/${chatKey}`);
+  router.push(`/chats/${chatKey}?token=${token}`);
 };

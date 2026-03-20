@@ -16,7 +16,7 @@ type InviteLinkPreviewProps = {
 export const InviteLinkPreview = ({ chatKey, token }: InviteLinkPreviewProps) => {
   const router = useRouter();
   const { showToast } = useToast();
-  const { data, isLoading, isError } = useQuery({
+  const { data, isError } = useQuery({
     queryKey: ["chatPreview", token],
     queryFn: async () => {
       const response = await getChatPreview(token);
@@ -31,19 +31,7 @@ export const InviteLinkPreview = ({ chatKey, token }: InviteLinkPreviewProps) =>
 
   if (isError) return null;
 
-  if (isLoading || !data) {
-    return (
-      <div className="mx-3 mt-1.5">
-        <div className="flex animate-pulse items-start gap-1 rounded border-l-4 border-[#9587F5] bg-white/50 p-1 px-2.5">
-          <div className="h-10 w-10 shrink-0 rounded-full bg-gray-200" />
-          <div className="flex flex-col gap-1">
-            <div className="h-4 w-24 rounded bg-gray-200" />
-            <div className="h-4 w-32 rounded bg-gray-200" />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  if (!data) return null;
 
   const isChannel = chatKey.startsWith("channel");
   const subtitle =
