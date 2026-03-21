@@ -1,9 +1,7 @@
-"use server";
-
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function POST() {
+export const POST = async () => {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get("refresh_token")?.value;
   if (!refreshToken) {
@@ -41,4 +39,4 @@ export async function POST() {
   } catch {
     return NextResponse.json({ error: "Серверная ошибка" }, { status: 500 });
   }
-}
+};

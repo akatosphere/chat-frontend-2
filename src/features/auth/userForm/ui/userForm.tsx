@@ -53,7 +53,7 @@ export const UserForm: React.FC<UserFormProps> = ({ className }) => {
     setUser(data);
     reset();
     /* eslint-disable-next-line */
-    document.cookie = "is_filled=true; path=/";
+    document.cookie = `is_filled=true; path=/; Max-Age=${60 * 60 * 24 * 30}`;
     router.push("/auth/success");
   };
 
