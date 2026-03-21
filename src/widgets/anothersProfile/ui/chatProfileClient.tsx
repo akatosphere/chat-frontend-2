@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
@@ -14,7 +15,12 @@ import { getProfileHeaderText } from "../lib/getProfileHeaderText";
 import { useChatProfileContextMenu } from "../lib/useChatProfileContextMenu";
 import { useProfileClose } from "../lib/useProfileClose";
 import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
-import { ChatProfile } from "./sections/chatProfile";
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const ChatProfile = dynamic(
+  () => import("./sections/chatProfile").then((m) => ({ default: m.ChatProfile })),
+  { ssr: false },
+);
 import { ChatSettingsPage } from "./sections/chatSettingsPage";
 import { InvitePage } from "./sections/invitePage";
 import { FilesPage } from "./tabs/filesPage";
@@ -103,7 +109,7 @@ export const ChatProfileClient: React.FC<ChatProfileClientProps> = ({
       ) : activeSection === "settings" ? (
         <ChatSettingsPage chatKey={chatKey} chatInfo={displayData} />
       ) : activeSection === "invite" ? (
-        <InvitePage />
+        <InvitePage chatKey={chatKey} />
       ) : (
         (() => {
           switch (activeTab) {

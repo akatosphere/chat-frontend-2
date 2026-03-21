@@ -1,10 +1,10 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 import { addMembersToChat } from "@/entities/chat/api/addMemberToChat";
+import { ChatParticipantListResponse } from "@/entities/chat/model/types";
 import { useChatInfoStore } from "@/entities/chat/model/useChatInfoStore";
-import { useChatStore } from "@/entities/chat/model/useChatStore";
 import { useContactsSync } from "@/entities/contact/lib/useContactsSync";
 import { useContactStore } from "@/entities/contact/model/store";
 import { useSelectContactsStore } from "@/features/contacts/model/SelectContactsStore";
@@ -20,16 +20,15 @@ import { useInvitePageLogic } from "../../lib/useInvitePageLogic";
 import { useAnothersProfileUIStore } from "../../model/anothersProfileUIStore";
 
 type InvitePageProps = {
-  className?: string;
+  chatKey: string;
 };
 
-export const InvitePage: React.FC<InvitePageProps> = () => {
+export const InvitePage: React.FC<InvitePageProps> = ({ chatKey }) => {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
   const { fetchNextPage, hasNextPage, isFetchingNextPage } = useContactsSync();
   const { contacts, isInitialized } = useContactStore();
-  const chatKey = useChatStore((s) => s.chatKey);
   const selectedContacts = useSelectContactsStore(useShallow((s) => s.selected));
   const setActiveSection = useAnothersProfileUIStore((s) => s.setActiveSection);
 
@@ -55,15 +54,52 @@ export const InvitePage: React.FC<InvitePageProps> = () => {
         uid_users_list: selectedContacts.map((c) => c.systemUid),
       });
 
-      const addedCount = response.added_users.length;
+      const addedUids = new Set(response.added_users.map((u) => u.uid));
+      const addedCount = addedUids.size;
 
-      // Инвалидируем query-кэш участников, чтобы при следующем маунте данные рефетчились с сервера
-      await queryClient.invalidateQueries({ queryKey: ["participants", chatKey] });
+      const newParticipants = selectedContacts
+        .filter((c) => addedUids.has(c.systemUid))
+        .map((c) => ({
+          uid: c.systemUid,
+          firstName: c.firstName,
+          lastName: c.lastName,
+          fullName: c.fullName ?? `${c.firstName} ${c.lastName}`.trim(),
+          avatarUrl: c.avatarUrl,
+          avatarWebpUrl: c.avatarWebpUrl,
+          isDeleted: false,
+          isOwner: false,
+          isBlocked: false,
+          isOnline: c.isOnline,
+          lastSeenAt: c.lastSeenAt,
+          isInContacts: true,
+        }));
+
+      queryClient.setQueryData(
+        ["participants", chatKey],
+        (oldData: InfiniteData<ChatParticipantListResponse> | undefined) => {
+          if (!oldData) return oldData;
+          const [firstPage, ...restPages] = oldData.pages;
+          return {
+            ...oldData,
+            pages: [
+              {
+                ...firstPage,
+                count: (firstPage?.count ?? 0) + addedCount,
+                results: [...(firstPage?.results ?? []), ...newParticipants],
+              },
+              ...restPages,
+            ],
+          };
+        },
+      );
 
       useChatInfoStore.getState().patchChatInfo(chatKey, {
         membersCount:
           (useChatInfoStore.getState().chatInfoByKey[chatKey]?.membersCount ?? 0) + addedCount,
       });
+
+      // Инвалидируем кэш для фоновой синхронизации с сервером
+      queryClient.invalidateQueries({ queryKey: ["participants", chatKey] });
 
       setActiveSection("main");
     } catch {
