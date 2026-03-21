@@ -23,6 +23,7 @@ export type ModalPayloads = {
     participantName: string;
     onConfirm: () => void;
     chatType: "group" | "channel" | "chat";
+    isLoading: boolean;
   };
   //новые модалки здесь
 };

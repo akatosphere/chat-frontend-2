@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
 
 import { removeMembersFromChat } from "@/entities/chat/api/removeMembersFromChat";
+import { useChatInfoStore } from "@/entities/chat/model/useChatInfoStore";
 import { useParticipantsStore } from "@/entities/chat/model/useParticipantsStore";
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
 import { useToast } from "@/shared/toast/ui/toastProvider";
@@ -38,6 +39,9 @@ export const useRemoveParticipant = ({
         });
         removeParticipants([participantUid]);
         queryClient.invalidateQueries({ queryKey: ["participants", chatKey] });
+        useChatInfoStore.getState().patchChatInfo(chatKey, {
+          membersCount: (useChatInfoStore.getState().chatInfoByKey[chatKey]?.membersCount ?? 0) - 1,
+        });
       }
     } catch (error) {
       console.error("Ошибка при удалении участника:", error);

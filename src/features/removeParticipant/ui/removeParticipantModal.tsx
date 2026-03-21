@@ -18,6 +18,7 @@ type RemoveParticipantModalProps = {
   onConfirm: () => void;
   participantName: string;
   chatType: "group" | "channel" | "chat";
+  isLoading: boolean;
 };
 
 export const RemoveParticipantModal: React.FC<RemoveParticipantModalProps> = ({
@@ -27,6 +28,7 @@ export const RemoveParticipantModal: React.FC<RemoveParticipantModalProps> = ({
   onConfirm,
   participantName,
   chatType,
+  isLoading,
 }) => {
   return (
     <ModalDialog className={cn(className)} open={isOpen} onOpenChange={onClose}>
@@ -50,6 +52,7 @@ export const RemoveParticipantModal: React.FC<RemoveParticipantModalProps> = ({
           size="smSubtext"
           className="desktop:text-error desktop:bg-transparent bg-primary desktop:flex-0 desktop:order-1 order-2 flex-1 text-white"
           onClick={onConfirm}
+          disabled={isLoading}
         >
           Удалить
         </Button>

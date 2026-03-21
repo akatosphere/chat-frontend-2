@@ -22,7 +22,7 @@ export const useParticipantContextMenu = ({
 
   const menuId = `participant-${participant.uid}`;
 
-  const { confirmRemove } = useRemoveParticipant({
+  const { confirmRemove, isLoading } = useRemoveParticipant({
     chatKey,
     participantUid: participant.uid,
     participantName: participant.fullName,
@@ -43,6 +43,7 @@ export const useParticipantContextMenu = ({
                 participantName: participant.fullName,
                 onConfirm: confirmRemove,
                 chatType: chatType,
+                isLoading,
               });
             },
           },

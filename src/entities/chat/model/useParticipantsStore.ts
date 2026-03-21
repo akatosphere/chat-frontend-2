@@ -44,9 +44,10 @@ export const useParticipantsStore = create<ParticipantsState>((set) => ({
   removeParticipants: (uids: string[]) =>
     set((state) => {
       const updatedParticipants = state.participants.filter((c) => !uids.includes(c.uid));
+      const countDeleted = state.participants.length - updatedParticipants.length;
       return {
         participants: updatedParticipants,
-        count: updatedParticipants.length,
+        count: state.count - countDeleted,
       };
     }),
 
