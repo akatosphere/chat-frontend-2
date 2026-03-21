@@ -1,10 +1,11 @@
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 import { addMembersToChat } from "@/entities/chat/api/addMemberToChat";
 import { ChatParticipantListResponse } from "@/entities/chat/model/types";
 import { useChatInfoStore } from "@/entities/chat/model/useChatInfoStore";
+import { useParticipantsStore } from "@/entities/chat/model/useParticipantsStore";
 import { useContactsSync } from "@/entities/contact/lib/useContactsSync";
 import { useContactStore } from "@/entities/contact/model/store";
 import { useSelectContactsStore } from "@/features/contacts/model/SelectContactsStore";
@@ -29,11 +30,19 @@ export const InvitePage: React.FC<InvitePageProps> = ({ chatKey }) => {
   const queryClient = useQueryClient();
   const { fetchNextPage, hasNextPage, isFetchingNextPage } = useContactsSync();
   const { contacts, isInitialized } = useContactStore();
+  const participants = useParticipantsStore((s) => s.participants);
   const selectedContacts = useSelectContactsStore(useShallow((s) => s.selected));
   const setActiveSection = useAnothersProfileUIStore((s) => s.setActiveSection);
 
+  const participantUids = useMemo(() => new Set(participants.map((p) => p.uid)), [participants]);
+
+  const availableContacts = useMemo(
+    () => contacts.filter((c) => !participantUids.has(c.systemUid)),
+    [contacts, participantUids],
+  );
+
   const logic = useInvitePageLogic({
-    contacts,
+    contacts: availableContacts,
     isInitialized,
     search,
   });
