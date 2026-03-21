@@ -36,7 +36,7 @@ export const ChatPreviewModal: React.FC<ChatPreviewModalProps> = ({
   const chatType = getChatTypeLight(chatKey);
   const { onJoin, isLoading } = useJoinToChat({ chatKey, token, closeModal: onClose });
   return (
-    <ModalDialog className={cn(className, "px-2 pb-6")} open={isOpen} onOpenChange={onClose}>
+    <ModalDialog className={cn(className, "px-2 pt-2 pb-6")} open={isOpen} onOpenChange={onClose}>
       <AlertDialogHeader className="relative flex w-full items-center justify-between gap-2">
         <Close
           className="absolute top-1 right-1 h-3 w-3 cursor-pointer text-black transition duration-200 hover:opacity-80"
