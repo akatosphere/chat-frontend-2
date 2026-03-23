@@ -1,8 +1,10 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
+import { onAuthChannelMessage } from "../api/authChannel";
+import { logout } from "../api/logout";
 import { useAuthStore } from "../api/store";
 
 const PUBLIC_ROUTES = [
@@ -20,10 +22,20 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children, initialToken }: AuthProviderProps) => {
   const pathname = usePathname();
+  const router = useRouter();
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
   const finishInitialization = useAuthStore((s) => s.finishInitialization);
   const isInitialized = useAuthStore((s) => s.isInitialized);
   const initialized = useRef(false);
+
+  useEffect(() => {
+    return onAuthChannelMessage(async (msg) => {
+      if (msg.type === "logout") {
+        await logout({ broadcast: false });
+        router.push("/auth");
+      }
+    });
+  }, [router]);
 
   useEffect(() => {
     if (initialized.current) return;
