@@ -71,7 +71,13 @@ export async function proxy(request: NextRequest) {
       // Устанавливаем новые куки в ОТВЕТ (чтобы браузер их запомнил)
       response.cookies.set("accessToken", newTokens.access, { httpOnly: false });
       if (newTokens.refresh) {
-        response.cookies.set("refresh_token", newTokens.refresh, { httpOnly: true });
+        response.cookies.set("refresh_token", newTokens.refresh, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          path: "/",
+          maxAge: 60 * 60 * 24 * 30,
+        });
       }
 
       // КРИТИЧЕСКИ ВАЖНО: Устанавливаем токен в ЗАПРОС,
