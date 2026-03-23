@@ -57,7 +57,6 @@ export const ParticipantsPage: React.FC<ParticipantsPageProps> = ({
             isLast={index === filtered.length - 1}
             isOwner={isOwner && !p.isOwner}
             className={className}
-            chatType={chatType}
           />
         ))
       ) : (
@@ -71,7 +70,6 @@ export const ParticipantsPage: React.FC<ParticipantsPageProps> = ({
                 isLast={participants.length === 1}
                 isOwner={false}
                 className={className}
-                chatType={chatType}
               />
             </>
           )}
@@ -88,7 +86,6 @@ export const ParticipantsPage: React.FC<ParticipantsPageProps> = ({
                   isLast={index + 1 === participants.length - 1}
                   isOwner={isOwner}
                   className={className}
-                  chatType={chatType}
                 />
               ))}
             </>

@@ -23,9 +23,8 @@ export type ModalPayloads = {
   forward: { chatKey: string };
   removeParticipant: {
     participantName: string;
-    onConfirm: () => void;
-    chatType: "group" | "channel" | "chat";
-    isLoading: boolean;
+    chatKey: string;
+    participantUid: string;
   };
   chatPreview: {
     chatKey: string;

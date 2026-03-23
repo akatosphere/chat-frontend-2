@@ -12,7 +12,6 @@ type ParticipantCardProps = {
   isLast: boolean;
   isOwner: boolean;
   className?: string;
-  chatType: "group" | "channel" | "chat";
 };
 
 export const ParticipantCard: React.FC<ParticipantCardProps> = ({
@@ -21,9 +20,8 @@ export const ParticipantCard: React.FC<ParticipantCardProps> = ({
   isLast,
   isOwner,
   className,
-  chatType,
 }) => {
-  const { onContextMenu } = useParticipantContextMenu({ participant, chatKey, chatType });
+  const { onContextMenu } = useParticipantContextMenu({ participant, chatKey });
 
   return (
     <div className={cn("", className)} onContextMenu={isOwner ? onContextMenu : undefined}>
