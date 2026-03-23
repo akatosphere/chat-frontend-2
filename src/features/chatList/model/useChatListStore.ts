@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 import { getGroupChannel } from "@/entities/chat/api/getGroupChannel";
-import { mapChatListItem } from "@/entities/chat/model/mapper";
+import { mapChatListItem } from "@/entities/chat/model/mappers";
 import { ChatListItem } from "@/entities/chat/model/types";
 
 import { applyChatOrder } from "../lib/applyChatOrder";

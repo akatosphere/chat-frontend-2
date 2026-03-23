@@ -2,6 +2,7 @@
 
 import React from "react";
 
+import { ChatPreviewModal } from "@/entities/chat/ui/chatPreviewModal";
 import { DeleteMessageModal } from "@/features/chat/chat/ui/deleteMessageModal/deleteMessageModal";
 import { ForwardModal } from "@/features/chat/chat/ui/forwardModal/forwardModal";
 import { SendImageModal } from "@/features/chat/chat/ui/sendImageModal/sendImageModal";
@@ -24,6 +25,7 @@ const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
   sendFile: SendFileModal,
   forward: ForwardModal,
   removeParticipant: RemoveParticipantModal,
+  chatPreview: ChatPreviewModal,
   // новые модалки сюда
 };
 

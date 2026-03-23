@@ -1,14 +1,8 @@
 import { errorHandler } from "@/shared/api/errorHandler";
 import getApiClient from "@/shared/api/getApiClient";
 
-import { ChatPreview, ChatPreviewDto } from "../model/types";
-
-const mapChatPreview = (dto: ChatPreviewDto): ChatPreview => ({
-  name: dto.name,
-  description: dto.description,
-  participantsCount: dto.participants_count,
-  avatarUrl: dto.avatar_webp_url,
-});
+import { mapChatPreview } from "../model/mappers";
+import { ChatPreviewDto } from "../model/types";
 
 export const getChatPreview = async (token: string) => {
   try {

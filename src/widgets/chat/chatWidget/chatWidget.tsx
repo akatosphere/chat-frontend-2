@@ -63,6 +63,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
           chatType: chatType,
         }}
         join={join}
+        chatKey={chatKey}
         onCallClick={() => {}}
         onSearchClick={() => {}}
       />

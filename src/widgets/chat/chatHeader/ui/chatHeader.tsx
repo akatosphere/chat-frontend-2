@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
+import { useJoinToChat } from "@/features/joinToChat/lib/useJoinToChat";
 import { BackButton } from "@/shared/ui/backButton";
 
 import { ChatHeaderActions } from "./chatHeaderActions";
@@ -22,6 +24,7 @@ type Props = {
   onCallClick: () => void;
   onSearchClick: () => void;
   join?: boolean;
+  chatKey?: string;
 };
 
 export const ChatHeader = ({
@@ -31,7 +34,10 @@ export const ChatHeader = ({
   onSearchClick,
   profileHref,
   join = false,
+  chatKey,
 }: Props) => {
+  const token = useSearchParams()?.get("token") ?? undefined;
+  const { onJoin, isLoading } = useJoinToChat({ chatKey, token, chatType: chat.chatType });
   return (
     <header className="desktop:bg-main-light-gray desktop:border-muted desktop:rounded-t-lg desktop:border-b flex h-15 items-center justify-between px-4">
       <BackButton href={backHref} className="desktop:hidden mr-6 shrink-0" width={12} height={20} />
@@ -51,6 +57,8 @@ export const ChatHeader = ({
         onSearchClick={onSearchClick}
         join={join}
         chatType={chat.chatType}
+        onJoin={onJoin}
+        isLoading={isLoading}
       />
     </header>
   );

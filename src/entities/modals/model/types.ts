@@ -1,3 +1,5 @@
+import { ChatPreview } from "@/entities/chat/model/types";
+
 export type ModalPayloads = {
   deleteChat: { chatKey: string };
   deleteMessage: { messageId: string; chatKey: string; chatKeyUser?: string };
@@ -24,6 +26,11 @@ export type ModalPayloads = {
     onConfirm: () => void;
     chatType: "group" | "channel" | "chat";
     isLoading: boolean;
+  };
+  chatPreview: {
+    chatKey: string;
+    token: string;
+    previewData: ChatPreview;
   };
   //новые модалки здесь
 };

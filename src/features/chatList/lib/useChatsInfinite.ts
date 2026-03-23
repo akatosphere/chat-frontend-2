@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-import { mapChatList } from "@/entities/chat/model/mapper";
+import { mapChatList } from "@/entities/chat/model/mappers";
 
 import { getChatList } from "../api/getChatList";
 import { useChatListStore } from "../model/useChatListStore";

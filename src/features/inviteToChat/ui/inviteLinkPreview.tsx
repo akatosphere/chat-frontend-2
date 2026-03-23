@@ -1,10 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { getChatPreview } from "@/entities/chat/api/getChatPreview";
 import { Avatar } from "@/entities/chat/ui/avatar";
+import { handleInviteLinkClick } from "@/features/chat/chat/lib/handleInviteLinkClick";
+import { useToast } from "@/shared/toast/ui/toastProvider";
 
 type InviteLinkPreviewProps = {
   chatKey: string;
@@ -12,7 +14,9 @@ type InviteLinkPreviewProps = {
 };
 
 export const InviteLinkPreview = ({ chatKey, token }: InviteLinkPreviewProps) => {
-  const { data, isLoading, isError } = useQuery({
+  const router = useRouter();
+  const { showToast } = useToast();
+  const { data, isError } = useQuery({
     queryKey: ["chatPreview", token],
     queryFn: async () => {
       const response = await getChatPreview(token);
@@ -27,19 +31,7 @@ export const InviteLinkPreview = ({ chatKey, token }: InviteLinkPreviewProps) =>
 
   if (isError) return null;
 
-  if (isLoading || !data) {
-    return (
-      <div className="mx-3 mt-1.5">
-        <div className="flex animate-pulse items-start gap-1 rounded border-l-4 border-[#9587F5] bg-white/50 p-1 px-2.5">
-          <div className="h-10 w-10 shrink-0 rounded-full bg-gray-200" />
-          <div className="flex flex-col gap-1">
-            <div className="h-4 w-24 rounded bg-gray-200" />
-            <div className="h-4 w-32 rounded bg-gray-200" />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  if (!data) return null;
 
   const isChannel = chatKey.startsWith("channel");
   const subtitle =
@@ -47,7 +39,16 @@ export const InviteLinkPreview = ({ chatKey, token }: InviteLinkPreviewProps) =>
 
   return (
     <div className="mx-3 mt-1.5">
-      <Link href={`/chats/${chatKey}?token=${token}`}>
+      <div
+        className="cursor-pointer"
+        onClick={() =>
+          handleInviteLinkClick({
+            url: `/chats/${chatKey}?token=${token}`,
+            router: router,
+            showToast: showToast,
+          })
+        }
+      >
         <div className="border-primary flex items-start gap-1 rounded border-l-4 bg-white/50 p-1 px-2.5">
           <Avatar avatarUrl={data.avatarUrl} size="sm" variant="chat" />
           <div className="flex flex-col gap-0.5">
@@ -58,7 +59,7 @@ export const InviteLinkPreview = ({ chatKey, token }: InviteLinkPreviewProps) =>
             </span>
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 };

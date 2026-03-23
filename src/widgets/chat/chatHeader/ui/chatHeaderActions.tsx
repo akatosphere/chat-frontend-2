@@ -1,3 +1,5 @@
+"use client";
+
 // import Image from "next/imag
 
 import { ChatType } from "@/entities/chat/model/types";
@@ -11,6 +13,8 @@ type Props = {
   onSearchClick: () => void;
   join?: boolean;
   chatType: ChatType;
+  isLoading?: boolean;
+  onJoin: () => void;
 };
 
 export const ChatHeaderActions = ({
@@ -18,12 +22,20 @@ export const ChatHeaderActions = ({
   onSearchClick,
   join = false,
   chatType,
+  isLoading = false,
+  onJoin,
 }: Props) => {
   return (
     <div className="flex items-center">
       {join ? (
         <div className="flex gap-3">
-          <Button size="sm">
+          <Button
+            size="sm"
+            onClick={() => {
+              onJoin();
+            }}
+            disabled={isLoading}
+          >
             {chatType === "private-group" || chatType === "public-group"
               ? "Вступить"
               : "Подписаться"}
