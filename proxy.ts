@@ -31,8 +31,6 @@ function isTokenExpired(token: string): boolean {
 }
 
 async function refreshTokens(refreshToken: string) {
-  console.log("REFRESH TOKEN");
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login/refresh/token/`,
@@ -59,8 +57,6 @@ const createRedirectWithCookies = (url: URL, source: NextResponse): NextResponse
 };
 
 export async function proxy(request: NextRequest) {
-  console.log("proxy.ts");
-
   const path = request.nextUrl.pathname;
   let accessToken = request.cookies.get("accessToken")?.value;
   const refreshToken = request.cookies.get("refresh_token")?.value;

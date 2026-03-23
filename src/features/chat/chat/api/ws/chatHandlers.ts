@@ -141,6 +141,5 @@ export const handleDeleteMessage: WSHandler<any> = (data) => {
   if (!payload || !payload.from_user || !payload.uid) return;
 
   useChatStore.getState().deleteMessage(payload.uid);
-  console.log("handleDeleteMessage", payload);
   optimisticDeleteMessage(payload.from_user.uid || "", payload.to_user?.uid || "", payload.uid);
 };

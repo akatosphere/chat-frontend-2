@@ -14,7 +14,6 @@ type ChatPageProps = {
 export default async function ChatPage({ params, searchParams }: ChatPageProps) {
   const { chatKey } = await params;
   const { token } = await searchParams;
-  console.log("token: ", token);
 
   const chatInfo = await getChatServer(chatKey, getChatTypeLight(chatKey));
 
