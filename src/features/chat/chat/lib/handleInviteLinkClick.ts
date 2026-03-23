@@ -2,6 +2,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 
 import { getChat } from "@/entities/chat/api/getChat";
 import { getChatPreview } from "@/entities/chat/api/getChatPreview";
+import { getChatTypeLight } from "@/entities/chat/lib/getChatTypeLight";
 import { parseInviteUrl } from "@/entities/chat/lib/parseInviteUrl";
 import { useModalStore } from "@/entities/modals/model/useGlobalModalStore";
 
@@ -32,7 +33,7 @@ export const handleInviteLinkClick = async ({ url, router, showToast }: Params) 
     return null;
   }
 
-  const chatType = chatKey.startsWith("channel_") ? "channel" : "group";
+  const chatType = getChatTypeLight(chatKey);
   const chatResult = await getChat(chatKey, chatType);
 
   if (!chatResult.success) {

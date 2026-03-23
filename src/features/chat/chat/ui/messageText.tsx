@@ -1,5 +1,6 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { LinkIt, urlRegex } from "react-linkify-it";
 
 import { parseInviteUrl } from "@/entities/chat/lib/parseInviteUrl";
@@ -70,6 +71,7 @@ export const MessageText: React.FC<MessageTextProps> = ({
 }) => {
   const { showToast } = useToast();
   const router = useRouter();
+  const urlComponent = useMemo(() => createUrlComponent(router, showToast), [router, showToast]);
   if (!block.text) return null;
   const isEmpty = block.text.trim() === "";
   if (isEmpty) return null;
@@ -85,7 +87,7 @@ export const MessageText: React.FC<MessageTextProps> = ({
         className,
       )}
     >
-      <LinkIt component={createUrlComponent(router, showToast)} regex={urlRegex}>
+      <LinkIt component={urlComponent} regex={urlRegex}>
         <p className="subtext emojis-apple desktop:wrap-break-word min-w-0 pr-2 wrap-anywhere whitespace-pre-wrap">
           {block.text}
         </p>

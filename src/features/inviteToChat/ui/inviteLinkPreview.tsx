@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { getChatPreview } from "@/entities/chat/api/getChatPreview";
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { handleInviteLinkClick } from "@/features/chat/chat/lib/handleInviteLinkClick";
+import { pluralize } from "@/shared/lib/pluralize";
 import { useToast } from "@/shared/toast/ui/toastProvider";
 
 type InviteLinkPreviewProps = {
@@ -35,7 +36,10 @@ export const InviteLinkPreview = ({ chatKey, token }: InviteLinkPreviewProps) =>
 
   const isChannel = chatKey.startsWith("channel");
   const subtitle =
-    data.description || `${data.participantsCount} ${isChannel ? "подписчиков" : "участников"}`;
+    data.description ||
+    (isChannel
+      ? `${data.participantsCount - 1} ${pluralize(data.participantsCount - 1, "подписчик", "подписчика", "подписчиков")}`
+      : `${data.participantsCount} ${pluralize(data.participantsCount, "участник", "участника", "участников")}`);
 
   return (
     <div className="mx-3 mt-1.5">

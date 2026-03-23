@@ -2,10 +2,9 @@ import { notFound } from "next/navigation";
 
 import { getChatServer } from "@/entities/chat/api/getChatServer";
 import { getChatTypeLight } from "@/entities/chat/lib/getChatTypeLight";
+import { getInitialJoin } from "@/entities/chat/lib/getInitialJoin";
 import { ChatInviteJoinView } from "@/features/joinToChat/ui/chatInviteJoinView";
 import { ChatWidget } from "@/widgets/chat/chatWidget/chatWidget";
-
-import { getInitialJoin } from "../../../../src/entities/chat/lib/getInitialJoin";
 
 type ChatPageProps = {
   params: Promise<{ chatKey: string }>;
