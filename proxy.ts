@@ -84,7 +84,7 @@ export async function proxy(request: NextRequest) {
         response.cookies.set("refresh_token", newTokens.refresh, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          sameSite: "strict",
+          sameSite: "lax",
           path: "/",
           maxAge: 60 * 60 * 24 * 30,
         });
