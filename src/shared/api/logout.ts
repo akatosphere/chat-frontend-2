@@ -29,7 +29,6 @@ export const logout = async () => {
   delete getApiClient.defaults.headers.common["Authorization"];
 
   // чистим client-side куки
-  document.cookie = "is_filled=false; path=/; Max-Age=0";
   document.cookie = "phone=; Max-Age=0; path=/";
 
   disconnectWS();

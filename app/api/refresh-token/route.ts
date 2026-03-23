@@ -23,10 +23,10 @@ export const POST = async () => {
       );
     }
 
+    const response = NextResponse.json({ access: data.access });
+
     if (data.refresh) {
-      cookieStore.set({
-        name: "refresh_token",
-        value: data.refresh,
+      response.cookies.set("refresh_token", data.refresh, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
@@ -35,7 +35,7 @@ export const POST = async () => {
       });
     }
 
-    return NextResponse.json({ access: data.access });
+    return response;
   } catch {
     return NextResponse.json({ error: "Серверная ошибка" }, { status: 500 });
   }
