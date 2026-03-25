@@ -37,7 +37,11 @@ export const ChatHeader = ({
   chatKey,
 }: Props) => {
   const token = useSearchParams()?.get("token") ?? undefined;
-  const { onJoin, isLoading } = useJoinToChat({ chatKey, token, chatType: chat.chatType });
+  const { onJoin, isLoading, setIsLoading } = useJoinToChat({
+    chatKey,
+    token,
+    chatType: chat.chatType,
+  });
   return (
     <header className="desktop:bg-main-light-gray desktop:border-muted desktop:rounded-t-lg desktop:border-b flex h-15 items-center justify-between px-4">
       <BackButton href={backHref} className="desktop:hidden mr-6 shrink-0" width={12} height={20} />
@@ -59,6 +63,7 @@ export const ChatHeader = ({
         chatType={chat.chatType}
         onJoin={onJoin}
         isLoading={isLoading}
+        setIsLoading={setIsLoading}
       />
     </header>
   );

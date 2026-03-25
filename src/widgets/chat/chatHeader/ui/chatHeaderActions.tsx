@@ -2,6 +2,8 @@
 
 // import Image from "next/imag
 
+import { useEffect } from "react";
+
 import { ChatType } from "@/entities/chat/model/types";
 import { Button } from "@/shared/shadcn/ui/button";
 import ProfileCall from "@/shared/ui/icons/chat/header/profileCall.svg";
@@ -15,6 +17,7 @@ type Props = {
   chatType: ChatType;
   isLoading?: boolean;
   onJoin: () => void;
+  setIsLoading: (value: boolean) => void;
 };
 
 export const ChatHeaderActions = ({
@@ -24,7 +27,11 @@ export const ChatHeaderActions = ({
   chatType,
   isLoading = false,
   onJoin,
+  setIsLoading,
 }: Props) => {
+  useEffect(() => {
+    setIsLoading(false);
+  }, [join]);
   return (
     <div className="flex items-center">
       {join ? (
