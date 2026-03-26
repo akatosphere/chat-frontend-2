@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { SearchMessageResponse } from "@/features/chat/chat/lib/searchMessagePosition";
@@ -8,6 +9,7 @@ import { searchMessages } from "@/features/chat/chat/lib/searchMessages";
 import { useMessageNavigation } from "@/features/chat/chat/model/store/useChatNavigationStore";
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
 import { SearchbarMessages } from "@/features/chat/chat/ui/searchbarMessages";
+import { useJoinToChat } from "@/features/joinToChat/lib/useJoinToChat";
 import { useDebouncedValue } from "@/shared/lib/hooks/useDebounceValue";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { BackButton } from "@/shared/ui/backButton";
@@ -25,13 +27,17 @@ type Props = {
     chatUid: string;
     photo: string | null;
   };
+  join?: boolean;
+  chatKey?: string;
   backHref: string;
   profileHref: string;
 };
 
-export const ChatHeader = ({ chat, backHref, profileHref }: Props) => {
+export const ChatHeader = ({ chat, backHref, profileHref, join, chatKey }: Props) => {
   const [searchValue, setSearch] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const token = useSearchParams()?.get("token") ?? undefined;
+  const { onJoin, isLoading } = useJoinToChat({ chatKey, token, chatType: chat.chatType });
 
   const [results, setResults] = useState<SearchMessageResponse[]>([]);
   const [resultsCount, setResultsCount] = useState(0);
@@ -42,9 +48,6 @@ export const ChatHeader = ({ chat, backHref, profileHref }: Props) => {
 
   const debounceSearch = useDebouncedValue(searchValue, 400);
 
-  // =========================
-  // 🔍 SEARCH INPUT
-  // =========================
   const handleSearchChange = (value: string) => {
     setSearch(value);
     resetSearch();
@@ -52,9 +55,6 @@ export const ChatHeader = ({ chat, backHref, profileHref }: Props) => {
     setPage(1);
   };
 
-  // =========================
-  // 🔍 FETCH ON INPUT
-  // =========================
   useEffect(() => {
     const runSearch = async () => {
       if (!debounceSearch.trim()) {
@@ -92,9 +92,6 @@ export const ChatHeader = ({ chat, backHref, profileHref }: Props) => {
     runSearch();
   }, [debounceSearch, chat.chatUid]);
 
-  // =========================
-  // 🔄 LOCAL NAVIGATION
-  // =========================
   const handlePageChange = (direction: number) => {
     if (!results.length) return;
 
@@ -107,9 +104,6 @@ export const ChatHeader = ({ chat, backHref, profileHref }: Props) => {
     useMessageNavigation.getState().navigate(target.uid, target.page, searchValue);
   };
 
-  // =========================
-  // UI ACTIONS
-  // =========================
   const onSearchClick = () => {
     setIsSearchOpen(!isSearchOpen);
     setSearch("");
@@ -165,6 +159,10 @@ export const ChatHeader = ({ chat, backHref, profileHref }: Props) => {
         <ChatHeaderActions
           onCallClick={onCallClick}
           onSearchClick={onSearchClick}
+          onJoin={onJoin}
+          join={join}
+          chatType={chat.chatType}
+          isLoading={isLoading}
           className={cn(isSearchOpen ? "hidden" : "flex")}
         />
       </header>

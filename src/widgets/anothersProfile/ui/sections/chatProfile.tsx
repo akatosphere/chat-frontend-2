@@ -14,12 +14,12 @@ import { OurTabsTrigger } from "@/shared/ourTabs/ourTabsTrigger";
 import { Tabs, TabsContent } from "@/shared/shadcn/ui/tabs";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 
-import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
-import { FilesPage } from "./tabs/filesPage";
-import { LinksPage } from "./tabs/linksPage";
-import { MediaPage } from "./tabs/mediaPage";
-import { ParticipantsPage } from "./tabs/participantsPage";
-import { VoicesPage } from "./tabs/voicesPage";
+import { useAnothersProfileUIStore } from "../../model/anothersProfileUIStore";
+import { FilesPage } from "../tabs/filesPage";
+import { LinksPage } from "../tabs/linksPage";
+import { MediaPage } from "../tabs/mediaPage";
+import { ParticipantsPage } from "../tabs/participantsPage";
+import { VoicesPage } from "../tabs/voicesPage";
 
 type ChatProfileProps = {
   initialParticipants: ChatParticipantListResponse | null;
@@ -27,6 +27,7 @@ type ChatProfileProps = {
   isOwner: boolean;
   isMobile: boolean;
   chatKey: string;
+  canInvite: boolean;
 };
 
 export const ChatProfile: React.FC<ChatProfileProps> = ({
@@ -35,26 +36,25 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
   isOwner,
   initialParticipants,
   chatKey,
+  canInvite,
 }) => {
   const chatType =
     initialData?.type === "private-group" || initialData?.type === "public-group"
       ? "group"
       : "channel";
-  const { activeSection, setActiveSection, toggleIsMainActive } = useAnothersProfileUIStore(
+  const { activeTab, setActiveTab, setActiveSection } = useAnothersProfileUIStore(
     useShallow((s) => ({
-      activeSection: s.activeSection,
+      activeTab: s.activeTab,
+      setActiveTab: s.setActiveTab,
       setActiveSection: s.setActiveSection,
-      resetTabsUI: s.reset,
-      toggleIsMainActive: s.toggleIsMainActive,
     })),
   );
-
   const handleTabChange = useCallback(
     (value: string) => {
-      toggleIsMainActive();
-      setActiveSection(value as "participants" | "media" | "files" | "voices" | "links");
+      setActiveSection("tab");
+      setActiveTab(value as "participants" | "media" | "files" | "voices" | "links");
     },
-    [setActiveSection, toggleIsMainActive],
+    [setActiveSection, setActiveTab],
   );
 
   const getMembersLabel = () => {
@@ -66,6 +66,10 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
     return `${count} ${pluralize(count, "участник", "участника", "участников")}`;
   };
 
+  if (!initialData) {
+    return <div>Ошибка загрузки профиля</div>;
+  }
+
   return (
     <>
       <SidebarContainer className="desktop:p-0 p-4" scrollbar={isMobile}>
@@ -74,7 +78,7 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
             size="anothersProfileAvatar"
             className="flex w-full justify-center"
             avatarUrl={initialData?.avatar}
-            variant="user"
+            variant="chat"
           />
           <div className="absolute bottom-3 left-4 text-white">
             <p className="title font-medium">{initialData?.title}</p>
@@ -85,26 +89,22 @@ export const ChatProfile: React.FC<ChatProfileProps> = ({
           <ProfileNotifications />
           <ChatInfoList initialData={initialData} isOwner={isOwner} />
         </div>
-        <Tabs value={activeSection} onValueChange={handleTabChange}>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
           <OurTabsList>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="participants">
-              {chatType === "channel" ? "Подписчики" : "Участники"}
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="media">
-              Медиа
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="files">
-              Файлы
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="voices">
-              Голосовые
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="links">
-              Ссылки
-            </OurTabsTrigger>
+            <OurTabsTrigger value="participants">Участники</OurTabsTrigger>
+            <OurTabsTrigger value="media">Медиа</OurTabsTrigger>
+            <OurTabsTrigger value="files">Файлы</OurTabsTrigger>
+            <OurTabsTrigger value="voices">Голосовые</OurTabsTrigger>
+            <OurTabsTrigger value="links">Ссылки</OurTabsTrigger>
           </OurTabsList>
           <TabsContent value="participants">
-            <ParticipantsPage initialParticipants={initialParticipants} chatKey={chatKey} />
+            <ParticipantsPage
+              canInvite={canInvite}
+              initialParticipants={initialParticipants}
+              chatKey={chatKey}
+              chatType={chatType}
+              isOwner={isOwner}
+            />
           </TabsContent>
           <TabsContent value="media">
             <MediaPage />

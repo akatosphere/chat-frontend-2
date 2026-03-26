@@ -14,8 +14,12 @@ export const useParticipantsSync = (
     chatKey,
     initialData,
   );
-
   const setParticipants = useParticipantsStore((s) => s.setParticipants);
+  const reset = useParticipantsStore((s) => s.reset);
+
+  useEffect(() => {
+    reset();
+  }, [chatKey, reset]);
 
   useEffect(() => {
     if (!data) return;
@@ -24,7 +28,7 @@ export const useParticipantsSync = (
     const allFetchedParticipants = data.pages.flatMap((page) => page.results);
     const totalCount = data.pages[0]?.count ?? 0;
 
-    // Обновляем стор.
+    // Обновляем стор
     setParticipants(allFetchedParticipants, totalCount);
   }, [data, setParticipants]);
 

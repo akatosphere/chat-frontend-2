@@ -22,11 +22,13 @@ interface MessageListProps {
   hasNextPage?: boolean;
   isFetchingNextPage?: boolean;
   loadedPages?: number;
+  isOwner: boolean;
 }
 
 export const MessageList: React.FC<MessageListProps> = ({
   className,
   currentUserId,
+  isOwner,
   fetchNextPage,
   hasNextPage = false,
   isFetchingNextPage = false,
@@ -35,7 +37,6 @@ export const MessageList: React.FC<MessageListProps> = ({
   const messages = useChatStore((s) => s.messages);
   const isReady = useChatStore((s) => s.isReady);
   const chatType = useChatStore((s) => s.chatType);
-  const isOwner = useChatStore((s) => s.createdBy === currentUserId);
   const chatId = useChatStore((s) => s.chatId);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);

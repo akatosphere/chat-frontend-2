@@ -24,6 +24,8 @@ interface ChatState {
   replyTarget: MappedChatMessage | null;
   forwardTargets: MappedChatMessage[];
 
+  fetchMedia: (chatKey: string) => Promise<void>;
+
   setReplyTarget: (message: MappedChatMessage | null) => void;
   setForwardTargets: (messages: MappedChatMessage[]) => void;
 
@@ -38,7 +40,6 @@ interface ChatState {
   enterSelectionMode: (uid?: string) => void;
   toggleMessageSelection: (uid: string) => void;
   exitSelectionMode: () => void;
-  fetchMedia: (chatKey: string) => Promise<void>;
 
   deleteMessage: (uid: string) => void;
   setInitialData: (

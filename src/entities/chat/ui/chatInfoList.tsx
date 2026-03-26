@@ -17,13 +17,21 @@ export const ChatInfoList = ({ className, initialData, isOwner }: ChatInfoListPr
 
   const { data, isLoading, isError } = useInviteLink(isOwner ? initialData?.chatKey : undefined);
 
+  const fullInviteLink = (() => {
+    if (!data?.invite_link) return undefined;
+    const tokenMatch = data.invite_link.match(/[?&]token=([^\s&]+)/);
+    const token = tokenMatch?.[1];
+    if (!token || !data.chat_key) return data.invite_link;
+    return `${process.env.NEXT_PUBLIC_APP_URL}/chats/${data.chat_key}?token=${token}`;
+  })();
+
   const inviteLink = isLoading
     ? "..."
     : isError
       ? "ошибка генерации пригласительной ссылки"
-      : data?.invite_link;
+      : fullInviteLink;
 
-  const hasInviteLink = !!data?.invite_link;
+  const hasInviteLink = !!fullInviteLink;
 
   return (
     <div className="flex w-full flex-col gap-2">

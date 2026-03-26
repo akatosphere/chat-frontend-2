@@ -3,12 +3,13 @@ import { useContactStore } from "@/entities/contact/model/store";
 import { useUserStore } from "@/entities/user/model/userStore";
 import { useChatListStore } from "@/features/chatList/model/useChatListStore";
 
-import { getApiClient } from "./getApiClient";
+import { broadcastLogout } from "./authChannel";
 import { getQueryClient } from "./getQueryClient";
 import { useAuthStore } from "./store";
 import { disconnectWS } from "./ws/wsClient";
 
-export const logout = async () => {
+export const logout = async (options?: { broadcast?: boolean }) => {
+  const { broadcast = true } = options ?? {};
   const store = useAuthStore.getState();
   const chatListStore = useChatListStore.getState();
   const chatStore = useChatStore.getState();
@@ -26,13 +27,15 @@ export const logout = async () => {
   chatListStore.reset();
   chatStore.reset();
   contactsStore.reset();
-  delete getApiClient.defaults.headers.common["Authorization"];
 
   // чистим client-side куки
-  document.cookie = "is_filled=false; path=/";
   document.cookie = "phone=; Max-Age=0; path=/";
 
   disconnectWS();
+
+  if (broadcast) {
+    broadcastLogout();
+  }
 
   try {
     // серверный логаут для httpOnly refresh token

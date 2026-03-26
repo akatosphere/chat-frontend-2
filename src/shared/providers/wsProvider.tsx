@@ -70,7 +70,7 @@ export const WSProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    if (!accessToken && prevTokenRef.current) {
+    if (accessToken === null && prevTokenRef.current) {
       disconnectWS();
       prevTokenRef.current = null;
       userIdExtractedRef.current = false;

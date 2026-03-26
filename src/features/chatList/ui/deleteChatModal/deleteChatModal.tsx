@@ -17,6 +17,7 @@ export type DeleteChatModalProps = {
   className?: string;
   isOpen: boolean;
   chatKey: string;
+  token: string;
   onClose: () => void;
 };
 

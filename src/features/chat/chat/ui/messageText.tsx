@@ -1,9 +1,57 @@
-import { cn } from "@/shared/shadcn/lib/utils";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
+import { LinkIt, urlRegex } from "react-linkify-it";
 
+import { parseInviteUrl } from "@/entities/chat/lib/parseInviteUrl";
+import { cn } from "@/shared/shadcn/lib/utils";
+import { useToast } from "@/shared/toast/ui/toastProvider";
+
+import { handleInviteLinkClick } from "../lib/handleInviteLinkClick";
 import { TextBlock } from "../model/messageBlock/types";
 import { useMessageNavigation } from "../model/store/useChatNavigationStore";
 import { SendingStatus } from "../model/types/serverTypes";
 import { MessageTimeAndStatus } from "./messageTimeAndStatus";
+
+const createUrlComponent = (
+  router: AppRouterInstance,
+  showToast: (
+    message: string,
+    icon: {
+      mobile: string;
+      desktop?: string | undefined;
+    },
+  ) => void,
+) => {
+  const urlComponent = (match: string, key: number) => {
+    const inviteData = parseInviteUrl(match);
+    if (inviteData) {
+      return (
+        <a
+          key={key}
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            handleInviteLinkClick({
+              url: match,
+              router: router,
+              showToast: showToast,
+            });
+          }}
+        >
+          {match}
+        </a>
+      );
+    }
+    return (
+      <a key={key} href={match} target="_blank" rel="noopener noreferrer">
+        {match}
+      </a>
+    );
+  };
+  urlComponent.displayName = "urlComponent";
+  return urlComponent;
+};
 
 type MessageTextProps = {
   className?: string;
@@ -45,12 +93,16 @@ export const MessageText: React.FC<MessageTextProps> = ({
       </>
     );
   };
+  const { showToast } = useToast();
+  const router = useRouter();
+  const urlComponent = useMemo(() => createUrlComponent(router, showToast), [router, showToast]);
   if (!block.text) return null;
   const isEmpty = block.text.trim() === "";
   if (isEmpty) return null;
   return (
     <div
       className={cn(
+        "classic-links",
         isEmpty
           ? "absolute right-3 bottom-2"
           : "relative flex h-fit w-full items-stretch justify-between px-3 pb-2.5",
@@ -59,9 +111,11 @@ export const MessageText: React.FC<MessageTextProps> = ({
         className,
       )}
     >
-      <p className="subtext emojis-apple desktop:wrap-break-word min-w-0 pr-2 wrap-anywhere whitespace-pre-wrap">
-        {highlightText(block.text, searchQuery)}
-      </p>
+      <LinkIt component={urlComponent} regex={urlRegex}>
+        <p className="subtext emojis-apple desktop:wrap-break-word min-w-0 pr-2 wrap-anywhere whitespace-pre-wrap">
+          {highlightText(block.text, searchQuery)}
+        </p>
+      </LinkIt>
       <div className="flex flex-col justify-end">
         <MessageTimeAndStatus isMine={isMine} time={time} status={status} isEmpty={isEmpty} />
       </div>

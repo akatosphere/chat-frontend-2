@@ -1,3 +1,4 @@
+import { InviteLinkPreview } from "@/features/inviteToChat/ui/inviteLinkPreview";
 import { MediaGrid } from "@/shared/ui/mediaGrid/mediaGrid";
 
 import { AudioMessage } from "../../../recordVoiceMessage/ui/audioMessage";
@@ -49,6 +50,9 @@ export const MessageBlockRenderer = ({
     case "audio": {
       return <AudioMessage file={block} isMine={isMine} time={time} status={status} />;
     }
+
+    case "inviteLink":
+      return <InviteLinkPreview chatKey={block.chatKey} token={block.token} />;
 
     case "text":
       return (

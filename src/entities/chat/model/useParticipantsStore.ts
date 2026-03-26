@@ -28,13 +28,16 @@ export const useParticipantsStore = create<ParticipantsState>((set) => ({
     }),
 
   addParticipants: (newParticipants) =>
-    set((state) => ({
+    set((state) => {
       // Добавляем только уникальные контакты (защита от дублей при пагинации)
-      participants: [
-        ...state.participants,
-        ...newParticipants.filter((nc) => !state.participants.some((sc) => sc.uid === nc.uid)),
-      ],
-    })),
+      const uniqueNewParticipants = newParticipants.filter(
+        (nc) => !state.participants.some((sc) => sc.uid === nc.uid),
+      );
+      return {
+        participants: [...state.participants, ...uniqueNewParticipants],
+        count: state.count + uniqueNewParticipants.length,
+      };
+    }),
 
   updateParticipant: (uid, patch) =>
     set((state) => ({
@@ -44,9 +47,10 @@ export const useParticipantsStore = create<ParticipantsState>((set) => ({
   removeParticipants: (uids: string[]) =>
     set((state) => {
       const updatedParticipants = state.participants.filter((c) => !uids.includes(c.uid));
+      const countDeleted = state.participants.length - updatedParticipants.length;
       return {
         participants: updatedParticipants,
-        count: updatedParticipants.length,
+        count: state.count - countDeleted,
       };
     }),
 

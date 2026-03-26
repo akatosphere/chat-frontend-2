@@ -12,9 +12,14 @@ import { cn } from "@/shared/shadcn/lib/utils";
 type ChatFooterProps = {
   className?: string;
   onSendMessage: (message: string) => void;
+  join?: boolean;
 };
 
-export const ChatFooter: React.FC<ChatFooterProps> = ({ className, onSendMessage }) => {
+export const ChatFooter: React.FC<ChatFooterProps> = ({
+  className,
+  onSendMessage,
+  join = false,
+}) => {
   const { isKeyboardOpen } = useKeyboardOffset();
   const { isSelectionMode, forwardTargets, isVoiceRecord, enterVoiceRecord } = useChatStore();
 
@@ -25,11 +30,17 @@ export const ChatFooter: React.FC<ChatFooterProps> = ({ className, onSendMessage
       <footer
         style={{ paddingBottom: "var(--keyboard-offset)" }}
         className={cn(
-          "bg-primary-gray/90 desktop:bg-main-light-gray border-muted w-full shrink-0 border-t",
+          "bg-primary-gray/90 desktop:bg-main-light-gray border-muted relative w-full shrink-0 border-t",
           className,
         )}
       >
-        {isSelectionMode ? (
+        {join ? (
+          <div className="bg-primary-accent-light desktop:left-1/2 desktop:w-186 desktop:-translate-x-1/2 absolute bottom-0 left-0 flex min-h-15 w-full flex-row items-center gap-2.5 px-4 py-2">
+            <span className="text-gray desktop:text-base grow text-center text-sm leading-[130%] font-normal tracking-[0.01em]">
+              Вступите в группу, чтобы открыть доступ к отправке сообщений
+            </span>
+          </div>
+        ) : isSelectionMode ? (
           <SelectBox />
         ) : isVoiceRecord ? (
           <VoiceRecordBox />

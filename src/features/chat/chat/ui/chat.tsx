@@ -21,15 +21,24 @@ type ChatProps = {
   createdBy?: string;
   chatKey: string;
   chatUid: string;
+  join?: boolean;
 };
 
-export const Chat = ({ className, chatKey, chatType, createdBy, chatUid }: ChatProps) => {
+export const Chat = ({
+  className,
+  chatKey,
+  chatType,
+  createdBy,
+  chatUid,
+  join = false,
+}: ChatProps) => {
   const currentUserId = useUserStore((s) => s.userId);
   const reset = useChatStore((s) => s.reset);
   const setInitialData = useChatStore((s) => s.setInitialData);
   const prependMessages = useChatStore((s) => s.prependMessages);
   const { reset: resetNavigation } = useMessageNavigation();
   const messages = useChatStore((s) => s.messages);
+  const isOwner = useChatStore((s) => s.createdBy === currentUserId);
 
   const handleSendMessage = useSendMessage();
 
@@ -167,8 +176,11 @@ export const Chat = ({ className, chatKey, chatType, createdBy, chatUid }: ChatP
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         loadedPages={data?.pages.length}
+        isOwner={isOwner}
       />
-      <ChatFooter onSendMessage={handleSendMessage} />
+      {((chatType != "public-channel" && chatType != "private-channel") || isOwner) && (
+        <ChatFooter onSendMessage={handleSendMessage} join={join} />
+      )}
     </div>
   );
 };

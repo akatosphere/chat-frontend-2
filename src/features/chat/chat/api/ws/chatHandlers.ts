@@ -103,7 +103,7 @@ export const handleCreateTextMessage: WSHandler = (data) => {
       message: {
         id: newMessage.id,
         uid: newMessage.uid,
-        hasForwarded: newMessage.forwardedMessages.length > 0,
+        hasForwarded: newMessage.isForwarded,
         files_summary: {
           count: newMessage.filesList.length,
           types: newMessage.filesList
@@ -172,6 +172,5 @@ export const handleDeleteMessage: WSHandler<any> = (data) => {
   if (!payload || !payload.from_user || !payload.uid) return;
 
   useChatStore.getState().deleteMessage(payload.uid);
-  console.log("handleDeleteMessage", payload);
   optimisticDeleteMessage(payload.from_user.uid || "", payload.to_user?.uid || "", payload.uid);
 };

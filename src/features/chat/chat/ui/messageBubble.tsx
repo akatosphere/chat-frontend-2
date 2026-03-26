@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 
 import { Avatar } from "@/entities/chat/ui/avatar";
 import { cn } from "@/shared/shadcn/lib/utils";
@@ -6,6 +6,7 @@ import { Checkbox } from "@/shared/ui/checkBox";
 
 import { useChatStore } from "../../../../entities/chat/model/useChatStore";
 import { useMessageContextMenu } from "../lib/useMessageContextMenu";
+import { useMessageNavigation } from "../model/store/useChatNavigationStore";
 import { MappedChatMessage } from "../model/types/mappedTypes";
 import { MessageLayout } from "./messageLayout";
 
@@ -37,6 +38,9 @@ const messageBubbleComponent = memo(
 
     const { onContextMenu, isOpen } = useMessageContextMenu(chatMessage);
 
+    const isHighlighted = useMessageNavigation(
+      useCallback((s) => s.highlightMessageId === chatMessage.uid, [chatMessage.uid]),
+    );
     // В каналах имя отправителя не показываем
     const showSenderName = !isMine && isGroupChat && isFirstInGroup && !isChannel;
 
@@ -47,7 +51,7 @@ const messageBubbleComponent = memo(
       <div
         className={cn(
           "flex w-full min-w-0 flex-1 items-center transition-colors duration-300 ease-out",
-          (isSelected || isOpen) && "bg-muted",
+          (isSelected || isHighlighted || isOpen) && "bg-muted",
           className,
         )}
         {...dataAttributes}

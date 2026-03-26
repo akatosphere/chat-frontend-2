@@ -8,6 +8,7 @@ export type MessageBlock =
   | TextBlock
   | FileBlock
   | MediaBlock
+  | InviteLinkBlock
   | AudioBlock;
 
 export type ReplyBlock = {
@@ -40,6 +41,12 @@ export type FileBlock = {
 export type MediaBlock = {
   type: "media";
   items: MediaItem[];
+};
+
+export type InviteLinkBlock = {
+  type: "inviteLink";
+  chatKey: string;
+  token: string;
 };
 
 export type AudioBlock = {

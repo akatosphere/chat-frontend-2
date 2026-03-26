@@ -1,3 +1,4 @@
+import { parseInviteUrl } from "@/entities/chat/lib/parseInviteUrl";
 import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
 import { AUDIO_TYPES, FILE_TYPES, IMAGE_TYPES } from "@/features/chatList/model/constants";
 
@@ -57,27 +58,20 @@ export const buildMessageBlocks = (msg: MappedChatMessage): MessageBlock[] => {
   }
 
   if (msg.content) {
+    const inviteData = parseInviteUrl(msg.content);
+    if (inviteData) {
+      blocks.push({
+        type: "inviteLink",
+        chatKey: inviteData.chatKey,
+        token: inviteData.token,
+      });
+    }
+
     blocks.push({
       type: "text",
       text: msg.content,
     });
   }
-
-  // if (msg.content) {
-  //   const inviteData = parseInviteUrl(msg.content);
-  //   if (inviteData) {
-  //     blocks.push({
-  //       type: "inviteLink",
-  //       chatKey: inviteData.chatKey,
-  //       token: inviteData.token,
-  //     });
-  //   }
-
-  //   blocks.push({
-  //     type: "text",
-  //     text: msg.content,
-  //   });
-  // }
 
   return blocks;
 };

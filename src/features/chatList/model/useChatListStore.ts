@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 import { getGroupChannel } from "@/entities/chat/api/getGroupChannel";
-import { mapChatListItem } from "@/entities/chat/model/mapper";
+import { mapChatListItem } from "@/entities/chat/model/mappers";
 import { ChatListItem } from "@/entities/chat/model/types";
 
 import { applyChatOrder } from "../lib/applyChatOrder";
@@ -12,6 +12,7 @@ type ChatListState = {
   chatsByKey: ChatsByKey;
   order: string[];
   count: number;
+  lastMergedAt: number;
 
   // base
   mergeChats: (chats: ChatListItem[]) => void;
@@ -36,6 +37,7 @@ export const useChatListStore = create<ChatListState>((set, get) => ({
   chatsByKey: {},
   order: [],
   count: 0,
+  lastMergedAt: 0,
 
   setCount: (count) => set({ count }),
   mergeChats: (chats) =>
@@ -133,5 +135,5 @@ export const useChatListStore = create<ChatListState>((set, get) => ({
     return chat?.id ?? null;
   },
 
-  reset: () => set({ chatsByKey: {}, order: [], count: 0 }),
+  reset: () => set({ chatsByKey: {}, order: [], count: 0, lastMergedAt: 0 }),
 }));

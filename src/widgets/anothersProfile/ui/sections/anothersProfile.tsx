@@ -19,11 +19,11 @@ import { Tabs, TabsContent } from "@/shared/shadcn/ui/tabs";
 import { SidebarContainer } from "@/shared/ui/sidebarContainer";
 import { Statusbar } from "@/shared/ui/statusbar/ui/statusbar";
 
-import { useAnothersProfileUIStore } from "../model/anothersProfileUIStore";
-import { FilesPage } from "./tabs/filesPage";
-import { LinksPage } from "./tabs/linksPage";
-import { MediaPage } from "./tabs/mediaPage";
-import { VoicesPage } from "./tabs/voicesPage";
+import { useAnothersProfileUIStore } from "../../model/anothersProfileUIStore";
+import { FilesPage } from "../tabs/filesPage";
+import { LinksPage } from "../tabs/linksPage";
+import { MediaPage } from "../tabs/mediaPage";
+import { VoicesPage } from "../tabs/voicesPage";
 
 type AnothersProfileProps = {
   initialData: User | null;
@@ -36,11 +36,11 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
   contactsInitialData,
   isMobile,
 }) => {
-  const { activeSection, setActiveSection, toggleIsMainActive } = useAnothersProfileUIStore(
+  const { activeTab, setActiveTab, setActiveSection } = useAnothersProfileUIStore(
     useShallow((s) => ({
-      activeSection: s.activeSection,
+      activeTab: s.activeTab,
+      setActiveTab: s.setActiveTab,
       setActiveSection: s.setActiveSection,
-      toggleIsMainActive: s.toggleIsMainActive,
     })),
   );
   const [showModal, setShowModal] = useState(false);
@@ -56,9 +56,13 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
   }, []);
 
   const handleTabChange = (value: string) => {
-    toggleIsMainActive();
-    setActiveSection(value as "participants" | "media" | "files" | "voices" | "links");
+    setActiveSection("tab");
+    setActiveTab(value as "participants" | "media" | "files" | "voices" | "links");
   };
+
+  if (!initialData) {
+    return <div>Ошибка загрузки профиля</div>;
+  }
 
   return (
     <>
@@ -92,20 +96,12 @@ export const AnothersProfile: React.FC<AnothersProfileProps> = ({
             />
           )}
         </div>
-        <Tabs value={activeSection} onValueChange={handleTabChange}>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
           <OurTabsList>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="media">
-              Медиа
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="files">
-              Файлы
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="voices">
-              Голосовые
-            </OurTabsTrigger>
-            <OurTabsTrigger onClick={toggleIsMainActive} value="links">
-              Ссылки
-            </OurTabsTrigger>
+            <OurTabsTrigger value="media">Медиа</OurTabsTrigger>
+            <OurTabsTrigger value="files">Файлы</OurTabsTrigger>
+            <OurTabsTrigger value="voices">Голосовые</OurTabsTrigger>
+            <OurTabsTrigger value="links">Ссылки</OurTabsTrigger>
           </OurTabsList>
           <TabsContent value="media">
             <MediaPage />

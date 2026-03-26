@@ -46,6 +46,7 @@ export const MessageLayout = ({
           ? "desktop:w-full w-fit"
           : "desktop:w-fit w-fit",
         isMine ? "bg-light-green rounded-br-sm" : "desktop:bg-gray-tone rounded-bl-sm bg-white",
+        isFirstBlockMedia && "pt-0",
       )}
     >
       {showSenderName && (
@@ -83,6 +84,7 @@ export const MessageLayout = ({
           time={time}
           status={status}
           id={message.id}
+          hasNameAbove={i === 0 && showSenderName}
         />
       ))}
     </div>

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { updateProfile } from "@/entities/user/api/updateProfile";
+import { saveIsFilledToCookie } from "@/shared/api/actions/saveIsFilledToCookie";
 import { FormInput } from "@/shared/form/ui/formInput";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
@@ -52,8 +53,7 @@ export const UserForm: React.FC<UserFormProps> = ({ className }) => {
 
     setUser(data);
     reset();
-    /* eslint-disable-next-line */
-    document.cookie = "is_filled=true; path=/";
+    await saveIsFilledToCookie(true);
     router.push("/auth/success");
   };
 

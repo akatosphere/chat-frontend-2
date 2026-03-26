@@ -1,7 +1,8 @@
 import { headers } from "next/headers";
 
 import { getChatServer } from "@/entities/chat/api/getChatServer";
-import { getChatType } from "@/shared/lib/getChatType";
+import { getChatTypeLight } from "@/entities/chat/lib/getChatTypeLight";
+import { getInitialJoin } from "@/entities/chat/lib/getInitialJoin";
 import { ChatWidget } from "@/widgets/chat/chatWidget/chatWidget";
 
 const extractChatKey = (pathname: string): string | null => {
@@ -22,7 +23,7 @@ export default async function ChatsPage() {
     );
   }
 
-  const chatInfo = await getChatServer(chatKey, getChatType(chatKey));
+  const chatInfo = await getChatServer(chatKey, getChatTypeLight(chatKey));
 
   if (!chatInfo?.success) {
     return (
@@ -32,11 +33,14 @@ export default async function ChatsPage() {
     );
   }
 
+  const initialJoin = await getInitialJoin(chatInfo.data);
+
   return (
     <ChatWidget
       chatKey={chatKey}
       chatType={chatInfo.type}
       initialChatInfo={chatInfo.data}
+      initialJoin={initialJoin}
       chatUid={chatInfo.data.uid}
     />
   );
