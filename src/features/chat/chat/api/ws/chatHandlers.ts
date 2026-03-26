@@ -118,10 +118,17 @@ export const handleCreateTextMessage: WSHandler = (data) => {
   }
 };
 
+type WSChatData = {
+  chat_data: {
+    chat_key: string;
+  };
+};
+
 export const handleReadStatus: WSHandler = (data) => {
   if (!data.object) return;
-  const chatKey = data.object.chat_data.chat_key;
-  console.log("handleReadStatus", data);
+  const obj = data.object as WSChatData;
+  const chatKey = obj.chat_data.chat_key;
+
   const updatedMsg = mapChatMessage(data.object as ChatMessage);
   if (!updatedMsg.uid) return;
 
@@ -158,7 +165,7 @@ export type WSDeleteMessageData = {
   to_user?: { uid: string };
 };
 
-// eslint-disable-next-line
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const handleDeleteMessage: WSHandler<any> = (data) => {
   const payload = data.object as WSDeleteMessageData;
 

@@ -159,9 +159,7 @@ export const useSendMessage = () => {
         request_uid: requestUid,
       };
 
-      console.log("tempServerMessage", tempServerMessage);
       const tempMessage = mapChatMessage(tempServerMessage);
-      console.log("tempMessage", tempMessage);
 
       addMessage(tempMessage);
       setReplyTarget(null);

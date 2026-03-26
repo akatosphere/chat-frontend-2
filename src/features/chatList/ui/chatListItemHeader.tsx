@@ -20,7 +20,6 @@ export const ChatListItemHeader = ({ chat, isActive }: ChatListItemHeaderProps) 
   const time = lastMsg ? formatLastSeen(lastMsg.created_at) : "";
   const userId = useUserStore((s) => s.userId);
 
-  console.log(chat.unreadMessages, "chat.unreadMessages");
   const status =
     chat.unreadMessages > 0 || lastMsg?.new ? MESSAGE_STATUS.DELIVERED : MESSAGE_STATUS.READ;
 

@@ -4,7 +4,6 @@ import { AUDIO_TYPES, FILE_TYPES, IMAGE_TYPES } from "@/features/chatList/model/
 import { MessageBlock } from "./types";
 
 export const buildMessageBlocks = (msg: MappedChatMessage): MessageBlock[] => {
-  console.log("buildMessageBlocks", msg);
   const blocks: MessageBlock[] = [];
 
   if (msg.repliedMessages?.length > 0) {
