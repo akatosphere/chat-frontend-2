@@ -63,5 +63,21 @@ export const buildMessageBlocks = (msg: MappedChatMessage): MessageBlock[] => {
     });
   }
 
+  // if (msg.content) {
+  //   const inviteData = parseInviteUrl(msg.content);
+  //   if (inviteData) {
+  //     blocks.push({
+  //       type: "inviteLink",
+  //       chatKey: inviteData.chatKey,
+  //       token: inviteData.token,
+  //     });
+  //   }
+
+  //   blocks.push({
+  //     type: "text",
+  //     text: msg.content,
+  //   });
+  // }
+
   return blocks;
 };

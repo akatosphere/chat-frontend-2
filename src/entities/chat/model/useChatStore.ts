@@ -1,8 +1,9 @@
 import { create } from "zustand";
 
-import { MappedChatMessage } from "@/features/chat/chat/model/types/mappedTypes";
+import { MappedChatMessage, MappedMessageFile } from "@/features/chat/chat/model/types/mappedTypes";
 import { MESSAGE_STATUS } from "@/shared/constants/constants";
 
+import { getChatMedia } from "../api/getChatMedia";
 import { ChatType } from "./types";
 
 interface ChatState {
@@ -11,6 +12,9 @@ interface ChatState {
   chatKey: string | null;
   chatType: ChatType | null;
   createdBy: string | null;
+  media: MappedMessageFile[];
+  isLoadingMedia: boolean;
+  isMediaLoaded: boolean;
   chatUid: string | null;
   isReady: boolean;
   isHide: boolean;
@@ -34,6 +38,7 @@ interface ChatState {
   enterSelectionMode: (uid?: string) => void;
   toggleMessageSelection: (uid: string) => void;
   exitSelectionMode: () => void;
+  fetchMedia: (chatKey: string) => Promise<void>;
 
   deleteMessage: (uid: string) => void;
   setInitialData: (
@@ -55,6 +60,7 @@ interface ChatState {
   clearMessages: () => void;
   clearForwardTargets: () => void;
   clearReplyTarget: () => void;
+  clearMedia: () => void;
   reset: () => void;
 }
 
@@ -65,6 +71,9 @@ export const useChatStore = create<ChatState>((set) => ({
   chatUid: null,
   isReady: false,
   chatId: null,
+  isLoadingMedia: false,
+  isMediaLoaded: false,
+  media: [],
   isHide: false,
   replyTarget: null,
   forwardTargets: [],
@@ -94,6 +103,29 @@ export const useChatStore = create<ChatState>((set) => ({
         isSelectionMode: next.size > 0,
       };
     }),
+
+  fetchMedia: async (chatKey: string) => {
+    if (!chatKey) return;
+    set({ isLoadingMedia: true });
+    try {
+      const data = await getChatMedia(chatKey);
+
+      const imagesOnly = (data as unknown as Record<string, unknown>[])
+        .filter((file) => {
+          const type = (file.file_type || file.fileType) as string | undefined;
+          return type?.startsWith("image/");
+        })
+        .map((file) => ({
+          ...file,
+          fileType: (file.file_type || file.fileType) as string,
+          fileUrl: (file.file_url || file.fileUrl) as string,
+        })) as unknown as MappedMessageFile[];
+
+      set({ media: imagesOnly, isLoadingMedia: false, isMediaLoaded: true });
+    } catch {
+      set({ isLoadingMedia: false, isMediaLoaded: false });
+    }
+  },
 
   exitSelectionMode: () =>
     set(() => ({
@@ -190,6 +222,7 @@ export const useChatStore = create<ChatState>((set) => ({
 
   clearMessages: () => set({ messages: [], replyTarget: null }),
 
+  clearMedia: () => set({ media: [], isLoadingMedia: false, isMediaLoaded: false }),
   reset: () =>
     set({
       messages: [],
