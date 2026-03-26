@@ -73,6 +73,8 @@ export const handleCreateTextMessage: WSHandler = (data) => {
         uid: newMessage.uid,
         content: newMessage.content,
         created_at: newMessage.createdAt,
+        has_forwarded_message: newMessage.forwardedMessages.length > 0,
+        has_replied_message: newMessage.repliedMessages.length > 0,
         files_summary: {
           count: newMessage.filesList.length,
           types: newMessage.filesList
@@ -101,6 +103,7 @@ export const handleCreateTextMessage: WSHandler = (data) => {
       message: {
         id: newMessage.id,
         uid: newMessage.uid,
+        hasForwarded: newMessage.forwardedMessages.length > 0,
         files_summary: {
           count: newMessage.filesList.length,
           types: newMessage.filesList

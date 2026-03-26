@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { SearchMessageResponse } from "@/features/chat/chat/lib/searchMessagePosition";
 import { searchMessages } from "@/features/chat/chat/lib/searchMessages";
 import { useMessageNavigation } from "@/features/chat/chat/model/store/useChatNavigationStore";
 import { ChatType } from "@/features/chat/chat/model/types/serverTypes";
@@ -31,13 +32,19 @@ type Props = {
 export const ChatHeader = ({ chat, backHref, profileHref }: Props) => {
   const [searchValue, setSearch] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const resetSearch = useMessageNavigation((s) => s.resetSearch);
-  const resetNavigationStore = useMessageNavigation((s) => s.reset);
+
+  const [results, setResults] = useState<SearchMessageResponse[]>([]);
   const [resultsCount, setResultsCount] = useState(0);
   const [page, setPage] = useState(1);
 
+  const resetSearch = useMessageNavigation((s) => s.resetSearch);
+  const resetNavigationStore = useMessageNavigation((s) => s.reset);
+
   const debounceSearch = useDebouncedValue(searchValue, 400);
 
+  // =========================
+  // 🔍 SEARCH INPUT
+  // =========================
   const handleSearchChange = (value: string) => {
     setSearch(value);
     resetSearch();
@@ -45,56 +52,83 @@ export const ChatHeader = ({ chat, backHref, profileHref }: Props) => {
     setPage(1);
   };
 
+  // =========================
+  // 🔍 FETCH ON INPUT
+  // =========================
   useEffect(() => {
     const runSearch = async () => {
       if (!debounceSearch.trim()) {
+        setResults([]);
         setResultsCount(0);
         resetSearch();
         resetNavigationStore();
         return;
       }
 
-      const count = await searchMessages({
+      const data = await searchMessages({
         userUid: chat.chatUid,
         query: debounceSearch,
-        page: 0,
       });
 
-      setResultsCount(count ?? 0);
+      if (!data) {
+        setResults([]);
+        setResultsCount(0);
+        resetSearch();
+        resetNavigationStore();
+        return;
+      }
+
+      setResults(data);
+      setResultsCount(data.length);
       setPage(1);
+
+      if (data.length > 0) {
+        const first = data[0];
+
+        useMessageNavigation.getState().navigate(first.uid, first.page, debounceSearch);
+      }
     };
 
     runSearch();
-  }, [debounceSearch, chat.chatUid, resetSearch, resetNavigationStore]);
+  }, [debounceSearch, chat.chatUid]);
 
-  const handlePageChange = async (direction: number) => {
-    if (!searchValue.trim()) return;
+  // =========================
+  // 🔄 LOCAL NAVIGATION
+  // =========================
+  const handlePageChange = (direction: number) => {
+    if (!results.length) return;
 
-    const nextPage = Math.min(Math.max(1, page + direction), resultsCount);
-
+    const nextPage = Math.min(Math.max(1, page + direction), results.length);
     setPage(nextPage);
 
-    await searchMessages({
-      userUid: chat.chatUid,
-      query: searchValue,
-      page: nextPage - 1,
-    });
+    const target = results[nextPage - 1];
+    if (!target) return;
+
+    useMessageNavigation.getState().navigate(target.uid, target.page, searchValue);
   };
 
+  // =========================
+  // UI ACTIONS
+  // =========================
   const onSearchClick = () => {
     setIsSearchOpen(!isSearchOpen);
     setSearch("");
+    setResults([]);
+    setResultsCount(0);
     resetNavigationStore();
   };
 
   const onCloseSearchClick = () => {
     setIsSearchOpen(false);
     setSearch("");
+    setResults([]);
+    setResultsCount(0);
     resetSearch();
     resetNavigationStore();
   };
 
   const onCallClick = () => {};
+
   return (
     <div className="flex flex-col">
       <header className="desktop:bg-main-light-gray desktop:border-muted desktop:rounded-t-lg desktop:border-b relative flex h-[60px] items-center justify-between px-4">
@@ -104,6 +138,7 @@ export const ChatHeader = ({ chat, backHref, profileHref }: Props) => {
           width={12}
           height={20}
         />
+
         <Link href={profileHref} className="flex w-full flex-1 items-center justify-between">
           <ChatHeaderUser
             chatType={chat.chatType}
@@ -126,12 +161,14 @@ export const ChatHeader = ({ chat, backHref, profileHref }: Props) => {
           isSearchOpen={isSearchOpen}
           className={cn(isSearchOpen ? "flex w-full pl-3" : "hidden")}
         />
+
         <ChatHeaderActions
           onCallClick={onCallClick}
           onSearchClick={onSearchClick}
           className={cn(isSearchOpen ? "hidden" : "flex")}
         />
       </header>
+
       {isSearchOpen && searchValue && (
         <div className="bg-primary-accent-light text-gray subtext flex items-center justify-start px-4 py-2">
           Результаты: {resultsCount > 0 ? `${page} из ${resultsCount}` : "0"}

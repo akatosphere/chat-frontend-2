@@ -22,5 +22,5 @@ export const searchMessages = async ({
   if (!first) return;
 
   useMessageNavigation.getState().navigate(first.uid, first.page, query);
-  return result.data.length;
+  return result.data ?? [];
 };

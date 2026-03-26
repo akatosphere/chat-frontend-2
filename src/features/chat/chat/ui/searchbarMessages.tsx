@@ -35,26 +35,35 @@ export const SearchbarMessages: React.FC<SearchbarMessagesProps> = ({
         isSearchOpen={isSearchOpen}
       />
       <div className="absolute right-4 flex items-center gap-6">
-        <div className="flex items-center gap-5">
-          <Button
-            variant={"text"}
-            size={"icon"}
-            disabled={disablePrev}
-            className={cn("h-5 w-5", disablePrev && "opacity-50")}
-            onClick={() => onPageChange?.(-1)}
-          >
-            <ArrowDown className="h-full w-full" />
-          </Button>
-          <Button
-            variant={"text"}
-            size={"icon"}
-            disabled={disableNext}
-            className={cn("h-5 w-5", disableNext && "opacity-50")}
-            onClick={() => onPageChange?.(1)}
-          >
-            <ArrowDown className="h-full w-full rotate-180" />
-          </Button>
-        </div>
+        {value && (
+          <div className="flex items-center gap-5">
+            <Button
+              variant={"text"}
+              size={"icon"}
+              disabled={disablePrev}
+              className={cn("h-5 w-5")}
+              onClick={() => onPageChange?.(-1)}
+            >
+              <ArrowDown
+                className={cn("h-full w-full", disablePrev && "bg-transparent opacity-50")}
+              />
+            </Button>
+            <Button
+              variant={"text"}
+              size={"icon"}
+              disabled={disableNext}
+              className={cn("h-5 w-5")}
+              onClick={() => onPageChange?.(1)}
+            >
+              <ArrowDown
+                className={cn(
+                  "h-full w-full rotate-180",
+                  disableNext && "bg-transparent opacity-50",
+                )}
+              />
+            </Button>
+          </div>
+        )}
         <Button variant={"text"} size={"icon"} className="h-4 w-4" onClick={onClose}>
           <Close className="h-full w-full" />
         </Button>

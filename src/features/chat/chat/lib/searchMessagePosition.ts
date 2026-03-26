@@ -13,7 +13,7 @@ export const searchMessagePosition = async ({
   userUid,
   type = "id_or_uid",
   query,
-  pageSize = 5,
+  pageSize = 50,
 }: {
   userUid: string;
   type: "id_or_uid" | "content";

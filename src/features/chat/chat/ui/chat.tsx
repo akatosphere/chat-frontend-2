@@ -50,6 +50,7 @@ export const Chat = ({ className, chatKey, chatType, createdBy, chatUid }: ChatP
   useEffect(() => {
     reset();
     resetNavigation();
+    useChatStore.setState((state) => ({ ...state, chatKey: chatKey }));
   }, [chatUid]);
 
   useEffect(() => {

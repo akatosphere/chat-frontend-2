@@ -223,7 +223,7 @@ export const MessageList: React.FC<MessageListProps> = ({
               label={group.label}
               messages={group.messages}
               currentUserId={currentUserId}
-              chatId={chatId}
+              chatId={chatId || 0}
               passDataAttributes
               isGroup={chatType === "public-group" || chatType === "private-group"}
             />

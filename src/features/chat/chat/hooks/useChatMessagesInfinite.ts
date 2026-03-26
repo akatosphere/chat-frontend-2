@@ -6,7 +6,7 @@ import { getMessagesClient } from "@/entities/chat/api/getMessagesClient";
 
 import { ChatMessageList } from "../model/types/serverTypes";
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 50;
 
 const extractPageFromUrl = (url: string | null | undefined): number | null => {
   if (!url) return null;
@@ -63,6 +63,7 @@ export const useChatMessagesInfinite = (chatUid: string | null) => {
         // ordering: "-created_at",
       });
 
+      console.log("result", result);
       if (!result.success) {
         throw new Error("Ошибка получения сообщений");
       }
