@@ -23,7 +23,7 @@ export const ChatHeaderUser = ({
   membersCount,
 }: Props) => {
   return (
-    <div className="border-light-gray desktop:border-none flex h-[60px] min-w-0 flex-1 items-center gap-3 border-b">
+    <div className="border-light-gray desktop:border-none flex h-[60px] min-w-0 flex-1 items-center gap-3 border-b pr-3">
       <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
         {photo ? (
           <Image src={photo} alt="profile" fill className="object-cover" />
@@ -34,7 +34,7 @@ export const ChatHeaderUser = ({
         )}
       </div>
 
-      <button className="flex min-w-0 cursor-pointer flex-col text-left">
+      <button className="flex w-full min-w-0 cursor-pointer flex-col text-left">
         <p className="desktop:text-lg truncate text-sm leading-5 font-medium">{name}</p>
         <Statusbar
           time={wasOnlineAt || null}

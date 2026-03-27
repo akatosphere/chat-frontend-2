@@ -41,7 +41,7 @@ export const ChatHeader = ({
   return (
     <header className="desktop:bg-main-light-gray desktop:border-muted desktop:rounded-t-lg desktop:border-b flex h-15 items-center justify-between px-4">
       <BackButton href={backHref} className="desktop:hidden mr-6 shrink-0" width={12} height={20} />
-      <Link href={profileHref} className="flex w-full flex-1 items-center justify-between">
+      <Link href={profileHref} className="flex w-full min-w-0 flex-1 items-center gap-3">
         <ChatHeaderUser
           chatType={chat.chatType}
           name={chat.name}
