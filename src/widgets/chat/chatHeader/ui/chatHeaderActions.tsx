@@ -1,6 +1,9 @@
 "use client";
 
 // import Image from "next/imag
+
+import { useEffect } from "react";
+
 import { ChatType } from "@/entities/chat/model/types";
 import { cn } from "@/shared/shadcn/lib/utils";
 import { Button } from "@/shared/shadcn/ui/button";
@@ -16,6 +19,7 @@ type Props = {
   chatType: ChatType;
   isLoading?: boolean;
   onJoin: () => void;
+  setIsLoading: (value: boolean) => void;
 };
 
 export const ChatHeaderActions = ({
@@ -26,9 +30,13 @@ export const ChatHeaderActions = ({
   isLoading = false,
   className,
   onJoin,
+  setIsLoading,
 }: Props) => {
+  useEffect(() => {
+    setIsLoading(false);
+  }, [join]);
   return (
-    <div className={cn("flex items-center", className)}>
+    <div className={cn("flex shrink-0 items-center", className)}>
       {join ? (
         <div className="flex gap-3">
           <Button

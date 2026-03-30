@@ -37,7 +37,11 @@ export const ChatHeader = ({ chat, backHref, profileHref, join, chatKey }: Props
   const [searchValue, setSearch] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const token = useSearchParams()?.get("token") ?? undefined;
-  const { onJoin, isLoading } = useJoinToChat({ chatKey, token, chatType: chat.chatType });
+  const { onJoin, isLoading, setIsLoading } = useJoinToChat({
+    chatKey,
+    token,
+    chatType: chat.chatType,
+  });
 
   const [results, setResults] = useState<SearchMessageResponse[]>([]);
   const [resultsCount, setResultsCount] = useState(0);
@@ -133,7 +137,10 @@ export const ChatHeader = ({ chat, backHref, profileHref, join, chatKey }: Props
           height={20}
         />
 
-        <Link href={profileHref} className="flex w-full flex-1 items-center justify-between">
+        <Link
+          href={profileHref}
+          className="flex w-full min-w-0 flex-1 items-center justify-between"
+        >
           <ChatHeaderUser
             chatType={chat.chatType}
             name={chat.name}
@@ -164,6 +171,7 @@ export const ChatHeader = ({ chat, backHref, profileHref, join, chatKey }: Props
           chatType={chat.chatType}
           isLoading={isLoading}
           className={cn(isSearchOpen ? "hidden" : "flex")}
+          setIsLoading={setIsLoading}
         />
       </header>
 
