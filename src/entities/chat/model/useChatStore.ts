@@ -231,6 +231,9 @@ export const useChatStore = create<ChatState>((set) => ({
       chatKey: null,
       isReady: false,
       replyTarget: null,
+      media: [],
+      isLoadingMedia: false,
+      isMediaLoaded: false,
       // forwardTargets: [],
     }),
 }));
