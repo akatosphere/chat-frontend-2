@@ -77,7 +77,7 @@ const messageBubbleComponent = memo(
         <div
           id={`msg-${chatMessage.uid}`}
           className={cn(
-            "flex flex-1 px-4 transition-colors duration-300 ease-out select-none",
+            "flex min-w-0 flex-1 px-4 transition-colors duration-300 ease-out select-none",
             isMine ? "justify-end" : "justify-start",
             // Если контента слева нет (личка/канал), добавляем стандартный паддинг
             !shouldShowSideContent && !isMine && "pl-4",
